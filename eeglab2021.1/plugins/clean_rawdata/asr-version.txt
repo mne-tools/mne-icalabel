@@ -1,0 +1,13 @@
+0.13
+
+Changes since version 0.12:
+- removed signal processing and statistics toolbox dependency
+- now using a more robust threshold estimation procedure in clean_windows and clean_asr
+- vis_artifacts now properly displays events while scrolling through data
+- fix: in asr_process when the reconstruction matrix was nontrivial on the first sample (would crash)
+
+Changes since version 0.1:
+- added proper licenses to code files
+- during online processing asr_process.m now carries over the reconstruction matrix from the previous block
+- minor fix: the clean_asr.m function now returns the same number of samples as its input
+

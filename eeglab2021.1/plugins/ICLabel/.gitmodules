@@ -1,0 +1,6 @@
+[submodule "matconvnet"]
+	path = matconvnet
+	url = https://github.com/lucapton/matconvnet.git
+[submodule "viewprops"]
+	path = viewprops
+	url = https://github.com/lucapton/viewprops.git

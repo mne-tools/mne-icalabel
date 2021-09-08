@@ -129,6 +129,6 @@ dmypy.json
 .pyre/
 
 # Matlab
-*.mat
 
 *.DS_Store
+eeg_ica_haufe

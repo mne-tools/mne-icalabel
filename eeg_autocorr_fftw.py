@@ -9,4 +9,8 @@ def eeg_autocorr_fftw(icaact, trials, srate, pnts, pct_data = 100):
         X = np.fft.fft(icaact[it,:,:], n = nfft, axis = 0)
         ac[it,:,:] = np.power(np.abs(X),2)
     
-    ac = np.fft.ifft(np.mean())
+    ac = np.fft.ifft(np.mean()) # ifft
+
+    print(ac.shape)
+
+

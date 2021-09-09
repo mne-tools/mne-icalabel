@@ -9,9 +9,8 @@ srate = corrData['srate'][0,0]
 trials = corrData['trials'][0,0]
 pnts = 384
 
-# X = np.array([1,2,3,4,5])
-# Y = np.fft.fft(X)
+resamp = eeg_autocorr_fftw(icaact, trials, srate, pnts=pnts)
 
-# print(np.abs(np.fft.ifft(Y)))
+matlab_resamp = sio.loadmat('resamp.mat')['resamp']
 
-eeg_autocorr_fftw(icaact, trials, srate, pnts=384)
+print(np.allclose(resamp, matlab_resamp, rtol=0, atol=0.8))

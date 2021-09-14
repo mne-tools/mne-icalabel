@@ -20,14 +20,25 @@ def testAutoCorr():
     print('AutoCorr:', np.allclose(resamp, matlab_resamp, rtol=0, atol=max_feat * relative_tol))
 
 def testRPSD():
-    rpsdData = sio.load('autoCorrData.mat')
+    rpsdData = sio.loadmat('rpsdData.mat')
 
+    # Inputs
     icaact = rpsdData['icaact']
+    icaweights = rpsdData['icaweights']
     srate = rpsdData['srate'][0,0]
     trials = rpsdData['trials'][0,0]
-    pnts = 384
+    pnts = rpsdData['pnts'][0,0]
+    nfreqs = rpsdData['nfreqs'][0,0]
 
-    eeg_rpsd(icaweights, pnts, srate, nfreqs)
+    # This is the correct MATLAB output to test against
+    outMat = rpsdData['psdmed']
+
+    # Subset is supposed to be random
+    # We include it to remove having to replicate randomness
+    subset = rpsdData['subset']
+
+    psdmed = eeg_rpsd(icaact, icaweights, pnts, srate, nfreqs, trials, pct_data=100, subset=subset)
+    print('PSD:', np.allclose(psdmed, outMat))
 
 def main():
     # testAutoCorr()

@@ -1,4 +1,4 @@
-function [subset, psdmed, temp2] = eeg_rpsd(EEG, nfreqs, pct_data)
+function [subpsdmed = eeg_rpsd(EEG, nfreqs, pct_data)
 
 % clean input cutoff freq
 nyquist = floor(EEG.srate / 2);
@@ -27,16 +27,14 @@ subset = randperm(n_seg, ceil(n_seg * pct_data / 100)); % need to improve this
 if exist('OCTAVE_VERSION', 'builtin') == 0
     rng('shuffle')
 end
+
 % calculate windowed spectrums
 psdmed = zeros(ncomp, nfreqs);
-
+EEG.srate*sum(window.^2)
 for it = 1:ncomp
     temp = reshape(EEG.icaact(it, index, :), [1 size(index) .* [1 EEG.trials]]);
     temp = bsxfun(@times, temp(:, :, subset), window);
     temp = fft(temp, n_points, 2);
-    if it == 1
-        temp2 = temp;
-    end
     temp = temp .* conj(temp);
     temp = temp(:, 2:nfreqs + 1, :) * 2 / (EEG.srate*sum(window.^2));
     if nfreqs == nyquist

@@ -40,6 +40,9 @@ def testRPSD():
     psdmed = eeg_rpsd(icaact, icaweights, pnts, srate, nfreqs, trials, pct_data=100, subset=subset)
     print('PSD:', np.allclose(psdmed, outMat))
 
+def testDipoleFit():
+    pass
+
 def main():
     # testAutoCorr()
     testRPSD()

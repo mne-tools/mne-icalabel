@@ -1,4 +1,4 @@
-# Iclabel-Python
+# ICLabel-Python
 
 This repository is a conversion of the popular ICLabel classifier for python.
 

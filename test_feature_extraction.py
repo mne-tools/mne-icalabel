@@ -19,7 +19,7 @@ def testAutoCorr():
 
     matlab_resamp = sio.loadmat('test_data/autocorr_data.mat')['resamp']
     
-    print('AutoCorr:', np.allclose(resamp, matlab_resamp, rtol=1e-6, atol=1e-6))
+    print('AutoCorr:', np.allclose(resamp, matlab_resamp, rtol=1e-7, atol=1e-7))
 
 
 def testRPSD():
@@ -49,7 +49,10 @@ def testRPSD():
 
 def testTopoplot(plot = False):
     """
-    Tests the Topoplot feature port.
+    Tests the topoplot feature.
+
+    Args:
+        plot (bool, optional): Heatmap plot flag. Defaults to False.
     """
     topoplot_data = sio.loadmat('test_data/topoplot_data.mat')
     

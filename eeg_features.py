@@ -4,7 +4,6 @@ import scipy.signal as ss
 from scipy.fft import fft, ifft
 from scipy.interpolate import griddata
 import warnings
-import pyfftw
 
 
 def eeg_autocorr_fftw(icaact: np.array, trials: int, srate: float, pnts: int, pct_data: int = 100) -> np.array:
@@ -25,11 +24,10 @@ def eeg_autocorr_fftw(icaact: np.array, trials: int, srate: float, pnts: int, pc
     ac = np.zeros((len(icaact), nfft), dtype=np.float64)
     
     for it in range(len(icaact)):
-        # X = np.fft.rfft(icaact[it:it+1,:,:], n = nfft, axis = 1)
-        X = pyfftw.interfaces.numpy_fft.fft(icaact[it:it+1,:,:], n = nfft, axis = 1, planner_effort='FFTW_ESTIMATE')
+        X = np.fft.fft(icaact[it:it+1,:,:], n = nfft, axis = 1)
         ac[it:it+1,:] = np.mean(np.power(np.abs(X),2), 2)
     
-    ac = pyfftw.interfaces.numpy_fft.ifft(ac, n=None, axis=1, planner_effort='FFTW_ESTIMATE') # ifft
+    ac = np.fft.ifft(ac, n=None, axis=1) # ifft
     
     if pnts < srate:
         ac = np.hstack((ac[:,0:pnts], np.zeros((len(ac), srate - pnts + 1))))

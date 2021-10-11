@@ -3,7 +3,21 @@ import numpy as np
 import scipy.signal as ss
 from scipy.fft import fft, ifft
 
-def eeg_autocorr_fftw(icaact, trials, srate, pnts, pct_data = 100):
+
+def eeg_autocorr_fftw(icaact: np.array, trials: int, srate: float, pnts: int, pct_data: int = 100) -> np.array:
+    """
+    Generates autocorrelation features for ICLabel.
+
+    Args:
+        icaact (np.array): ICA activation waveforms
+        trials (int): number of trials
+        srate (float): sample rate
+        pnts (int): number of points
+        pct_data (int, optional): [description]. Defaults to 100.
+
+    Returns:
+        np.array: autocorrelation feature
+    """
     nfft = 2**(math.ceil(math.log2(abs(2*pnts - 1))))
     ac = np.zeros((len(icaact), nfft, trials), dtype=np.float64)
     

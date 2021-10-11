@@ -276,21 +276,21 @@ end
 % calling topoplot from Fieldtrip
 % -------------------------------
 fieldtrip = 0;
-if nargin < 2, loc_file = []; end;
-if isstruct(Values) | ~isstruct(loc_file), fieldtrip == 1; end;
-if isstr(loc_file), if exist(loc_file) ~= 2, fieldtrip == 1; end; end;
+if nargin < 2, loc_file = []; end
+if isstruct(Values) || ~isstruct(loc_file), fieldtrip == 1; end
+if isstr(loc_file), if exist(loc_file) ~= 2, fieldtrip == 1; end; end
 if fieldtrip
     disp('Calling topoplot from Fieldtrip');
     dir1 = which('topoplot');           dir1 = fileparts(dir1);
     dir2 = which('electrodenormalize'); dir2 = fileparts(dir2);
     addpath(dir2);
-    try,
+    try
         topoplot(Values, loc_file, varargin{:});
-    catch, 
-    end;
+    catch 
+    end
     addpath(dir1);
     return;
-end;
+end
 
 nargs = nargin;
 if nargs == 1
@@ -325,19 +325,19 @@ if nargs == 1
     end
   end
 end
-if nargs < 2
-  loc_file = DEFAULT_ELOC;
-  if ~exist(loc_file)
-      fprintf('default locations file "%s" not found - specify chan_locs in topoplot() call.\n',loc_file)
-      error(' ')
-  end
-end
-if isempty(loc_file)
-  loc_file = 0;
-end
-if isnumeric(loc_file) & loc_file == 0
-  loc_file = DEFAULT_ELOC;
-end
+% if nargs < 2
+%   loc_file = DEFAULT_ELOC;
+%   if ~exist(loc_file)
+%       fprintf('default locations file "%s" not found - specify chan_locs in topoplot() call.\n',loc_file)
+%       error(' ')
+%   end
+% end
+% if isempty(loc_file)
+%   loc_file = 0;
+% end
+% if isnumeric(loc_file) && loc_file == 0
+%   loc_file = DEFAULT_ELOC;
+% end
 
 if nargs > 2
   if ~(round(nargs/2) == nargs/2)
@@ -566,7 +566,7 @@ if nargs > 2
 end
 if strcmpi(whitebk, 'on')
     BACKCOLOR = [ 1 1 1 ];
-end;
+end
 
 cmap = jet(64);
 cmaplen = size(cmap,1);
@@ -580,8 +580,8 @@ if strcmp(STYLE,'blank')    % else if Values holds numbers of channels to mark
         ContourVals = zeros(1,length(loc_file));
         ContourVals(Values) = 1;
         Values = ContourVals;
-    end;
-end;
+    end
+end
 
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%% test args for plotting an electrode grid %%%%%%%%%%%%%%%%%%%%%%
@@ -632,16 +632,15 @@ if ~strcmpi(STYLE,'grid')                     % if not plot grid only
 %%%%%%%%%%%%%%%%%%%% Read the channel location information %%%%%%%%%%%%%%%%%%%%%%%%
 % 
   if isstr(loc_file)
-      [tmpeloc labels Th Rd indices] = readlocs( loc_file);
+      [tmpeloc, labels, Th, Rd, indices] = readlocs( loc_file);
   elseif isstruct(loc_file) % a locs struct
-      [tmpeloc labels Th Rd indices] = readlocs( loc_file );
+      [tmpeloc, labels, Th, Rd, indices] = readlocs( loc_file );
       % Note: Th and Rd correspond to indices channels-with-coordinates only
   else
        error('loc_file must be a EEG.locs struct or locs filename');
   end
   Th = pi/180*Th;                              % convert degrees to radians
   allchansind = 1:length(Th);
-
   
   if ~isempty(plotchans)
       if max(plotchans) > length(Th)
@@ -654,11 +653,11 @@ if ~strcmpi(STYLE,'grid')                     % if not plot grid only
 %
 if ~isempty(plotchans)
     plotchans = intersect(plotchans, indices);
-end;
-if ~isempty(Values) & ~strcmpi( STYLE, 'blank') & isempty(plotchans)
+end
+if ~isempty(Values) && ~strcmpi( STYLE, 'blank') && isempty(plotchans)
     plotchans = indices;
 end
-if isempty(plotchans) & strcmpi( STYLE, 'blank')
+if isempty(plotchans) && strcmpi( STYLE, 'blank')
     plotchans = indices;
 end
 
@@ -666,7 +665,7 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%% filter for channel type(s), if specified %%%%%%%%%%%%%%%%%%%%% 
 %
 
-if CHOOSECHANTYPE, 
+if CHOOSECHANTYPE 
     newplotchans = eeg_chantype(loc_file,chantype); 
     plotchans = intersect(newplotchans, plotchans);
 end
@@ -674,7 +673,7 @@ end
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%% filter channels used for components %%%%%%%%%%%%%%%%%%%%% 
 %
-if isfield(CHANINFO, 'icachansind') & ~isempty(Values) & length(Values) ~= length(tmpeloc)
+if isfield(CHANINFO, 'icachansind') && ~isempty(Values) && length(Values) ~= length(tmpeloc)
 
     % test if ICA component
     % ---------------------
@@ -692,8 +691,8 @@ if isfield(CHANINFO, 'icachansind') & ~isempty(Values) & length(Values) ~= lengt
         tmpvals(CHANINFO.icachansind) = ContourVals;
         ContourVals = tmpvals;
         
-    end;
-end;
+    end
+end
 
 %
 %%%%%%%%%%%%%%%%%%% last channel is reference? %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -702,9 +701,9 @@ if length(tmpeloc) == length(Values) + 1 % remove last channel if necessary
                                          % (common reference channel)
     if plotchans(end) == length(tmpeloc)
         plotchans(end) = [];
-    end;
+    end
 
-end;
+end
 
 %
 %%%%%%%%%%%%%%%%%%% remove infinite and NaN values %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -712,7 +711,7 @@ end;
 if length(Values) > 1
     inds          = union(find(isnan(Values)), find(isinf(Values))); % NaN and Inf values
     plotchans     = setdiff(plotchans, inds);
-end;
+end
 if strcmp(plotgrid,'on')
     plotchans = setxor(plotchans,gchans);   % remove grid chans from head plotchans   
 end
@@ -726,10 +725,11 @@ x         = x(plotchans);
 y         = y(plotchans);
 labels    = labels(plotchans); % remove labels for electrodes without locations
 labels    = strvcat(labels); % make a label string matrix
-if ~isempty(Values) & length(Values) > 1
+
+if ~isempty(Values) && length(Values) > 1
     Values      = Values(plotchans);
     ContourVals = ContourVals(plotchans);
-end;
+end
 
 %
 %%%%%%%%%%%%%%%%%% Read plotting radius from chanlocs  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -739,14 +739,14 @@ if isempty(plotrad) & isfield(tmpeloc, 'plotrad'),
     if isstr(plotrad)                        % plotrad shouldn't be a string
         plotrad = str2num(plotrad)           % just checking
     end
-    if plotrad < MINPLOTRAD | plotrad > 1.0
+    if plotrad < MINPLOTRAD || plotrad > 1.0
        fprintf('Bad value (%g) for plotrad.\n',plotrad);
        error(' ');
     end
-    if strcmpi(VERBOSE,'on') & ~isempty(plotrad)
+    if strcmpi(VERBOSE,'on') && ~isempty(plotrad)
        fprintf('Plotting radius plotrad (%g) set from EEG.chanlocs.\n',plotrad);
     end
-end;
+end
 if isempty(plotrad) 
   plotrad = min(1.0,max(Rd)*1.02);            % default: just outside the outermost electrode location
   plotrad = max(plotrad,0.5);                 % default: plot out to the 0.5 head boundary
@@ -761,7 +761,7 @@ else
      plotrad = intrad;
   end
 end                                           % don't interpolate channels with Rd > 1 (below head)
-if isstr(plotrad) | plotrad < MINPLOTRAD | plotrad > 1.0
+if isstr(plotrad) || plotrad < MINPLOTRAD || plotrad > 1.0
    error('plotrad must be between 0.15 and 1.0');
 end
 
@@ -785,20 +785,20 @@ end
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Shrink mode %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-if ~isempty(shrinkfactor) | isfield(tmpeloc, 'shrink'), 
-    if isempty(shrinkfactor) & isfield(tmpeloc, 'shrink'), 
+if ~isempty(shrinkfactor) || isfield(tmpeloc, 'shrink')
+    if isempty(shrinkfactor) && isfield(tmpeloc, 'shrink')
         shrinkfactor = tmpeloc(1).shrink;
         if strcmpi(VERBOSE,'on')
             if isstr(shrinkfactor)
                 fprintf('Automatically shrinking coordinates to lie above the head perimter.\n');
             else                
                 fprintf('Automatically shrinking coordinates by %3.2f\n', shrinkfactor);
-            end;
+            end
         end
-    end;
+    end
     
     if isstr(shrinkfactor)
-        if strcmpi(shrinkfactor, 'on') | strcmpi(shrinkfactor, 'force') | strcmpi(shrinkfactor, 'auto')  
+        if strcmpi(shrinkfactor, 'on') || strcmpi(shrinkfactor, 'force') || strcmpi(shrinkfactor, 'auto')  
             if abs(headrad-rmax) > 1e-2
              fprintf('     NOTE -> the head cartoon will NOT accurately indicate the actual electrode locations\n');
             end
@@ -819,13 +819,13 @@ if ~isempty(shrinkfactor) | isfield(tmpeloc, 'shrink'),
             end
         end
     end
-end; % if shrink
+end % if shrink
       
 %
 %%%%%%%%%%%%%%%%% Issue warning if headrad ~= rmax  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 
 
-if headrad ~= 0.5 & strcmpi(VERBOSE, 'on')
+if headrad ~= 0.5 && strcmpi(VERBOSE, 'on')
    fprintf('     NB: Plotting map using ''plotrad'' %-4.3g,',plotrad);
    fprintf(    ' ''headrad'' %-4.3g\n',headrad);
    fprintf('Warning: The plotting radius of the cartoon head is NOT anatomically correct (0.5).\n')
@@ -851,13 +851,13 @@ ally      = y;
 intchans; % interpolate using only the 'intchans' channels
 pltchans; % plot using only indicated 'plotchans' channels
 
-if length(pltchans) < length(Rd) & strcmpi(VERBOSE, 'on')
+if length(pltchans) < length(Rd) && strcmpi(VERBOSE, 'on')
         fprintf('Interpolating %d and plotting %d of the %d scalp electrodes.\n', ...
                    length(intchans),length(pltchans),length(Rd));    
-end;	
+end	
 
 
-% fprintf('topoplot(): plotting %d channels\n',length(pltchans));
+fprintf('topoplot(): plotting %d channels\n',length(pltchans));
 if ~isempty(EMARKER2CHANS)
     if strcmpi(STYLE,'blank')
        error('emarker2 not defined for style ''blank'' - use marking channel numbers in place of data');
@@ -868,13 +868,13 @@ if ~isempty(EMARKER2CHANS)
 end
 
 if ~isempty(Values)
-	if length(Values) == length(Th)  % if as many map Values as channel locs
-		intValues      = Values(intchans);
-		intContourVals = ContourVals(intchans);
+    if length(Values) == length(Th)  % if as many map Values as channel locs
+        intValues      = Values(intchans);
+        intContourVals = ContourVals(intchans);
         Values         = Values(pltchans);
-		ContourVals    = ContourVals(pltchans);
-	end;	
-end;   % now channel parameters and values all refer to plotting channels only
+        ContourVals    = ContourVals(pltchans);
+    end
+end   % now channel parameters and values all refer to plotting channels only
 
 allchansind = allchansind(pltchans);
 intTh = Th(intchans);           % eliminate channels outside the interpolation area
@@ -887,6 +887,7 @@ x     = x(pltchans);
 y     = y(pltchans);
 
 labels= labels(pltchans,:);
+
 %
 %%%%%%%%%%%%%%% Squeeze channel locations to <= rmax %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 
@@ -910,15 +911,16 @@ end % if ~strcmpi(STYLE,'grid')
 %
 %%%%%%%%%%%%%%%% rotate channels based on chaninfo %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-if strcmpi(lower(NOSEDIR), '+x')
+if strcmpi(NOSEDIR, '+x')
      rotate = 0;
 else
-    if strcmpi(lower(NOSEDIR), '+y')
+    if strcmpi(NOSEDIR, '+y')
         rotate = 3*pi/2;
-    elseif strcmpi(lower(NOSEDIR), '-x')
+    elseif strcmpi(NOSEDIR, '-x')
         rotate = pi;
-    else rotate = pi/2;
-    end;
+    else
+        rotate = pi/2;
+    end
     allcoords = (inty + intx*sqrt(-1))*exp(sqrt(-1)*rotate);
     intx = imag(allcoords);
     inty = real(allcoords);
@@ -928,7 +930,7 @@ else
     allcoords = (y + x*sqrt(-1))*exp(sqrt(-1)*rotate);
     x = imag(allcoords);
     y = real(allcoords);
-end;
+end
 
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Make the plot %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -956,36 +958,38 @@ if ~strcmpi(STYLE,'blank') % if draw interpolated scalp map
   %
   xi = linspace(xmin,xmax,GRID_SCALE);   % x-axis description (row vector)
   yi = linspace(ymin,ymax,GRID_SCALE);   % y-axis description (row vector)
-
+  
   [Xi,Yi,Zi] = griddata(double(inty),double(intx),double(intValues),double(yi)',double(xi),'v4'); % interpolate data
 %   [Xi,Yi,ZiC] = griddata(double(inty),double(intx),double(intContourVals),double(yi)',double(xi),'v4'); % interpolate data
-  
+    
   %
   %%%%%%%%%%%%%%%%%%%%%%% Mask out data outside the head %%%%%%%%%%%%%%%%%%%%%
   %
   mask = (sqrt(Xi.^2 + Yi.^2) <= rmax); % mask outside the plotting circle
   ii = find(mask == 0);
+  
   Zi(ii)  = NaN;                         % mask non-plotting voxels with NaNs  
 %   ZiC(ii) = NaN;                         % mask non-plotting voxels with NaNs
+  
   grid = plotrad;                       % unless 'noplot', then 3rd output arg is plotrad
   %
   %%%%%%%%%% Return interpolated value at designated scalp location %%%%%%%%%%
   %
-  if exist('chanrad')   % optional first argument to 'noplot' 
-      chantheta = (chantheta/360)*2*pi;
-      chancoords = round(ceil(GRID_SCALE/2)+GRID_SCALE/2*2*chanrad*[cos(-chantheta),...
-                                                      -sin(-chantheta)]);
-      if chancoords(1)<1 ...
-         | chancoords(1) > GRID_SCALE ...
-            | chancoords(2)<1 ...
-               | chancoords(2)>GRID_SCALE
-          error('designated ''noplot'' channel out of bounds')
-      else
-        chanval = Zi(chancoords(1),chancoords(2));
-        grid = Zi;
-        Zi = chanval;  % return interpolated value instead of Zi
-      end
-  end
+%   if exist('chanrad')   % optional first argument to 'noplot' 
+%       chantheta = (chantheta/360)*2*pi;
+%       chancoords = round(ceil(GRID_SCALE/2)+GRID_SCALE/2*2*chanrad*[cos(-chantheta),...
+%                                                       -sin(-chantheta)]);
+%       if chancoords(1)<1 ...
+%          | chancoords(1) > GRID_SCALE ...
+%             | chancoords(2)<1 ...
+%                | chancoords(2)>GRID_SCALE
+%           error('designated ''noplot'' channel out of bounds')
+%       else
+%         chanval = Zi(chancoords(1),chancoords(2));
+%         grid = Zi;
+%         Zi = chanval;  % return interpolated value instead of Zi
+%       end
+%   end
   %
   %%%%%%%%%%%%%%%%%%%%%%%%%% Return interpolated image only  %%%%%%%%%%%%%%%%%
   %
@@ -995,7 +999,7 @@ if ~strcmpi(STYLE,'blank') % if draw interpolated scalp map
     end
     return;
    end
-  %
+  %%
   %%%%%%%%%%%%%%%%%%%%%%% Calculate colormap limits %%%%%%%%%%%%%%%%%%%%%%%%%%
   %
   if isstr(MAPLIMITS)

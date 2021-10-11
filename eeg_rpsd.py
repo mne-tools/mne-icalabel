@@ -2,7 +2,24 @@ import numpy as np
 import math
 from scipy.fft import fft
 
-def eeg_rpsd(icaact, icaweights, pnts, srate, nfreqs, trials, pct_data=100, subset = None):
+
+def eeg_rpsd(icaact: np.array, icaweights: np.array, pnts: int, srate: float, nfreqs: int, trials: int, pct_data: int = 100, subset = None) -> np.array:
+    """
+    Generates RPSD features for ICLabel.
+
+    Args:
+        icaact (np.array): [description]
+        icaweights (np.array): [description]
+        pnts (int): [description]
+        srate (float): [description]
+        nfreqs (int): [description]
+        trials (int): [description]
+        pct_data (int, optional): [description]. Defaults to 100.
+        subset ([type], optional): [description]. Defaults to None.
+
+    Returns:
+        np.array: [description]
+    """
     # Clean input cutoff freq
     nyquist = math.floor(srate / 2)
     if nfreqs > nyquist:

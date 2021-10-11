@@ -4,6 +4,7 @@ import scipy.signal as ss
 from scipy.fft import fft, ifft
 from scipy.interpolate import griddata
 import warnings
+import pyfftw
 
 
 def eeg_autocorr_fftw(icaact: np.array, trials: int, srate: float, pnts: int, pct_data: int = 100) -> np.array:
@@ -21,20 +22,21 @@ def eeg_autocorr_fftw(icaact: np.array, trials: int, srate: float, pnts: int, pc
         np.array: autocorrelation feature
     """
     nfft = 2**(math.ceil(math.log2(abs(2*pnts - 1))))
-    ac = np.zeros((len(icaact), nfft, trials), dtype=np.float64)
+    ac = np.zeros((len(icaact), nfft), dtype=np.float64)
     
     for it in range(len(icaact)):
-        X = fft(icaact[it:it+1,:,:], n = nfft, axis = 1)
-        ac[it:it+1,:,:] = np.power(np.abs(X),2)
+        # X = np.fft.rfft(icaact[it:it+1,:,:], n = nfft, axis = 1)
+        X = pyfftw.interfaces.numpy_fft.fft(icaact[it:it+1,:,:], n = nfft, axis = 1, planner_effort='FFTW_ESTIMATE')
+        ac[it:it+1,:] = np.mean(np.power(np.abs(X),2), 2)
     
-    ac = np.abs(ifft(np.mean(ac, axis=2), n=None, axis=1)) # ifft
+    ac = pyfftw.interfaces.numpy_fft.ifft(ac, n=None, axis=1, planner_effort='FFTW_ESTIMATE') # ifft
     
     if pnts < srate:
         ac = np.hstack((ac[:,0:pnts], np.zeros((len(ac), srate - pnts + 1))))
     else:
         ac = ac[:,0:srate+1]
 
-    ac = ac[:,0:srate+1] / ac[:,1][:,None]
+    ac = ac[:,0:srate+1] / ac[:,0][:,None]
 
     resamp = ss.resample_poly(ac.T, 100, srate).T
 

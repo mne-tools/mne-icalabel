@@ -8,27 +8,25 @@ def testAutoCorr():
     """
     Tests the autocorrelation feature port.
     """
-    corrData = sio.loadmat('autoCorrData.mat')
+    corr_data = sio.loadmat('test_data/autocorr_data.mat')
 
-    icaact = corrData['icaact']
-    srate = corrData['srate'][0,0]
-    trials = corrData['trials'][0,0]
-    pnts = 384
+    icaact = corr_data['icaact']
+    srate = corr_data['srate'][0,0]
+    trials = corr_data['trials'][0,0]
+    pnts = corr_data['pnts']
 
     resamp = eeg_autocorr_fftw(icaact, trials, srate, pnts=pnts)
 
-    matlab_resamp = sio.loadmat('resamp.mat')['resamp']
-    max_feat = np.max(matlab_resamp)
-    relative_tol = float(input())
-
-    print('AutoCorr:', np.allclose(resamp, matlab_resamp, rtol=0, atol=max_feat * relative_tol))
+    matlab_resamp = sio.loadmat('test_data/autocorr_data.mat')['resamp']
+    
+    print('AutoCorr:', np.allclose(resamp, matlab_resamp, rtol=1e-6, atol=1e-6))
 
 
 def testRPSD():
     """
     Tests the RPSD feature port.
     """
-    rpsdData = sio.loadmat('rpsdData.mat')
+    rpsdData = sio.loadmat('test_data/rpsd_data.mat')
 
     # Inputs
     icaact = rpsdData['icaact']
@@ -49,11 +47,11 @@ def testRPSD():
     print('PSD:', np.allclose(psdmed, outMat))
 
 
-def testTopoplot():
+def testTopoplot(plot = False):
     """
     Tests the Topoplot feature port.
     """
-    topoplot_data = sio.loadmat('topoplot_data.mat')
+    topoplot_data = sio.loadmat('test_data/topoplot_data.mat')
     
     # Inputs
     icawinv = topoplot_data['icawinv']
@@ -70,19 +68,20 @@ def testTopoplot():
     
     print('Topomap:', np.allclose(Zi, temp_topo, equal_nan=True)) # need equal_nan because there are nan values in both
     
-    _,axes = plt.subplots(1,2)
-    axes[0].imshow(Zi)
-    axes[0].set_title('Python')
-    axes[1].imshow(temp_topo)
-    axes[1].set_title('Matlab')
-    plt.show()
+    if plot:
+        _,axes = plt.subplots(1,2)
+        axes[0].imshow(Zi)
+        axes[0].set_title('Python')
+        axes[1].imshow(temp_topo)
+        axes[1].set_title('Matlab')
+        plt.show()
 
 
 def main():
-    # testAutoCorr()
-    # testRPSD()
-    np.set_printoptions(edgeitems=30, linewidth=100000, precision=1)
+    testAutoCorr()
+    testRPSD()
     testTopoplot()
+
 
 if __name__ == "__main__":
     main()

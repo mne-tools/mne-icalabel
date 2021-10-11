@@ -972,6 +972,7 @@ if ~strcmpi(STYLE,'blank') % if draw interpolated scalp map
 %   ZiC(ii) = NaN;                         % mask non-plotting voxels with NaNs
   
   grid = plotrad;                       % unless 'noplot', then 3rd output arg is plotrad
+  return
   %
   %%%%%%%%%% Return interpolated value at designated scalp location %%%%%%%%%%
   %

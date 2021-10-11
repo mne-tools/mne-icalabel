@@ -2,8 +2,8 @@ import numpy as np
 import scipy.io as sio
 from eeg_autocorr_fftw import eeg_autocorr_fftw
 from eeg_rpsd import eeg_rpsd
-from eeg_topoplot import eeg_topoplot, gdatav4
-import warnings
+from eeg_topoplot import eeg_topoplot
+import matplotlib.pyplot as plt
 
 
 def testAutoCorr():
@@ -63,14 +63,21 @@ def testTopoplot():
     Th = topoplot_data['Th']
     plotchans = topoplot_data['plotchans']
     
-    Zi = eeg_topoplot(icawinv=icawinv[:,:1], Rd=Rd, Th=Th, plotchans=plotchans)
+    # Python output
+    i = 10
+    Zi = eeg_topoplot(icawinv=icawinv[:,i:i+1], Rd=Rd, Th=Th, plotchans=plotchans)
     
+    # Actual output
     temp_topo = topoplot_data['temp_topo']
     
-    # print('Topomap:', np.allclose(Zi, temp_topo, rtol=1e-1, atol=1e-1))
-    print(Zi)
-    print()
-    print(temp_topo)
+    print('Topomap:', np.allclose(Zi, temp_topo, equal_nan=True)) # need equal_nan because there are nan values in both
+    
+    _,axes = plt.subplots(1,2)
+    axes[0].imshow(Zi)
+    axes[0].set_title('Python')
+    axes[1].imshow(temp_topo)
+    axes[1].set_title('Matlab')
+    plt.show()
 
 
 def main():

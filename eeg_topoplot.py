@@ -53,12 +53,12 @@ def mergepoints2D(x,y,v):
     x = x.copy()
     y = y.copy()
     v = v.copy()
-    x = np.reshape(x,(sz),order='F');
-    y = np.reshape(y,(sz),order='F');
-    v = np.reshape(v,(sz),order='F');
+    x = np.reshape(x,(sz),order='F')
+    y = np.reshape(y,(sz),order='F')
+    v = np.reshape(v,(sz),order='F')
 
-    myepsx = np.spacing(0.5 * (np.max(x) - np.min(x)))**(1/3);
-    myepsy = np.spacing(0.5 * (np.max(y) - np.min(y)))**(1/3);
+    myepsx = np.spacing(0.5 * (np.max(x) - np.min(x)))**(1/3)
+    myepsy = np.spacing(0.5 * (np.max(y) - np.min(y)))**(1/3)
     # % look for x, y points that are indentical (within a tolerance)
     # % average out the values for these points
     if np.all(np.isreal(v)):
@@ -91,7 +91,7 @@ def gdatav4(x,y,v,xq,yq):
     %   1987.  Describes interpolation using value or
     %   gradient of value in any dimension.
     """
-    x, y, v = mergepoints2D(x,y,v);
+    x, y, v = mergepoints2D(x,y,v)
 
     xy = x + 1j*y
     xy = np.squeeze(xy)
@@ -110,13 +110,13 @@ def gdatav4(x,y,v,xq,yq):
     weights = np.linalg.lstsq(g, v)[0]
 
     (m,n) = xq.shape
-    vq = np.zeros(xq.shape);
+    vq = np.zeros(xq.shape)
     #xy = np.tranpose(xy);
 
     # % Evaluate at requested points (xq,yq).  Loop to save memory.
     for i in range(m):
         for j in range(n):
-            d = np.abs(xq[i,j] + 1j*yq[i,j] - xy);
+            d = np.abs(xq[i,j] + 1j*yq[i,j] - xy)
             g = np.square(d) * (np.log(d)-1);#   % Green's function.
             #% Value of Green's function at zero
             g[np.where(np.isclose(d,0))] = 0;
@@ -173,13 +173,13 @@ def eeg_topoplot(icawinv: np.array, Th: np.array, Rd: np.array, plotchans: np.ar
     # Do interpolation with v4 scheme from MATLAB
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
-        Xi, Yi, Zi = gdatav4(intx, inty, intValues, XQ, YQ)
+        Xi, Yi, Zi = gdatav4(inty, intx, intValues, YQ, XQ)
     
     mask = np.sqrt(np.power(Xi,2) + np.power(Yi,2)) > RMAX
     
     Zi[mask] = np.nan
     
-    return Zi
+    return Zi.T
     
     
     

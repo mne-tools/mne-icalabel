@@ -132,3 +132,5 @@ dmypy.json
 
 *.DS_Store
 eeg_ica_haufe
+
+.vscode

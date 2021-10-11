@@ -1,8 +1,0 @@
-{
-    "files.exclude": {
-        "**/.git": true,         // this is a default value
-        "**/.DS_Store": true,    // this is a default value
-        "**/__pycache__": true,
-        "**/*.pyc": true
-    }
-}

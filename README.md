@@ -1,4 +1,4 @@
-# iclabel-python
+# Iclabel-Python
 
 This repository is a conversion of the popular ICLabel classifier for python.
 
@@ -10,13 +10,11 @@ This repository is a conversion of the popular ICLabel classifier for python.
 
 ## Feature Extraction
 
-Features to convert:
+Converted Features:
 
 1. Autocorrelation
-2. Topomat
-3. Power Spectral Density
-4. Equivalent Dipole Fits
-5. Hand Crafted Features
+2. Power Spectral Density
+3. Topomap
 
 ## Converting Matlab ConvNet
 

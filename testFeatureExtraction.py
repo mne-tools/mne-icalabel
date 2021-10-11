@@ -1,8 +1,6 @@
 import numpy as np
 import scipy.io as sio
-from eeg_autocorr_fftw import eeg_autocorr_fftw
-from eeg_rpsd import eeg_rpsd
-from eeg_topoplot import eeg_topoplot
+from eeg_features import eeg_autocorr_fftw, eeg_rpsd, eeg_topoplot
 import matplotlib.pyplot as plt
 
 

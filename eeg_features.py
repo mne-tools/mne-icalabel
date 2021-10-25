@@ -6,6 +6,39 @@ from scipy.interpolate import griddata
 import warnings
 
 
+def eeg_features(icaact: np.array, 
+                 trials: int, 
+                 srate: float, 
+                 pnts: int, 
+                 icaweights: np.array,
+                 nfreqs: int,
+                 icawinv: np.array, 
+                 Th: np.array, 
+                 Rd: np.array, 
+                 plotchans: np.array,
+                 pct_data: int = 100) -> np.array:
+    """
+    Generates the feature nd-array for ICLabel.
+
+    Args:
+        icaact (np.array): ICA activation waveforms
+        trials (int): Number of trials
+        srate (float): Sampling Rate
+        pnts (int): Number of Points
+        icaweights (np.array): ICA Weights
+        nfreqs (int): Number of frequencies
+        icawinv (np.array): pinv(EEG.icaweights*EEG.icasphere)
+        Th (np.array): Theta coordinates of electrodes (polar)
+        Rd (np.array): Rho coordinates of electrodes (polar)
+        plotchans (np.array): plot channels
+        pct_data (int, optional): . Defaults to 100.
+
+    Returns:
+        np.array: Feature matrix (4D)
+    """
+    pass
+
+    
 def eeg_autocorr_fftw(icaact: np.array, trials: int, srate: float, pnts: int, pct_data: int = 100) -> np.array:
     """
     Generates autocorrelation features for ICLabel.

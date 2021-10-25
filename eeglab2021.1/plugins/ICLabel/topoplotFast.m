@@ -857,7 +857,7 @@ if length(pltchans) < length(Rd) && strcmpi(VERBOSE, 'on')
 end	
 
 
-fprintf('topoplot(): plotting %d channels\n',length(pltchans));
+% fprintf('topoplot(): plotting %d channels\n',length(pltchans));
 if ~isempty(EMARKER2CHANS)
     if strcmpi(STYLE,'blank')
        error('emarker2 not defined for style ''blank'' - use marking channel numbers in place of data');

@@ -10,7 +10,6 @@ end
 if ~exist('pct_data', 'var') || isempty(pct_data)
     pct_data = 100;
 end
-
 % setup constants
 ncomp = size(EEG.icaweights, 1);
 n_points = min(EEG.pnts, EEG.srate);

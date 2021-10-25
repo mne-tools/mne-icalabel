@@ -10,8 +10,8 @@ def eeg_features(icaact: np.array,
                  trials: int, 
                  srate: float, 
                  pnts: int, 
+                 subset: np.array,
                  icaweights: np.array,
-                 nfreqs: int,
                  icawinv: np.array, 
                  Th: np.array, 
                  Rd: np.array, 
@@ -36,7 +36,31 @@ def eeg_features(icaact: np.array,
     Returns:
         np.array: Feature matrix (4D)
     """
-    pass
+    # Generate topoplot features
+    ncomp = icawinv.shape[1]
+    topo = np.zeros((32, 32, 1, ncomp))
+    plotchans -= 1
+    for it in range(ncomp):
+        temp_topo = eeg_topoplot(icawinv=icawinv[:, it:it+1], Th=Th, Rd=Rd, plotchans=plotchans)
+        np.nan_to_num(temp_topo, copy=False)  # Set NaN values to 0 in-place
+        topo[:,:,0,it] = temp_topo / np.max(np.abs(temp_topo))
+    
+    
+    # Generate PSD Features
+    psd = eeg_rpsd(icaact=icaact, icaweights=icaweights, trials=trials, srate=srate, pnts=pnts, subset=subset)
+    
+    # for linenoise_ind in [50,60]:
+    #     linenoise_around = np.array([linenoise_ind - 1, linenoise_ind + 1])
+    #     difference = psd[:,linenoise_around] - psd[:,linenoise_ind]
+    #     notch_ind = np.all(difference > 5, 1)
+    
+    # Normalize
+    psd = psd / np.max(np.abs(psd))
+    
+    # Autocorrelation
+    autocorr = eeg_autocorr_fftw(icaact=icaact, trials=trials, srate=srate, pnts=pnts, pct_data=pct_data)
+    
+    return [0.99 * topo, 0.99 * psd, 0.99 * autocorr]
 
     
 def eeg_autocorr_fftw(icaact: np.array, trials: int, srate: float, pnts: int, pct_data: int = 100) -> np.array:
@@ -74,7 +98,13 @@ def eeg_autocorr_fftw(icaact: np.array, trials: int, srate: float, pnts: int, pc
     return resamp[:,1:]
 
 
-def eeg_rpsd(icaact: np.array, icaweights: np.array, pnts: int, srate: float, nfreqs: int, trials: int, pct_data: int = 100, subset = None) -> np.array:
+def eeg_rpsd(icaact: np.array, 
+             icaweights: np.array, 
+             pnts: int, 
+             srate: float,
+             trials: int, 
+             pct_data: int = 100, 
+             subset = None) -> np.array:
     """
     Generates RPSD features for ICLabel.
 
@@ -93,8 +123,7 @@ def eeg_rpsd(icaact: np.array, icaweights: np.array, pnts: int, srate: float, nf
     """
     # Clean input cutoff freq
     nyquist = math.floor(srate / 2)
-    if nfreqs > nyquist:
-        nfreqs = nyquist
+    nfreqs = nyquist
     
     ncomp = len(icaweights)
     n_points = min(pnts, srate)
@@ -106,7 +135,9 @@ def eeg_rpsd(icaact: np.array, icaweights: np.array, pnts: int, srate: float, nf
     n_seg = index.shape[1] * trials
     if subset is None:
         subset = np.random.permutation(n_seg)[:math.ceil(n_seg * pct_data / 100)]
+    return subset
     subset -= 1 # because matlab uses indices starting at 1
+    
     subset = np.squeeze(subset)
 
     psdmed = np.zeros((ncomp, nfreqs))
@@ -121,7 +152,7 @@ def eeg_rpsd(icaact: np.array, icaweights: np.array, pnts: int, srate: float, nf
             temp[:,-1,:] /= 2
         psdmed[it, :] = 20 * np.real(np.log10(np.median(temp, axis=2)))
 
-    return psdmed
+    
 
 
 def pol2cart(theta: np.array, rho: np.array) -> tuple[np.array, np.array]:
@@ -209,8 +240,8 @@ def mergepoints2D(x: np.array, y: np.array, v: np.array) -> tuple[np.array, np.a
         # Re-combine the real and imaginary parts
         v = yxv[:,2]+1j*yxv[:,3]
     # Give a warning if some of the points were duplicates (and averaged out)
-    if sz > x.shape[0]:
-        print('MATLAB:griddata:DuplicateDataPoints')
+    # if sz > x.shape[0]:
+    #     print('MATLAB:griddata:DuplicateDataPoints')
     return x,y,v
 
 
@@ -277,12 +308,11 @@ def eeg_topoplot(icawinv: np.array, Th: np.array, Rd: np.array, plotchans: np.ar
     GRID_SCALE = 32
     RMAX = 0.5
     
-    Th *= np.pi / 180
+    Th = Th * np.pi / 180
     allchansind = np.array(list(range(Th.shape[1])))
     intchans = np.array(list(range(30)))
     plotchans = np.squeeze(plotchans)
     x, y = pol2cart(Th, Rd)
-    plotchans -= 1 # Because python indices start at 0
     allchansind = allchansind[plotchans]
     
     Rd = Rd[:,plotchans]
@@ -291,7 +321,6 @@ def eeg_topoplot(icawinv: np.array, Th: np.array, Rd: np.array, plotchans: np.ar
     
     intx  = x[:,intchans]
     inty  = y[:,intchans]
-    
     icawinv = icawinv[plotchans]
     intValues = icawinv[intchans]
     

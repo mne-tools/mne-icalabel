@@ -49,12 +49,7 @@ assert(isfield(EEG, 'icawinv') && ~isempty(EEG.icawinv), ...
 
 % extract features
 disp 'ICLabel: extracting features...'
-
 features = ICL_feature_extractor(EEG, flag_autocorr);
-
-EEG.features = features;
-
-return
 
 % run ICL
 disp 'ICLabel: calculating labels...'

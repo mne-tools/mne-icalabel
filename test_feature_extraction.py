@@ -123,8 +123,8 @@ def testFull():
 def main():
     # testAutoCorr()
     # testRPSD()
-    # testTopoplot()
-    testFull()
+    testTopoplot()
+    # testFull()
 
 
 if __name__ == "__main__":

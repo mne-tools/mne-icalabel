@@ -2,7 +2,7 @@
 """
 .. _tut-auto-artifact-ica:
 
-Repairing artifacts with ICA automatically
+WIP: Repairing artifacts with ICA automatically
 ==========================================
 
 This tutorial covers automatically repairing signals using ICA. For conceptual background on ICA, see

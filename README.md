@@ -20,7 +20,8 @@ This repository is a conversion of the popular ICLabel classifier for python.
 ## Converting MatConvNet to PyTorch
 
 Architecture in matconvnet:
-![ICLabel Net Architecture](ICLabel_DagNN_Architecture.png)
+
+<img src="ICLabel_DagNN_Architecture.png" width="400"/>
 
 The PyTorch model is in the `PortToPytorch.ipynb` jupyter notebook. The state dict is in iclabelNet.pt.
 The model has three inputs: image, psd, and autocorrelation features. To encourage generalization, the image

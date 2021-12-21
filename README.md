@@ -2,20 +2,30 @@
 
 This repository is a conversion of the popular ICLabel classifier for python.
 
-## Pipeline
+## Ports Completed
 
 1. Convert feature extraction
 2. Convert Matlab ConvNet
-3. Connect to mne package
 
-## Feature Extraction
+## Ports TODO
 
-Converted Features:
+1. Connect to mne package
+
+## Converted Features
 
 1. Autocorrelation
 2. Power Spectral Density
 3. Topomap
 
-## Converting Matlab ConvNet
+## Converting MatConvNet to PyTorch
 
-## MNE Package
+Architecture in matconvnet:
+![ICLabel Net Architecture](ICLabel_DagNN_Architecture.png)
+
+The PyTorch model is in the `PortToPytorch.ipynb` jupyter notebook. The state dict is in iclabelNet.pt.
+The model has three inputs: image, psd, and autocorrelation features. To encourage generalization, the image
+features are rotated and negated to quadruple the image features. The psd and autocorrelation features
+are coppied to the new image features. Then, the predicted probabilities are averaged over all four
+images.
+
+## MNE Package Port

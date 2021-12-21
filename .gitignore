@@ -135,6 +135,5 @@ eeg_ica_haufe
 
 .vscode
 matconvnet-1.0-beta25/
-eeglab2021.1/
 
-*.mat
+**/*.mat

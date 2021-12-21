@@ -36,7 +36,7 @@ def testRPSD():
     pnts = rpsdData['pnts'][0,0]
 
     # This is the correct MATLAB output to test against
-    outMat = rpsdData['psdmed']
+    outMat = rpsdData['psd']
 
     # Subset is supposed to be random
     # We include it to remove having to replicate randomness
@@ -80,54 +80,12 @@ def testTopoplot(plot = False):
         axes[1].imshow(temp_topo)
         axes[1].set_title('Matlab')
         plt.show()
-        
-def testFull():
-    full_data = sio.loadmat('test_data/full_data.mat')
-    
-    # Inputs
-    icawinv = full_data['icawinv']
-    Rd = full_data['Rd']
-    Th = full_data['Th']
-    plotchans = full_data['plotchans']
-    topo = full_data['topo']
-    
-    icaact = full_data['icaact']
-    icaweights = full_data['icaweights']
-    srate = full_data['srate'][0,0]
-    trials = full_data['trials'][0,0]
-    pnts = full_data['pnts'][0,0]
-    psd = full_data['psd']
-    subset = full_data['subset']
-    
-    features = eeg_features(icaact=icaact, 
-                            icaweights=icaweights, 
-                            srate=srate, 
-                            trials=trials, 
-                            pnts=pnts, 
-                            icawinv=icawinv, 
-                            Th=Th, Rd=Rd, 
-                            plotchans=plotchans,
-                            subset=subset)
-    matlab_features = full_data['features']
-    
-    print(features[0].shape, features[1].shape, features[2].shape)
-    
-    # # Test Topo
-    # print('Topo:', np.allclose(matlab_features[0,0], features[0]))
-    
-    # # Test PSD
-    # print('PSD:', np.allclose(matlab_features[0,1], features[1]))
-    
-    # # Test Autocorr
-    # print('Autocorr:', np.allclose(matlab_features[0,2], features[2]))
-    
 
 
 def main():
-    # testAutoCorr()
-    # testRPSD()
+    testAutoCorr()
+    testRPSD()
     testTopoplot()
-    # testFull()
 
 
 if __name__ == "__main__":

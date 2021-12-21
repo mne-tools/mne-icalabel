@@ -49,24 +49,6 @@ def eeg_features(icaact: np.array,
     # Generate PSD Features
     psd = eeg_rpsd(icaact=icaact, icaweights=icaweights, trials=trials, srate=srate, pnts=pnts, subset=subset)
     
-    nfreq = psd.shape[1]
-    if nfreq < 100:
-        psd = np.concatenate([psd, np.tile(psd[:,-2:-1],(1,100-nfreq))], axis=1)
-    
-    for linenoise_ind in [50,60]:
-        linenoise_around = np.array([linenoise_ind - 1, linenoise_ind + 1])
-        difference = psd[:,linenoise_around] - psd[:,linenoise_ind:linenoise_ind+1]
-        notch_ind = np.all(difference > 5, 1)
-        
-        if np.any(notch_ind):
-            psd[notch_ind, linenoise_ind] = np.mean(psd[notch_ind, linenoise_around], axis=1)
-    
-    # Normalize
-    psd = psd / np.max(np.abs(psd))
-    
-    psd = np.expand_dims(psd, (2,3))
-    psd = np.transpose(psd, [2, 1, 3, 0])
-    
     # Autocorrelation
     autocorr = eeg_autocorr_fftw(icaact=icaact, trials=trials, srate=srate, pnts=pnts, pct_data=pct_data)
     autocorr = np.expand_dims(autocorr, (2,3))
@@ -163,6 +145,24 @@ def eeg_rpsd(icaact: np.array,
         if nfreqs == nyquist:
             temp[:,-1,:] /= 2
         psdmed[it, :] = 20 * np.real(np.log10(np.median(temp, axis=2)))
+
+    nfreq = psdmed.shape[1]
+    if nfreq < 100:
+        psdmed = np.concatenate([psdmed, np.tile(psdmed[:,-1:],(1,100-nfreq))], axis=1)
+    
+    for linenoise_ind in [50,60]:
+        linenoise_around = np.array([linenoise_ind - 1, linenoise_ind + 1])
+        difference = psdmed[:,linenoise_around] - psdmed[:,linenoise_ind:linenoise_ind+1]
+        notch_ind = np.all(difference > 5, 1)
+        
+        if np.any(notch_ind):
+            psdmed[notch_ind, linenoise_ind] = np.mean(psdmed[notch_ind, linenoise_around], axis=1)
+    
+    # # Normalize
+    psdmed = psdmed / np.max(np.abs(psdmed), axis=1, keepdims=True)
+    
+    psdmed = np.expand_dims(psdmed, (2,3))
+    psdmed = np.transpose(psdmed, [2, 1, 3, 0])
 
     return psdmed
 

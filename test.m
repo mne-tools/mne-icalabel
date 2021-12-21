@@ -33,28 +33,29 @@ plotchans = [1 3 4 5 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27
 
 % %% calc psd
 psd = eeg_rpsd(EEG, 100);
-subset = psd;
-% 
-% % extrapolate or prune as needed
-% nfreq = size(psd, 2);
-% if nfreq < 100
-%     psd = [psd, repmat(psd(:, end), 1, 100 - nfreq)];
-% end
-% 
-% % undo notch filter
-% for linenoise_ind = [50, 60]
-%     linenoise_around = [linenoise_ind - 1, linenoise_ind + 1];
-%     difference = bsxfun(@minus, psd(:, linenoise_around), ...
-%         psd(:, linenoise_ind));
-%     notch_ind = all(difference > 5, 2);
-%     if any(notch_ind)
-%         psd(notch_ind, linenoise_ind) = mean(psd(notch_ind, linenoise_around), 2);
-%     end
-% end
-% 
-% psd = bsxfun(@rdivide, psd, max(abs(psd), [], 2));
 
-% psd = single(permute(psd, [3 2 4 1]));
+
+% 
+% extrapolate or prune as needed
+nfreq = size(psd, 2);
+if nfreq < 100
+    psd = [psd, repmat(psd(:, end), 1, 100 - nfreq)];
+end
+
+% undo notch filter
+for linenoise_ind = [50, 60]
+    linenoise_around = [linenoise_ind - 1, linenoise_ind + 1];
+    difference = bsxfun(@minus, psd(:, linenoise_around), ...
+        psd(:, linenoise_ind));
+    notch_ind = all(difference > 5, 2);
+    if any(notch_ind)
+        psd(notch_ind, linenoise_ind) = mean(psd(notch_ind, linenoise_around), 2);
+    end
+end
+
+psd = bsxfun(@rdivide, psd, max(abs(psd), [], 2));
+
+psd = single(permute(psd, [3 2 4 1]));
 
 features = ICL_feature_extractor(EEG, true);
 

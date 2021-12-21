@@ -18,7 +18,7 @@ def testAutoCorr():
     resamp = eeg_autocorr_fftw(icaact, trials, srate, pnts=pnts)
 
     matlab_resamp = sio.loadmat('test_data/autocorr_data.mat')['resamp']
-    
+    print(resamp.shape)
     print('AutoCorr:', np.allclose(resamp, matlab_resamp, rtol=1e-7, atol=1e-7))
 
 
@@ -107,14 +107,16 @@ def testFull():
                             subset=subset)
     matlab_features = full_data['features']
     
-    # Test Topo
-    print('Topo:', np.allclose(matlab_features[0,0], features[0]))
+    print(features[0].shape, features[1].shape, features[2].shape)
     
-    # Test PSD
-    print('PSD:', np.allclose(matlab_features[0,1], features[1]))
+    # # Test Topo
+    # print('Topo:', np.allclose(matlab_features[0,0], features[0]))
     
-    # Test Autocorr
-    print('Autocorr:', np.allclose(matlab_features[0,2], features[2]))
+    # # Test PSD
+    # print('PSD:', np.allclose(matlab_features[0,1], features[1]))
+    
+    # # Test Autocorr
+    # print('Autocorr:', np.allclose(matlab_features[0,2], features[2]))
     
 
 

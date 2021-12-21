@@ -49,16 +49,28 @@ def eeg_features(icaact: np.array,
     # Generate PSD Features
     psd = eeg_rpsd(icaact=icaact, icaweights=icaweights, trials=trials, srate=srate, pnts=pnts, subset=subset)
     
-    # for linenoise_ind in [50,60]:
-    #     linenoise_around = np.array([linenoise_ind - 1, linenoise_ind + 1])
-    #     difference = psd[:,linenoise_around] - psd[:,linenoise_ind]
-    #     notch_ind = np.all(difference > 5, 1)
+    nfreq = psd.shape[1]
+    if nfreq < 100:
+        psd = np.concatenate([psd, np.tile(psd[:,-2:-1],(1,100-nfreq))], axis=1)
+    
+    for linenoise_ind in [50,60]:
+        linenoise_around = np.array([linenoise_ind - 1, linenoise_ind + 1])
+        difference = psd[:,linenoise_around] - psd[:,linenoise_ind:linenoise_ind+1]
+        notch_ind = np.all(difference > 5, 1)
+        
+        if np.any(notch_ind):
+            psd[notch_ind, linenoise_ind] = np.mean(psd[notch_ind, linenoise_around], axis=1)
     
     # Normalize
     psd = psd / np.max(np.abs(psd))
     
+    psd = np.expand_dims(psd, (2,3))
+    psd = np.transpose(psd, [2, 1, 3, 0])
+    
     # Autocorrelation
     autocorr = eeg_autocorr_fftw(icaact=icaact, trials=trials, srate=srate, pnts=pnts, pct_data=pct_data)
+    autocorr = np.expand_dims(autocorr, (2,3))
+    autocorr = np.transpose(autocorr, [2, 1, 3, 0])
     
     return [0.99 * topo, 0.99 * psd, 0.99 * autocorr]
 
@@ -135,7 +147,7 @@ def eeg_rpsd(icaact: np.array,
     n_seg = index.shape[1] * trials
     if subset is None:
         subset = np.random.permutation(n_seg)[:math.ceil(n_seg * pct_data / 100)]
-    return subset
+    
     subset -= 1 # because matlab uses indices starting at 1
     
     subset = np.squeeze(subset)
@@ -152,7 +164,7 @@ def eeg_rpsd(icaact: np.array,
             temp[:,-1,:] /= 2
         psdmed[it, :] = 20 * np.real(np.log10(np.median(temp, axis=2)))
 
-    
+    return psdmed
 
 
 def pol2cart(theta: np.array, rho: np.array) -> tuple[np.array, np.array]:

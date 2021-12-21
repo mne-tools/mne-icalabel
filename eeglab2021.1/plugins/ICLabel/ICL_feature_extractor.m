@@ -66,9 +66,11 @@ end
 
 % normalize
 psd = bsxfun(@rdivide, psd, max(abs(psd), [], 2));
-
+size(psd)
 % reshape and cast
 psd = single(permute(psd, [3 2 4 1]));
+
+size(psd)
 
 %% calc autocorrelation?
 if flag_autocorr
@@ -81,10 +83,12 @@ if flag_autocorr
     else
         autocorr = eeg_autocorr_fftw(EEG);
     end
-
+    
     % reshape and cast
     autocorr = single(permute(autocorr, [3 2 4 1]));
 end
+
+size(autocorr)
 
 %% format outputs
 if flag_autocorr

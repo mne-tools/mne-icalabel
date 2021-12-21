@@ -61,6 +61,9 @@ def testTopoplot(plot = False):
     Th = topoplot_data['Th']
     plotchans = topoplot_data['plotchans']
     
+    # Fix plotchans for python
+    plotchans -= 1
+    
     # Python output
     i = 10
     Zi = eeg_topoplot(icawinv=icawinv[:,i:i+1], Rd=Rd, Th=Th, plotchans=plotchans)

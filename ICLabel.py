@@ -111,19 +111,19 @@ class ICLabelNet(nn.Module):
         self.seq = nn.Sequential(self.conv, self.softmax)
 
     @staticmethod
-    def reshape_fortran(x: torch.tensor, shape) -> torch.tensor:
+    def reshape_fortran(x: torch.Tensor, shape) -> torch.Tensor:
         if len(x.shape) > 0:
             x = x.permute(*reversed(range(len(x.shape))))
         return x.reshape(*reversed(shape)).permute(*reversed(range(len(shape))))
 
-    def reshape_concat(self, tensor):
+    def reshape_concat(self, tensor: torch.Tensor) -> torch.Tensor:
         tensor = self.reshape_fortran(tensor, [-1, 1, 1, 100])
         tensor = torch.concat([tensor, tensor, tensor, tensor], 1)
         tensor = torch.concat([tensor, tensor, tensor, tensor], 2)
         tensor = torch.permute(tensor, (0, 3, 1, 2))
         return tensor
 
-    def forward(self, images, psds, autocorr):
+    def forward(self, images: torch.Tensor, psds: torch.Tensor, autocorr: torch.Tensor) -> torch.Tensor:
         out_img = self.img_conv(images)
         out_psds = self.psds_conv(psds)
         out_autocorr = self.autocorr_conv(autocorr)
@@ -147,7 +147,7 @@ class ICLabelNet(nn.Module):
         return labels
 
 
-def format_input(images, psd, autocorr):
+def format_input(images: np.ndarray, psd: np.ndarray, autocorr: np.ndarray):
     formatted_images = np.concatenate((images,
                                        -1 * images,
                                        np.flip(images, axis=1),
@@ -163,7 +163,7 @@ def format_input(images, psd, autocorr):
     return formatted_images, formatted_psd, formatted_autocorr
 
 
-def run_iclabel(images, psds, autocorr):
+def run_iclabel(images: np.ndarray, psds: np.ndarray, autocorr: np.ndarray) -> np.ndarray:
     # Get network and load weights
     iclabel_net = ICLabelNet()
     iclabel_net.load_state_dict(torch.load('iclabelNet.pt'))
@@ -173,27 +173,116 @@ def run_iclabel(images, psds, autocorr):
     return labels.detach().numpy()
 
 
+def mne_to_eeglab_locs(raw):
+    def sph2topo(theta, phi):
+        az = phi
+        horiz = theta
+        angle = -1 * horiz
+        radius = (np.pi / 2 - az) / np.pi
+        return angle, radius
+
+    def cart2sph(x, y, z):
+        azimuth = np.arctan2(y, x)
+        elevation = np.arctan2(z, np.sqrt(x ** 2 + y ** 2))
+        r = np.sqrt(x ** 2 + y ** 2 + z ** 2)
+        # theta,phi,r
+        return azimuth, elevation, r
+
+    locs = raw._get_channel_positions()
+
+    # %% Obtain carthesian coordinates
+    X = locs[:, 1]
+    Y = -1 * locs[:, 0]  # be mindful of the nose orientation in eeglab and mne
+    # see https://github.com/mne-tools/mne-python/blob/24377ad3200b6099ed47576e9cf8b27578d571ef/mne/io/eeglab/eeglab.py#L105
+    Z = locs[:, 2]
+
+    # %% Obtain Spherical Coordinates
+    sph = np.array([cart2sph(X[i], Y[i], Z[i]) for i in range(len(X))])
+    theta = sph[:, 0]
+    phi = sph[:, 1]
+
+    # %% Obtain Polar coordinates (as in eeglab)
+    topo = np.array([sph2topo(theta[i], phi[i]) for i in range(len(theta))])
+    Rd = topo[:, 1]
+    Th = topo[:, 0]
+
+    return Rd.reshape([1, -1]), np.degrees(Th).reshape([1, -1])
+
+
+def mne_iclabel(epochs):
+    from mne.preprocessing import ICA
+    from eeg_features import eeg_features
+
+    ica = ICA(n_components=None, max_iter='auto', random_state=97, method='infomax')
+    ica.fit(epochs)
+
+    icaact = ica.get_sources(epochs).get_data()
+    icaact = np.transpose(icaact, [1, 2, 0])
+
+    # weights (unmixing matrix)
+    icaweights = ica.unmixing_matrix_
+
+    icawinv = np.linalg.pinv(ica.unmixing_matrix_ @ ica.pca_components_.T)
+
+    srate = 128
+    pnts = 384
+    trials = 80
+
+    Rd, Th = mne_to_eeglab_locs(epochs)
+
+    features = eeg_features(icaact=icaact,
+                            trials=trials,
+                            srate=srate,
+                            pnts=pnts,
+                            subset=None,
+                            icaweights=icaweights,
+                            icawinv=icawinv,
+                            Th=Th,
+                            Rd=Rd)
+
+    topo = features[0].astype(np.float32)
+    psds = features[1].astype(np.float32)
+    autocorr = features[2].astype(np.float32)
+
+    labels = run_iclabel(topo, psds, autocorr)
+
+    return ica, labels
+
+
 def main():
-    import scipy.io as sio
-
-    features = sio.loadmat('features.mat')['features']
-
-    images = features[0, 0]
-    psds = features[0, 1]
-    autocorrs = features[0, 2]
-
-    labels = run_iclabel(images, psds, autocorrs)
-
+    import mne
+    import os
+    # import scipy.io as sio
+    #
+    # features = sio.loadmat('features.mat')['features']
+    #
+    # images = features[0, 0]
+    # psds = features[0, 1]
+    # autocorrs = features[0, 2]
+    #
+    # print(images.shape, psds.shape, autocorrs.shape)
+    # print(images.dtype, psds.dtype, autocorrs.dtype)
+    #
+    # labels = run_iclabel(images, psds, autocorrs)
+    #
     # Print out
     np.set_printoptions(precision=4)
     np.set_printoptions(suppress=True)
+    #
+    # labels_mat = sio.loadmat('labels.mat')['labels']
+    #
+    # # Print labels side by side
+    # print('PyTorch                                            MATLAB')
+    # for pytorch_out, matlab_out in zip(labels, labels_mat):
+    #     print(pytorch_out, matlab_out)
 
-    labels_mat = sio.loadmat('labels.mat')['labels']
+    eeglab_file = os.path.join('eeglab2021.1', 'sample_data', 'eeglab_data_epochs_ica.set')
 
-    # Print labels side by side
-    print('PyTorch                                            MATLAB')
-    for pytorch_out, matlab_out in zip(labels, labels_mat):
-        print(pytorch_out, matlab_out)
+    epochs = mne.io.read_epochs_eeglab(eeglab_file)
+
+    ica, labels = mne_iclabel(epochs)
+
+    print(labels)
 
 
 if __name__ == "__main__":

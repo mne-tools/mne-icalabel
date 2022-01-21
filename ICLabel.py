@@ -1,6 +1,8 @@
 import torch.nn as nn
 import torch
 import numpy as np
+import os
+import mne
 
 
 class ICLabelNetImg(nn.Module):
@@ -156,9 +158,11 @@ def format_input(images: np.ndarray, psd: np.ndarray, autocorr: np.ndarray):
     formatted_psd = np.repeat(psd, 4, axis=3)
     formatted_autocorr = np.repeat(autocorr, 4, axis=3)
 
-    formatted_images = torch.from_numpy(np.transpose(formatted_images, (3, 2, 0, 1)))
+    formatted_images = torch.from_numpy(
+        np.transpose(formatted_images, (3, 2, 0, 1)))
     formatted_psd = torch.from_numpy(np.transpose(formatted_psd, (3, 2, 0, 1)))
-    formatted_autocorr = torch.from_numpy(np.transpose(formatted_autocorr, (3, 2, 0, 1)))
+    formatted_autocorr = torch.from_numpy(
+        np.transpose(formatted_autocorr, (3, 2, 0, 1)))
 
     return formatted_images, formatted_psd, formatted_autocorr
 
@@ -173,8 +177,29 @@ def run_iclabel(images: np.ndarray, psds: np.ndarray, autocorr: np.ndarray) -> n
     return labels.detach().numpy()
 
 
-def mne_to_eeglab_locs(raw):
+def mne_to_eeglab_locs(raw: mne.io.BaseRaw):
+    """Obtain EEGLab-like spherical coordinate from EEG channel positions.
+
+    TODO: @JACOB:
+    - Where is (0,0,0) defined in MNE vs EEGLab?
+    - some text description of how the sphere coordinates differ between MNE
+    and EEGLab.
+
+    Parameters
+    ----------
+    raw : mne.io.BaseRaw
+        Instance of raw object with a `mne.montage.DigMontage` set with
+        ``n_channels`` channel positions.
+
+    Returns
+    -------
+    Rd : np.array of shape (1, n_channels)
+        Angle in spherical coordinates of each EEG channel.
+    Th : np.array of shape (1, n_channels)
+        Degree in spherical coordinates of each EEG channel.
+    """
     def sph2topo(theta, phi):
+        """Add docstring in numpy format."""
         az = phi
         horiz = theta
         angle = -1 * horiz
@@ -182,26 +207,36 @@ def mne_to_eeglab_locs(raw):
         return angle, radius
 
     def cart2sph(x, y, z):
+        """Add docstring in numpy format."""
         azimuth = np.arctan2(y, x)
         elevation = np.arctan2(z, np.sqrt(x ** 2 + y ** 2))
         r = np.sqrt(x ** 2 + y ** 2 + z ** 2)
         # theta,phi,r
         return azimuth, elevation, r
 
-    locs = raw._get_channel_positions()
+    # get the channel position dictionary
+    montage = raw.get_montage()
+    positions = montage.get_positions()
+    ch_pos = positions['ch_pos']
 
-    # %% Obtain carthesian coordinates
+    # get locations as a 2D array
+    locs = np.vstack(ch_pos.values())
+
+    # Obtain carthesian coordinates
     X = locs[:, 1]
-    Y = -1 * locs[:, 0]  # be mindful of the nose orientation in eeglab and mne
+
+    # be mindful of the nose orientation in eeglab and mne
+    # TODO: @Jacob, please expand on this.
+    Y = -1 * locs[:, 0]
     # see https://github.com/mne-tools/mne-python/blob/24377ad3200b6099ed47576e9cf8b27578d571ef/mne/io/eeglab/eeglab.py#L105
     Z = locs[:, 2]
 
-    # %% Obtain Spherical Coordinates
+    # Obtain Spherical Coordinates
     sph = np.array([cart2sph(X[i], Y[i], Z[i]) for i in range(len(X))])
     theta = sph[:, 0]
     phi = sph[:, 1]
 
-    # %% Obtain Polar coordinates (as in eeglab)
+    # Obtain Polar coordinates (as in eeglab)
     topo = np.array([sph2topo(theta[i], phi[i]) for i in range(len(theta))])
     Rd = topo[:, 1]
     Th = topo[:, 0]
@@ -213,7 +248,8 @@ def mne_iclabel(epochs):
     from mne.preprocessing import ICA
     from eeg_features import eeg_features
 
-    ica = ICA(n_components=None, max_iter='auto', random_state=97, method='infomax')
+    ica = ICA(n_components=None, max_iter='auto',
+              random_state=97, method='infomax')
     ica.fit(epochs)
 
     icaact = ica.get_sources(epochs).get_data()
@@ -276,7 +312,8 @@ def main():
     # for pytorch_out, matlab_out in zip(labels, labels_mat):
     #     print(pytorch_out, matlab_out)
 
-    eeglab_file = os.path.join('eeglab2021.1', 'sample_data', 'eeglab_data_epochs_ica.set')
+    eeglab_file = os.path.join(
+        'eeglab2021.1', 'sample_data', 'eeglab_data_epochs_ica.set')
 
     epochs = mne.io.read_epochs_eeglab(eeglab_file)
 

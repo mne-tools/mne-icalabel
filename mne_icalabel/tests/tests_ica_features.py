@@ -12,7 +12,7 @@ from mne_icalabel.ica_features import autocorr_fftw, rpsd, topoplot
 from eeg_features import eeg_autocorr_fftw, eeg_rpsd, eeg_topoplot
 
 
-# load in test data from original Matlab ICLabel
+# load in test data for features from original Matlab ICLabel
 corr_data_file_path = str(importlib.resources.files(
     'mne_icalabel.tests').joinpath('data/autocorr_data.mat'))
 rpsd_data_file_path = str(importlib.resources.files(
@@ -23,7 +23,6 @@ topoplot_data_file_path = str(importlib.resources.files(
 corr_data = sio.loadmat(corr_data_file_path)
 rpsd_data = sio.loadmat(rpsd_data_file_path)
 topoplot_data = sio.loadmat(topoplot_data_file_path)
-# full_data = sio.loadmat('./data/full_data.mat')
 
 
 def _create_test_ica_component():

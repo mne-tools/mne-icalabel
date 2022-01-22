@@ -1,7 +1,6 @@
 import torch.nn as nn
 import torch
 import numpy as np
-import os
 import mne
 
 
@@ -198,19 +197,23 @@ def mne_to_eeglab_locs(raw: mne.io.BaseRaw):
     Th : np.array of shape (1, n_channels)
         Degree in spherical coordinates of each EEG channel.
     """
-    def sph2topo(theta, phi):
-        """Add docstring in numpy format."""
-        az = phi
-        horiz = theta
+    def _sph2topo(_theta, _phi):
+        """
+        Convert spherical coordinates to topo.
+        """
+        az = _phi
+        horiz = _theta
         angle = -1 * horiz
         radius = (np.pi / 2 - az) / np.pi
         return angle, radius
 
-    def cart2sph(x, y, z):
-        """Add docstring in numpy format."""
-        azimuth = np.arctan2(y, x)
-        elevation = np.arctan2(z, np.sqrt(x ** 2 + y ** 2))
-        r = np.sqrt(x ** 2 + y ** 2 + z ** 2)
+    def _cart2sph(_x, _y, _z):
+        """
+        Convert cartesian coordinates to spherical.
+        """
+        azimuth = np.arctan2(_y, _x)
+        elevation = np.arctan2(_z, np.sqrt(_x ** 2 + _y ** 2))
+        r = np.sqrt(_x ** 2 + _y ** 2 + _z ** 2)
         # theta,phi,r
         return azimuth, elevation, r
 
@@ -220,28 +223,28 @@ def mne_to_eeglab_locs(raw: mne.io.BaseRaw):
     ch_pos = positions['ch_pos']
 
     # get locations as a 2D array
-    locs = np.vstack(ch_pos.values())
+    locs = np.vstack(list(ch_pos.values()))
 
     # Obtain carthesian coordinates
-    X = locs[:, 1]
+    x = locs[:, 1]
 
     # be mindful of the nose orientation in eeglab and mne
     # TODO: @Jacob, please expand on this.
-    Y = -1 * locs[:, 0]
+    y = -1 * locs[:, 0]
     # see https://github.com/mne-tools/mne-python/blob/24377ad3200b6099ed47576e9cf8b27578d571ef/mne/io/eeglab/eeglab.py#L105
-    Z = locs[:, 2]
+    z = locs[:, 2]
 
     # Obtain Spherical Coordinates
-    sph = np.array([cart2sph(X[i], Y[i], Z[i]) for i in range(len(X))])
+    sph = np.array([_cart2sph(x[i], y[i], z[i]) for i in range(len(x))])
     theta = sph[:, 0]
     phi = sph[:, 1]
 
     # Obtain Polar coordinates (as in eeglab)
-    topo = np.array([sph2topo(theta[i], phi[i]) for i in range(len(theta))])
-    Rd = topo[:, 1]
-    Th = topo[:, 0]
+    topo = np.array([_sph2topo(theta[i], phi[i]) for i in range(len(theta))])
+    rd = topo[:, 1]
+    th = topo[:, 0]
 
-    return Rd.reshape([1, -1]), np.degrees(Th).reshape([1, -1])
+    return rd.reshape([1, -1]), np.degrees(th).reshape([1, -1])
 
 
 def mne_iclabel(epochs):
@@ -249,7 +252,8 @@ def mne_iclabel(epochs):
     from eeg_features import eeg_features
 
     ica = ICA(n_components=None, max_iter='auto',
-              random_state=97, method='infomax')
+              random_state=97, method='infomax',
+              fit_params=dict(extended=True))
     ica.fit(epochs)
 
     icaact = ica.get_sources(epochs).get_data()
@@ -264,7 +268,7 @@ def mne_iclabel(epochs):
     pnts = 384
     trials = 80
 
-    Rd, Th = mne_to_eeglab_locs(epochs)
+    rd, th = mne_to_eeglab_locs(epochs)
 
     features = eeg_features(icaact=icaact,
                             trials=trials,
@@ -273,8 +277,8 @@ def mne_iclabel(epochs):
                             subset=None,
                             icaweights=icaweights,
                             icawinv=icawinv,
-                            Th=Th,
-                            Rd=Rd)
+                            Th=th,
+                            Rd=rd)
 
     topo = features[0].astype(np.float32)
     psds = features[1].astype(np.float32)

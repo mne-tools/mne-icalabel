@@ -75,7 +75,7 @@ def eeg_autocorr_fftw(icaact: np.array, trials: int, srate: float, pnts: int, pc
         X = np.fft.fft(icaact[it:it + 1, :, :], n=nfft, axis=1)
         ac[it:it + 1, :] = np.mean(np.power(np.abs(X), 2), 2)
 
-    ac = np.fft.ifft(ac, n=None, axis=1)  # ifft
+    ac = np.real_if_close(np.fft.ifft(ac, n=None, axis=1), tol=1e5)  # ifft
 
     if pnts < srate:
         ac = np.hstack((ac[:, 0:pnts], np.zeros((len(ac), srate - pnts + 1))))

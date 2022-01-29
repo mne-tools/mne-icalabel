@@ -2,6 +2,7 @@ function psdmed = eeg_rpsd(EEG, nfreqs, pct_data)
 
 % clean input cutoff freq
 nyquist = floor(EEG.srate / 2);
+
 if ~exist('nfreqs', 'var') || isempty(nfreqs)
     nfreqs = nyquist;
 elseif nfreqs > nyquist

@@ -61,8 +61,6 @@ def test_topoplot(plot=False):
     th = topoplot_data['Th']
     plotchans = np.squeeze(topoplot_data['plotchans']) - 1
 
-    print(rd)
-    print(th)
     # Python output
     i = 10
     zi = eeg_topoplot(icawinv=icawinv[:, i:i + 1], Rd=rd, Th=th, plotchans=plotchans)

@@ -1,20 +1,19 @@
 import numpy as np
 import math
 import scipy.signal as ss
-from scipy.fft import fft, ifft
-from scipy.interpolate import griddata
+from scipy.fft import fft
 import warnings
 
 
 def eeg_features(icaact: np.array,
                  trials: int,
-                 srate: float,
+                 srate: int,
                  pnts: int,
-                 subset: np.array,
                  icaweights: np.array,
                  icawinv: np.array,
-                 Th: np.array,
-                 Rd: np.array,
+                 th: np.array,
+                 rd: np.array,
+                 subset: np.array = None,
                  pct_data: int = 100) -> np.array:
     """
     Generates the feature nd-array for ICLabel.
@@ -22,14 +21,14 @@ def eeg_features(icaact: np.array,
     Args:
         icaact (np.array): ICA activation waveforms
         trials (int): Number of trials
-        srate (float): Sampling Rate
+        srate (int): Sampling Rate
         pnts (int): Number of Points
         icaweights (np.array): ICA Weights
-        nfreqs (int): Number of frequencies
         icawinv (np.array): pinv(EEG.icaweights*EEG.icasphere)
-        Th (np.array): Theta coordinates of electrodes (polar)
-        Rd (np.array): Rho coordinates of electrodes (polar)
+        th (np.array): Theta coordinates of electrodes (polar)
+        rd (np.array): Rho coordinates of electrodes (polar)
         pct_data (int, optional): . Defaults to 100.
+        subset (np.array): Subset of indices (Randomly generated. Can be inputed for testing)
 
     Returns:
         np.array: Feature matrix (4D)
@@ -37,9 +36,9 @@ def eeg_features(icaact: np.array,
     # Generate topoplot features
     ncomp = icawinv.shape[1]
     topo = np.zeros((32, 32, 1, ncomp))
-    plotchans = np.squeeze(np.argwhere(~np.isnan(np.squeeze(Th))))
+    plotchans = np.squeeze(np.argwhere(~np.isnan(np.squeeze(th))))
     for it in range(ncomp):
-        temp_topo = eeg_topoplot(icawinv=icawinv[:, it:it + 1], Th=Th, Rd=Rd, plotchans=plotchans)
+        temp_topo = eeg_topoplot(icawinv=icawinv[:, it:it + 1], Th=th, Rd=rd, plotchans=plotchans)
         np.nan_to_num(temp_topo, copy=False)  # Set NaN values to 0 in-place
         topo[:, :, 0, it] = temp_topo / np.max(np.abs(temp_topo))
 
@@ -84,7 +83,7 @@ def eeg_autocorr_fftw(icaact: np.array, trials: int, srate: float, pnts: int, pc
 
     ac = ac[:, 0:srate + 1] / ac[:, 0][:, None]
 
-    resamp = ss.resample_poly(ac.T, 100, srate).T
+    resamp = ss.resample_poly(ac.T, 100, int(srate)).T
 
     return resamp[:, 1:]
 
@@ -92,7 +91,7 @@ def eeg_autocorr_fftw(icaact: np.array, trials: int, srate: float, pnts: int, pc
 def eeg_rpsd(icaact: np.array,
              icaweights: np.array,
              pnts: int,
-             srate: float,
+             srate: int,
              trials: int,
              pct_data: int = 100,
              subset=None) -> np.array:
@@ -103,8 +102,7 @@ def eeg_rpsd(icaact: np.array,
         icaact (np.array): [description]
         icaweights (np.array): [description]
         pnts (int): [description]
-        srate (float): [description]
-        nfreqs (int): [description]
+        srate (int): [description]
         trials (int): [description]
         pct_data (int, optional): [description]. Defaults to 100.
         subset ([type], optional): [description]. Defaults to None.
@@ -114,36 +112,43 @@ def eeg_rpsd(icaact: np.array,
     """
     # Clean input cutoff freq
     nyquist = math.floor(srate / 2)
-    nfreqs = nyquist
+    nfreqs = 100
+    if nfreqs > nyquist:
+        nfreqs = nyquist
 
     ncomp = len(icaweights)
     n_points = min(pnts, srate)
     window = np.hamming(n_points).reshape(1, -1)[:, :, np.newaxis]
 
     cutoff = math.floor(pnts / n_points) * n_points
-    index = np.ceil(np.arange(0, cutoff - n_points + 1, n_points / 2)).astype(np.int64).reshape(1, -1) + np.arange(0,
-                                                                                                                   n_points).reshape(
-        -1, 1)
-
+    index = np.ceil(np.arange(0, cutoff - n_points + 1, n_points / 2)).astype(np.int64).reshape(1, -1) \
+            + np.arange(0, n_points).reshape(-1, 1)
+    
     n_seg = index.shape[1] * trials
     if subset is None:
         subset = np.random.permutation(n_seg)[:math.ceil(n_seg * pct_data / 100)]
 
     subset = np.squeeze(subset)
-
+    
     psdmed = np.zeros((ncomp, nfreqs))
     denom = srate * np.sum(np.power(window, 2))
+    
     for it in range(ncomp):
         temp = icaact[it, index, :].reshape(1, index.shape[0], n_seg, order='F')
         temp = temp[:, :, subset] * window
         temp = fft(temp, n_points, 1)
+        
         temp = temp * np.conjugate(temp)
-        temp = temp[:, 1:nfreqs + 1, :] * 2 / denom
+        
+        temp = temp[:, 1:(nfreqs + 1), :] * 2 / denom
+        
         if nfreqs == nyquist:
+            
             temp[:, -1, :] /= 2
         psdmed[it, :] = 20 * np.real(np.log10(np.median(temp, axis=2)))
 
     nfreq = psdmed.shape[1]
+    
     if nfreq < 100:
         psdmed = np.concatenate([psdmed, np.tile(psdmed[:, -1:], (1, 100 - nfreq))], axis=1)
 
@@ -248,9 +253,7 @@ def mergepoints2D(x: np.array, y: np.array, v: np.array) -> tuple[np.array, np.a
         y = yxv[:, 0]
         # Re-combine the real and imaginary parts
         v = yxv[:, 2] + 1j * yxv[:, 3]
-    # Give a warning if some of the points were duplicates (and averaged out)
-    # if sz > x.shape[0]:
-    #     print('MATLAB:griddata:DuplicateDataPoints')
+
     return x, y, v
 
 

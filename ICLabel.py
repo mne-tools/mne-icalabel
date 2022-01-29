@@ -257,6 +257,7 @@ def mne_iclabel(epochs):
     ica.fit(epochs)
 
     icaact = ica.get_sources(epochs).get_data()
+    print(icaact.shape)
     icaact = np.transpose(icaact, [1, 2, 0])
 
     # weights (unmixing matrix)
@@ -269,7 +270,7 @@ def mne_iclabel(epochs):
     trials = 80
 
     rd, th = mne_to_eeglab_locs(epochs)
-
+    
     features = eeg_features(icaact=icaact,
                             trials=trials,
                             srate=srate,
@@ -277,9 +278,9 @@ def mne_iclabel(epochs):
                             subset=None,
                             icaweights=icaweights,
                             icawinv=icawinv,
-                            Th=th,
-                            Rd=rd)
-
+                            th=th,
+                            rd=rd)
+    
     topo = features[0].astype(np.float32)
     psds = features[1].astype(np.float32)
     autocorr = features[2].astype(np.float32)

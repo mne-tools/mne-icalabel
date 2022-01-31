@@ -3,7 +3,7 @@
 .. _tut-auto-artifact-ica:
 
 WIP: Repairing artifacts with ICA automatically
-==========================================
+===============================================
 
 This tutorial covers automatically repairing signals using ICA. For conceptual background on ICA, see
 :ref:`this scikit-learn tutorial

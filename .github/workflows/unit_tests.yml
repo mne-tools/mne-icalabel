@@ -1,0 +1,156 @@
+name: 'unit_tests'
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.number }}-${{ github.event.type }}
+  cancel-in-progress: true
+on:
+  push:
+    branches:
+      - 'main'
+  pull_request:
+    branches:
+      - '*'
+
+jobs:
+  # Run style tests
+  style:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ ubuntu-latest ]
+        python-version: [ 3.9 ]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install pip
+        run: |
+          pip install --upgrade pip
+          pip install --upgrade --upgrade-strategy eager -r requirements.txt
+          pip install --upgrade --upgrade-strategy eager -r requirements_testing.txt
+      - name: Run style & documentation tests
+        run: make pep
+
+  # Run installation tests
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ ubuntu-latest, macos-latest ]
+        python-version: [ 3.7, 3.8, 3.9 ]
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade --upgrade-strategy eager -r requirements.txt
+          pip install --upgrade --upgrade-strategy eager -r requirements_testing.txt
+
+      # build with sdist directly
+      - uses: actions/checkout@v2
+      - name: Build sdist
+        run: python setup.py sdist
+      - name: Install sdist
+        run: pip install ./dist/mne-icalabel-*
+      - name: Clean up working directory
+        run: rm -rf ./*
+      - name: Try importing mne_icalabel
+        run: python -c 'import mne_icalabel; print(mne_icalabel.__version__)'
+      - name: Remove sdist install
+        run: pip uninstall -y mne-icalabel
+      # build with build wheet
+      - uses: actions/checkout@v2
+      - name: Build wheel
+        run: python setup.py bdist_wheel
+      - name: Install wheel
+        run: pip install ./dist/mne_icalabel-*.whl
+      - name: Clean up working directory
+        run: rm -rf ./*
+      - name: Try importing mne_icalabel
+        run: python -c 'import mne_icalabel; print(mne_icalabel.__version__)'
+      - name: Remove wheel install
+        run: pip uninstall -y mne-icalabel
+
+      - uses: actions/checkout@v2
+      - name: Test extras install
+        run: |
+          pip install .[full]
+          python -c 'import mne_icalabel; print(mne_icalabel.__version__)'
+
+  # Run unit tests
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            python-version: 3.7
+            mne-version: mne-main
+          - os: ubuntu-latest
+            python-version: 3.9
+            mne-version: mne-main
+          - os: macos-latest
+            python-version: 3.9
+            mne-version: mne-main
+
+    env:
+      TZ: Europe/Berlin
+      FORCE_COLOR: true
+      DISPLAY: ':99.0'
+      MNE_LOGGING_LEVEL: 'info'
+      OPENBLAS_NUM_THREADS: '1'
+      PYTHONUNBUFFERED: '1'
+
+    steps:
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade --upgrade-strategy eager -r requirements.txt
+          pip install --upgrade --upgrade-strategy eager -r requirements_testing.txt
+
+      - name: Install MNE (main)
+        if: "matrix.mne-version == 'mne-main'"
+        run: |
+          git clone --depth 1 https://github.com/mne-tools/mne-python.git -b main
+          pip install -e ./mne-python
+
+      - name: Display versions and environment information
+        run: |
+          echo $TZ
+          date
+          python --version
+          which python
+
+      - name: Install mne-icalabel
+        run: |
+          pip install --no-deps .
+
+      - shell: bash -el {0}
+        run: mne sys_info
+        name: 'Show infos'
+
+      - name: Run pytest
+        run: |
+          python -m pytest . --cov=mne_icalabel --cov-report=xml --cov-config=setup.cfg --verbose --ignore mne-python
+        shell: bash
+
+      - name: Upload coverage stats to codecov
+        if: "matrix.os == 'ubuntu-latest'"
+        uses: codecov/codecov-action@v1
+        with:
+          file: ./coverage.xml

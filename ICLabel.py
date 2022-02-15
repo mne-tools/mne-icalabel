@@ -262,8 +262,12 @@ def mne_iclabel(epochs):
 
     # weights (unmixing matrix)
     icaweights = ica.unmixing_matrix_
+    
+    s = np.sqrt(ica.pca_explained_variance_)
+    u = ica.unmixing_matrix_ / s
+    v = ica.pca_components_
 
-    icawinv = np.linalg.pinv(ica.unmixing_matrix_ @ ica.pca_components_.T)
+    icawinv = np.linalg.pinv((u * s) @ v)
 
     srate = 128
     pnts = 384

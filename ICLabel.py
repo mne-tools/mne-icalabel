@@ -154,8 +154,8 @@ def format_input(images: np.ndarray, psd: np.ndarray, autocorr: np.ndarray):
                                        np.flip(images, axis=1),
                                        np.flip(-1 * images, axis=1)),
                                       axis=3)
-    formatted_psds = np.tile(psds, (1,1,1,4))
-    formatted_autocorrs = np.tile(autocorrs, (1,1,1,4))
+    formatted_psd = np.tile(psd, (1,1,1,4))
+    formatted_autocorr = np.tile(autocorr, (1,1,1,4))
 
     formatted_images = torch.from_numpy(
         np.transpose(formatted_images, (3, 2, 0, 1)))

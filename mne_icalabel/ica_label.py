@@ -1,15 +1,15 @@
+from tkinter import N
 import numpy as np
 import math
 import scipy.signal
 import warnings
-
+from numpy.typing import ArrayLike
+import mne
 from mne import BaseEpochs
 from mne.io import BaseRaw
 from mne.preprocessing import ICA
 
-from eeg_features import eeg_topoplot
-
-from .ica_features import rpsd, autocorr_fftw, topoplot
+from .ica_features import rpsd, autocorr_fftw, topoplot, mne_to_eeglab_locs
 
 
 def ica_label(inst, verbose=True, **ica_kwargs):
@@ -59,76 +59,72 @@ def ica_label(inst, verbose=True, **ica_kwargs):
     return clean_inst
 
 
-def eeg_features(icaact: np.array,
-                 trials: int,
-                 srate: float,
-                 pnts: int,
-                 subset: np.array,
-                 icaweights: np.array,
-                 icawinv: np.array,
-                 Th: np.array,
-                 Rd: np.array,
-                 plotchans: np.array,
-                 pct_data: int = 100) -> np.array:
+def ica_eeg_features(raw: mne.io.BaseRaw, 
+                 ica: mne.preprocessing.ICA,
+                 subset: np.array = None,
+                 pct_data: int = 100) -> ArrayLike:
     """
-    TODO: make this work with Raw
     Generates the feature nd-array for ICLabel.
 
-    Args:
-        icaact (np.array): ICA activation waveforms
-        trials (int): Number of trials
-        srate (float): Sampling Rate
-        pnts (int): Number of Points
-        icaweights (np.array): ICA Weights
-        nfreqs (int): Number of frequencies
-        icawinv (np.array): pinv(EEG.icaweights*EEG.icasphere)
-        Th (np.array): Theta coordinates of electrodes (polar)
-        Rd (np.array): Rho coordinates of electrodes (polar)
-        plotchans (np.array): plot channels
-        pct_data (int, optional): . Defaults to 100.
+    Parameters
+    ----------
+    raw : instance of Raw
+        The Raw object that ICA is applied to.
+    ica : instance of ICA
+        The ICA instance that was fitted to ``raw``.
+    subset : np.ndarray
+        A subset to take on the RPSD.
+        TODO: Not sure what this input argument is for.
+    pct_data (int, optional):
+        Defaults to 100.
 
     Returns:
-        np.array: Feature matrix (4D)
+        np.ndarray: Feature matrix (4D)
     """
+    n_components = ica.n_components_
+    sfreq = int(raw.info['sfreq'])
+    # pnts = icaact.shape[1]
+
+    # get the weights * sphere and compute ica weight inverse
+    s = np.sqrt(ica.pca_explained_variance_)[:n_components]
+    u = ica.unmixing_matrix_ / s
+    v = ica.pca_components_[:n_components,:]
+    ica_weights = (u * s) @ v
+    icawinv = np.linalg.pinv(ica_weights)
+
+    # ica sphere - assumed to be identity
+    icasphere = np.eye(icawinv.shape[0])
+
+    # get the ica activations
+    raw_data = raw.get_data(picks=ica.ch_names) #* 1e6
+    icaact = (ica_weights[0:n_components,:] @ icasphere) @ raw_data
+
+    # make sure ICA activation is 3D to account for "trial" dimension
+    if icaact.ndim == 2:
+        icaact = np.expand_dims(icaact, axis=2)
+
+    # get the polar coordinates of electrode locations
+    rd, th = mne_to_eeglab_locs(raw)
+
     # Generate topoplot features
-    ncomp = icawinv.shape[1]
-    topo = np.zeros((32, 32, 1, ncomp))
-    plotchans -= 1
-    for it in range(ncomp):
-        temp_topo = topoplot(
-            icawinv=icawinv[:, it:it + 1], Th=Th, Rd=Rd, plotchans=plotchans)
+    topo = np.zeros((32, 32, 1, n_components))
+    plotchans = np.squeeze(np.argwhere(~np.isnan(np.squeeze(th))))
+    print(n_components)
+    for it in range(n_components):
+        temp_topo = topoplot(icawinv=icawinv[:, it], 
+            theta_coords=th, rho_coords=rd, picks=plotchans)
         np.nan_to_num(temp_topo, copy=False)  # Set NaN values to 0 in-place
         topo[:, :, 0, it] = temp_topo / np.max(np.abs(temp_topo))
 
     # Generate PSD Features
-    psd = rpsd(icaact=icaact, icaweights=icaweights, trials=trials,
-               srate=srate, pnts=pnts, subset=subset)
-
-    nfreq = psd.shape[1]
-    if nfreq < 100:
-        psd = np.concatenate(
-            [psd, np.tile(psd[:, -2:-1], (1, 100 - nfreq))], axis=1)
-
-    for linenoise_ind in [50, 60]:
-        linenoise_around = np.array([linenoise_ind - 1, linenoise_ind + 1])
-        difference = psd[:, linenoise_around] - \
-            psd[:, linenoise_ind:linenoise_ind + 1]
-        notch_ind = np.all(difference > 5, 1)
-
-        if np.any(notch_ind):
-            psd[notch_ind, linenoise_ind] = np.mean(
-                psd[notch_ind, linenoise_around], axis=1)
-
-    # Normalize
-    psd = psd / np.max(np.abs(psd))
-
-    psd = np.expand_dims(psd, (2, 3))
-    psd = np.transpose(psd, [2, 1, 3, 0])
+    # RPSD is sensitive to sfreq as a float
+    psd = rpsd(icaact=icaact, sfreq=sfreq, pct_data=pct_data, subset=subset)
 
     # Autocorrelation
-    autocorr = autocorr_fftw(icaact=icaact, trials=trials,
-                             srate=srate, pnts=pnts, pct_data=pct_data)
+    autocorr = autocorr_fftw(icaact=icaact, sfreq=sfreq)
     autocorr = np.expand_dims(autocorr, (2, 3))
     autocorr = np.transpose(autocorr, [2, 1, 3, 0])
 
     return [0.99 * topo, 0.99 * psd, 0.99 * autocorr]
+
+

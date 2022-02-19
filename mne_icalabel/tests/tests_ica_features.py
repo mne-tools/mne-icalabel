@@ -4,12 +4,12 @@ import importlib.resources
 
 import numpy as np
 import scipy.io as sio
-from numpy.testing import assert_array_almost_equal, assert_array_equal
+from numpy.testing import assert_array_almost_equal, assert_array_equal, assert_allclose
 import mne
 from mne.preprocessing import ICA
 
-from mne_icalabel.ica_features import autocorr_fftw, rpsd, topoplot
-from eeg_features import eeg_autocorr_fftw, eeg_rpsd, eeg_topoplot
+from mne_icalabel.ica_features import autocorr_fftw, rpsd, topoplot, mne_to_eeglab_locs
+from mne_icalabel.tests._eeg_features import eeg_autocorr_fftw, eeg_rpsd, eeg_topoplot
 
 
 # load in test data for features from original Matlab ICLabel
@@ -55,11 +55,6 @@ def test_eeg_autocorr_fftw():
     ica_raw = ica.get_sources(raw)
     ica_act = np.atleast_3d(ica_raw.get_data())
 
-    autocorr_feature = autocorr_fftw(ica_act, sfreq)
-    test_autocorr_feature = eeg_autocorr_fftw(
-        ica_act, 0, srate=int(sfreq), pnts=len(raw.times))
-    assert_array_equal(autocorr_feature, test_autocorr_feature)
-
     # test against EEGlab's matlab test data
     icaact = corr_data['icaact']
     srate = corr_data['srate'][0, 0]
@@ -67,8 +62,14 @@ def test_eeg_autocorr_fftw():
     matlab_resamp = sio.loadmat('test_data/autocorr_data.mat')['resamp']
     assert_array_almost_equal(resamp, matlab_resamp)
 
+    # run autocorrelation feature generation and compare
+    # to original implementation by Jacob
+    autocorr_feature = autocorr_fftw(ica_act, sfreq)
+    test_autocorr_feature = eeg_autocorr_fftw(
+        ica_act, 0, srate=int(sfreq), pnts=len(raw.times))
+    assert_array_almost_equal(autocorr_feature, test_autocorr_feature)
 
-@pytest.mark.skip(reason='Doesntwork')
+
 def test_rpsd_feature():
     """Test PSD feature generation.
 
@@ -84,15 +85,48 @@ def test_rpsd_feature():
     ica_raw = ica.get_sources(raw)
     ica_act = np.atleast_3d(ica_raw.get_data())
 
+    # test against EEGlab's matlab test data
+    # TODO: does not work because there are numerical differences...
+    icaact = rpsd_data['icaact']
+    srate = rpsd_data['srate'][0, 0]
+    resamp = rpsd(icaact, srate)
+    matlab_resamp = sio.loadmat('test_data/rpsd_data.mat')['psd']
+    # assert_allclose(resamp, matlab_resamp)
+
+    # test against Jacob's implementation
     test_rpsd_feature = eeg_rpsd(
-        ica_act, icaweights=ica_weights, trials=1, srate=int(sfreq), pnts=len(raw.times))
-    rpsd_feature = rpsd(ica_act, sfreq)
+        ica_act.copy(), icaweights=ica_weights.copy(),
+        trials=1, srate=int(sfreq), pnts=len(raw.times))
+    rpsd_feature = rpsd(ica_act, int(sfreq))
     assert_array_equal(rpsd_feature, test_rpsd_feature)
 
 
-@pytest.mark.skip(reason='Doesntwork')
 def test_topoplot_feature():
     """Test topoplot feature generation."""
+    # Test against Matlab's EEGLab test data
+    icawinv = topoplot_data['icawinv']
+    Rd = topoplot_data['Rd']
+    Th = topoplot_data['Th']
+    plotchans = topoplot_data['plotchans']
+    expected_topo = topoplot_data['temp_topo']
+
+    i = 10
+    # compare output to Jacob's original implementation
+    test_Zi = eeg_topoplot(icawinv=icawinv[:, i:i + 1], Rd=Rd, Th=Th,
+                           plotchans=plotchans - 1)
+
+    # now compare the output to what is expected
+    Z_i = topoplot(icawinv[:, i:i + 1], theta_coords=Th, rho_coords=Rd,
+                   picks=plotchans - 1)
+    assert_array_almost_equal(test_Zi, Z_i)
+    assert_array_almost_equal(Z_i, expected_topo)
+
+
+def test_topoplot_from_raw():
+    """Test generating topoplot from Raw.
+
+    Tests converting rho and theta coordinates from
+    MNE-Python's Raw data structure."""
     ica, raw = _create_test_ica_component()
 
     # get the ICA waveforms
@@ -101,26 +135,9 @@ def test_topoplot_feature():
 
     # compute the inputs for topoplot
     ica_winv = np.linalg.pinv(ica_weights.dot(ica_sphere))
-    theta = np.arange(ica.n_components_)
-    rho = np.arange(ica.n_components_)
-
-    # topoplot_feature = topoplot(ica_winv, theta, rho)
-    # test_topoplot_feature = eeg_topoplot(ica_winv, theta, rho)
-    # assert_array_equal(topoplot_feature, test_topoplot_feature)
-
-    # Test against Matlab's EEGLab test data
-    icawinv = topoplot_data['icawinv']
-    Rd = topoplot_data['Rd']
-    Th = topoplot_data['Th']
-    plotchans = topoplot_data['plotchans']
-    expected_topo = topoplot_data['temp_topo']
-
-    print(expected_topo.shape)
-    print(Rd.shape, Th.shape)
-    print(plotchans)
-    print(icawinv.shape)
-    # Python output
-    i = 10
-    Zi = eeg_topoplot(icawinv=icawinv[:, i:i + 1], Rd=Rd, Th=Th,
-                      plotchans=plotchans)
-    assert_array_equal(Zi, expected_topo)
+    rho, theta = mne_to_eeglab_locs(raw)
+    n_components = ica.n_components_
+    for i in range(n_components):
+        Z_i = topoplot(ica_winv[:, i:i + 1], theta_coords=theta,
+                       rho_coords=rho,
+                       picks=None)

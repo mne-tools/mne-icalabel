@@ -6,7 +6,7 @@
 [![PyPI Download count](https://pepy.tech/badge/mne-icalabel)](https://pepy.tech/project/mne-icalabel)
 [![Latest PyPI release](https://img.shields.io/pypi/v/mne-icalabel.svg)](https://pypi.org/project/mne-icalabel/)
 
-This repository is a conversion of the popular ICLabel classifier for python.
+This repository is a conversion of the popular ICLabel classifier for Python. In addition, we provide improvements in the form of other models.
 
 ## Ports Completed
 
@@ -36,3 +36,5 @@ are coppied to the new image features. Then, the predicted probabilities are ave
 images.
 
 ## MNE Package Port
+
+

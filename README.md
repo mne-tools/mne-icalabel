@@ -38,3 +38,17 @@ images.
 ## MNE Package Port
 
 
+# Installation
+
+To get the latest code using [git](https://git-scm.com/), open a terminal and type:
+
+    git clone git://github.com/jacobf18/iclabel-python.git
+    cd iclabel-python
+    pip install -e .    
+
+or one can install directly using pip
+
+    pip install --user -U https://api.github.com/repos/jacobf18/iclabel-python/zipball/main
+
+Alternatively, you can also download a
+`zip file of the latest development version <https://github.com/mne-tools/mne-connectivity/archive/main.zip>`__.

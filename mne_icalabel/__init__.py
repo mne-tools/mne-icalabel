@@ -8,4 +8,4 @@
 __version__ = '0.1dev0'
 
 from .ica_features import rpsd, autocorr_fftw, topoplot
-from .ica_label import eeg_features, ica_label
+from .ica_label import ica_eeg_features

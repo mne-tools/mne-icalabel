@@ -1,7 +1,9 @@
+from typing import List, Tuple
+from numpy.typing import ArrayLike
 import numpy as np
 
 
-def pol2cart(theta: np.array, rho: np.array) -> tuple[np.array, np.array]:
+def pol2cart(theta: ArrayLike, rho: ArrayLike) -> Tuple[ArrayLike, ArrayLike]:
     """
     Converts polar coordinates to cartesian coordinates.
 
@@ -14,7 +16,7 @@ def pol2cart(theta: np.array, rho: np.array) -> tuple[np.array, np.array]:
     return x, y
 
 
-def mergesimpts(data: np.array, tols: list[np.array, np.array, np.array], mode: str = 'average') -> np.array:
+def mergesimpts(data: ArrayLike, tols: List[ArrayLike], mode: str = 'average') -> ArrayLike:
     """
 
     Args:
@@ -34,10 +36,8 @@ def mergesimpts(data: np.array, tols: list[np.array, np.array, np.array], mode: 
         if point in idxs_ready:
             continue
         else:
-            similar_pts = np.where(
-                np.prod(np.abs(data_ - data_[point]) < tols_, axis=-1))
-            similar_pts = np.array(
-                list(set(similar_pts[0].tolist()) - set(idxs_ready)))
+            similar_pts = np.where(np.prod(np.abs(data_ - data_[point]) < tols_, axis=-1))
+            similar_pts = np.array(list(set(similar_pts[0].tolist()) - set(idxs_ready)))
             idxs_ready += similar_pts.tolist()
             if mode == 'average':
                 exemplar = np.mean(data_[similar_pts], axis=0)
@@ -47,7 +47,7 @@ def mergesimpts(data: np.array, tols: list[np.array, np.array, np.array], mode: 
     return np.array(newdata)
 
 
-def mergepoints2D(x: np.array, y: np.array, v: np.array) -> tuple[np.array, np.array, np.array]:
+def mergepoints2D(x: ArrayLike, y: ArrayLike, v: ArrayLike) -> Tuple[ArrayLike, ArrayLike, ArrayLike]:
     """
     Averages values for points that are close to each other.
 
@@ -65,12 +65,12 @@ def mergepoints2D(x: np.array, y: np.array, v: np.array) -> tuple[np.array, np.a
     x = x.copy()
     y = y.copy()
     v = v.copy()
-    x = np.reshape(x, (sz), order='F')
-    y = np.reshape(y, (sz), order='F')
-    v = np.reshape(v, (sz), order='F')
+    x = np.reshape(x, sz, order='F')
+    y = np.reshape(y, sz, order='F')
+    v = np.reshape(v, sz, order='F')
 
-    myepsx = np.spacing(0.5 * (np.max(x) - np.min(x)))**(1/3)
-    myepsy = np.spacing(0.5 * (np.max(y) - np.min(y)))**(1/3)
+    myepsx = np.spacing(0.5 * (np.max(x) - np.min(x))) ** (1 / 3)
+    myepsy = np.spacing(0.5 * (np.max(y) - np.min(y))) ** (1 / 3)
     # Look for x, y points that are indentical (within a tolerance)
     # Average out the values for these points
     if np.all(np.isreal(v)):
@@ -86,14 +86,12 @@ def mergepoints2D(x: np.array, y: np.array, v: np.array) -> tuple[np.array, np.a
         x = yxv[:, 1]
         y = yxv[:, 0]
         # Re-combine the real and imaginary parts
-        v = yxv[:, 2]+1j*yxv[:, 3]
-    # Give a warning if some of the points were duplicates (and averaged out)
-    # if sz > x.shape[0]:
-    #     print('MATLAB:griddata:DuplicateDataPoints')
+        v = yxv[:, 2] + 1j * yxv[:, 3]
+
     return x, y, v
 
 
-def gdatav4(x: np.array, y: np.array, v: np.array, xq: np.array, yq: np.array) -> tuple[np.array, np.array, np.array]:
+def gdatav4(x: ArrayLike, y: ArrayLike, v: ArrayLike, xq: ArrayLike, yq: ArrayLike) -> Tuple[ArrayLike, ArrayLike, ArrayLike]:
     """
     GDATAV4 MATLAB 4 GRIDDATA interpolation
     Reference:  David T. Sandwell, Biharmonic spline
@@ -112,16 +110,15 @@ def gdatav4(x: np.array, y: np.array, v: np.array, xq: np.array, yq: np.array) -
     Returns:
         tuple[np.array, np.array, np.array]: tuple of Xi, Yi, Zi 
     """
-
     x, y, v = mergepoints2D(x, y, v)
 
-    xy = x + 1j*y
+    xy = x + 1j * y
     xy = np.squeeze(xy)
 
     # Determine distances between points
     d = np.abs(np.subtract.outer(xy, xy))
     # % Determine weights for interpolation
-    g = np.square(d) * (np.log(d)-1)  # % Green's function.
+    g = np.square(d) * (np.log(d) - 1)  # % Green's function.
     # Fixup value of Green's function along diagonal
     np.fill_diagonal(g, 0)
     weights = np.linalg.lstsq(g, v)[0]
@@ -132,10 +129,9 @@ def gdatav4(x: np.array, y: np.array, v: np.array, xq: np.array, yq: np.array) -
     # Evaluate at requested points (xq,yq).  Loop to save memory.
     for i in range(m):
         for j in range(n):
-            d = np.abs(xq[i, j] + 1j*yq[i, j] - xy)
-            g = np.square(d) * (np.log(d)-1)
+            d = np.abs(xq[i, j] + 1j * yq[i, j] - xy)
+            g = np.square(d) * (np.log(d) - 1)
             # Value of Green's function at zero
             g[np.where(np.isclose(d, 0))] = 0
-            vq[i, j] = (np.expand_dims(g, axis=0) @
-                        np.expand_dims(weights, axis=1))[0][0]
+            vq[i, j] = (np.expand_dims(g, axis=0) @ np.expand_dims(weights, axis=1))[0][0]
     return xq, yq, vq

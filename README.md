@@ -6,7 +6,7 @@
 [![PyPI Download count](https://pepy.tech/badge/mne-icalabel)](https://pepy.tech/project/mne-icalabel)
 [![Latest PyPI release](https://img.shields.io/pypi/v/mne-icalabel.svg)](https://pypi.org/project/mne-icalabel/)
 
-This repository is a conversion of the popular ICLabel classifier for python.
+This repository is a conversion of the popular ICLabel classifier for Python. In addition, we provide improvements in the form of other models.
 
 ## Ports Completed
 
@@ -36,3 +36,19 @@ are coppied to the new image features. Then, the predicted probabilities are ave
 images.
 
 ## MNE Package Port
+
+
+# Installation
+
+To get the latest code using [git](https://git-scm.com/), open a terminal and type:
+
+    git clone git://github.com/jacobf18/iclabel-python.git
+    cd iclabel-python
+    pip install -e .    
+
+or one can install directly using pip
+
+    pip install --user -U https://api.github.com/repos/jacobf18/iclabel-python/zipball/main
+
+Alternatively, you can also download a
+`zip file of the latest development version <https://github.com/mne-tools/mne-connectivity/archive/main.zip>`__.

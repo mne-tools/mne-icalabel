@@ -138,8 +138,6 @@ eeg_ica_haufe
 .vscode
 matconvnet-1.0-beta25/
 
-**/*.mat
-
 .idea
 *.set
 *.fdt

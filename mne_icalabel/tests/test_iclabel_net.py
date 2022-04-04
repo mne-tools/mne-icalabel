@@ -27,13 +27,13 @@ def test_weights():
     network_matlab = loadmat(matconvnet_iclabel_path)
 
     # load weights from matlab network
-    weights_matlab = network_matlab["params"]['value'][0,:]
+    weights_matlab = network_matlab['params']['value'][0,:]
     # format weights from matlab network to torch convention
     for k, weight in enumerate(weights_matlab):
         if weight.ndim == 4:
             weights_matlab[k] = weight.transpose((3, 2, 0, 1))
         elif weight.ndim == 3:
-            weights_matlab[k] = weight.transpose((2,0,1))
+            weights_matlab[k] = weight.transpose((2, 0, 1))
 
     network_python_layers = [
         layer for layer in network_python.keys() if 'seq' not in layer]
@@ -65,12 +65,11 @@ def test_weights():
 
         # find matlab_layer idx
         idx = network_matlab_layers.index(matlab_layer)
-
         # compare layers weights
         assert np.allclose(network_python[python_layer], weights_matlab[idx])
 
 
-def test_network_output():
+def test_network_outputs():
     """
     Compare that the ICLabel network in python and matlab outputs the same
     values for a common set of features.

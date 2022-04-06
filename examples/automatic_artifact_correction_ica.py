@@ -5,11 +5,11 @@
 WIP: Repairing artifacts with ICA automatically
 ===============================================
 
-This tutorial covers automatically repairing signals using ICA. For conceptual background on ICA, see
-:ref:`this scikit-learn tutorial
-<sphx_glr_auto_examples_decomposition_plot_ica_blind_source_separation.py>`. For
-a basic understanding of how to use ICA to remove artifacts, see the tutorial
-`_tut-artifact-ica` in MNE-Python.
+This tutorial covers automatically repairing signals using ICA. For conceptual
+background on ICA, see :ref:`this scikit-learn tutorial
+<sphx_glr_auto_examples_decomposition_plot_ica_blind_source_separation.py>`.
+For a basic understanding of how to use ICA to remove artifacts, see the
+tutorial `_tut-artifact-ica` in MNE-Python.
 
 We begin as always by importing the necessary Python modules and loading some
 :ref:`example data <sample-dataset>`. Because ICA can be computationally

@@ -1,0 +1,8 @@
+include *.png
+include *.txt
+include Makefile
+recursive-include examples *.py
+recursive-include examples *.txt
+recursive-include mne_icalabel *.pt
+recursive-include mne_icalabel *.py
+recursive-include test_data *.mat

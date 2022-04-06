@@ -1,4 +1,3 @@
-import py
 import pytest
 import importlib.resources
 
@@ -11,10 +10,14 @@ from mne_icalabel.ica_net import run_iclabel
 
 
 # load in test data for features from original Matlab ICLabel
-ica_file_path = str(importlib.resources.files(
-    'mne_icalabel.tests').joinpath('data/eeglab_ica.set'))
-ica_raw_file_path = str(importlib.resources.files(
-    'mne_icalabel.tests').joinpath('data/eeglab_ica_raw.mat'))
+ica_file_path = str(
+    importlib.resources.files(
+        "mne_icalabel.tests").joinpath("data/eeglab_ica.set")
+)
+ica_raw_file_path = str(
+    importlib.resources.files("mne_icalabel.tests").joinpath(
+        "data/eeglab_ica_raw.mat")
+)
 
 
 def test_iclabel_net():
@@ -22,8 +25,10 @@ def test_iclabel_net():
     eeglab_ica = mne.preprocessing.read_ica_eeglab(ica_file_path)
     eeglab_raw = mne.io.read_raw_eeglab(ica_file_path)
 
-    eeglab_ica_raw = sio.loadmat(ica_raw_file_path)['EEG']
-    raw_labels = eeglab_ica_raw['etc'][0][0][0][0]['ic_classification'][0][0][0][0][0][1]
+    eeglab_ica_raw = sio.loadmat(ica_raw_file_path)["EEG"]
+    raw_labels = eeglab_ica_raw["etc"][0][0][0][0][
+        "ic_classification"
+    ][0][0][0][0][0][1]
 
     # compute the features of the ICA waveforms
     ica_features = ica_eeg_features(eeglab_raw, eeglab_ica)
@@ -42,7 +47,8 @@ def test_iclabel_net():
     # TODO: there is one difference between IClabel in Matlab and Python
     print(num_labels)
     print(orig_num_labels)
-    
+
+    # everything is correct Brain vs non-brain
     num_labels[num_labels != 0] = 1
     orig_num_labels[orig_num_labels != 0] = 1
     assert sum(map(lambda x, y: bool(x - y), num_labels, orig_num_labels)) == 1

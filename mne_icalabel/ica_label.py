@@ -5,10 +5,12 @@ import mne
 from .ica_features import rpsd, autocorr_fftw, topoplot, mne_to_eeglab_locs
 
 
-def ica_eeg_features(raw: mne.io.BaseRaw,
-                     ica: mne.preprocessing.ICA,
-                     subset: np.array = None,
-                     pct_data: int = 100) -> ArrayLike:
+def ica_eeg_features(
+    raw: mne.io.BaseRaw,
+    ica: mne.preprocessing.ICA,
+    subset: np.array = None,
+    pct_data: int = 100,
+) -> ArrayLike:
     """
     Generates the feature nd-array for ICLabel.
 
@@ -28,7 +30,7 @@ def ica_eeg_features(raw: mne.io.BaseRaw,
         np.ndarray: Feature matrix (4D)
     """
     n_components = ica.n_components_
-    sfreq = int(raw.info['sfreq'])
+    sfreq = int(raw.info["sfreq"])
     # pnts = icaact.shape[1]
 
     # get the weights * sphere and compute ica weight inverse
@@ -57,8 +59,10 @@ def ica_eeg_features(raw: mne.io.BaseRaw,
     plotchans = np.squeeze(np.argwhere(~np.isnan(np.squeeze(th))))
     print(n_components)
     for it in range(n_components):
-        temp_topo = topoplot(icawinv=icawinv[:, it],
-                             theta_coords=th, rho_coords=rd, picks=plotchans)
+        temp_topo = topoplot(
+            icawinv=icawinv[:, it], theta_coords=th,
+            rho_coords=rd, picks=plotchans
+        )
         np.nan_to_num(temp_topo, copy=False)  # Set NaN values to 0 in-place
         topo[:, :, 0, it] = temp_topo / np.max(np.abs(temp_topo))
 

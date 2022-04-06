@@ -16,7 +16,9 @@ def pol2cart(theta: ArrayLike, rho: ArrayLike) -> Tuple[ArrayLike, ArrayLike]:
     return x, y
 
 
-def mergesimpts(data: ArrayLike, tols: List[ArrayLike], mode: str = 'average') -> ArrayLike:
+def mergesimpts(
+    data: ArrayLike, tols: List[ArrayLike], mode: str = "average"
+) -> ArrayLike:
     """
 
     Args:
@@ -36,10 +38,13 @@ def mergesimpts(data: ArrayLike, tols: List[ArrayLike], mode: str = 'average') -
         if point in idxs_ready:
             continue
         else:
-            similar_pts = np.where(np.prod(np.abs(data_ - data_[point]) < tols_, axis=-1))
-            similar_pts = np.array(list(set(similar_pts[0].tolist()) - set(idxs_ready)))
+            similar_pts = np.where(
+                np.prod(np.abs(data_ - data_[point]) < tols_, axis=-1)
+            )
+            similar_pts = np.array(list(
+                set(similar_pts[0].tolist()) - set(idxs_ready)))
             idxs_ready += similar_pts.tolist()
-            if mode == 'average':
+            if mode == "average":
                 exemplar = np.mean(data_[similar_pts], axis=0)
             else:
                 exemplar = data_[similar_pts].copy()[0]  # first
@@ -47,7 +52,9 @@ def mergesimpts(data: ArrayLike, tols: List[ArrayLike], mode: str = 'average') -
     return np.array(newdata)
 
 
-def mergepoints2D(x: ArrayLike, y: ArrayLike, v: ArrayLike) -> Tuple[ArrayLike, ArrayLike, ArrayLike]:
+def mergepoints2D(
+    x: ArrayLike, y: ArrayLike, v: ArrayLike
+) -> Tuple[ArrayLike, ArrayLike, ArrayLike]:
     """
     Averages values for points that are close to each other.
 
@@ -65,24 +72,24 @@ def mergepoints2D(x: ArrayLike, y: ArrayLike, v: ArrayLike) -> Tuple[ArrayLike, 
     x = x.copy()
     y = y.copy()
     v = v.copy()
-    x = np.reshape(x, sz, order='F')
-    y = np.reshape(y, sz, order='F')
-    v = np.reshape(v, sz, order='F')
+    x = np.reshape(x, sz, order="F")
+    y = np.reshape(y, sz, order="F")
+    v = np.reshape(v, sz, order="F")
 
     myepsx = np.spacing(0.5 * (np.max(x) - np.min(x))) ** (1 / 3)
     myepsy = np.spacing(0.5 * (np.max(y) - np.min(y))) ** (1 / 3)
-    # Look for x, y points that are indentical (within a tolerance)
+    # Look for x, y points that are identical (within a tolerance)
     # Average out the values for these points
     if np.all(np.isreal(v)):
         data = np.stack((y, x, v), axis=-1)
-        yxv = mergesimpts(data, [myepsy, myepsx, np.inf], 'average')
+        yxv = mergesimpts(data, [myepsy, myepsx, np.inf], "average")
         x = yxv[:, 1]
         y = yxv[:, 0]
         v = yxv[:, 2]
     else:
         # If z is imaginary split out the real and imaginary parts
         data = np.stack((y, x, np.real(v), np.imag(v)), axis=-1)
-        yxv = mergesimpts(data, [myepsy, myepsx, np.inf, np.inf], 'average')
+        yxv = mergesimpts(data, [myepsy, myepsx, np.inf, np.inf], "average")
         x = yxv[:, 1]
         y = yxv[:, 0]
         # Re-combine the real and imaginary parts
@@ -91,7 +98,9 @@ def mergepoints2D(x: ArrayLike, y: ArrayLike, v: ArrayLike) -> Tuple[ArrayLike, 
     return x, y, v
 
 
-def gdatav4(x: ArrayLike, y: ArrayLike, v: ArrayLike, xq: ArrayLike, yq: ArrayLike) -> Tuple[ArrayLike, ArrayLike, ArrayLike]:
+def gdatav4(
+    x: ArrayLike, y: ArrayLike, v: ArrayLike, xq: ArrayLike, yq: ArrayLike
+) -> Tuple[ArrayLike, ArrayLike, ArrayLike]:
     """
     GDATAV4 MATLAB 4 GRIDDATA interpolation
     Reference:  David T. Sandwell, Biharmonic spline
@@ -108,7 +117,7 @@ def gdatav4(x: ArrayLike, y: ArrayLike, v: ArrayLike, xq: ArrayLike, yq: ArrayLi
         yq (np.array): y-grid
 
     Returns:
-        tuple[np.array, np.array, np.array]: tuple of Xi, Yi, Zi 
+        tuple[np.array, np.array, np.array]: tuple of Xi, Yi, Zi
     """
     x, y, v = mergepoints2D(x, y, v)
 
@@ -133,5 +142,6 @@ def gdatav4(x: ArrayLike, y: ArrayLike, v: ArrayLike, xq: ArrayLike, yq: ArrayLi
             g = np.square(d) * (np.log(d) - 1)
             # Value of Green's function at zero
             g[np.where(np.isclose(d, 0))] = 0
-            vq[i, j] = (np.expand_dims(g, axis=0) @ np.expand_dims(weights, axis=1))[0][0]
+            vq[i, j] = (np.expand_dims(g, axis=0) @
+                        np.expand_dims(weights, axis=1))[0][0]
     return xq, yq, vq

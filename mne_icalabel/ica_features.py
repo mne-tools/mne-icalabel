@@ -3,7 +3,6 @@ import math
 import scipy.signal
 import warnings
 from numpy.typing import ArrayLike
-from numpy.testing import assert_array_equal
 import mne
 
 from .utils import gdatav4, pol2cart
@@ -34,12 +33,12 @@ def autocorr_fftw(icaact: ArrayLike, sfreq: float) -> ArrayLike:
     sfreq = int(sfreq)
 
     # the number of FFTs and shape of the autocorrelation
-    n_fft = 2**(math.ceil(math.log2(abs(2 * n_times - 1))))
+    n_fft = 2 ** (math.ceil(math.log2(abs(2 * n_times - 1))))
     ac = np.zeros((len(icaact), n_fft), dtype=np.float64)
 
     for idx in range(len(icaact)):
-        X = np.fft.fft(icaact[idx:idx + 1, :], n=n_fft, axis=1)
-        ac[idx:idx + 1, :] = np.mean(np.power(np.abs(X), 2), 2)
+        X = np.fft.fft(icaact[idx: idx + 1, :], n=n_fft, axis=1)
+        ac[idx: idx + 1, :] = np.mean(np.power(np.abs(X), 2), 2)
 
     # compute the inverse fourier transform as the auto-correlation
     ac = np.fft.ifft(ac, n=None, axis=1)  # ifft
@@ -47,20 +46,18 @@ def autocorr_fftw(icaact: ArrayLike, sfreq: float) -> ArrayLike:
         ac = np.hstack((ac[:, 0:n_times], np.zeros(
             (len(ac), sfreq - n_times + 1))))
     else:
-        ac = ac[:, 0:sfreq + 1]
+        ac = ac[:, 0: sfreq + 1]
 
     # normalize
-    ac = ac[:, 0:sfreq + 1] / ac[:, 0][:, None]
+    ac = ac[:, 0: sfreq + 1] / ac[:, 0][:, None]
 
     # resample with polynomial interpolation
     resamp = scipy.signal.resample_poly(ac.T, 100, sfreq).T
     return resamp[:, 1:]
 
 
-def rpsd(icaact: ArrayLike,
-         sfreq: int,
-         pct_data: int = 100,
-         subset=None) -> ArrayLike:
+def rpsd(icaact: ArrayLike, sfreq: int,
+         pct_data: int = 100, subset=None) -> ArrayLike:
     """Generates RPSD features for ICLabel.
 
     Parameters
@@ -96,16 +93,16 @@ def rpsd(icaact: ArrayLike,
     # define the Hamming window to perform convolution
     window = np.hamming(n_points).reshape(1, -1)[:, :, np.newaxis]
     cutoff = math.floor(n_times / n_points) * n_points
-    index = np.ceil(np.arange(0, cutoff - n_points + 1, n_points / 2)
-                    ).astype(np.int64).reshape(1, -1) + \
-        np.arange(0, n_points).reshape(-1, 1)
+    index = np.ceil(np.arange(0, cutoff - n_points + 1, n_points / 2)).astype(
+        np.int64
+    ).reshape(1, -1) + np.arange(0, n_points).reshape(-1, 1)
     index = index.astype(np.int64)
 
     # the number of segments
     n_seg = index.shape[1] * n_trials
     if subset is None:
         subset = np.random.permutation(
-            n_seg)[:math.ceil(n_seg * pct_data / 100)]
+            n_seg)[: math.ceil(n_seg * pct_data / 100)]
 
     # subset -= 1  # because matlab uses indices starting at 1
     subset = np.squeeze(subset)
@@ -115,12 +112,11 @@ def rpsd(icaact: ArrayLike,
     # compute the PSD for each ICA component
     for idx in range(n_components):
         temp = icaact[idx, index, :]
-        temp = temp.reshape(
-            1, index.shape[0], n_seg, order='F')
+        temp = temp.reshape(1, index.shape[0], n_seg, order="F")
         temp = temp[:, :, subset] * window
         temp = scipy.fft.fft(temp, n_points, 1)
         temp = temp * np.conjugate(temp)
-        temp = temp[:, 1:n_freqs + 1, :] * 2 / denom
+        temp = temp[:, 1: n_freqs + 1, :] * 2 / denom
         if n_freqs == nyquist:
             temp[:, -1, :] /= 2
 
@@ -129,27 +125,40 @@ def rpsd(icaact: ArrayLike,
 
     nfreq = psd_feature.shape[1]
     if nfreq < 100:
-        psd_feature = np.concatenate([psd_feature, np.tile(psd_feature[:, -1:], (1, 100 - nfreq))], axis=1)
+        psd_feature = np.concatenate(
+            [psd_feature, np.tile(psd_feature[:, -1:], (1, 100 - nfreq))],
+            axis=1
+        )
 
     for linenoise_ind in [50, 60]:
         linenoise_around = np.array([linenoise_ind - 1, linenoise_ind + 1])
-        difference = psd_feature[:, linenoise_around] - psd_feature[:, linenoise_ind:linenoise_ind + 1]
+        difference = (
+            psd_feature[:, linenoise_around] -
+            psd_feature[:, linenoise_ind: linenoise_ind + 1]
+        )
         notch_ind = np.all(difference > 5, 1)
 
         if np.any(notch_ind):
-            psd_feature[notch_ind, linenoise_ind] = np.mean(psd_feature[notch_ind, linenoise_around], axis=1)
+            psd_feature[notch_ind, linenoise_ind] = np.mean(
+                psd_feature[notch_ind, linenoise_around], axis=1
+            )
 
     # # Normalize
-    psd_feature = psd_feature / np.max(np.abs(psd_feature), axis=1, keepdims=True)
+    psd_feature = psd_feature / \
+        np.max(np.abs(psd_feature), axis=1, keepdims=True)
 
     psd_feature = np.expand_dims(psd_feature, (2, 3))
     psd_feature = np.transpose(psd_feature, [2, 1, 3, 0])
 
     return psd_feature
 
-    
-def topoplot(icawinv: ArrayLike, theta_coords: ArrayLike,
-             rho_coords: ArrayLike, picks: ArrayLike = None) -> ArrayLike:
+
+def topoplot(
+    icawinv: ArrayLike,
+    theta_coords: ArrayLike,
+    rho_coords: ArrayLike,
+    picks: ArrayLike = None,
+) -> ArrayLike:
     """Generates topoplot image for ICLabel
 
     Parameters
@@ -248,6 +257,7 @@ def mne_to_eeglab_locs(raw: mne.io.BaseRaw):
     Th : np.array of shape (1, n_channels)
         Degree in spherical coordinates of each EEG channel.
     """
+
     def _sph2topo(_theta, _phi):
         """
         Convert spherical coordinates to topo.
@@ -263,15 +273,15 @@ def mne_to_eeglab_locs(raw: mne.io.BaseRaw):
         Convert cartesian coordinates to spherical.
         """
         azimuth = np.arctan2(_y, _x)
-        elevation = np.arctan2(_z, np.sqrt(_x ** 2 + _y ** 2))
-        r = np.sqrt(_x ** 2 + _y ** 2 + _z ** 2)
+        elevation = np.arctan2(_z, np.sqrt(_x**2 + _y**2))
+        r = np.sqrt(_x**2 + _y**2 + _z**2)
         # theta,phi,r
         return azimuth, elevation, r
 
     # get the channel position dictionary
     montage = raw.get_montage()
     positions = montage.get_positions()
-    ch_pos = positions['ch_pos']
+    ch_pos = positions["ch_pos"]
 
     # get locations as a 2D array
     locs = np.vstack(list(ch_pos.values()))
@@ -282,7 +292,7 @@ def mne_to_eeglab_locs(raw: mne.io.BaseRaw):
     # be mindful of the nose orientation in eeglab and mne
     # TODO: @Jacob, please expand on this.
     y = -1 * locs[:, 0]
-    # see https://github.com/mne-tools/mne-python/blob/24377ad3200b6099ed47576e9cf8b27578d571ef/mne/io/eeglab/eeglab.py#L105
+    # see https://github.com/mne-tools/mne-python/blob/24377ad3200b6099ed47576e9cf8b27578d571ef/mne/io/eeglab/eeglab.py#L105  # noqa
     z = locs[:, 2]
 
     # Obtain Spherical Coordinates

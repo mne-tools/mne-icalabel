@@ -46,7 +46,7 @@ def eeg_features(
     plotchans = np.squeeze(np.argwhere(~np.isnan(np.squeeze(th))))
     for it in range(ncomp):
         temp_topo = eeg_topoplot(
-            icawinv=icawinv[:, it: it + 1], Th=th, Rd=rd, plotchans=plotchans
+            icawinv=icawinv[:, it : it + 1], Th=th, Rd=rd, plotchans=plotchans
         )
         np.nan_to_num(temp_topo, copy=False)  # Set NaN values to 0 in-place
         topo[:, :, 0, it] = temp_topo / np.max(np.abs(temp_topo))
@@ -93,17 +93,17 @@ def eeg_autocorr_fftw(
     ac = np.zeros((len(icaact), nfft), dtype=np.float64)
 
     for it in range(len(icaact)):
-        X = np.fft.fft(icaact[it: it + 1, :, :], n=nfft, axis=1)
-        ac[it: it + 1, :] = np.mean(np.power(np.abs(X), 2), 2)
+        X = np.fft.fft(icaact[it : it + 1, :, :], n=nfft, axis=1)
+        ac[it : it + 1, :] = np.mean(np.power(np.abs(X), 2), 2)
 
     ac = np.real_if_close(np.fft.ifft(ac, n=None, axis=1), tol=1e5)  # ifft
 
     if pnts < srate:
         ac = np.hstack((ac[:, 0:pnts], np.zeros((len(ac), srate - pnts + 1))))
     else:
-        ac = ac[:, 0: srate + 1]
+        ac = ac[:, 0 : srate + 1]
 
-    ac = ac[:, 0: srate + 1] / ac[:, 0][:, None]
+    ac = ac[:, 0 : srate + 1] / ac[:, 0][:, None]
 
     resamp = ss.resample_poly(ac.T, 100, int(srate)).T
 
@@ -151,8 +151,7 @@ def eeg_rpsd(
 
     n_seg = index.shape[1] * trials
     if subset is None:
-        subset = np.random.permutation(
-            n_seg)[: math.ceil(n_seg * pct_data / 100)]
+        subset = np.random.permutation(n_seg)[: math.ceil(n_seg * pct_data / 100)]
 
     subset = np.squeeze(subset)
 
@@ -160,14 +159,13 @@ def eeg_rpsd(
     denom = srate * np.sum(np.power(window, 2))
 
     for it in range(ncomp):
-        temp = icaact[it, index, :].reshape(
-            1, index.shape[0], n_seg, order="F")
+        temp = icaact[it, index, :].reshape(1, index.shape[0], n_seg, order="F")
         temp = temp[:, :, subset] * window
         temp = fft(temp, n_points, 1)
 
         temp = temp * np.conjugate(temp)
 
-        temp = temp[:, 1: (nfreqs + 1), :] * 2 / denom
+        temp = temp[:, 1 : (nfreqs + 1), :] * 2 / denom
 
         if nfreqs == nyquist:
 
@@ -184,8 +182,7 @@ def eeg_rpsd(
     for linenoise_ind in [50, 60]:
         linenoise_around = np.array([linenoise_ind - 1, linenoise_ind + 1])
         difference = (
-            psdmed[:, linenoise_around] -
-            psdmed[:, linenoise_ind: linenoise_ind + 1]
+            psdmed[:, linenoise_around] - psdmed[:, linenoise_ind : linenoise_ind + 1]
         )
         notch_ind = np.all(difference > 5, 1)
 
@@ -241,8 +238,7 @@ def mergesimpts(
             similar_pts = np.where(
                 np.prod(np.abs(data_ - data_[point]) < tols_, axis=-1)
             )
-            similar_pts = np.array(
-                list(set(similar_pts[0].tolist()) - set(idxs_ready)))
+            similar_pts = np.array(list(set(similar_pts[0].tolist()) - set(idxs_ready)))
             idxs_ready += similar_pts.tolist()
             if mode == "average":
                 exemplar = np.mean(data_[similar_pts], axis=0)

@@ -149,7 +149,7 @@ jobs:
 
       - name: Run pytest
         run: |
-          python -m pytest . --cov=mne_icalabel --cov-report=xml --cov-config=setup.cfg --verbose --ignore mne-python
+          python -m pytest ./mne_icalabel --cov=mne_icalabel --cov-report=xml --cov-config=setup.cfg --verbose --ignore mne-python
         shell: bash
 
       - name: Upload coverage stats to codecov

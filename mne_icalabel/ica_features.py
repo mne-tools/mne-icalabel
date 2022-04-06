@@ -37,27 +37,25 @@ def autocorr_fftw(icaact: ArrayLike, sfreq: float) -> ArrayLike:
     ac = np.zeros((len(icaact), n_fft), dtype=np.float64)
 
     for idx in range(len(icaact)):
-        X = np.fft.fft(icaact[idx: idx + 1, :], n=n_fft, axis=1)
-        ac[idx: idx + 1, :] = np.mean(np.power(np.abs(X), 2), 2)
+        X = np.fft.fft(icaact[idx : idx + 1, :], n=n_fft, axis=1)
+        ac[idx : idx + 1, :] = np.mean(np.power(np.abs(X), 2), 2)
 
     # compute the inverse fourier transform as the auto-correlation
     ac = np.fft.ifft(ac, n=None, axis=1)  # ifft
     if n_times < sfreq:
-        ac = np.hstack((ac[:, 0:n_times], np.zeros(
-            (len(ac), sfreq - n_times + 1))))
+        ac = np.hstack((ac[:, 0:n_times], np.zeros((len(ac), sfreq - n_times + 1))))
     else:
-        ac = ac[:, 0: sfreq + 1]
+        ac = ac[:, 0 : sfreq + 1]
 
     # normalize
-    ac = ac[:, 0: sfreq + 1] / ac[:, 0][:, None]
+    ac = ac[:, 0 : sfreq + 1] / ac[:, 0][:, None]
 
     # resample with polynomial interpolation
     resamp = scipy.signal.resample_poly(ac.T, 100, sfreq).T
     return resamp[:, 1:]
 
 
-def rpsd(icaact: ArrayLike, sfreq: int,
-         pct_data: int = 100, subset=None) -> ArrayLike:
+def rpsd(icaact: ArrayLike, sfreq: int, pct_data: int = 100, subset=None) -> ArrayLike:
     """Generates RPSD features for ICLabel.
 
     Parameters
@@ -101,8 +99,7 @@ def rpsd(icaact: ArrayLike, sfreq: int,
     # the number of segments
     n_seg = index.shape[1] * n_trials
     if subset is None:
-        subset = np.random.permutation(
-            n_seg)[: math.ceil(n_seg * pct_data / 100)]
+        subset = np.random.permutation(n_seg)[: math.ceil(n_seg * pct_data / 100)]
 
     # subset -= 1  # because matlab uses indices starting at 1
     subset = np.squeeze(subset)
@@ -116,7 +113,7 @@ def rpsd(icaact: ArrayLike, sfreq: int,
         temp = temp[:, :, subset] * window
         temp = scipy.fft.fft(temp, n_points, 1)
         temp = temp * np.conjugate(temp)
-        temp = temp[:, 1: n_freqs + 1, :] * 2 / denom
+        temp = temp[:, 1 : n_freqs + 1, :] * 2 / denom
         if n_freqs == nyquist:
             temp[:, -1, :] /= 2
 
@@ -126,15 +123,14 @@ def rpsd(icaact: ArrayLike, sfreq: int,
     nfreq = psd_feature.shape[1]
     if nfreq < 100:
         psd_feature = np.concatenate(
-            [psd_feature, np.tile(psd_feature[:, -1:], (1, 100 - nfreq))],
-            axis=1
+            [psd_feature, np.tile(psd_feature[:, -1:], (1, 100 - nfreq))], axis=1
         )
 
     for linenoise_ind in [50, 60]:
         linenoise_around = np.array([linenoise_ind - 1, linenoise_ind + 1])
         difference = (
-            psd_feature[:, linenoise_around] -
-            psd_feature[:, linenoise_ind: linenoise_ind + 1]
+            psd_feature[:, linenoise_around]
+            - psd_feature[:, linenoise_ind : linenoise_ind + 1]
         )
         notch_ind = np.all(difference > 5, 1)
 
@@ -144,8 +140,7 @@ def rpsd(icaact: ArrayLike, sfreq: int,
             )
 
     # # Normalize
-    psd_feature = psd_feature / \
-        np.max(np.abs(psd_feature), axis=1, keepdims=True)
+    psd_feature = psd_feature / np.max(np.abs(psd_feature), axis=1, keepdims=True)
 
     psd_feature = np.expand_dims(psd_feature, (2, 3))
     psd_feature = np.transpose(psd_feature, [2, 1, 3, 0])

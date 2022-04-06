@@ -41,8 +41,7 @@ def mergesimpts(
             similar_pts = np.where(
                 np.prod(np.abs(data_ - data_[point]) < tols_, axis=-1)
             )
-            similar_pts = np.array(list(
-                set(similar_pts[0].tolist()) - set(idxs_ready)))
+            similar_pts = np.array(list(set(similar_pts[0].tolist()) - set(idxs_ready)))
             idxs_ready += similar_pts.tolist()
             if mode == "average":
                 exemplar = np.mean(data_[similar_pts], axis=0)
@@ -142,6 +141,7 @@ def gdatav4(
             g = np.square(d) * (np.log(d) - 1)
             # Value of Green's function at zero
             g[np.where(np.isclose(d, 0))] = 0
-            vq[i, j] = (np.expand_dims(g, axis=0) @
-                        np.expand_dims(weights, axis=1))[0][0]
+            vq[i, j] = (np.expand_dims(g, axis=0) @ np.expand_dims(weights, axis=1))[0][
+                0
+            ]
     return xq, yq, vq

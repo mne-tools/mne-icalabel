@@ -1,4 +1,8 @@
-import importlib.resources
+try:
+    from importlib.resources import files
+except ImportError:
+    from importlib_resources import files
+
 import torch.nn as nn
 import torch
 import numpy as np
@@ -34,8 +38,7 @@ class ICLabelNetImg(nn.Module):
         )
         self.relu3 = nn.LeakyReLU(negative_slope=0.2)
         self.sequential = nn.Sequential(
-            self.conv1, self.relu1, self.conv2,
-            self.relu2, self.conv3, self.relu3
+            self.conv1, self.relu1, self.conv2, self.relu2, self.conv3, self.relu3
         )
 
     def forward(self, x):
@@ -71,8 +74,7 @@ class ICLabelNetPSDS(nn.Module):
         )
         self.relu3 = nn.LeakyReLU(negative_slope=0.2)
         self.sequential = nn.Sequential(
-            self.conv1, self.relu1, self.conv2,
-            self.relu2, self.conv3, self.relu3
+            self.conv1, self.relu1, self.conv2, self.relu2, self.conv3, self.relu3
         )
 
     def forward(self, x):
@@ -108,8 +110,7 @@ class ICLabelNetAutocorr(nn.Module):
         )
         self.relu3 = nn.LeakyReLU(negative_slope=0.2)
         self.sequential = nn.Sequential(
-            self.conv1, self.relu1, self.conv2,
-            self.relu2, self.conv3, self.relu3
+            self.conv1, self.relu1, self.conv2, self.relu2, self.conv3, self.relu3
         )
 
     def forward(self, x):
@@ -176,16 +177,13 @@ class ICLabelNet(nn.Module):
 
 def format_input(images: ArrayLike, psd: ArrayLike, autocorr: ArrayLike):
     formatted_images = np.concatenate(
-        (images, -1 * images,
-         np.flip(images, axis=1),
-         np.flip(-1 * images, axis=1)),
+        (images, -1 * images, np.flip(images, axis=1), np.flip(-1 * images, axis=1)),
         axis=3,
     )
     formatted_psd = np.tile(psd, (1, 1, 1, 4))
     formatted_autocorr = np.tile(autocorr, (1, 1, 1, 4))
 
-    formatted_images = torch.from_numpy(
-        np.transpose(formatted_images, (3, 2, 0, 1)))
+    formatted_images = torch.from_numpy(np.transpose(formatted_images, (3, 2, 0, 1)))
     formatted_psd = torch.from_numpy(np.transpose(formatted_psd, (3, 2, 0, 1)))
     formatted_autocorr = torch.from_numpy(
         np.transpose(formatted_autocorr, (3, 2, 0, 1))
@@ -194,12 +192,11 @@ def format_input(images: ArrayLike, psd: ArrayLike, autocorr: ArrayLike):
     return formatted_images, formatted_psd, formatted_autocorr
 
 
-def run_iclabel(images: ArrayLike, psds: ArrayLike,
-                autocorr: ArrayLike) -> ArrayLike:
-    ica_network_file = str(
-        importlib.resources.files("mne_icalabel").joinpath(
-            "assets/iclabelNet.pt")
-    )
+def run_iclabel(images: ArrayLike, psds: ArrayLike, autocorr: ArrayLike) -> ArrayLike:
+    submodule = "mne_icalabel"
+    filename = "assets/iclabelNet.pt"
+    ica_network_file = files(submodule).joinpath(filename)
+
     # Get network and load weights
     iclabel_net = ICLabelNet()
     iclabel_net.load_state_dict(torch.load(ica_network_file))

@@ -13,3 +13,4 @@ twine
 wheel
 pooch
 mne-bids
+importlib_resources

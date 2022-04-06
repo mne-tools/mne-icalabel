@@ -60,8 +60,7 @@ def ica_eeg_features(
     print(n_components)
     for it in range(n_components):
         temp_topo = topoplot(
-            icawinv=icawinv[:, it], theta_coords=th,
-            rho_coords=rd, picks=plotchans
+            icawinv=icawinv[:, it], theta_coords=th, rho_coords=rd, picks=plotchans
         )
         np.nan_to_num(temp_topo, copy=False)  # Set NaN values to 0 in-place
         topo[:, :, 0, it] = temp_topo / np.max(np.abs(temp_topo))

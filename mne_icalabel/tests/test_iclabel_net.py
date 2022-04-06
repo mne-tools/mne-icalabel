@@ -1,5 +1,9 @@
 import pytest
-import importlib.resources
+
+try:
+    from importlib.resources import files
+except ImportError:
+    from importlib_resources import files
 
 import numpy as np
 import scipy.io as sio
@@ -10,14 +14,8 @@ from mne_icalabel.ica_net import run_iclabel
 
 
 # load in test data for features from original Matlab ICLabel
-ica_file_path = str(
-    importlib.resources.files(
-        "mne_icalabel.tests").joinpath("data/eeglab_ica.set")
-)
-ica_raw_file_path = str(
-    importlib.resources.files("mne_icalabel.tests").joinpath(
-        "data/eeglab_ica_raw.mat")
-)
+ica_file_path = str(files("mne_icalabel.tests").joinpath("data/eeglab_ica.set"))
+ica_raw_file_path = str(files("mne_icalabel.tests").joinpath("data/eeglab_ica_raw.mat"))
 
 
 def test_iclabel_net():
@@ -26,9 +24,9 @@ def test_iclabel_net():
     eeglab_raw = mne.io.read_raw_eeglab(ica_file_path)
 
     eeglab_ica_raw = sio.loadmat(ica_raw_file_path)["EEG"]
-    raw_labels = eeglab_ica_raw["etc"][0][0][0][0][
-        "ic_classification"
-    ][0][0][0][0][0][1]
+    raw_labels = eeglab_ica_raw["etc"][0][0][0][0]["ic_classification"][0][0][0][0][0][
+        1
+    ]
 
     # compute the features of the ICA waveforms
     ica_features = ica_eeg_features(eeglab_raw, eeglab_ica)

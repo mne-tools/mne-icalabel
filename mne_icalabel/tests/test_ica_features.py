@@ -1,5 +1,9 @@
 import os
-import importlib.resources
+
+try:
+    from importlib.resources import files
+except ImportError:
+    from importlib_resources import files
 
 import numpy as np
 import scipy.io as sio
@@ -7,24 +11,17 @@ from numpy.testing import assert_array_almost_equal, assert_array_equal
 import mne
 from mne.preprocessing import ICA
 
-from mne_icalabel.ica_features import (
-    autocorr_fftw, rpsd, topoplot, mne_to_eeglab_locs)
-from mne_icalabel.tests._eeg_features import (
-    eeg_autocorr_fftw, eeg_rpsd, eeg_topoplot)
+from mne_icalabel.ica_features import autocorr_fftw, rpsd, topoplot, mne_to_eeglab_locs
+from mne_icalabel.tests._eeg_features import eeg_autocorr_fftw, eeg_rpsd, eeg_topoplot
 
 
 # load in test data for features from original Matlab ICLabel
 corr_data_file_path = str(
-    importlib.resources.files("mne_icalabel.tests").joinpath(
-        "data/autocorr_data.mat")
+    files("mne_icalabel.tests").joinpath("data/autocorr_data.mat")
 )
-rpsd_data_file_path = str(
-    importlib.resources.files(
-        "mne_icalabel.tests").joinpath("data/rpsd_data.mat")
-)
+rpsd_data_file_path = str(files("mne_icalabel.tests").joinpath("data/rpsd_data.mat"))
 topoplot_data_file_path = str(
-    importlib.resources.files("mne_icalabel.tests").joinpath(
-        "data/topoplot_data.mat")
+    files("mne_icalabel.tests").joinpath("data/topoplot_data.mat")
 )
 
 corr_data = sio.loadmat(corr_data_file_path)
@@ -130,13 +127,12 @@ def test_topoplot_feature():
     i = 10
     # compare output to Jacob's original implementation
     test_Zi = eeg_topoplot(
-        icawinv=icawinv[:, i: i + 1], Rd=Rd, Th=Th, plotchans=plotchans - 1
+        icawinv=icawinv[:, i : i + 1], Rd=Rd, Th=Th, plotchans=plotchans - 1
     )
 
     # now compare the output to what is expected
     Z_i = topoplot(
-        icawinv[:, i: i + 1], theta_coords=Th,
-        rho_coords=Rd, picks=plotchans - 1
+        icawinv[:, i : i + 1], theta_coords=Th, rho_coords=Rd, picks=plotchans - 1
     )
     assert_array_almost_equal(test_Zi, Z_i)
     assert_array_almost_equal(Z_i, expected_topo)
@@ -159,7 +155,6 @@ def test_topoplot_from_raw():
     n_components = ica.n_components_
     for i in range(n_components):
         Z_i = topoplot(
-            ica_winv[:, i: i + 1], theta_coords=theta,
-            rho_coords=rho, picks=None
+            ica_winv[:, i : i + 1], theta_coords=theta, rho_coords=rho, picks=None
         )
         assert not np.isnan(Z_i).any()

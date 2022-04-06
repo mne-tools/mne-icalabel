@@ -6,3 +6,8 @@ recursive-include examples *.txt
 recursive-include mne_icalabel *.pt
 recursive-include mne_icalabel *.py
 recursive-include test_data *.mat
+
+exclude .circlci/config.yml
+recursive-exclude mne_icalabel *.fdt
+recursive-exclude mne_icalabel *.mat
+recursive-exclude mne_icalabel *.set

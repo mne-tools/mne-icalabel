@@ -3,10 +3,10 @@ try:
 except ImportError:
     from importlib_resources import files
 from pathlib import Path
-import pytest
 
 import mne
 import numpy as np
+import pytest
 from scipy.io import loadmat
 import torch
 

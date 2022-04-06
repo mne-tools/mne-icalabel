@@ -93,10 +93,13 @@ jobs:
       matrix:
         include:
           - os: ubuntu-latest
-            python-version: 3.7
+            python-version: 3.8
             mne-version: mne-main
           - os: ubuntu-latest
             python-version: 3.9
+            mne-version: mne-main
+          - os: ubuntu-latest
+            python-version: 3.10
             mne-version: mne-main
           - os: macos-latest
             python-version: 3.9

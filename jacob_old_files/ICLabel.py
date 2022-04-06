@@ -1,4 +1,8 @@
-import importlib.resources
+try:
+    from importlib.resources import files
+except ImportError:
+    from importlib_resources import files
+
 import torch.nn as nn
 import torch
 import numpy as np
@@ -168,12 +172,12 @@ def format_input(images: ArrayLike, psd: ArrayLike, autocorr: ArrayLike):
 
 
 def run_iclabel(images: ArrayLike, psds: ArrayLike, autocorr: ArrayLike) -> ArrayLike:
-    # ica_network_file = str(importlib.resources.files(
-    #     'mne_icalabel').joinpath('assets/iclabelNet.pt'))
+    ica_network_file = str(files(
+        'mne_icalabel').joinpath('assets/iclabelNet.pt'))
 
     # Get network and load weights
     iclabel_net = ICLabelNet()
-    iclabel_net.load_state_dict(torch.load('iclabelNet.pt'))
+    iclabel_net.load_state_dict(torch.load(ica_network_file))
 
     # Format input and get labels
     labels = iclabel_net(*format_input(images, psds, autocorr))

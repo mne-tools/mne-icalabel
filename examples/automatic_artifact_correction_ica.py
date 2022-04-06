@@ -5,11 +5,11 @@
 WIP: Repairing artifacts with ICA automatically
 ===============================================
 
-This tutorial covers automatically repairing signals using ICA. For conceptual background on ICA, see
-:ref:`this scikit-learn tutorial
-<sphx_glr_auto_examples_decomposition_plot_ica_blind_source_separation.py>`. For
-a basic understanding of how to use ICA to remove artifacts, see the tutorial
-`_tut-artifact-ica` in MNE-Python.
+This tutorial covers automatically repairing signals using ICA. For conceptual
+background on ICA, see :ref:`this scikit-learn tutorial
+<sphx_glr_auto_examples_decomposition_plot_ica_blind_source_separation.py>`.
+For a basic understanding of how to use ICA to remove artifacts, see the
+tutorial `_tut-artifact-ica` in MNE-Python.
 
 We begin as always by importing the necessary Python modules and loading some
 :ref:`example data <sample-dataset>`. Because ICA can be computationally
@@ -22,14 +22,15 @@ and classes from that submodule:
 
 import os
 import mne
-from mne.preprocessing import (ICA, create_eog_epochs, create_ecg_epochs)
+from mne.preprocessing import ICA, create_eog_epochs, create_ecg_epochs
 
 sample_data_folder = mne.datasets.sample.data_path()
-sample_data_raw_file = os.path.join(sample_data_folder, 'MEG', 'sample',
-                                    'sample_audvis_filt-0-40_raw.fif')
+sample_data_raw_file = os.path.join(
+    sample_data_folder, "MEG", "sample", "sample_audvis_filt-0-40_raw.fif"
+)
 raw = mne.io.read_raw_fif(sample_data_raw_file)
 # Here we'll crop to 60 seconds and drop gradiometer channels for speed
-raw.crop(tmax=60.).pick_types(meg='mag', eeg=True, stim=True, eog=True)
+raw.crop(tmax=60.0).pick_types(meg="mag", eeg=True, stim=True, eog=True)
 raw.load_data()
 
 # %%
@@ -52,10 +53,9 @@ raw.load_data()
 # dataset they are big enough to see easily in the raw data:
 
 # pick some channels that clearly show heartbeats and blinks
-regexp = r'(MEG [12][45][123]1|EEG 00.)'
+regexp = r"(MEG [12][45][123]1|EEG 00.)"
 artifact_picks = mne.pick_channels_regexp(raw.ch_names, regexp=regexp)
-raw.plot(order=artifact_picks, n_channels=len(artifact_picks),
-         show_scrollbars=False)
+raw.plot(order=artifact_picks, n_channels=len(artifact_picks), show_scrollbars=False)
 
 # %%
 # We can get a summary of how the ocular artifact manifests across each channel
@@ -92,7 +92,7 @@ ecg_evoked.plot_joint()
 # `~mne.io.Raw` object around so we can apply the ICA solution to it
 # later.
 
-filt_raw = raw.copy().filter(l_freq=1., h_freq=None)
+filt_raw = raw.copy().filter(l_freq=1.0, h_freq=None)
 
 # %%
 # Fitting and plotting the ICA solution
@@ -130,7 +130,7 @@ filt_raw = raw.copy().filter(l_freq=1., h_freq=None)
 # we'll also specify a `random seed`_ so that we get identical results each
 # time this tutorial is built by our web servers.
 
-ica = ICA(n_components=15, max_iter='auto', random_state=97)
+ica = ICA(n_components=15, max_iter="auto", random_state=97)
 ica.fit(filt_raw)
 ica
 
@@ -163,9 +163,9 @@ ica.plot_sources(raw, show_scrollbars=False)
 ica.plot_components()
 
 # blinks
-ica.plot_overlay(raw, exclude=[0], picks='eeg')
+ica.plot_overlay(raw, exclude=[0], picks="eeg")
 # heartbeats
-ica.plot_overlay(raw, exclude=[1], picks='mag')
+ica.plot_overlay(raw, exclude=[1], picks="mag")
 
 # %%
 # We can also plot some diagnostics of each IC using
@@ -203,8 +203,8 @@ ica.plot_properties(raw, picks=[0, 1])
 reconst_raw = raw.copy()
 ica.apply(reconst_raw)
 
-raw.plot(order=artifact_picks, n_channels=len(artifact_picks),
-         show_scrollbars=False)
-reconst_raw.plot(order=artifact_picks, n_channels=len(artifact_picks),
-                 show_scrollbars=False)
+raw.plot(order=artifact_picks, n_channels=len(artifact_picks), show_scrollbars=False)
+reconst_raw.plot(
+    order=artifact_picks, n_channels=len(artifact_picks), show_scrollbars=False
+)
 del reconst_raw

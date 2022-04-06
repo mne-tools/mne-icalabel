@@ -88,6 +88,16 @@ flake:
 	fi;
 	@echo "flake8 passed"
 
+black:
+	@if command -v black > /dev/null; then \
+		echo "Running black"; \
+		black --check mne_icalabel examples; \
+	else \
+		echo "black not found, please install it!"; \
+		exit 1; \
+	fi;
+	@echo "black passed"
+
 codespell:  # running manually
 	@codespell -w -i 3 -q 3 -S $(CODESPELL_SKIPS) --ignore-words=ignore_words.txt $(CODESPELL_DIRS)
 
@@ -105,7 +115,7 @@ check-readme:
 	python setup.py check --restructuredtext --strict
 
 pep:
-	@$(MAKE) -k flake pydocstyle codespell-error check-manifest
+	@$(MAKE) -k black pydocstyle codespell-error check-manifest
 
 docstyle: pydocstyle
 

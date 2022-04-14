@@ -9,12 +9,10 @@ import numpy as np
 import pytest
 from scipy.io import loadmat
 import torch
-from mne.io import read_raw_fif
 
-from mne.preprocessing import ICA
 from mne_icalabel.ica_label import ica_eeg_features
 from mne_icalabel.ica_net import run_iclabel
-from mne_icalabel.ica_net import  ICLabelNet
+from mne_icalabel.ica_net import ICLabelNet
 
 
 # load in test data for features from original Matlab ICLabel
@@ -114,7 +112,7 @@ def test_labels():
     eeglab_ica = mne.preprocessing.read_ica_eeglab(ica_file_path)
     eeglab_raw = mne.io.read_raw_eeglab(ica_file_path)
 
-    eeglab_ica_raw = sio.loadmat(ica_raw_file_path)["EEG"]
+    eeglab_ica_raw = loadmat(ica_raw_file_path)["EEG"]
     raw_labels = eeglab_ica_raw["etc"][0][0][0][0]["ic_classification"][0][0][0][0][0][
         1
     ]

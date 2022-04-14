@@ -20,9 +20,6 @@ ica_file_path = str(files("mne_icalabel.tests").joinpath("data/eeglab_ica.set"))
 ica_raw_file_path = str(files("mne_icalabel.tests").joinpath("data/eeglab_ica_raw.mat"))
 torch_iclabel_path = Path(__file__).parent.parent / 'assets' / 'iclabelNet.pt'
 matconvnet_iclabel_path = Path(__file__).parent / 'data' / 'netICL.mat'
-
-
-sample_input_file = Path(__file__).parent / 'data' / 'ica-test-raw.fif'
 mat_image_features_path = Path(__file__).parent / 'data' / 'matlab_images.mat'
 mat_psds_features_path = Path(__file__).parent / 'data' / 'matlab_psds.mat'
 mat_autocorr_features_path = Path(__file__).parent / 'data' / 'matlab_autocorrs.mat'

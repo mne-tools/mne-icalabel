@@ -18,7 +18,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ ubuntu-latest ]
-        python-version: [ 3.9 ]
+        python-version: [ '3.10' ]
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python ${{ matrix.python-version }}
@@ -40,7 +40,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ ubuntu-latest, macos-latest ]
-        python-version: [ 3.7, 3.8, 3.9 ]
+        python-version: [ 3.8, 3.9, '3.10' ]
     steps:
       - uses: actions/checkout@v2
 
@@ -93,10 +93,13 @@ jobs:
       matrix:
         include:
           - os: ubuntu-latest
-            python-version: 3.7
+            python-version: 3.8
             mne-version: mne-main
           - os: ubuntu-latest
             python-version: 3.9
+            mne-version: mne-main
+          - os: ubuntu-latest
+            python-version: '3.10'
             mne-version: mne-main
           - os: macos-latest
             python-version: 3.9
@@ -146,7 +149,7 @@ jobs:
 
       - name: Run pytest
         run: |
-          python -m pytest . --cov=mne_icalabel --cov-report=xml --cov-config=setup.cfg --verbose --ignore mne-python
+          python -m pytest ./mne_icalabel --cov=mne_icalabel --cov-report=xml --cov-config=setup.cfg --verbose --ignore mne-python
         shell: bash
 
       - name: Upload coverage stats to codecov

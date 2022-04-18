@@ -139,3 +139,7 @@ eeg_ica_haufe
 matconvnet-1.0-beta25/
 
 .idea
+*.set
+*.fdt
+
+example_mne.ipynb

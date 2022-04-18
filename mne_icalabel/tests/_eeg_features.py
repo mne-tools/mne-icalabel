@@ -73,6 +73,10 @@ def eeg_features(
     return [0.99 * topo, 0.99 * psd, 0.99 * autocorr]
 
 
+def nextpow2(x):
+    return math.ceil(math.log2(abs(x)))
+
+
 def eeg_autocorr_fftw(
     icaact: np.array, trials: int, srate: float, pnts: int, pct_data: int = 100
 ) -> np.array:
@@ -89,14 +93,14 @@ def eeg_autocorr_fftw(
     Returns:
         np.array: autocorrelation feature
     """
-    nfft = 2 ** (math.ceil(math.log2(abs(2 * pnts - 1))))
+    nfft = 2 ** nextpow2(2 * pnts - 1)
     ac = np.zeros((len(icaact), nfft), dtype=np.float64)
 
     for it in range(len(icaact)):
         X = np.fft.fft(icaact[it : it + 1, :, :], n=nfft, axis=1)
         ac[it : it + 1, :] = np.mean(np.power(np.abs(X), 2), 2)
 
-    ac = np.real_if_close(np.fft.ifft(ac, n=None, axis=1), tol=1e5)  # ifft
+    ac = np.real_if_close(np.fft.ifft(ac, n=None, axis=1))  # ifft
 
     if pnts < srate:
         ac = np.hstack((ac[:, 0:pnts], np.zeros((len(ac), srate - pnts + 1))))
@@ -105,6 +109,30 @@ def eeg_autocorr_fftw(
 
     ac = ac[:, 0 : srate + 1] / ac[:, 0][:, None]
 
+    resamp = ss.resample_poly(ac.T, 100, int(srate)).T
+
+    return resamp[:, 1:]
+
+
+def eeg_autocorr_welch(icaact: np.array, trials: int, srate: float, pnts: int, pct_data: int = 100) -> np.array:
+    ncomp = icaact.shape[0]
+    n_points = min(pnts, srate*3)
+    nfft = 2 ** nextpow2(2 * n_points - 1)
+    cutoff = math.floor(pnts / n_points) * n_points
+    
+    index = np.ceil(np.arange(start=0, stop=cutoff - n_points + 1, step=n_points / 2)) + np.arange(0,n_points).reshape(-1,1)
+    index = index.astype(int)
+    
+    segments = icaact[:, index, :].reshape((ncomp, index.shape[0], index.shape[1]), order='F')
+    
+    ac = np.zeros((ncomp, nfft), dtype=np.float64)
+    for it in range(ncomp):
+        fftpow = np.mean(np.abs(np.fft.fft(segments[it:it+1,:,:], n=nfft, axis=1))**2, axis=2)
+        ac[it:it+1,:] = np.real(np.fft.ifft(fftpow, n=None, axis=1))
+    
+    # normalize
+    ac = ac[:,0:srate+1] / (ac[:,0:1] * (np.hstack((np.arange(n_points,n_points-srate,-1), max(1, n_points - srate))) / n_points))
+    
     resamp = ss.resample_poly(ac.T, 100, int(srate)).T
 
     return resamp[:, 1:]

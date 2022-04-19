@@ -19,11 +19,11 @@ from mne_icalabel.ica_net import ICLabelNet
 ica_file_path = str(files("mne_icalabel.tests").joinpath("data/eeglab_ica.set"))
 ica_raw_file_path = str(files("mne_icalabel.tests").joinpath("data/eeglab_ica_raw.mat"))
 torch_iclabel_path = Path(__file__).parent.parent / 'assets' / 'iclabelNet.pt'
-matconvnet_iclabel_path = Path(__file__).parent / 'data' / 'netICL.mat'
-mat_image_features_path = Path(__file__).parent / 'data' / 'matlab_images.mat'
-mat_psds_features_path = Path(__file__).parent / 'data' / 'matlab_psds.mat'
-mat_autocorr_features_path = Path(__file__).parent / 'data' / 'matlab_autocorrs.mat'
-mat_labels_file_path = Path(__file__).parent / 'data' / 'matlab_labels.mat'
+matconvnet_iclabel_path = str(files("mne_icalabel.tests").joinpath('data/netICL.mat'))
+mat_image_features_path = str(files("mne_icalabel.tests").joinpath('data/matlab_images.mat'))
+mat_psds_features_path = str(files("mne_icalabel.tests").joinpath('data/matlab_psds.mat'))
+mat_autocorr_features_path = str(files("mne_icalabel.tests").joinpath('data/matlab_autocorrs.mat'))
+mat_labels_file_path = str(files("mne_icalabel.tests").joinpath('data/matlab_labels.mat'))
 
 
 def test_weights():

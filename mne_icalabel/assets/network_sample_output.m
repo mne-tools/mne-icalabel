@@ -2,7 +2,7 @@ clc
 % Importing the sample fif file and executing ICA decomposition on the
 % input
 [ALLEEG , ~, ~, ALLCOM] = eeglab;
-EEG = pop_fileio('C:\Users\asaini\Desktop\FCBG\iclabel-python\ica-test-raw.fif', 'dataformat','auto');
+EEG = pop_fileio('../tests/data/ica-test-raw.fif', 'dataformat','auto');
 [ALLEEG, EEG, CURRENTSET] = pop_newset(ALLEEG, EEG, 0,'setname','ica_set_test','gui','off'); 
 EEG = eeg_checkset( EEG );
 pop_eegplot( EEG, 1, 1, 1);
@@ -40,9 +40,9 @@ if isempty(findstr('mex', path2vl_nnconv{1})) && length(path2vl_nnconv) > 1
 end
 
 % Saving the features to compare with torch features
-save('matlab_images', 'images');
-save('matlab_psds', 'psds');
-save('matlab_autocorrs', 'autocorrs');
+save('../tests/data/matlab_images', 'images');
+save('../tests/data/matlab_psds', 'psds');
+save('../tests/data/matlab_autocorrs', 'autocorrs');
 
 %Applying forward pass
 net.eval(input);
@@ -51,10 +51,10 @@ out = net.getVar(net.getOutputs()).value;
 %% extract result
 labels = squeeze(net.getVar(net.getOutputs()).value)';
 
-labels = reshape(mean(reshape(labels', [], 4), 2), 7, [])';cd ..
+labels = reshape(mean(reshape(labels', [], 4), 2), 7, [])';
 
 
 
-save('matlab_labels', 'labels')
+save('../tests/data/matlab_labels', 'labels');
 
 eeglab redraw;

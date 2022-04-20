@@ -2,7 +2,6 @@ try:
     from importlib.resources import files
 except ImportError:
     from importlib_resources import files
-from pathlib import Path
 
 import mne
 import numpy as np
@@ -18,7 +17,7 @@ from mne_icalabel.ica_net import ICLabelNet
 # load in test data for features from original Matlab ICLabel
 ica_file_path = str(files("mne_icalabel.tests").joinpath("data/eeglab_ica.set"))
 ica_raw_file_path = str(files("mne_icalabel.tests").joinpath("data/eeglab_ica_raw.mat"))
-torch_iclabel_path = Path(__file__).parent.parent / "assets" / "iclabelNet.pt"
+torch_iclabel_path = str(files("mne_icalabel.assets").joinpath("iclabelNet.pt"))
 matconvnet_iclabel_path = str(files("mne_icalabel.tests").joinpath("data/netICL.mat"))
 mat_image_features_path = str(
     files("mne_icalabel.tests").joinpath("data/matlab_images.mat")
@@ -85,32 +84,39 @@ def test_weights():
 def test_network_outputs():
     """
     Compare that the ICLabel network in python and matlab outputs the same
-    values for a common set of features.
-    
-    Note: The matlab script to generate sample output can be found at 
+    values for a common set of features (input to the forward pass).
+
+    Notes
+    -----
+    The matlab script to generate the input and output of the forward pass in
+    matconvnet can be found in:
     /mne_icalabel/tests/data/network_sample_output.m
     """
+    # Load features to use for the forward pass
     matlab_images = loadmat(mat_image_features_path)["images"]
     matlab_psds = loadmat(mat_psds_features_path)["psds"]
     matlab_autocorrs = loadmat(mat_autocorr_features_path)["autocorrs"]
 
-    # Reshaping the matlab extracted features in torch formatting
+    # Reshape the features to fit torch format
     matlab_images = np.transpose(matlab_images, (3, 2, 0, 1))
     matlab_psds = np.transpose(matlab_psds, (3, 2, 0, 1))
     matlab_autocorrs = np.transpose(matlab_autocorrs, (3, 2, 0, 1))
 
-    # Converting these in tensors
+    # Converting to tensors
     matlab_images = torch.from_numpy(matlab_images).float()
     matlab_psds = torch.from_numpy(matlab_psds).float()
     matlab_autocorrs = torch.from_numpy(matlab_autocorrs).float()
 
+    # Load the forward pass outputs obtained with matconvnet
     matlab_labels = loadmat(mat_labels_file_path)["labels"]
 
+    # Run the forward pass in pytorch
     iclabel_net = ICLabelNet()
     iclabel_net.load_state_dict(torch.load(torch_iclabel_path))
     torch_labels = iclabel_net(matlab_images, matlab_psds, matlab_autocorrs)
     torch_labels = torch_labels.detach().numpy()
 
+    # Compare both outputs
     assert np.allclose(matlab_labels, torch_labels, rtol=1e-5, atol=1e-5)
 
 

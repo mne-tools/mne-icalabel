@@ -86,6 +86,9 @@ def test_network_outputs():
     """
     Compare that the ICLabel network in python and matlab outputs the same
     values for a common set of features.
+    
+    Note: The matlab script to generate sample output can be found at 
+    /mne_icalabel/tests/data/network_sample_output.m
     """
     matlab_images = loadmat(mat_image_features_path)["images"]
     matlab_psds = loadmat(mat_psds_features_path)["psds"]

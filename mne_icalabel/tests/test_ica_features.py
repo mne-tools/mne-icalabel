@@ -68,7 +68,7 @@ def test_eeg_autocorr_fftw():
     icaact = corr_data["icaact"]
     srate = corr_data["srate"][0, 0]
     resamp = autocorr_fftw(icaact, srate)
-    matlab_resamp = sio.loadmat("test_data/autocorr_data.mat")["resamp"]
+    matlab_resamp = sio.loadmat(corr_data_file_path)["resamp"]
     assert_array_almost_equal(resamp, matlab_resamp)
 
     # run autocorrelation feature generation and compare

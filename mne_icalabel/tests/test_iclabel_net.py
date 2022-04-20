@@ -2,7 +2,6 @@ try:
     from importlib.resources import files
 except ImportError:
     from importlib_resources import files
-from pathlib import Path
 
 import mne
 import numpy as np
@@ -18,12 +17,20 @@ from mne_icalabel.ica_net import ICLabelNet
 # load in test data for features from original Matlab ICLabel
 ica_file_path = str(files("mne_icalabel.tests").joinpath("data/eeglab_ica.set"))
 ica_raw_file_path = str(files("mne_icalabel.tests").joinpath("data/eeglab_ica_raw.mat"))
-torch_iclabel_path = Path(__file__).parent.parent / 'assets' / 'iclabelNet.pt'
-matconvnet_iclabel_path = Path(__file__).parent / 'data' / 'netICL.mat'
-mat_image_features_path = Path(__file__).parent / 'data' / 'matlab_images.mat'
-mat_psds_features_path = Path(__file__).parent / 'data' / 'matlab_psds.mat'
-mat_autocorr_features_path = Path(__file__).parent / 'data' / 'matlab_autocorrs.mat'
-mat_labels_file_path = Path(__file__).parent / 'data' / 'matlab_labels.mat'
+torch_iclabel_path = str(files("mne_icalabel").joinpath("assets/iclabelNet.pt"))
+matconvnet_iclabel_path = str(files("mne_icalabel.tests").joinpath("data/netICL.mat"))
+mat_image_features_path = str(
+    files("mne_icalabel.tests").joinpath("data/matlab_images.mat")
+)
+mat_psds_features_path = str(
+    files("mne_icalabel.tests").joinpath("data/matlab_psds.mat")
+)
+mat_autocorr_features_path = str(
+    files("mne_icalabel.tests").joinpath("data/matlab_autocorrs.mat")
+)
+mat_labels_file_path = str(
+    files("mne_icalabel.tests").joinpath("data/matlab_labels.mat")
+)
 
 
 def test_weights():
@@ -32,7 +39,7 @@ def test_weights():
     network_matlab = loadmat(matconvnet_iclabel_path)
 
     # load weights from matlab network
-    weights_matlab = network_matlab['params']['value'][0,:]
+    weights_matlab = network_matlab["params"]["value"][0, :]
     # format weights from matlab network to torch convention
     for k, weight in enumerate(weights_matlab):
         if weight.ndim == 4:
@@ -41,32 +48,32 @@ def test_weights():
             weights_matlab[k] = weight.transpose((2, 0, 1))
 
     network_python_layers = [
-        layer for layer in network_python.keys() if 'seq' not in layer]
-    network_matlab_layers = [
-        elt[0] for elt in network_matlab['params']['name'][0, :]]
+        layer for layer in network_python.keys() if "seq" not in layer
+    ]
+    network_matlab_layers = [elt[0] for elt in network_matlab["params"]["name"][0, :]]
 
     # match layer names torch -> matconvnet
     keyword_mapping = {
-        'img': 'image',
-        'psds': 'psdmed',
-        'autocorr': 'autocorr',
-        'weight': 'kernel',
-        'bias': 'bias',
-        }
+        "img": "image",
+        "psds": "psdmed",
+        "autocorr": "autocorr",
+        "weight": "kernel",
+        "bias": "bias",
+    }
 
     for python_layer in network_python_layers:
-        split = python_layer.split('.')
+        split = python_layer.split(".")
         if len(split) == 2:
             _, param = split
-            matlab_layer = f'discriminator_conv_{keyword_mapping[param]}'
+            matlab_layer = f"discriminator_conv_{keyword_mapping[param]}"
         elif len(split) == 3:
             feature, idx, param = split
-            feature = keyword_mapping[feature.split('_')[0]]
+            feature = keyword_mapping[feature.split("_")[0]]
             idx = int(idx[-1])
             param = keyword_mapping[param]
-            matlab_layer = f'discriminator_{feature}_layer{idx}_conv_{param}'
+            matlab_layer = f"discriminator_{feature}_layer{idx}_conv_{param}"
         else:
-            raise ValueError('Unexpected layer name.')
+            raise ValueError("Unexpected layer name.")
 
         # find matlab_layer idx
         idx = network_matlab_layers.index(matlab_layer)
@@ -77,29 +84,39 @@ def test_weights():
 def test_network_outputs():
     """
     Compare that the ICLabel network in python and matlab outputs the same
-    values for a common set of features.
-    """
-    matlab_images = loadmat(mat_image_features_path)['images']
-    matlab_psds = loadmat(mat_psds_features_path)['psds']
-    matlab_autocorrs = loadmat(mat_autocorr_features_path)['autocorrs']
+    values for a common set of features (input to the forward pass).
 
-    # Reshaping the matlab extracted features in torch formatting
+    Notes
+    -----
+    The matlab script to generate the input and output of the forward pass in
+    matconvnet can be found in:
+    /mne_icalabel/tests/data/network_sample_output.m
+    """
+    # Load features to use for the forward pass
+    matlab_images = loadmat(mat_image_features_path)["images"]
+    matlab_psds = loadmat(mat_psds_features_path)["psds"]
+    matlab_autocorrs = loadmat(mat_autocorr_features_path)["autocorrs"]
+
+    # Reshape the features to fit torch format
     matlab_images = np.transpose(matlab_images, (3, 2, 0, 1))
     matlab_psds = np.transpose(matlab_psds, (3, 2, 0, 1))
     matlab_autocorrs = np.transpose(matlab_autocorrs, (3, 2, 0, 1))
 
-    # Converting these in tensors
+    # Converting to tensors
     matlab_images = torch.from_numpy(matlab_images).float()
     matlab_psds = torch.from_numpy(matlab_psds).float()
     matlab_autocorrs = torch.from_numpy(matlab_autocorrs).float()
 
-    matlab_labels = loadmat(mat_labels_file_path)['labels']
+    # Load the forward pass outputs obtained with matconvnet
+    matlab_labels = loadmat(mat_labels_file_path)["labels"]
 
+    # Run the forward pass in pytorch
     iclabel_net = ICLabelNet()
     iclabel_net.load_state_dict(torch.load(torch_iclabel_path))
     torch_labels = iclabel_net(matlab_images, matlab_psds, matlab_autocorrs)
     torch_labels = torch_labels.detach().numpy()
 
+    # Compare both outputs
     assert np.allclose(matlab_labels, torch_labels, rtol=1e-5, atol=1e-5)
 
 

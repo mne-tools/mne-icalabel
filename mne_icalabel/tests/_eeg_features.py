@@ -114,25 +114,41 @@ def eeg_autocorr_fftw(
     return resamp[:, 1:]
 
 
-def eeg_autocorr_welch(icaact: np.array, trials: int, srate: float, pnts: int, pct_data: int = 100) -> np.array:
+def eeg_autocorr_welch(
+    icaact: np.array, trials: int, srate: float, pnts: int, pct_data: int = 100
+) -> np.array:
     ncomp = icaact.shape[0]
-    n_points = min(pnts, srate*3)
+    n_points = min(pnts, srate * 3)
     nfft = 2 ** nextpow2(2 * n_points - 1)
     cutoff = math.floor(pnts / n_points) * n_points
-    
-    index = np.ceil(np.arange(start=0, stop=cutoff - n_points + 1, step=n_points / 2)) + np.arange(0,n_points).reshape(-1,1)
+
+    index = np.ceil(
+        np.arange(start=0, stop=cutoff - n_points + 1, step=n_points / 2)
+    ) + np.arange(0, n_points).reshape(-1, 1)
     index = index.astype(int)
-    
-    segments = icaact[:, index, :].reshape((ncomp, index.shape[0], index.shape[1]), order='F')
-    
+
+    segments = icaact[:, index, :].reshape(
+        (ncomp, index.shape[0], index.shape[1]), order="F"
+    )
+
     ac = np.zeros((ncomp, nfft), dtype=np.float64)
     for it in range(ncomp):
-        fftpow = np.mean(np.abs(np.fft.fft(segments[it:it+1,:,:], n=nfft, axis=1))**2, axis=2)
-        ac[it:it+1,:] = np.real(np.fft.ifft(fftpow, n=None, axis=1))
-    
+        fftpow = np.mean(
+            np.abs(np.fft.fft(segments[it : it + 1, :, :], n=nfft, axis=1)) ** 2, axis=2
+        )
+        ac[it : it + 1, :] = np.real(np.fft.ifft(fftpow, n=None, axis=1))
+
     # normalize
-    ac = ac[:,0:srate+1] / (ac[:,0:1] * (np.hstack((np.arange(n_points,n_points-srate,-1), max(1, n_points - srate))) / n_points))
-    
+    ac = ac[:, 0 : srate + 1] / (
+        ac[:, 0:1]
+        * (
+            np.hstack(
+                (np.arange(n_points, n_points - srate, -1), max(1, n_points - srate))
+            )
+            / n_points
+        )
+    )
+
     resamp = ss.resample_poly(ac.T, 100, int(srate)).T
 
     return resamp[:, 1:]

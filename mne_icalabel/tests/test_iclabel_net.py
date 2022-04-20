@@ -17,7 +17,7 @@ from mne_icalabel.ica_net import ICLabelNet
 # load in test data for features from original Matlab ICLabel
 ica_file_path = str(files("mne_icalabel.tests").joinpath("data/eeglab_ica.set"))
 ica_raw_file_path = str(files("mne_icalabel.tests").joinpath("data/eeglab_ica_raw.mat"))
-torch_iclabel_path = str(files("mne_icalabel.assets").joinpath("iclabelNet.pt"))
+torch_iclabel_path = str(files("mne_icalabel").joinpath("assets/iclabelNet.pt"))
 matconvnet_iclabel_path = str(files("mne_icalabel.tests").joinpath("data/netICL.mat"))
 mat_image_features_path = str(
     files("mne_icalabel.tests").joinpath("data/matlab_images.mat")

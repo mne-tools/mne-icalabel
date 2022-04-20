@@ -106,7 +106,7 @@ codespell-error:  # running on travis
 
 pydocstyle:
 	@echo "Running pydocstyle"
-	@pydocstyle mne
+	@pydocstyle mne_icalabel
 
 check-manifest:
 	check-manifest --ignore .circleci*,doc,logo,.DS_Store

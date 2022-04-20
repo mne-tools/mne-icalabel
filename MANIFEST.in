@@ -7,7 +7,10 @@ recursive-include mne_icalabel *.pt
 recursive-include mne_icalabel *.py
 recursive-include test_data *.mat
 
-exclude .circlci/config.yml
+recursive-exclude mne_icalabel *.fif
+recursive-exclude mne_icalabel *.m
+
+exclude .circleci/config.yml
 recursive-exclude mne_icalabel *.fdt
 recursive-exclude mne_icalabel *.mat
 recursive-exclude mne_icalabel *.set

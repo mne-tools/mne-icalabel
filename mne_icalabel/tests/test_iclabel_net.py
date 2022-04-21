@@ -18,8 +18,12 @@ torch_iclabel_path = str(files("mne_icalabel").joinpath("assets/iclabelNet.pt"))
 matconvnet_iclabel_path = str(files("mne_icalabel.tests").joinpath("data/netICL.mat"))
 
 # Network forward pass input/output
-matconvnet_fw_input_path = str(files("mne_icalabel.tests").joinpath("data/network_input.mat"))
-matconvnet_fw_output_path = str(files("mne_icalabel.tests").joinpath("data/network_output.mat"))
+matconvnet_fw_input_path = str(
+    files("mne_icalabel.tests").joinpath("data/network_input.mat")
+)
+matconvnet_fw_output_path = str(
+    files("mne_icalabel.tests").joinpath("data/network_output.mat")
+)
 
 # Raw files with ICA decomposition
 raw_eeglab_path = str(files("mne_icalabel.tests").joinpath("data/sample.set"))
@@ -84,15 +88,15 @@ def test_network_outputs():
     The corresponding MATLAB code can be found in 'data/network_output.txt'.
     """
     # load features to use for the forward pass
-    features = loadmat(matconvnet_fw_input_path)['input'][0, :]
+    features = loadmat(matconvnet_fw_input_path)["input"][0, :]
     # features is a (6, ) array with:
     # - elements in position [0, 2, 4] -> 1-element array with the var name
     # - elements in position [1, 3, 5] -> data arrays
-    assert 'in_image' == features[0][0]
+    assert "in_image" == features[0][0]
     images = features[1]
-    assert 'in_psdmed' == features[2][0]
+    assert "in_psdmed" == features[2][0]
     psd = features[3]
-    assert 'in_autocorr' == features[4][0]
+    assert "in_autocorr" == features[4][0]
     autocorr = features[5]
 
     # reshape the features to fit torch format

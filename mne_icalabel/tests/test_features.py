@@ -32,5 +32,5 @@ def test_compute_ica_activations():
     ica = read_ica_eeglab(raw_eeglab_path)
     icaact = compute_ica_activations(raw, ica)
 
-    icaact_eeglab = loadmat(icaact_eeglab_path)['icaact']
+    icaact_eeglab = loadmat(icaact_eeglab_path)["icaact"]
     assert np.allclose(icaact, icaact_eeglab, rtol=1e-8, atol=1e-4)

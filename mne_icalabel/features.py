@@ -5,8 +5,8 @@ from numpy.typing import ArrayLike
 
 
 def retrieve_eeglab_icawinv(
-        ica: ICA,
-        ) -> ArrayLike:
+    ica: ICA,
+) -> ArrayLike:
     """
     Retrieves 'icawinv' from an MNE ICA instance.
 
@@ -28,10 +28,7 @@ def retrieve_eeglab_icawinv(
     return np.linalg.pinv(weights), weights
 
 
-def compute_ica_activations(
-        raw: BaseRaw,
-        ica: ICA
-        ) -> ArrayLike:
+def compute_ica_activations(raw: BaseRaw, ica: ICA) -> ArrayLike:
     """Compute the ICA activations 'icaact' variable from an MNE ICA instance.
 
     Parameters
@@ -48,5 +45,5 @@ def compute_ica_activations(
     icawinv, weights = retrieve_eeglab_icawinv(ica)
     icasphere = np.eye(icawinv.shape[0])
     raw_data = raw.get_data(picks=ica.ch_names)
-    icaact = (weights[0:ica.n_components_, :] @ icasphere) @ raw_data
+    icaact = (weights[0 : ica.n_components_, :] @ icasphere) @ raw_data
     return icaact * 1e6

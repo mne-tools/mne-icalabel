@@ -14,23 +14,13 @@ from mne_icalabel.ica_net import run_iclabel
 from mne_icalabel.ica_net import ICLabelNet
 
 
-# load in test data for features from original Matlab ICLabel
-ica_file_path = str(files("mne_icalabel.tests").joinpath("data/eeglab_ica.set"))
-ica_raw_file_path = str(files("mne_icalabel.tests").joinpath("data/eeglab_ica_raw.mat"))
+# Network weights
 torch_iclabel_path = str(files("mne_icalabel").joinpath("assets/iclabelNet.pt"))
 matconvnet_iclabel_path = str(files("mne_icalabel.tests").joinpath("data/netICL.mat"))
-mat_image_features_path = str(
-    files("mne_icalabel.tests").joinpath("data/matlab_images.mat")
-)
-mat_psds_features_path = str(
-    files("mne_icalabel.tests").joinpath("data/matlab_psds.mat")
-)
-mat_autocorr_features_path = str(
-    files("mne_icalabel.tests").joinpath("data/matlab_autocorrs.mat")
-)
-mat_labels_file_path = str(
-    files("mne_icalabel.tests").joinpath("data/matlab_labels.mat")
-)
+
+# Network forward pass input/output
+matconvnet_fw_input_path = str(files("mne_icalabel.tests").joinpath("data/network_input.mat"))
+matconvnet_fw_output_path = str(files("mne_icalabel.tests").joinpath("data/network_output.mat"))
 
 
 def test_weights():
@@ -92,29 +82,36 @@ def test_network_outputs():
     matconvnet can be found in:
     /mne_icalabel/tests/data/network_sample_output.m
     """
-    # Load features to use for the forward pass
-    matlab_images = loadmat(mat_image_features_path)["images"]
-    matlab_psds = loadmat(mat_psds_features_path)["psds"]
-    matlab_autocorrs = loadmat(mat_autocorr_features_path)["autocorrs"]
+    # load features to use for the forward pass
+    features = loadmat(matconvnet_fw_input_path)['input'][0, :]
+    # features is a (6, ) array with:
+    # - elements in position [0, 2, 4] -> 1-element array with the var name
+    # - elements in position [1, 3, 5] -> data arrays
+    assert 'in_image' == features[0][0]
+    images = features[1]
+    assert 'in_psdmed' == features[2][0]
+    psd = features[3]
+    assert 'in_autocorr' == features[4][0]
+    autocorr = features[5]
 
-    # Reshape the features to fit torch format
-    matlab_images = np.transpose(matlab_images, (3, 2, 0, 1))
-    matlab_psds = np.transpose(matlab_psds, (3, 2, 0, 1))
-    matlab_autocorrs = np.transpose(matlab_autocorrs, (3, 2, 0, 1))
+    # reshape the features to fit torch format
+    images = np.transpose(images, (3, 2, 0, 1))
+    psd = np.transpose(psd, (3, 2, 0, 1))
+    autocorr = np.transpose(autocorr, (3, 2, 0, 1))
 
-    # Converting to tensors
-    matlab_images = torch.from_numpy(matlab_images).float()
-    matlab_psds = torch.from_numpy(matlab_psds).float()
-    matlab_autocorrs = torch.from_numpy(matlab_autocorrs).float()
+    # convert to tensors
+    images = torch.from_numpy(images).float()
+    psd = torch.from_numpy(psd).float()
+    autocorr = torch.from_numpy(autocorr).float()
 
-    # Load the forward pass outputs obtained with matconvnet
-    matlab_labels = loadmat(mat_labels_file_path)["labels"]
-
-    # Run the forward pass in pytorch
+    # run the forward pass on pytorch
     iclabel_net = ICLabelNet()
     iclabel_net.load_state_dict(torch.load(torch_iclabel_path))
-    torch_labels = iclabel_net(matlab_images, matlab_psds, matlab_autocorrs)
-    torch_labels = torch_labels.detach().numpy()
+    torch_labels = iclabel_net(images, psd, autocorr)
+    torch_labels = torch_labels.detach().numpy()  # (30, 7)
+
+    # load the matconvnet output of the forward pass on those 3 feature arrays
+    matlab_labels = loadmat(matconvnet_fw_output_path)["labels"]  # (30, 7)
 
     # Compare both outputs
     assert np.allclose(matlab_labels, torch_labels, rtol=1e-5, atol=1e-5)
@@ -123,33 +120,4 @@ def test_network_outputs():
 def test_labels():
     """Test that the ICLabel network in python and matlab outputs the same
     labels for a common ICA decomposition."""
-    eeglab_ica = mne.preprocessing.read_ica_eeglab(ica_file_path)
-    eeglab_raw = mne.io.read_raw_eeglab(ica_file_path)
-
-    eeglab_ica_raw = loadmat(ica_raw_file_path)["EEG"]
-    raw_labels = eeglab_ica_raw["etc"][0][0][0][0]["ic_classification"][0][0][0][0][0][
-        1
-    ]
-
-    # compute the features of the ICA waveforms
-    ica_features = ica_eeg_features(eeglab_raw, eeglab_ica)
-    topo = ica_features[0].astype(np.float32)
-    psds = ica_features[1].astype(np.float32)
-    with pytest.warns(np.ComplexWarning):
-        autocorr = ica_features[2].astype(np.float32)
-
-    # run ICLabel network
-    labels = run_iclabel(topo, psds, autocorr)
-
-    num_labels = np.argmax(labels, axis=1)
-    orig_num_labels = np.argmax(raw_labels, axis=1)
-
-    # TO show that these are equal, add an assert False statement at the end
-    # TODO: there is one difference between IClabel in Matlab and Python
-    print(num_labels)
-    print(orig_num_labels)
-
-    # everything is correct Brain vs non-brain
-    num_labels[num_labels != 0] = 1
-    orig_num_labels[orig_num_labels != 0] = 1
-    assert sum(map(lambda x, y: bool(x - y), num_labels, orig_num_labels)) == 1
+    pass

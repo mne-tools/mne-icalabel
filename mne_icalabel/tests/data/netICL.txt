@@ -1,0 +1,3 @@
+The file 'netICL.mat' contains the matconvnet ICLabel neural network.
+
+sha1: 826d1b9611ca9d35f1a4011550adcced7e769203

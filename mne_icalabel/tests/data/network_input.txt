@@ -2,6 +2,8 @@ The file 'network_input.mat' contains the input provided to the forward pass of
 the matconvnet version of the ICLabel neural network. The features were
 extracted from the 'sample.set' dataset.
 
+sha1: a306954e7b3dbd5b86339099670e304b8b463b4c
+
 .. code-block:: Matlab
 
     % Load

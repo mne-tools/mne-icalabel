@@ -2,6 +2,8 @@ The file 'sample.set' was obtained by using the sample EEGLAB dataset.
 The EOG channels have been dropped and the dataset has been cropped between 0
 and 10 seconds.
 
+sha1: db2922667ebb1ba214f9b9a5dc250c9a1827f24a
+
 .. code-block:: Matlab
 
     % Load

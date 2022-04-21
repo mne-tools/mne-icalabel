@@ -1,11 +1,17 @@
-The file 'icaact.mat' was obtained by using the sample EEGLAB dataset.
+The file 'icaact-raw.mat' was obtained by using the sample RAW EEGLAB dataset.
+The file 'icaact-epo.mat' was obtained by using the sample RAW EEGLAB dataset.
 
-sha1: 77843a0773c27147bab2bd9232009ec183ae9473
+------------------------------------------------------------------------------
+
+    'icaact-raw.mat
+
+sha1:
+
 
 .. code-block:: Matlab
 
     % Load
-    EEG = pop_loadset('sample.set');
+    EEG = pop_loadset('sample-raw.set');
     EEG = eeg_checkset(EEG);
 
     % Calculate ICA activations
@@ -14,4 +20,26 @@ sha1: 77843a0773c27147bab2bd9232009ec183ae9473
 
     % Save
     icaact = EEG.icaact
-    save('icaact.mat', 'icaact')
+    save('icaact', 'icaact')
+
+
+------------------------------------------------------------------------------
+
+    'icaact-epo.mat'
+
+sha1:
+
+
+.. code-block:: Matlab
+
+    % Load
+    EEG = pop_loadset('sample-epo.set');
+    EEG = eeg_checkset(EEG);
+
+    % Calculate ICA activations
+    EEG.icaact = eeg_getica(EEG);
+    EEG.icaact = double(EEG.icaact);
+
+    % Save
+    icaact = EEG.icaact
+    save('icaact-epo', 'icaact')

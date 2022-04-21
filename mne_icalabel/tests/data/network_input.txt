@@ -1,13 +1,18 @@
 The file 'network_input.mat' contains the input provided to the forward pass of
 the matconvnet version of the ICLabel neural network. The features were
-extracted from the 'sample.set' dataset.
+extracted from the 'sample-raw.set' dataset.
 
-sha1: a306954e7b3dbd5b86339099670e304b8b463b4c
+------------------------------------------------------------------------------
+
+    'network_input.mat'
+
+sha1:
+
 
 .. code-block:: Matlab
 
     % Load
-    EEG = pop_loadset('sample.set');
+    EEG = pop_loadset('sample-raw.set');
     EEG = eeg_checkset(EEG);
 
     % Extract features
@@ -27,4 +32,4 @@ sha1: a306954e7b3dbd5b86339099670e304b8b463b4c
     };
 
     % Save
-    save('network_input', 'input')
+    save('network_input', 'input');

@@ -2,16 +2,21 @@ The file 'network_output.mat' contains the output of the forward pass obtained
 with the matconvnet version of the ICLabel neural network when
 'network_input.mat' is provided.
 
+------------------------------------------------------------------------------
+
+    'network_output.mat'
+
 sha1: 1a778577eb0c377aa4c996e180b18cdf1a02732c
+
 
 .. code-block:: Matlab
 
     % Load inputs
-    load('network_input.mat')
+    load('network_input.mat');
 
     % Load network
-    netStruct = load('netICL.mat')
-    net = dagnn.DagNN.loadobj(netStruct)
+    netStruct = load('netICL.mat');
+    net = dagnn.DagNN.loadobj(netStruct);
 
     % Forward pass
     net.eval(input);

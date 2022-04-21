@@ -1,3 +1,6 @@
+from typing import Union
+
+from mne import BaseEpochs
 from mne.io import BaseRaw
 from mne.preprocessing import ICA
 import numpy as np
@@ -28,7 +31,7 @@ def retrieve_eeglab_icawinv(
     return np.linalg.pinv(weights), weights
 
 
-def compute_ica_activations(raw: BaseRaw, ica: ICA) -> ArrayLike:
+def compute_ica_activations(inst: Union[BaseRaw, BaseEpochs], ica: ICA) -> ArrayLike:
     """Compute the ICA activations 'icaact' variable from an MNE ICA instance.
 
     Parameters
@@ -44,6 +47,6 @@ def compute_ica_activations(raw: BaseRaw, ica: ICA) -> ArrayLike:
     """
     icawinv, weights = retrieve_eeglab_icawinv(ica)
     icasphere = np.eye(icawinv.shape[0])
-    raw_data = raw.get_data(picks=ica.ch_names)
-    icaact = (weights[0 : ica.n_components_, :] @ icasphere) @ raw_data
+    data = inst.get_data(picks=ica.ch_names)
+    icaact = (weights[0 : ica.n_components_, :] @ icasphere) @ data
     return icaact * 1e6

@@ -26,7 +26,7 @@ matconvnet_fw_output_path = str(
 )
 
 # Raw files with ICA decomposition
-raw_eeglab_path = str(files("mne_icalabel.tests").joinpath("data/sample.set"))
+raw_eeglab_path = str(files("mne_icalabel.tests").joinpath("data/sample-raw.set"))
 
 
 def test_weights():

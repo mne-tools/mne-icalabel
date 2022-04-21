@@ -19,8 +19,8 @@ sha1:
     EEG.icaact = double(EEG.icaact);
 
     % Save
-    icaact = EEG.icaact
-    save('icaact', 'icaact')
+    icaact = EEG.icaact;
+    save('icaact-raw', 'icaact');
 
 
 ------------------------------------------------------------------------------

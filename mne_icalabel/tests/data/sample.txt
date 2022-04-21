@@ -4,7 +4,7 @@ and 10 seconds.
 
 The file 'sample-epo.set' was obtained by using the sample EEGLAB dataset.
 The EOG channels have been dropped and the dataset has been cropped by
-selecting the 3 first 'square' epochs with [tmin=0, tmax=1] (s).
+selecting the 3 first 'rt' epochs with [tmin=0, tmax=1] (s).
 
 ------------------------------------------------------------------------------
 
@@ -16,7 +16,7 @@ sha1:
 .. code-block:: Matlab
 
     % Load
-    file_dataset = '/eeglab2022.0/sample_data/eeglab_data.set';
+    file_dataset = 'eeglab2022.0/sample_data/eeglab_data.set';
     EEG = pop_loadset(file_dataset);
     EEG = eeg_checkset(EEG);
 
@@ -28,7 +28,7 @@ sha1:
     EEG = pop_runica(EEG, 'icatype', 'runica', 'extended', 1, 'interrupt', 'off');
 
     % Save
-    pop_saveset(EEG, 'filename', 'sample.set', 'savemode', 'onefile');
+    pop_saveset(EEG, 'filename', 'sample-raw.set', 'savemode', 'onefile');
 
 
 .. code-block:: Python
@@ -51,17 +51,20 @@ sha1:
 .. code-block:: Matlab
 
     % Load
-    file_dataset = '/eeglab2022.0/sample_data/eeglab_data.set';
+    file_dataset = 'sample/eeglab_data.set';
     EEG = pop_loadset(file_dataset);
     EEG = eeg_checkset(EEG);
 
     % Create epochs (trials)
     [events, number] = eeg_eventtypes(EEG);
-    EEG = pop_epoch(EEG, {'square'}, [0, 1]);
+    EEG = pop_epoch(EEG, {'rt'}, [0, 1]);
 
     % Drop non-EEG channel and crop dataset
     idx = eeg_chaninds(EEG, {'EOG1', 'EOG2'});
     EEG = pop_select(EEG, 'nochannel', idx, 'trial', [1, 2, 3]);
+
+    % Run ICA
+    EEG = pop_runica(EEG, 'icatype', 'runica', 'extended', 1, 'interrupt', 'off');
 
     % Save
     pop_saveset(EEG, 'filename', 'sample-epo.set', 'savemode', 'onefile');

@@ -1,5 +1,3 @@
-junit-results.xml
-
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -52,6 +50,7 @@ coverage.xml
 *.py,cover
 .hypothesis/
 .pytest_cache/
+junit-results.xml
 
 # Translations
 *.mo
@@ -130,16 +129,11 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# Matlab
-
+# macOS
 *.DS_Store
-eeg_ica_haufe
 
+# VSCode
 .vscode
-matconvnet-1.0-beta25/
 
+# IntelliJ
 .idea
-*.set
-*.fdt
-
-example_mne.ipynb

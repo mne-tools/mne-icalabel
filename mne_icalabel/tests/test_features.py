@@ -3,6 +3,7 @@ try:
 except ImportError:
     from importlib_resources import files
 
+from mne import read_epochs_eeglab
 from mne.io import read_raw
 from mne.io.eeglab.eeglab import _check_load_mat
 from mne.preprocessing import read_ica_eeglab
@@ -35,6 +36,10 @@ def test_retrieve_eeglab_icawinv():
     assert np.allclose(icawinv, eeg.icawinv)
 
     # Epoch instance
+    ica = read_ica_eeglab(epo_eeglab_path)
+    icawinv, _ = retrieve_eeglab_icawinv(ica)
+    eeg = _check_load_mat(epo_eeglab_path, None)
+    assert np.allclose(icawinv, eeg.icawinv)
 
 
 def test_compute_ica_activations():
@@ -48,3 +53,9 @@ def test_compute_ica_activations():
     assert np.allclose(icaact, icaact_eeglab, rtol=1e-8, atol=1e-4)
 
     # Epoch instance
+    epochs = read_epochs_eeglab(epo_eeglab_path)
+    ica = read_ica_eeglab(epo_eeglab_path)
+    icaact = compute_ica_activations(epochs, ica)
+
+    icaact_eeglab = loadmat(epo_icaact_eeglab_path)["icaact"]
+    assert np.allclose(icaact, icaact_eeglab, rtol=1e-8, atol=1e-4)

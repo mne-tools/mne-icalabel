@@ -3,11 +3,14 @@ try:
 except ImportError:
     from importlib_resources import files
 
+from mne.io import read_raw
+from mne.preprocessing import read_ica_eeglab
 import numpy as np
 from scipy.io import loadmat
 import torch
 
-from mne_icalabel.ica_net import ICLabelNet
+from mne_icalabel.ica_label import ica_eeg_features
+from mne_icalabel.ica_net import ICLabelNet, run_iclabel
 
 
 # Network weights
@@ -17,6 +20,9 @@ matconvnet_iclabel_path = str(files("mne_icalabel.tests").joinpath("data/netICL.
 # Network forward pass input/output
 matconvnet_fw_input_path = str(files("mne_icalabel.tests").joinpath("data/network_input.mat"))
 matconvnet_fw_output_path = str(files("mne_icalabel.tests").joinpath("data/network_output.mat"))
+
+# Raw files with ICA decomposition
+raw_eeglab_path = str(files("mne_icalabel.tests").joinpath("data/sample.set"))
 
 
 def test_weights():
@@ -75,26 +81,7 @@ def test_network_outputs():
     Notes
     -----
     The forward pass has been run in matconvnet with the same input features.
-
-    .. code-block:: Matlab
-
-        % Load inputs
-        load('data/network_input.mat')
-
-        % Load network
-        netStruct = load('data/netICL.mat')
-        net = dagnn.DagNN.loadobj(netStruct)
-
-        % Forward pass
-        net.eval(input);
-        out = net.getVar(net.getOutputs()).value;
-
-        % Output of the network
-        labels = squeeze(net.getVar(net.getOutputs()).value)';
-        labels = reshape(mean(reshape(labels', [], 4), 2), 7, [])';
-
-        % Save
-        save('data/network_output', 'labels');
+    The corresponding MATLAB code can be found in 'data/network_output.txt'.
     """
     # load features to use for the forward pass
     features = loadmat(matconvnet_fw_input_path)['input'][0, :]
@@ -133,5 +120,21 @@ def test_network_outputs():
 
 def test_labels():
     """Test that the ICLabel network in python and matlab outputs the same
-    labels for a common ICA decomposition."""
-    pass
+    labels for a common ICA decomposition.
+
+    Notes
+    -----
+    The raw and its ICA decomposition have been obtained in EEGLAB from one of
+    its sample dataset.
+    The corresponding MATLAB code can be found in 'data/sample.txt'.
+    """
+    raw = read_raw(raw_eeglab_path, preload=True)
+    ica = read_ica_eeglab(raw_eeglab_path)
+
+    features = ica_eeg_features(raw, ica)
+    # TODO: Feature extraction is failing for now. To be completed when feature
+    # extraction is fully tested.
+    topo = features[0].astype(np.float32)
+    psds = features[1].astype(np.float32)
+    autocorr = features[2].astype(np.float32)
+    labels = run_iclabel(topo, psds, autocorr)

@@ -32,7 +32,19 @@ def compute_ica_activations(
         raw: BaseRaw,
         ica: ICA
         ) -> ArrayLike:
-    """Compute the ICA activations: 'icaact'."""
+    """Compute the ICA activations 'icaact' variable from an MNE ICA instance.
+
+    Parameters
+    ----------
+    raw : Raw
+        MNE Raw instance with data array in Volts.
+    ica : ICA
+        MNE ICA decomposition.
+
+    Returns
+    -------
+    icaact : array
+    """
     icawinv, weights = retrieve_eeglab_icawinv(ica)
     icasphere = np.eye(icawinv.shape[0])
     raw_data = raw.get_data(picks=ica.ch_names)

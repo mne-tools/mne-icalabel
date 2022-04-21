@@ -23,3 +23,8 @@ def retrieve_eeglab_icawinv(
     u = ica.unmixing_matrix_ / s
     v = ica.pca_components_[:n_components, :]
     return np.linalg.pinv((u * s) @ v)
+
+
+def compute_ica_activations():
+    """Compute the ICA activations: 'icaact'."""
+    pass

@@ -74,9 +74,27 @@ def test_network_outputs():
 
     Notes
     -----
-    The matlab script to generate the input and output of the forward pass in
-    matconvnet can be found in:
-    /mne_icalabel/tests/data/network_sample_output.m
+    The forward pass has been run in matconvnet with the same input features.
+
+    .. code-block:: Matlab
+
+        % Load inputs
+        load('data/network_input.mat')
+
+        % Load network
+        netStruct = load('data/netICL.mat')
+        net = dagnn.DagNN.loadobj(netStruct)
+
+        % Forward pass
+        net.eval(input);
+        out = net.getVar(net.getOutputs()).value;
+
+        % Output of the network
+        labels = squeeze(net.getVar(net.getOutputs()).value)';
+        labels = reshape(mean(reshape(labels', [], 4), 2), 7, [])';
+
+        % Save
+        save('data/network_output', 'labels');
     """
     # load features to use for the forward pass
     features = loadmat(matconvnet_fw_input_path)['input'][0, :]

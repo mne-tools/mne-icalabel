@@ -3,14 +3,10 @@ try:
 except ImportError:
     from importlib_resources import files
 
-import mne
 import numpy as np
-import pytest
 from scipy.io import loadmat
 import torch
 
-from mne_icalabel.ica_label import ica_eeg_features
-from mne_icalabel.ica_net import run_iclabel
 from mne_icalabel.ica_net import ICLabelNet
 
 

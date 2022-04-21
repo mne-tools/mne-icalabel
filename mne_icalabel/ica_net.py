@@ -193,9 +193,7 @@ def format_input(images: ArrayLike, psd: ArrayLike, autocorr: ArrayLike):
 
 
 def run_iclabel(images: ArrayLike, psds: ArrayLike, autocorr: ArrayLike) -> ArrayLike:
-    submodule = "mne_icalabel"
-    filename = "assets/iclabelNet.pt"
-    ica_network_file = files(submodule).joinpath(filename)
+    ica_network_file = files("mne_icalabel").joinpath("assets/iclabelNet.pt")
 
     # Get network and load weights
     iclabel_net = ICLabelNet()

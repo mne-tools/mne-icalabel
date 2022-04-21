@@ -12,12 +12,14 @@ from scipy.io import loadmat
 from mne_icalabel.features import retrieve_eeglab_icawinv, compute_ica_activations
 
 
-# Raw files with ICA decomposition
+# Raw/Epochs files with ICA decomposition
 raw_eeglab_path = str(files("mne_icalabel.tests").joinpath("data/sample-raw.set"))
+epo_eeglab_path = str(files("mne_icalabel.tests").joinpath("data/sample-epo.set"))
+
+# ICA activation matrix for raw/epochs
 raw_icaact_eeglab_path = str(
     files("mne_icalabel.tests").joinpath("data/icaact-raw.mat")
 )
-epo_eeglab_path = str(files("mne_icalabel.tests").joinpath("data/sample-epo.set"))
 epo_icaact_eeglab_path = str(
     files("mne_icalabel.tests").joinpath("data/icaact-epo.mat")
 )

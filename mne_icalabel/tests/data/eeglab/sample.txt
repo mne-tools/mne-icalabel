@@ -4,7 +4,7 @@ and 10 seconds.
 
 .. code-block:: Matlab
 
-    % Load dataset
+    % Load
     file_dataset = '/eeglab2022.0/sample_data/eeglab_data.set';
     EEG = pop_loadset(file_dataset);
     EEG = eeg_checkset(EEG);

@@ -15,18 +15,18 @@ from mne_icalabel.ica_net import ICLabelNet, run_iclabel
 
 # Network weights
 torch_iclabel_path = str(files("mne_icalabel").joinpath("assets/iclabelNet.pt"))
-matconvnet_iclabel_path = str(files("mne_icalabel.tests").joinpath("data/netICL.mat"))
+matconvnet_iclabel_path = str(files("mne_icalabel.tests").joinpath("data/network/netICL.mat"))
 
 # Network forward pass input/output
 matconvnet_fw_input_path = str(
-    files("mne_icalabel.tests").joinpath("data/network_input.mat")
+    files("mne_icalabel.tests").joinpath("data/network/network_input.mat")
 )
 matconvnet_fw_output_path = str(
-    files("mne_icalabel.tests").joinpath("data/network_output.mat")
+    files("mne_icalabel.tests").joinpath("data/network/network_output.mat")
 )
 
 # Raw files with ICA decomposition
-raw_eeglab_path = str(files("mne_icalabel.tests").joinpath("data/sample-raw.set"))
+raw_eeglab_path = str(files("mne_icalabel.tests").joinpath("data/datasets/sample-raw.set"))
 
 
 def test_weights():

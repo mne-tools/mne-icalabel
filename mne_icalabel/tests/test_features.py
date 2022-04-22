@@ -14,15 +14,15 @@ from mne_icalabel.features import retrieve_eeglab_icawinv, compute_ica_activatio
 
 
 # Raw/Epochs files with ICA decomposition
-raw_eeglab_path = str(files("mne_icalabel.tests").joinpath("data/sample-raw.set"))
-epo_eeglab_path = str(files("mne_icalabel.tests").joinpath("data/sample-epo.set"))
+raw_eeglab_path = str(files("mne_icalabel.tests").joinpath("data/datasets/sample-raw.set"))
+epo_eeglab_path = str(files("mne_icalabel.tests").joinpath("data/datasets/sample-epo.set"))
 
 # ICA activation matrix for raw/epochs
 raw_icaact_eeglab_path = str(
-    files("mne_icalabel.tests").joinpath("data/icaact-raw.mat")
+    files("mne_icalabel.tests").joinpath("data/icaact/icaact-raw.mat")
 )
 epo_icaact_eeglab_path = str(
-    files("mne_icalabel.tests").joinpath("data/icaact-epo.mat")
+    files("mne_icalabel.tests").joinpath("data/icaact/icaact-epo.mat")
 )
 
 

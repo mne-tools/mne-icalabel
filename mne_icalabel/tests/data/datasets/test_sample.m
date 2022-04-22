@@ -4,9 +4,9 @@
 % dataset. The EOG channels have been dropped and the dataset has been 
 % cropped between 0 and 10 seconds.
 
-% ------------------------------------------------------------------------
-% sha1:
-% ------------------------------------------------------------------------
+% ----------------------------------------------
+% sha1: 055fea07348f1f379fe7fb62bc1379f0b948f43a
+% ----------------------------------------------
 
 % Load
 file_dataset = 'eeglab2022.0/sample_data/eeglab_data.set';
@@ -40,9 +40,9 @@ ica = read_ica_eeglab(fname)
 % dataset. The EOG channels have been dropped and the dataset has been 
 % cropped by selecting the 3 first 'rt' epochs with [tmin=0, tmax=1] (s).
 
-% ------------------------------------------------------------------------
-% sha1:
-% ------------------------------------------------------------------------
+% ----------------------------------------------
+% sha1: e9c7968c8a151f758a8dc7461976f17cba10c4f7
+% ----------------------------------------------
 
 % Load
 file_dataset = 'eeglab2022.0/sample_data/eeglab_data.set';

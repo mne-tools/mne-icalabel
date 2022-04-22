@@ -15,6 +15,7 @@ from mne_icalabel.features import (
     compute_ica_activations,
     next_power_of_2,
     eeg_autocorr,
+    eeg_autocorr_fftw,
     )
 
 
@@ -33,11 +34,14 @@ epo_icaact_eeglab_path = str(
 )
 
 # Autocorrelations
-autocorr_short_raw = str(
+autocorr_short_raw_path = str(
     files("mne_icalabel.tests").joinpath("data/autocorr/autocorr-short-raw.mat")
 )
-autocorr_very_short_raw = str(
+autocorr_very_short_raw_path = str(
     files("mne_icalabel.tests").joinpath("data/autocorr/autocorr-very-short-raw.mat")
+)
+autocorr_epo_path = str(
+    files("mne_icalabel.tests").joinpath("data/autocorr/autocorr-epo.mat")
 )
 
 
@@ -93,7 +97,7 @@ def test_eeg_autocorr():
     icaact = compute_ica_activations(raw, ica)
     autocorr = eeg_autocorr(raw, ica, icaact)
 
-    autocorr_eeglab = loadmat(autocorr_short_raw)["autocorr"]
+    autocorr_eeglab = loadmat(autocorr_short_raw_path)["autocorr"]
     assert np.allclose(autocorr, autocorr_eeglab, atol=1e-4)
 
     # Raw shorter than 1 second
@@ -102,5 +106,16 @@ def test_eeg_autocorr():
     icaact = compute_ica_activations(raw, ica)
     autocorr = eeg_autocorr(raw, ica, icaact)
 
-    autocorr_eeglab = loadmat(autocorr_very_short_raw)["autocorr"]
+    autocorr_eeglab = loadmat(autocorr_very_short_raw_path)["autocorr"]
+    assert np.allclose(autocorr, autocorr_eeglab, atol=1e-4)
+
+
+def test_eeg_autocorr_fftw():
+    """Test eeg_autocorr_fftw feature used on epoch datasets."""
+    epochs = read_epochs_eeglab(epo_eeglab_path)
+    ica = read_ica_eeglab(epo_eeglab_path)
+    icaact = compute_ica_activations(epochs, ica)
+    autocorr = eeg_autocorr_fftw(epochs, ica, icaact)
+
+    autocorr_eeglab = loadmat(autocorr_epo_path)["autocorr"]
     assert np.allclose(autocorr, autocorr_eeglab, atol=1e-4)

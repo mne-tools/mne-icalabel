@@ -109,13 +109,15 @@ def next_power_of_2(x):
 
 def eeg_autocorr_welch(inst, ica):
     """Autocorrelation feature applied on raw object with at least 5 * fs
-    samples (5 seconds)."""
+    samples (5 seconds).
+    MATLAB: 'eeg_autocorr_welch'."""
     pass
 
 
 def eeg_autocorr(raw: BaseRaw, ica: ICA, icaact: np.ndarray):
     """Autocorrelation feature applied on raw object that do not have enough
-    sampes for eeg_autocorr_welch."""
+    sampes for eeg_autocorr_welch.
+    MATLAB: 'eeg_autocorr.m'."""
     assert isinstance(raw, BaseRaw)  # sanity-check
 
     # in MATLAB, 'pct_data' variable is not used.
@@ -136,7 +138,7 @@ def eeg_autocorr(raw: BaseRaw, ica: ICA, icaact: np.ndarray):
     else:
         ac = c[:, 0:int(raw.info['sfreq']) + 1]
 
-    # normalize
+    # normalize by 0-tap autocorrelation
     ac = np.divide(ac.T, ac[:, 0]).T
 
     # resample to 1 second at 100 samples/sec
@@ -145,6 +147,32 @@ def eeg_autocorr(raw: BaseRaw, ica: ICA, icaact: np.ndarray):
     return resamp.astype(np.float32)
 
 
-def eeg_autocorr_fftw():
-    """Autocorrelation feature applied on epoch object."""
-    pass
+def eeg_autocorr_fftw(epochs: BaseEpochs, ica: ICA, icaact: np.ndarray):
+    """Autocorrelation feature applied on epoch object.
+    MATLAB: 'eeg_autocorr_fftw.m'."""
+    assert isinstance(epochs, BaseEpochs)  # sanity-check
+
+    # in MATLAB, 'pct_data' variable is not used.
+    ncomp = ica.n_components_
+    nfft = next_power_of_2(2 * epochs.times.size - 1)
+
+    ac = np.zeros((ncomp, nfft))
+    for it in range(ncomp):
+        x = np.fft.fft(icaact[it, :, :], nfft, axis=0)
+        ac[it, :] = np.mean(np.power(np.abs(x), 2), axis=1)
+
+    ac = np.fft.ifft(ac)
+
+    if epochs.times.size < epochs.info['sfreq']:
+        zeros = np.zeros(
+            (ac.shape[0], int(epochs.info['sfreq']) - epochs.times.size + 1))
+        ac = np.hstack([ac[:, 0:epochs.times.size], zeros])
+    else:
+        ac = ac[:, 0:int(epochs.info['sfreq']) + 1]
+
+    ac = np.divide(ac.T, ac[:, 0]).T
+
+    # resample to 1 second at 100 samples/sec
+    resamp = resample_poly(ac.T, 100, epochs.info['sfreq']).T
+    resamp = resamp[:, 1:, np.newaxis, np.newaxis].transpose([2, 1, 3, 0])
+    return resamp.astype(np.float32)

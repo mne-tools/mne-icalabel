@@ -113,12 +113,14 @@ def eeg_autocorr_welch(inst, ica):
     pass
 
 
-def eeg_autocorr(inst, ica, icaact):
+def eeg_autocorr(raw: BaseRaw, ica: ICA, icaact: np.ndarray):
     """Autocorrelation feature applied on raw object that do not have enough
     sampes for eeg_autocorr_welch."""
+    assert isinstance(raw, BaseRaw)  # sanity-check
+
     # in MATLAB, 'pct_data' variable is not used.
     ncomp = ica.n_components_
-    nfft = next_power_of_2(2 * inst.times.size - 1)
+    nfft = next_power_of_2(2 * raw.times.size - 1)
 
     c = np.zeros((ncomp, nfft))
     for it in range(ncomp):
@@ -127,16 +129,18 @@ def eeg_autocorr(inst, ica, icaact):
         x = np.power(np.abs(np.fft.fft(icaact[it, :], n=nfft)), 2)
         c[it, :] = np.fft.ifft(x)
 
-    if inst.times.size < inst.info['sfreq']:
-        pass  # TODO
+    if raw.times.size < raw.info['sfreq']:
+        zeros = np.zeros(
+            (c.shape[0], int(raw.info['sfreq']) - raw.times.size + 1))
+        ac = np.hstack([c[:, 0:raw.times.size], zeros])
     else:
-        ac = c[:, 0:int(inst.info['sfreq']) + 1]
+        ac = c[:, 0:int(raw.info['sfreq']) + 1]
 
     # normalize
     ac = np.divide(ac.T, ac[:, 0]).T
 
     # resample to 1 second at 100 samples/sec
-    resamp = resample_poly(ac.T, 100, inst.info['sfreq']).T
+    resamp = resample_poly(ac.T, 100, raw.info['sfreq']).T
     resamp = resamp[:, 1:, np.newaxis, np.newaxis].transpose([2, 1, 3, 0])
     return resamp.astype(np.float32)
 

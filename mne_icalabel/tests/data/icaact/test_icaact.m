@@ -19,6 +19,7 @@ EEG.icaact = double(EEG.icaact);
 icaact = EEG.icaact;
 save('icaact-raw', 'icaact');
 
+
 %% EPOCHS - 'icaact-epo.mat'
 
 % The file 'icaact-epo.mat' was obtained from the ICA decomposition in the

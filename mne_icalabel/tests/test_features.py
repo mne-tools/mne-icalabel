@@ -21,6 +21,7 @@ from mne_icalabel.features import (
 # Raw/Epochs files with ICA decomposition
 raw_eeglab_path = str(files("mne_icalabel.tests").joinpath("data/datasets/sample-raw.set"))
 raw_short_eeglab_path = str(files("mne_icalabel.tests").joinpath("data/datasets/sample-short-raw.set"))
+raw_very_short_eeglab_path = str(files("mne_icalabel.tests").joinpath("data/datasets/sample-very-short-raw.set"))
 epo_eeglab_path = str(files("mne_icalabel.tests").joinpath("data/datasets/sample-epo.set"))
 
 # ICA activation matrix for raw/epochs
@@ -34,6 +35,9 @@ epo_icaact_eeglab_path = str(
 # Autocorrelations
 autocorr_short_raw = str(
     files("mne_icalabel.tests").joinpath("data/autocorr/autocorr-short-raw.mat")
+)
+autocorr_very_short_raw = str(
+    files("mne_icalabel.tests").joinpath("data/autocorr/autocorr-very-short-raw.mat")
 )
 
 
@@ -83,6 +87,7 @@ def test_next_power_of_2():
 
 def test_eeg_autocorr():
     """Test eeg_autocorr feature used on short raw datasets."""
+    # Raw between 1 and 5 seconds
     raw = read_raw(raw_short_eeglab_path)
     ica = read_ica_eeglab(raw_short_eeglab_path)
     icaact = compute_ica_activations(raw, ica)
@@ -91,4 +96,11 @@ def test_eeg_autocorr():
     autocorr_eeglab = loadmat(autocorr_short_raw)["autocorr"]
     assert np.allclose(autocorr, autocorr_eeglab, atol=1e-4)
 
-    # TODO: Add test with a raw that is shorter than 1 second.
+    # Raw shorter than 1 second
+    raw = read_raw(raw_very_short_eeglab_path)
+    ica = read_ica_eeglab(raw_very_short_eeglab_path)
+    icaact = compute_ica_activations(raw, ica)
+    autocorr = eeg_autocorr(raw, ica, icaact)
+
+    autocorr_eeglab = loadmat(autocorr_very_short_raw)["autocorr"]
+    assert np.allclose(autocorr, autocorr_eeglab, atol=1e-4)

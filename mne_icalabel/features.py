@@ -103,7 +103,7 @@ def eeg_rpsd():
 # ----------------------------------------------------------------------------
 def eeg_autocorr_welch():
     """Autocorrelation feature applied on raw object with at least 5 * fs
-    samples."""
+    samples (5 seconds)."""
     pass
 
 

@@ -14,6 +14,7 @@ from mne_icalabel.features import (
     retrieve_eeglab_icawinv,
     compute_ica_activations,
     next_power_of_2,
+    eeg_autocorr_welch,
     eeg_autocorr,
     eeg_autocorr_fftw,
     )
@@ -34,6 +35,9 @@ epo_icaact_eeglab_path = str(
 )
 
 # Autocorrelations
+autocorr_raw_path = autocorr_short_raw_path = str(
+    files("mne_icalabel.tests").joinpath("data/autocorr/autocorr-raw.mat")
+)
 autocorr_short_raw_path = str(
     files("mne_icalabel.tests").joinpath("data/autocorr/autocorr-short-raw.mat")
 )
@@ -87,6 +91,17 @@ def test_next_power_of_2():
     for k, exp in zip(x, expected):
         val = next_power_of_2(k)
         assert exp == val
+
+
+def test_eeg_autocorr_welch():
+    """Test eeg_autocorr_welch feature used on long raw datasets."""
+    raw = read_raw(raw_eeglab_path)
+    ica = read_ica_eeglab(raw_eeglab_path)
+    icaact = compute_ica_activations(raw, ica)
+    autocorr = eeg_autocorr_welch(raw, ica, icaact)
+
+    autocorr_eeglab = loadmat(autocorr_raw_path)["autocorr"]
+    assert np.allclose(autocorr, autocorr_eeglab, atol=1e-4)
 
 
 def test_eeg_autocorr():

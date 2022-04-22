@@ -5,6 +5,7 @@ from mne.io import BaseRaw
 from mne.preprocessing import ICA
 import numpy as np
 from numpy.typing import ArrayLike
+from scipy.signal import resample_poly
 
 
 def get_features(inst: Union[BaseRaw, BaseEpochs], ica: ICA):
@@ -101,16 +102,43 @@ def eeg_rpsd():
 
 
 # ----------------------------------------------------------------------------
-def eeg_autocorr_welch():
+def next_power_of_2(x):
+    """Equivalent to 2^nextpow2 in MATLAB."""
+    return 1 if x == 0 else 2**(x - 1).bit_length()
+
+
+def eeg_autocorr_welch(inst, ica):
     """Autocorrelation feature applied on raw object with at least 5 * fs
     samples (5 seconds)."""
     pass
 
 
-def eeg_autocorr():
+def eeg_autocorr(inst, ica, icaact):
     """Autocorrelation feature applied on raw object that do not have enough
     sampes for eeg_autocorr_welch."""
-    pass
+    # in MATLAB, 'pct_data' variable is not used.
+    ncomp = ica.n_components_
+    nfft = next_power_of_2(2 * inst.times.size - 1)
+
+    c = np.zeros((ncomp, nfft))
+    for it in range(ncomp):
+        # in MATLAB, 'mean' does nothing here. It looks like it was included
+        # for a case where epochs are provided.
+        x = np.power(np.abs(np.fft.fft(icaact[it, :], n=nfft)), 2)
+        c[it, :] = np.fft.ifft(x)
+
+    if inst.times.size < inst.info['sfreq']:
+        pass  # TODO
+    else:
+        ac = c[:, 0:int(inst.info['sfreq']) + 1]
+
+    # normalize
+    ac = np.divide(ac.T, ac[:, 0]).T
+
+    # resample to 1 second at 100 samples/sec
+    resamp = resample_poly(ac.T, 100, inst.info['sfreq']).T
+    resamp = resamp[:, 1:, np.newaxis, np.newaxis].transpose([2, 1, 3, 0])
+    return resamp.astype(np.float32)
 
 
 def eeg_autocorr_fftw():

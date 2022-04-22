@@ -4,7 +4,7 @@
 % dataset 'sample-raw.set'.
 
 % ----------------------------------------------
-% sha1: 3592b5cd682789ea6ec55d8056895a956b722dc6
+% sha1: 1367b5203dd1f97f2878ce26d0f55c5453074663
 % ----------------------------------------------
 
 % Load
@@ -16,7 +16,7 @@ EEG.icaact = eeg_getica(EEG);
 EEG.icaact = double(EEG.icaact);
 
 % Retrieve autocorr
-autocorr = eeg_autocorr(EEG);
+autocorr = eeg_autocorr_welch(EEG);
 
 % Reshape and cast
 autocorr = single(permute(autocorr, [3 2 4 1]));

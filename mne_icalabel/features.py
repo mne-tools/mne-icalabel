@@ -36,17 +36,25 @@ def compute_ica_activations(inst: Union[BaseRaw, BaseEpochs], ica: ICA) -> Array
 
     Parameters
     ----------
-    raw : Raw
-        MNE Raw instance with data array in Volts.
+    inst : Raw | Epoch
+        MNE Raw/Epoch instance with data array in Volts.
     ica : ICA
         MNE ICA decomposition.
 
     Returns
     -------
     icaact : array
+        raw: (n_components, n_samples)
+        epoch: (n_components, n_samples, n_trials)
     """
     icawinv, weights = retrieve_eeglab_icawinv(ica)
     icasphere = np.eye(icawinv.shape[0])
-    data = inst.get_data(picks=ica.ch_names)
+    data = inst.get_data(picks=ica.ch_names) * 1e6
     icaact = (weights[0 : ica.n_components_, :] @ icasphere) @ data
-    return icaact * 1e6
+
+    # move trial (epoch) dimension to the end
+    if icaact.ndim == 3:
+        assert isinstance(inst, BaseEpochs)  # sanity-check
+        icaact = icaact.transpose([1, 2, 0])
+
+    return icaact

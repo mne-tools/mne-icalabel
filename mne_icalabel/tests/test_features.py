@@ -17,14 +17,22 @@ from mne_icalabel.features import (
     eeg_autocorr_welch,
     eeg_autocorr,
     eeg_autocorr_fftw,
-    )
+)
 
 
 # Raw/Epochs files with ICA decomposition
-raw_eeglab_path = str(files("mne_icalabel.tests").joinpath("data/datasets/sample-raw.set"))
-raw_short_eeglab_path = str(files("mne_icalabel.tests").joinpath("data/datasets/sample-short-raw.set"))
-raw_very_short_eeglab_path = str(files("mne_icalabel.tests").joinpath("data/datasets/sample-very-short-raw.set"))
-epo_eeglab_path = str(files("mne_icalabel.tests").joinpath("data/datasets/sample-epo.set"))
+raw_eeglab_path = str(
+    files("mne_icalabel.tests").joinpath("data/datasets/sample-raw.set")
+)
+raw_short_eeglab_path = str(
+    files("mne_icalabel.tests").joinpath("data/datasets/sample-short-raw.set")
+)
+raw_very_short_eeglab_path = str(
+    files("mne_icalabel.tests").joinpath("data/datasets/sample-very-short-raw.set")
+)
+epo_eeglab_path = str(
+    files("mne_icalabel.tests").joinpath("data/datasets/sample-epo.set")
+)
 
 # ICA activation matrix for raw/epochs
 raw_icaact_eeglab_path = str(

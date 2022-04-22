@@ -31,7 +31,7 @@ def get_features(inst: Union[BaseRaw, BaseEpochs], ica: ICA):
 
     # compute autocorr feature (float32)
     if isinstance(inst, BaseRaw):
-        if 5 < inst.times.size / inst.info['sfreq']:
+        if 5 < inst.times.size / inst.info["sfreq"]:
             autocorr = eeg_autocorr_welch(inst, ica, icaact)
         else:
             autocorr = eeg_autocorr(inst, ica, icaact)
@@ -105,7 +105,7 @@ def eeg_rpsd():
 # ----------------------------------------------------------------------------
 def next_power_of_2(x):
     """Equivalent to 2^nextpow2 in MATLAB."""
-    return 1 if x == 0 else 2**(x - 1).bit_length()
+    return 1 if x == 0 else 2 ** (x - 1).bit_length()
 
 
 def eeg_autocorr_welch(raw: BaseRaw, ica: ICA, icaact: np.ndarray):
@@ -119,7 +119,7 @@ def eeg_autocorr_welch(raw: BaseRaw, ica: ICA, icaact: np.ndarray):
 
     # setup constants
     ncomp = ica.n_components_
-    n_points = min(raw.times.size, int(raw.info['sfreq'] * 3))
+    n_points = min(raw.times.size, int(raw.info["sfreq"] * 3))
     nfft = next_power_of_2(2 * n_points - 1)
     cutoff = math.floor(raw.times.size / n_points) * n_points
     range_ = np.arange(0, cutoff - n_points + n_points / 2, n_points / 2)
@@ -156,7 +156,7 @@ def eeg_autocorr_welch(raw: BaseRaw, ica: ICA, icaact: np.ndarray):
     """
 
     temp = np.hstack([icaact[:, index[:, k]] for k in range(index.shape[-1])])
-    segments = temp.reshape(ncomp, *index.shape, order='F')
+    segments = temp.reshape(ncomp, *index.shape, order="F")
 
     # calc autocorrelation
     ac = np.zeros((ncomp, nfft))
@@ -170,17 +170,17 @@ def eeg_autocorr_welch(raw: BaseRaw, ica: ICA, icaact: np.ndarray):
     # - EEG.pnts < EEG.srate: never occurs since we are using raw that last at
     # least 5 seconds
     # - EEG.pnts > EEG.srate
-    ac = ac[:, :int(raw.info['sfreq']) + 1]
+    ac = ac[:, : int(raw.info["sfreq"]) + 1]
     # build that 3-line denominator
-    arr1 = np.arange(n_points, n_points - int(raw.info['sfreq']), -1)
-    arr1 = np.hstack([arr1, [np.max([1, n_points - int(raw.info['sfreq'])])]])
+    arr1 = np.arange(n_points, n_points - int(raw.info["sfreq"]), -1)
+    arr1 = np.hstack([arr1, [np.max([1, n_points - int(raw.info["sfreq"])])]])
     den = np.tile(ac[:, 0], (arr1.size, 1))
     den = den.T * arr1 / n_points
     # finally..
     ac = np.divide(ac, den)
 
     # resample to 1 second at 100 samples/sec
-    resamp = resample_poly(ac.T, 100, raw.info['sfreq']).T
+    resamp = resample_poly(ac.T, 100, raw.info["sfreq"]).T
     resamp = resamp[:, 1:, np.newaxis, np.newaxis].transpose([2, 1, 3, 0])
     return resamp.astype(np.float32)
 
@@ -202,18 +202,17 @@ def eeg_autocorr(raw: BaseRaw, ica: ICA, icaact: np.ndarray):
         x = np.power(np.abs(np.fft.fft(icaact[it, :], n=nfft)), 2)
         c[it, :] = np.fft.ifft(x)
 
-    if raw.times.size < raw.info['sfreq']:
-        zeros = np.zeros(
-            (c.shape[0], int(raw.info['sfreq']) - raw.times.size + 1))
-        ac = np.hstack([c[:, :raw.times.size], zeros])
+    if raw.times.size < raw.info["sfreq"]:
+        zeros = np.zeros((c.shape[0], int(raw.info["sfreq"]) - raw.times.size + 1))
+        ac = np.hstack([c[:, : raw.times.size], zeros])
     else:
-        ac = c[:, :int(raw.info['sfreq']) + 1]
+        ac = c[:, : int(raw.info["sfreq"]) + 1]
 
     # normalize by 0-tap autocorrelation
     ac = np.divide(ac.T, ac[:, 0]).T
 
     # resample to 1 second at 100 samples/sec
-    resamp = resample_poly(ac.T, 100, raw.info['sfreq']).T
+    resamp = resample_poly(ac.T, 100, raw.info["sfreq"]).T
     resamp = resamp[:, 1:, np.newaxis, np.newaxis].transpose([2, 1, 3, 0])
     return resamp.astype(np.float32)
 
@@ -234,16 +233,17 @@ def eeg_autocorr_fftw(epochs: BaseEpochs, ica: ICA, icaact: np.ndarray):
 
     ac = np.fft.ifft(ac)
 
-    if epochs.times.size < epochs.info['sfreq']:
+    if epochs.times.size < epochs.info["sfreq"]:
         zeros = np.zeros(
-            (ac.shape[0], int(epochs.info['sfreq']) - epochs.times.size + 1))
-        ac = np.hstack([ac[:, :epochs.times.size], zeros])
+            (ac.shape[0], int(epochs.info["sfreq"]) - epochs.times.size + 1)
+        )
+        ac = np.hstack([ac[:, : epochs.times.size], zeros])
     else:
-        ac = ac[:, :int(epochs.info['sfreq']) + 1]
+        ac = ac[:, : int(epochs.info["sfreq"]) + 1]
 
     ac = np.divide(ac.T, ac[:, 0]).T
 
     # resample to 1 second at 100 samples/sec
-    resamp = resample_poly(ac.T, 100, epochs.info['sfreq']).T
+    resamp = resample_poly(ac.T, 100, epochs.info["sfreq"]).T
     resamp = resamp[:, 1:, np.newaxis, np.newaxis].transpose([2, 1, 3, 0])
     return resamp.astype(np.float32)

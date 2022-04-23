@@ -26,7 +26,7 @@ def get_features(inst: Union[BaseRaw, BaseEpochs], ica: ICA):
     topo = eeg_topoplot()
 
     # compute psd feature (float32)
-    psd = eeg_rpsd()
+    psd = eeg_rpsd(inst, ica, icaact)
 
     # compute autocorr feature (float32)
     if isinstance(inst, BaseRaw):
@@ -36,6 +36,8 @@ def get_features(inst: Union[BaseRaw, BaseEpochs], ica: ICA):
             autocorr = eeg_autocorr(inst, ica, icaact)
     else:
         autocorr = eeg_autocorr_fftw(inst, ica, icaact)
+
+    # TODO: format with the 0.99 multiplication
 
 
 def retrieve_eeglab_icawinv(
@@ -99,18 +101,9 @@ def eeg_topoplot():
 def eeg_rpsd(inst: Union[BaseRaw, BaseEpochs], ica: ICA, icaact: np.ndarray):
     """PSD feature."""
     assert isinstance(inst, (BaseRaw, BaseEpochs))  # sanity-check
-
     constants = _eeg_rpsd_constants(inst, ica)
     psd = _eeg_rpsd_compute_psdmed(inst, icaact, *constants)
-
-    # extrapolate or prune as needed
-    nfreq = psd.shape[1]
-    if nfreq < 100:
-        psd = np.concatenate([psd, np.tile(psd[:, -1:], (1, 100 - nfreq))], axis=1)
-
-    # undo notch filter
-
-
+    psd = _eeg_rpsd_format(psd)
     return psd
 
 
@@ -185,6 +178,18 @@ def _eeg_rpsd_compute_psdmed(
 
     return psdmed
 
+
+def _eeg_rpsd_format(
+        psd: np.ndarray,
+        ):
+    """Apply the formatting steps after 'eeg_rpsd.m' from the MATLAB feature
+    extraction."""
+    # extrapolate or prune as needed
+    nfreq = psd.shape[1]
+    if nfreq < 100:
+        psd = np.concatenate([psd, np.tile(psd[:, -1:], (1, 100 - nfreq))], axis=1)
+
+    # undo notch filter
 
 
 # ----------------------------------------------------------------------------

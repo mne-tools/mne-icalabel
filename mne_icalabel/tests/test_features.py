@@ -16,6 +16,7 @@ from mne_icalabel.features import (
     next_power_of_2,
     _eeg_rpsd_constants,
     _eeg_rpsd_compute_psdmed,
+    _eeg_rpsd_format,
     eeg_autocorr_welch,
     eeg_autocorr,
     eeg_autocorr_fftw,
@@ -50,6 +51,12 @@ psd_constants_raw_path = str(
 )
 psd_psdmed_raw_path = str(
     files("mne_icalabel.tests").joinpath("data/psd/psdmed-raw.mat")
+)
+psd_steps_raw_path = str(
+    files("mne_icalabel.tests").joinpath("data/psd/psd-step-by-step-raw.mat")
+)
+psd_raw_path = str(
+    files("mne_icalabel.tests").joinpath("data/psd/psd-raw.mat")
 )
 
 # Autocorrelations
@@ -155,7 +162,43 @@ def test_eeg_rpsd_compute_psdmed():
                                       nyquist, index, window, subset_eeglab)
 
     psdmed_eeglab = loadmat(psd_psdmed_raw_path)['psdmed']
-    assert np.allclose(psdmed, psdmed_eeglab, atol=1e-3)
+    assert np.allclose(psdmed, psdmed_eeglab, atol=1e-4)
+
+
+def test_eeg_rpsd():
+    """Test eeg_rpsd function that extract the PSD feature from the IC."""
+    # Compare that both MATLAB files are identical (since rng('default') was
+    # called both time, resetting the seed).
+    psd1 = loadmat(psd_steps_raw_path)['psd']
+    psd2 = loadmat(psd_raw_path)['psd']
+    assert np.allclose(psd1, psd2, atol=1e-4)
+
+    # clean-up
+    psd_eeglab = psd2.copy()
+    del psd1
+    del psd2
+
+    # compute psd in Python
+    raw = read_raw(raw_eeglab_path, preload=True)
+    ica = read_ica_eeglab(raw_eeglab_path)
+    icaact = compute_ica_activations(raw, ica)
+
+    # retrieve subset from eeglab
+    constants_eeglab = loadmat(psd_constants_raw_path)['constants'][0, 0]
+    assert constants_eeglab['subset'].shape[0] == 1
+    subset_eeglab = constants_eeglab['subset'][0, :] - 1
+
+    # retrieve the rest from python
+    ncomp, nfreqs, n_points, nyquist, index, window, _ = \
+        _eeg_rpsd_constants(raw, ica)
+
+    # compute psdmed
+    psdmed = _eeg_rpsd_compute_psdmed(raw, icaact, ncomp, nfreqs, n_points,
+                                      nyquist, index, window, subset_eeglab)
+
+    # format and compare
+    psd = _eeg_rpsd_format(psdmed)
+    assert np.allclose(psd, psd_eeglab, atol=1e-4)
 
 
 def test_next_power_of_2():

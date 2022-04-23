@@ -14,6 +14,8 @@ from mne_icalabel.features import (
     retrieve_eeglab_icawinv,
     compute_ica_activations,
     next_power_of_2,
+    _eeg_rpsd_constants,
+    _eeg_rpsd_compute_psdmed,
     eeg_autocorr_welch,
     eeg_autocorr,
     eeg_autocorr_fftw,
@@ -40,6 +42,14 @@ raw_icaact_eeglab_path = str(
 )
 epo_icaact_eeglab_path = str(
     files("mne_icalabel.tests").joinpath("data/icaact/icaact-epo.mat")
+)
+
+# PSD
+psd_constants_raw_path = str(
+    files("mne_icalabel.tests").joinpath("data/psd/constants-raw.mat")
+)
+psd_psdmed_raw_path = str(
+    files("mne_icalabel.tests").joinpath("data/psd/psdmed-raw.mat")
 )
 
 # Autocorrelations
@@ -90,6 +100,62 @@ def test_compute_ica_activations():
 
     icaact_eeglab = loadmat(epo_icaact_eeglab_path)["icaact"]
     assert np.allclose(icaact, icaact_eeglab, rtol=1e-8, atol=1e-4)
+
+
+def test_eeg_rpsd_constants():
+    """Test _eeg_rpsd_constants function."""
+    # Raw
+    raw = read_raw(raw_eeglab_path, preload=True)
+    ica = read_ica_eeglab(raw_eeglab_path)
+    ncomp, nfreqs, n_points, nyquist, index, window, subset = \
+        _eeg_rpsd_constants(raw, ica)
+
+    constants_eeglab = loadmat(psd_constants_raw_path)['constants'][0, 0]
+    ncomp_eeglab = constants_eeglab['ncomp'][0, 0]
+    nfreqs_eeglab = constants_eeglab['nfreqs'][0, 0]
+    n_points_eeglab = constants_eeglab['n_points'][0, 0]
+    nyquist_eeglab = constants_eeglab['nyquist'][0, 0]
+    index_eeglab = constants_eeglab['index']
+    window_eeglab = constants_eeglab['window']
+    subset_eeglab = constants_eeglab['subset']
+
+    assert ncomp == ncomp_eeglab
+    assert nfreqs == nfreqs_eeglab
+    assert n_points == n_points_eeglab
+    assert nyquist == nyquist_eeglab
+    assert np.allclose(index, index_eeglab - 1)
+
+    # window and subset are not squeezed in matlab
+    assert window_eeglab.shape[0] == 1
+    assert np.allclose(window, window_eeglab[0, :])
+
+    # for subsets, compare if the same elements are in both
+    assert subset_eeglab.shape[0] == 1
+    assert len(set(list(subset)).difference(set(list(subset_eeglab[0, :] - 1)))) == 0
+    assert len(set(list(subset_eeglab[0, :] - 1)).difference(set(list(subset)))) == 0
+
+
+def test_eeg_rpsd_compute_psdmed():
+    """Test _eeg_rpsd_compute_psdmed function."""
+    raw = read_raw(raw_eeglab_path, preload=True)
+    ica = read_ica_eeglab(raw_eeglab_path)
+    icaact = compute_ica_activations(raw, ica)
+
+    # retrieve subset from eeglab
+    constants_eeglab = loadmat(psd_constants_raw_path)['constants'][0, 0]
+    assert constants_eeglab['subset'].shape[0] == 1
+    subset_eeglab = constants_eeglab['subset'][0, :] - 1
+
+    # retrieve the rest from python
+    ncomp, nfreqs, n_points, nyquist, index, window, _ = \
+        _eeg_rpsd_constants(raw, ica)
+
+    # compute psdmed
+    psdmed = _eeg_rpsd_compute_psdmed(raw, icaact, ncomp, nfreqs, n_points,
+                                      nyquist, index, window, subset_eeglab)
+
+    psdmed_eeglab = loadmat(psd_psdmed_raw_path)['psdmed']
+    assert np.allclose(psdmed, psdmed_eeglab, atol=1e-3)
 
 
 def test_next_power_of_2():

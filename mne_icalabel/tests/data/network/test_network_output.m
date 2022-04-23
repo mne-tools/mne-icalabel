@@ -1,9 +1,9 @@
-% The file 'network_output.mat' contains the output of the forward pass 
+% The file 'network_output.mat' contains the output of the forward pass
 % obtained with the matconvnet version of the ICLabel neural network when
 % 'network_input.mat' is provided.
 
 % ----------------------------------------------
-% sha1: 01b8e2d8383068fbd8dc2705ebf38a8763b62115
+% sha1:
 % ----------------------------------------------
 
 % Load inputs

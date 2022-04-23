@@ -1,9 +1,9 @@
-% The file 'network_input.mat' contains the input provided to the forward 
-% pass of the matconvnet version of the ICLabel neural network. The 
+% The file 'network_input.mat' contains the input provided to the forward
+% pass of the matconvnet version of the ICLabel neural network. The
 % features were extracted from the 'sample-raw.set' dataset.
 
 % ----------------------------------------------
-% sha1: 34eb43ce7b5dadc0fc38e3d1f2e980d873330668
+% sha1:
 % ----------------------------------------------
 
 % Load

@@ -1,4 +1,3 @@
-import math
 from typing import Union
 
 from mne import BaseEpochs
@@ -97,9 +96,87 @@ def eeg_topoplot():
 
 
 # ----------------------------------------------------------------------------
-def eeg_rpsd():
+def eeg_rpsd(inst: Union[BaseRaw, BaseEpochs], ica: ICA, icaact: np.ndarray):
     """PSD feature."""
-    pass
+    assert isinstance(inst, (BaseRaw, BaseEpochs))  # sanity-check
+
+    constants = _eeg_rpsd_constants(inst, ica)
+    psdmed = _eeg_rpsd_compute_psdmed(inst, icaact, *constants)
+
+    return psdmed
+
+
+def _eeg_rpsd_constants(inst: Union[BaseRaw, BaseEpochs], ica: ICA):
+    """Computes the constants before ``randperm`` is used to compute the
+    subset."""
+    # in MATLAB, 'pct_data' variable is never provided and is always initialized
+    # to 100. 'pct_data' is only used in a division by 100.. and thus has no
+    # impact and is omitted here.
+    # in MATLAB, 'nfreqs' variable is always provided as 100 to this function,
+    # thus it is either equal to 100 or to the nyquist frequency depending on
+    # the nyquist frequency.
+
+    nyquist = np.floor(inst.info['sfreq'] / 2).astype(int)
+    nfreqs = nyquist if nyquist < 100 else 100
+
+    ncomp = ica.n_components_
+    n_points = min(inst.times.size, int(inst.info["sfreq"]))
+    window = np.hamming(n_points)
+    cutoff = np.floor(inst.times.size / n_points) * n_points
+
+    # python is 0-index while matlab is 1-index, thus (1:n_points) becomes
+    # np.arange(0, n_points) since 'index' is used to select from arrays.
+    range_ = np.ceil(np.arange(0, cutoff - n_points + n_points / 2, n_points / 2))
+    index = np.tile(range_, (n_points, 1)).T + np.arange(0, n_points)
+    index = index.T.astype(int)
+
+    # different behaviors based on EEG.trials, i.e. raw or epoch
+    if isinstance(inst, BaseRaw):
+        n_seg = index.shape[1]
+    if isinstance(inst, BaseEpochs):
+        n_seg = index.shape[1] * len(inst)
+
+    # in MATLAB: 'subset = randperm(n_seg, ceil(n_seg * pct_data / 100));'
+    # which is basically: 'subset = randperm(n_seg, n_seg);'
+    # np.random.seed() can be used to fix the seed to the same value as MATLAB,
+    # but since the 'randperm' equivalent in numpy does not exist, it is not
+    # possible to reproduce the output in python.
+    # 'subset' is used to select from arrays and is 0-index in Python while its
+    # 1-index in MATLAB.
+    subset = np.random.permutation(range(n_seg))  # 0-index
+
+    return ncomp, nfreqs, n_points, nyquist, index, window, subset
+
+
+def _eeg_rpsd_compute_psdmed(
+        inst: Union[BaseRaw, BaseEpochs],
+        icaact: np.ndarray,
+        ncomp: int,
+        nfreqs: int,
+        n_points: int,
+        nyquist: int,
+        index: np.ndarray,
+        window: np.ndarray,
+        subset:np.ndarray,
+        ) -> np.ndarray:
+    """Compute the variable 'psdmed', annotated as windowed spectrums."""
+    denominator = inst.info['sfreq'] * np.sum(np.power(window, 2))
+    psdmed = np.zeros((ncomp, nfreqs))
+    for it in range(ncomp):
+        # Compared to MATLAB, shapes differ as the component dimension (size 1)
+        # was squeezed.
+        temp = np.hstack([icaact[it, index[:, k]] for k in range(index.shape[-1])])
+        temp = temp.reshape(*index.shape, order="F")
+        temp = (temp[:, subset].T * window).T
+        temp = np.fft.fft(temp, n_points, axis=0)
+        temp = temp * np.conjugate(temp)
+        temp = temp[1:nfreqs + 1, :] * 2 / denominator
+        if nfreqs == nyquist:
+            temp[-1, :] = temp[-1, :] / 2
+        psdmed[it, :] = 20 * np.real(np.log10(np.median(temp, axis=1)))
+
+    return psdmed
+
 
 
 # ----------------------------------------------------------------------------
@@ -114,49 +191,48 @@ def eeg_autocorr_welch(raw: BaseRaw, ica: ICA, icaact: np.ndarray):
     MATLAB: 'eeg_autocorr_welch.m'."""
     assert isinstance(raw, BaseRaw)  # sanity-check
 
-    # in MATLAB, 'pct_data' variable is never provided and is always set to 100
-    # and since it's only used in a code segment that is never executed..
+    # in MATLAB, 'pct_data' variable is never provided and is always initialized
+    # to 100. 'pct_data' is only used in an 'if' statement reached if 'pct_data'
+    # is different than 100.. thus, 'pct_data' is not used by this autocorrelation
+    # function and is omitted here.
 
     # setup constants
     ncomp = ica.n_components_
     n_points = min(raw.times.size, int(raw.info["sfreq"] * 3))
     nfft = next_power_of_2(2 * n_points - 1)
-    cutoff = math.floor(raw.times.size / n_points) * n_points
-    range_ = np.arange(0, cutoff - n_points + n_points / 2, n_points / 2)
+    cutoff = np.floor(raw.times.size / n_points) * n_points
+    range_ = np.ceil(np.arange(0, cutoff - n_points + n_points / 2, n_points / 2))
     index = np.tile(range_, (n_points, 1)).T + np.arange(0, n_points)
     # python uses 0-index and matlab uses 1-index
-    # thus (1:n_points) becomes np.arange(0, n_points)
+    # python is 0-index while matlab is 1-index, thus (1:n_points) becomes
+    # np.arange(0, n_points) since 'index' is used to select from arrays.
     index = index.T.astype(int)
 
     # separate data segments
+    temp = np.hstack([icaact[:, index[:, k]] for k in range(index.shape[-1])])
+    segments = temp.reshape(ncomp, *index.shape, order="F")
+
     """
-    ## I misread.. and spent time on the part if pct_data != 100.. which never
-    ## occurs. Just in case, here it is:
+    # Just in case, here is the 'if' statement when 'pct_data' is different
+    # than 100.
 
     n_seg = index.shape[1]
     # In MATLAB: n_seg = size(index, 2) * EEG.trials;
-    # But EEG.trials is always provided as 1 because only raw dataset reach
-    # this point.
+    # However, this function is only called on RAW dataset with EEG.trials
+    # equal to 1.
 
-    # In MATLAB: subset = randperm(n_seg, ceil(n_seg * pct_data / 100)); % need to find a better way to take subset
-    # You don't say! 'pct_data' is always equal to 100..
-    # In Python: I did not find a way to match randperm; the equivalent
-    # function does not exist in numpy.
-    # - np.random.permutation(range(1, n_seg + 1))
-    # - np.random.choice(range(1, n_seg+1), size=5, replace=False)
-    # - L = list(range(1, n_seg + 1))
-    #   np.random.shuffle(L)
-    # for a common np.random.seed().
+    # in MATLAB: 'subset = randperm(n_seg, ceil(n_seg * pct_data / 100));'
+    # which is basically: 'subset = randperm(n_seg, n_seg);'
+    # np.random.seed() can be used to fix the seed to the same value as MATLAB,
+    # but since the 'randperm' equivalent in numpy does not exist, it is not
+    # possible to reproduce the output in python.
+    # 'subset' is used to select from arrays and is 0-index in Python while its
+    # 1-index in MATLAB.
     subset = np.random.permutation(range(n_seg))  # 0-index
     temp = np.hstack([icaact[:, index[:, k]] for k in range(index.shape[-1])])
     temp = temp.reshape(ncomp, *index.shape, order='F')
     segments = temp[:, :, subset]
-    # I think that was basically to create segments with overlap.. but don't
-    # quote me on that.
     """
-
-    temp = np.hstack([icaact[:, index[:, k]] for k in range(index.shape[-1])])
-    segments = temp.reshape(ncomp, *index.shape, order="F")
 
     # calc autocorrelation
     ac = np.zeros((ncomp, nfft))
@@ -166,12 +242,12 @@ def eeg_autocorr_welch(raw: BaseRaw, ica: ICA, icaact: np.ndarray):
     ac = np.fft.ifft(ac)
 
     # normalize
-    # In MATLAB, there are 2 scenarios:
-    # - EEG.pnts < EEG.srate: never occurs since we are using raw that last at
-    # least 5 seconds
-    # - EEG.pnts > EEG.srate
+    # In MATLAB, 2 scenarios are defined:
+    # - EEG.pnts < EEG.srate, which never occurs since then raw provided to
+    # this autocorrelation function last at least 5 second.
+    # - EEG.pnts > EEG.srate, implemented below.
     ac = ac[:, : int(raw.info["sfreq"]) + 1]
-    # build that 3-line denominator
+    # build the (3-line!) denominator
     arr1 = np.arange(n_points, n_points - int(raw.info["sfreq"]), -1)
     arr1 = np.hstack([arr1, [np.max([1, n_points - int(raw.info["sfreq"])])]])
     den = np.tile(ac[:, 0], (arr1.size, 1))
@@ -191,14 +267,16 @@ def eeg_autocorr(raw: BaseRaw, ica: ICA, icaact: np.ndarray):
     MATLAB: 'eeg_autocorr.m'."""
     assert isinstance(raw, BaseRaw)  # sanity-check
 
-    # in MATLAB, 'pct_data' variable is not used.
+    # in MATLAB, 'pct_data' variable is neither provided or used, thus it is
+    # omitted here.
     ncomp = ica.n_components_
     nfft = next_power_of_2(2 * raw.times.size - 1)
 
     c = np.zeros((ncomp, nfft))
     for it in range(ncomp):
         # in MATLAB, 'mean' does nothing here. It looks like it was included
-        # for a case where epochs are provided.
+        # for a case where epochs are provided, which never happens with this
+        # autocorrelation function.
         x = np.power(np.abs(np.fft.fft(icaact[it, :], n=nfft)), 2)
         c[it, :] = np.fft.ifft(x)
 
@@ -222,7 +300,8 @@ def eeg_autocorr_fftw(epochs: BaseEpochs, ica: ICA, icaact: np.ndarray):
     MATLAB: 'eeg_autocorr_fftw.m'."""
     assert isinstance(epochs, BaseEpochs)  # sanity-check
 
-    # in MATLAB, 'pct_data' variable is not used.
+    # in MATLAB, 'pct_data' variable is neither provided or used, thus it is
+    # omitted here.
     ncomp = ica.n_components_
     nfft = next_power_of_2(2 * epochs.times.size - 1)
 

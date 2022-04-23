@@ -4,7 +4,7 @@
 % dataset 'sample-raw.set'.
 
 % ----------------------------------------------
-% sha1: 1367b5203dd1f97f2878ce26d0f55c5453074663
+% sha1:
 % ----------------------------------------------
 
 % Load
@@ -31,7 +31,7 @@ save('autocorr-raw', 'autocorr');
 % dataset 'sample-short-raw.set'.
 
 % ----------------------------------------------
-% sha1: 344e069e252d1189f600c14c52ace16ba6ba7d37
+% sha1:
 % ----------------------------------------------
 
 % Load
@@ -58,7 +58,7 @@ save('autocorr-short-raw', 'autocorr');
 % sample dataset 'sample-very-short-raw.set'.
 
 % ----------------------------------------------
-% sha1: 9f080284e6e6e17e58dbf0812f8afac8e96bde15
+% sha1:
 % ----------------------------------------------
 
 % Load
@@ -85,7 +85,7 @@ save('autocorr-very-short-raw', 'autocorr');
 % sample dataset 'sample-epo.set'.
 
 % ----------------------------------------------
-% sha1: a658b34a7dec10d4cce7cdf715511c5da179d280
+% sha1:
 % ----------------------------------------------
 
 % Load

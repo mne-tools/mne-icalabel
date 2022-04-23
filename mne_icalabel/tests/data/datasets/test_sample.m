@@ -5,7 +5,7 @@
 % cropped between 0 and 10 seconds.
 
 % ----------------------------------------------
-% sha1: 055fea07348f1f379fe7fb62bc1379f0b948f43a
+% sha1:
 % ----------------------------------------------
 
 % Load
@@ -42,7 +42,7 @@ ica = read_ica_eeglab(fname)
 % cropped between 0 and 10 seconds.
 
 % ----------------------------------------------
-% sha1: 3d26ed185e6dde905eb1498f3764a0c976e0e619
+% sha1:
 % ----------------------------------------------
 
 % Load
@@ -79,7 +79,7 @@ ica = read_ica_eeglab(fname)
 % cropped between 0 and 10 seconds.
 
 % ----------------------------------------------
-% sha1: c44ac8c699d3c8fb4648509971b0a24a3748c65c
+% sha1:
 % ----------------------------------------------
 
 % Load
@@ -116,7 +116,7 @@ ica = read_ica_eeglab(fname)
 % cropped by selecting the 3 first 'rt' epochs with [tmin=0, tmax=1] (s).
 
 % ----------------------------------------------
-% sha1: e9c7968c8a151f758a8dc7461976f17cba10c4f7
+% sha1:
 % ----------------------------------------------
 
 % Load

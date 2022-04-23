@@ -166,8 +166,14 @@ def _eeg_rpsd_compute_psdmed(
     for it in range(ncomp):
         # Compared to MATLAB, shapes differ as the component dimension (size 1)
         # was squeezed.
-        temp = np.hstack([icaact[it, index[:, k]] for k in range(index.shape[-1])])
-        temp = temp.reshape(*index.shape, order="F")
+        if isinstance(inst, BaseRaw):
+            temp = np.hstack([icaact[it, index[:, k]] for k in range(index.shape[-1])])
+            temp = temp.reshape(*index.shape, order="F")
+        elif isinstance(inst, BaseEpochs):
+            temp = np.hstack([icaact[it, index[:, k], :] for k in range(index.shape[-1])])
+            temp = temp.reshape(index.shape[0], len(inst), order="F")
+        else:
+            raise RuntimeError  # should never happen
         temp = (temp[:, subset].T * window).T
         temp = np.fft.fft(temp, n_points, axis=0)
         temp = temp * np.conjugate(temp)
@@ -200,7 +206,14 @@ def _eeg_rpsd_format(
         difference = (psd[:, linenoise_around].T - psd[:, linenoise_ind]).T
         notch_ind = np.all(5 < difference, axis=1)
         if any(notch_ind):
-            psd[notch_ind, linenoise_ind] = np.mean(psd[notch_ind, linenoise_around], axis=-1)
+            # Numpy doesn't like the selection '[notch_ind, linenoise_ind]' with
+            # 'notch_ind' as a bool mask. 'notch_ind' is first converted to int.
+            # Numpy doesn't like the selection '[notch_ind, linenoise_around]'
+            # with both defined as multi-values 1D arrays (or list). To get
+            # around, the syntax [notch_ind[:, None], linenoise_around] is used.
+            # That syntax works only with arrays (not list).
+            notch_ind = np.where(notch_ind)[0]
+            psd[notch_ind, linenoise_ind] = np.mean(psd[notch_ind[:, None], linenoise_around], axis=-1)
 
     # normalize
     psd = np.divide(psd.T, np.max(np.abs(psd), axis=-1)).T

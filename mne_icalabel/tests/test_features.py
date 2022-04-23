@@ -76,7 +76,7 @@ def test_retrieve_eeglab_icawinv():
 def test_compute_ica_activations():
     """Test that the icaact is correctly retrieved from an MNE ICA object."""
     # Raw instance
-    raw = read_raw(raw_eeglab_path)
+    raw = read_raw(raw_eeglab_path, preload=True)
     ica = read_ica_eeglab(raw_eeglab_path)
     icaact = compute_ica_activations(raw, ica)
 
@@ -103,7 +103,7 @@ def test_next_power_of_2():
 
 def test_eeg_autocorr_welch():
     """Test eeg_autocorr_welch feature used on long raw datasets."""
-    raw = read_raw(raw_eeglab_path)
+    raw = read_raw(raw_eeglab_path, preload=True)
     ica = read_ica_eeglab(raw_eeglab_path)
     icaact = compute_ica_activations(raw, ica)
     autocorr = eeg_autocorr_welch(raw, ica, icaact)
@@ -115,7 +115,7 @@ def test_eeg_autocorr_welch():
 def test_eeg_autocorr():
     """Test eeg_autocorr feature used on short raw datasets."""
     # Raw between 1 and 5 seconds
-    raw = read_raw(raw_short_eeglab_path)
+    raw = read_raw(raw_short_eeglab_path, preload=True)
     ica = read_ica_eeglab(raw_short_eeglab_path)
     icaact = compute_ica_activations(raw, ica)
     autocorr = eeg_autocorr(raw, ica, icaact)
@@ -124,7 +124,7 @@ def test_eeg_autocorr():
     assert np.allclose(autocorr, autocorr_eeglab, atol=1e-4)
 
     # Raw shorter than 1 second
-    raw = read_raw(raw_very_short_eeglab_path)
+    raw = read_raw(raw_very_short_eeglab_path, preload=True)
     ica = read_ica_eeglab(raw_very_short_eeglab_path)
     icaact = compute_ica_activations(raw, ica)
     autocorr = eeg_autocorr(raw, ica, icaact)

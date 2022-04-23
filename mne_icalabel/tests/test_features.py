@@ -55,9 +55,7 @@ psd_psdmed_raw_path = str(
 psd_steps_raw_path = str(
     files("mne_icalabel.tests").joinpath("data/psd/psd-step-by-step-raw.mat")
 )
-psd_raw_path = str(
-    files("mne_icalabel.tests").joinpath("data/psd/psd-raw.mat")
-)
+psd_raw_path = str(files("mne_icalabel.tests").joinpath("data/psd/psd-raw.mat"))
 psd_constants_epo_path = str(
     files("mne_icalabel.tests").joinpath("data/psd/constants-epo.mat")
 )
@@ -67,9 +65,7 @@ psd_psdmed_epo_path = str(
 psd_steps_epo_path = str(
     files("mne_icalabel.tests").joinpath("data/psd/psd-step-by-step-epo.mat")
 )
-psd_epo_path = str(
-    files("mne_icalabel.tests").joinpath("data/psd/psd-epo.mat")
-)
+psd_epo_path = str(files("mne_icalabel.tests").joinpath("data/psd/psd-epo.mat"))
 
 # Autocorrelations
 autocorr_raw_path = autocorr_short_raw_path = str(
@@ -126,17 +122,18 @@ def test_eeg_rpsd_constants():
     # Raw --------------------------------------------------------------------
     raw = read_raw(raw_eeglab_path, preload=True)
     ica = read_ica_eeglab(raw_eeglab_path)
-    ncomp, nfreqs, n_points, nyquist, index, window, subset = \
-        _eeg_rpsd_constants(raw, ica)
+    ncomp, nfreqs, n_points, nyquist, index, window, subset = _eeg_rpsd_constants(
+        raw, ica
+    )
 
-    constants_eeglab = loadmat(psd_constants_raw_path)['constants'][0, 0]
-    ncomp_eeglab = constants_eeglab['ncomp'][0, 0]
-    nfreqs_eeglab = constants_eeglab['nfreqs'][0, 0]
-    n_points_eeglab = constants_eeglab['n_points'][0, 0]
-    nyquist_eeglab = constants_eeglab['nyquist'][0, 0]
-    index_eeglab = constants_eeglab['index']
-    window_eeglab = constants_eeglab['window']
-    subset_eeglab = constants_eeglab['subset']
+    constants_eeglab = loadmat(psd_constants_raw_path)["constants"][0, 0]
+    ncomp_eeglab = constants_eeglab["ncomp"][0, 0]
+    nfreqs_eeglab = constants_eeglab["nfreqs"][0, 0]
+    n_points_eeglab = constants_eeglab["n_points"][0, 0]
+    nyquist_eeglab = constants_eeglab["nyquist"][0, 0]
+    index_eeglab = constants_eeglab["index"]
+    window_eeglab = constants_eeglab["window"]
+    subset_eeglab = constants_eeglab["subset"]
 
     assert ncomp == ncomp_eeglab
     assert nfreqs == nfreqs_eeglab
@@ -156,17 +153,18 @@ def test_eeg_rpsd_constants():
     # Epochs -----------------------------------------------------------------
     epochs = read_epochs_eeglab(epo_eeglab_path)
     ica = read_ica_eeglab(epo_eeglab_path)
-    ncomp, nfreqs, n_points, nyquist, index, window, subset = \
-        _eeg_rpsd_constants(epochs, ica)
+    ncomp, nfreqs, n_points, nyquist, index, window, subset = _eeg_rpsd_constants(
+        epochs, ica
+    )
 
-    constants_eeglab = loadmat(psd_constants_epo_path)['constants'][0, 0]
-    ncomp_eeglab = constants_eeglab['ncomp'][0, 0]
-    nfreqs_eeglab = constants_eeglab['nfreqs'][0, 0]
-    n_points_eeglab = constants_eeglab['n_points'][0, 0]
-    nyquist_eeglab = constants_eeglab['nyquist'][0, 0]
-    index_eeglab = constants_eeglab['index']
-    window_eeglab = constants_eeglab['window']
-    subset_eeglab = constants_eeglab['subset']
+    constants_eeglab = loadmat(psd_constants_epo_path)["constants"][0, 0]
+    ncomp_eeglab = constants_eeglab["ncomp"][0, 0]
+    nfreqs_eeglab = constants_eeglab["nfreqs"][0, 0]
+    n_points_eeglab = constants_eeglab["n_points"][0, 0]
+    nyquist_eeglab = constants_eeglab["nyquist"][0, 0]
+    index_eeglab = constants_eeglab["index"]
+    window_eeglab = constants_eeglab["window"]
+    subset_eeglab = constants_eeglab["subset"]
 
     assert ncomp == ncomp_eeglab
     assert nfreqs == nfreqs_eeglab
@@ -192,19 +190,19 @@ def test_eeg_rpsd_compute_psdmed():
     icaact = compute_ica_activations(raw, ica)
 
     # retrieve subset from eeglab
-    constants_eeglab = loadmat(psd_constants_raw_path)['constants'][0, 0]
-    assert constants_eeglab['subset'].shape[0] == 1
-    subset_eeglab = constants_eeglab['subset'][0, :] - 1
+    constants_eeglab = loadmat(psd_constants_raw_path)["constants"][0, 0]
+    assert constants_eeglab["subset"].shape[0] == 1
+    subset_eeglab = constants_eeglab["subset"][0, :] - 1
 
     # retrieve the rest from python
-    ncomp, nfreqs, n_points, nyquist, index, window, _ = \
-        _eeg_rpsd_constants(raw, ica)
+    ncomp, nfreqs, n_points, nyquist, index, window, _ = _eeg_rpsd_constants(raw, ica)
 
     # compute psdmed
-    psdmed = _eeg_rpsd_compute_psdmed(raw, icaact, ncomp, nfreqs, n_points,
-                                      nyquist, index, window, subset_eeglab)
+    psdmed = _eeg_rpsd_compute_psdmed(
+        raw, icaact, ncomp, nfreqs, n_points, nyquist, index, window, subset_eeglab
+    )
 
-    psdmed_eeglab = loadmat(psd_psdmed_raw_path)['psdmed']
+    psdmed_eeglab = loadmat(psd_psdmed_raw_path)["psdmed"]
     assert np.allclose(psdmed, psdmed_eeglab, atol=1e-4)
 
     # Epochs -----------------------------------------------------------------
@@ -213,19 +211,21 @@ def test_eeg_rpsd_compute_psdmed():
     icaact = compute_ica_activations(epochs, ica)
 
     # retrieve subset from eeglab
-    constants_eeglab = loadmat(psd_constants_epo_path)['constants'][0, 0]
-    assert constants_eeglab['subset'].shape[0] == 1
-    subset_eeglab = constants_eeglab['subset'][0, :] - 1
+    constants_eeglab = loadmat(psd_constants_epo_path)["constants"][0, 0]
+    assert constants_eeglab["subset"].shape[0] == 1
+    subset_eeglab = constants_eeglab["subset"][0, :] - 1
 
     # retrieve the rest from python
-    ncomp, nfreqs, n_points, nyquist, index, window, _ = \
-        _eeg_rpsd_constants(epochs, ica)
+    ncomp, nfreqs, n_points, nyquist, index, window, _ = _eeg_rpsd_constants(
+        epochs, ica
+    )
 
     # compute psdmed
-    psdmed = _eeg_rpsd_compute_psdmed(epochs, icaact, ncomp, nfreqs, n_points,
-                                      nyquist, index, window, subset_eeglab)
+    psdmed = _eeg_rpsd_compute_psdmed(
+        epochs, icaact, ncomp, nfreqs, n_points, nyquist, index, window, subset_eeglab
+    )
 
-    psdmed_eeglab = loadmat(psd_psdmed_epo_path)['psdmed']
+    psdmed_eeglab = loadmat(psd_psdmed_epo_path)["psdmed"]
     assert np.allclose(psdmed, psdmed_eeglab, atol=5e-2)
     # TODO: investigate why the tolerance had to be brought this high for this
     # particular case.
@@ -236,8 +236,8 @@ def test_eeg_rpsd():
     # Raw --------------------------------------------------------------------
     # Compare that both MATLAB files are identical (since rng('default') was
     # called both time, resetting the seed).
-    psd1 = loadmat(psd_steps_raw_path)['psd']
-    psd2 = loadmat(psd_raw_path)['psd']
+    psd1 = loadmat(psd_steps_raw_path)["psd"]
+    psd2 = loadmat(psd_raw_path)["psd"]
     assert np.allclose(psd1, psd2, atol=1e-4)
 
     # clean-up
@@ -251,17 +251,17 @@ def test_eeg_rpsd():
     icaact = compute_ica_activations(raw, ica)
 
     # retrieve subset from eeglab
-    constants_eeglab = loadmat(psd_constants_raw_path)['constants'][0, 0]
-    assert constants_eeglab['subset'].shape[0] == 1
-    subset_eeglab = constants_eeglab['subset'][0, :] - 1
+    constants_eeglab = loadmat(psd_constants_raw_path)["constants"][0, 0]
+    assert constants_eeglab["subset"].shape[0] == 1
+    subset_eeglab = constants_eeglab["subset"][0, :] - 1
 
     # retrieve the rest from python
-    ncomp, nfreqs, n_points, nyquist, index, window, _ = \
-        _eeg_rpsd_constants(raw, ica)
+    ncomp, nfreqs, n_points, nyquist, index, window, _ = _eeg_rpsd_constants(raw, ica)
 
     # compute psdmed
-    psdmed = _eeg_rpsd_compute_psdmed(raw, icaact, ncomp, nfreqs, n_points,
-                                      nyquist, index, window, subset_eeglab)
+    psdmed = _eeg_rpsd_compute_psdmed(
+        raw, icaact, ncomp, nfreqs, n_points, nyquist, index, window, subset_eeglab
+    )
 
     # format and compare
     psd = _eeg_rpsd_format(psdmed)
@@ -270,8 +270,8 @@ def test_eeg_rpsd():
     # Epochs -----------------------------------------------------------------
     # Compare that both MATLAB files are identical (since rng('default') was
     # called both time, resetting the seed).
-    psd1 = loadmat(psd_steps_epo_path)['psd']
-    psd2 = loadmat(psd_epo_path)['psd']
+    psd1 = loadmat(psd_steps_epo_path)["psd"]
+    psd2 = loadmat(psd_epo_path)["psd"]
     assert np.allclose(psd1, psd2, atol=1e-4)
 
     # clean-up
@@ -285,17 +285,19 @@ def test_eeg_rpsd():
     icaact = compute_ica_activations(epochs, ica)
 
     # retrieve subset from eeglab
-    constants_eeglab = loadmat(psd_constants_epo_path)['constants'][0, 0]
-    assert constants_eeglab['subset'].shape[0] == 1
-    subset_eeglab = constants_eeglab['subset'][0, :] - 1
+    constants_eeglab = loadmat(psd_constants_epo_path)["constants"][0, 0]
+    assert constants_eeglab["subset"].shape[0] == 1
+    subset_eeglab = constants_eeglab["subset"][0, :] - 1
 
     # retrieve the rest from python
-    ncomp, nfreqs, n_points, nyquist, index, window, _ = \
-        _eeg_rpsd_constants(epochs, ica)
+    ncomp, nfreqs, n_points, nyquist, index, window, _ = _eeg_rpsd_constants(
+        epochs, ica
+    )
 
     # compute psdmed
-    psdmed = _eeg_rpsd_compute_psdmed(epochs, icaact, ncomp, nfreqs, n_points,
-                                      nyquist, index, window, subset_eeglab)
+    psdmed = _eeg_rpsd_compute_psdmed(
+        epochs, icaact, ncomp, nfreqs, n_points, nyquist, index, window, subset_eeglab
+    )
 
     # format and compare
     psd = _eeg_rpsd_format(psdmed)

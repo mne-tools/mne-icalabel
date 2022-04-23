@@ -117,7 +117,7 @@ def _eeg_rpsd_constants(inst: Union[BaseRaw, BaseEpochs], ica: ICA):
     # thus it is either equal to 100 or to the nyquist frequency depending on
     # the nyquist frequency.
 
-    nyquist = np.floor(inst.info['sfreq'] / 2).astype(int)
+    nyquist = np.floor(inst.info["sfreq"] / 2).astype(int)
     nfreqs = nyquist if nyquist < 100 else 100
 
     ncomp = ica.n_components_
@@ -150,18 +150,18 @@ def _eeg_rpsd_constants(inst: Union[BaseRaw, BaseEpochs], ica: ICA):
 
 
 def _eeg_rpsd_compute_psdmed(
-        inst: Union[BaseRaw, BaseEpochs],
-        icaact: np.ndarray,
-        ncomp: int,
-        nfreqs: int,
-        n_points: int,
-        nyquist: int,
-        index: np.ndarray,
-        window: np.ndarray,
-        subset:np.ndarray,
-        ) -> np.ndarray:
+    inst: Union[BaseRaw, BaseEpochs],
+    icaact: np.ndarray,
+    ncomp: int,
+    nfreqs: int,
+    n_points: int,
+    nyquist: int,
+    index: np.ndarray,
+    window: np.ndarray,
+    subset: np.ndarray,
+) -> np.ndarray:
     """Compute the variable 'psdmed', annotated as windowed spectrums."""
-    denominator = inst.info['sfreq'] * np.sum(np.power(window, 2))
+    denominator = inst.info["sfreq"] * np.sum(np.power(window, 2))
     psdmed = np.zeros((ncomp, nfreqs))
     for it in range(ncomp):
         # Compared to MATLAB, shapes differ as the component dimension (size 1)
@@ -170,14 +170,16 @@ def _eeg_rpsd_compute_psdmed(
             temp = np.hstack([icaact[it, index[:, k]] for k in range(index.shape[-1])])
             temp = temp.reshape(*index.shape, order="F")
         elif isinstance(inst, BaseEpochs):
-            temp = np.hstack([icaact[it, index[:, k], :] for k in range(index.shape[-1])])
+            temp = np.hstack(
+                [icaact[it, index[:, k], :] for k in range(index.shape[-1])]
+            )
             temp = temp.reshape(index.shape[0], len(inst), order="F")
         else:
             raise RuntimeError  # should never happen
         temp = (temp[:, subset].T * window).T
         temp = np.fft.fft(temp, n_points, axis=0)
         temp = temp * np.conjugate(temp)
-        temp = temp[1:nfreqs + 1, :] * 2 / denominator
+        temp = temp[1 : nfreqs + 1, :] * 2 / denominator
         if nfreqs == nyquist:
             temp[-1, :] = temp[-1, :] / 2
         psdmed[it, :] = 20 * np.real(np.log10(np.median(temp, axis=1)))
@@ -186,8 +188,8 @@ def _eeg_rpsd_compute_psdmed(
 
 
 def _eeg_rpsd_format(
-        psd: np.ndarray,
-        ):
+    psd: np.ndarray,
+):
     """Apply the formatting steps after 'eeg_rpsd.m' from the MATLAB feature
     extraction."""
     # extrapolate or prune as needed
@@ -213,7 +215,9 @@ def _eeg_rpsd_format(
             # around, the syntax [notch_ind[:, None], linenoise_around] is used.
             # That syntax works only with arrays (not list).
             notch_ind = np.where(notch_ind)[0]
-            psd[notch_ind, linenoise_ind] = np.mean(psd[notch_ind[:, None], linenoise_around], axis=-1)
+            psd[notch_ind, linenoise_ind] = np.mean(
+                psd[notch_ind[:, None], linenoise_around], axis=-1
+            )
 
     # normalize
     psd = np.divide(psd.T, np.max(np.abs(psd), axis=-1)).T

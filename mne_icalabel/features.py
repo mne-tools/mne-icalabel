@@ -190,6 +190,22 @@ def _eeg_rpsd_format(
         psd = np.concatenate([psd, np.tile(psd[:, -1:], (1, 100 - nfreq))], axis=1)
 
     # undo notch filter
+    for linenoise_ind in (50, 60):
+        # 'linenoise_ind' is used for array selection in psd, which is
+        # 0-index in Python and 1-index in MATLAB.
+        linenoise_ind -= 1
+        linenoise_around = np.array([linenoise_ind - 1, linenoise_ind + 1])
+        # 'linenoise_around' is used for array selection in psd, which is
+        # 0-index in Python and 1-index in MATLAB.
+        difference = (psd[:, linenoise_around].T - psd[:, linenoise_ind]).T
+        notch_ind = np.all(5 < difference, axis=1)
+        if any(notch_ind):
+            psd[notch_ind, linenoise_ind] = np.mean(psd[notch_ind, linenoise_around], axis=-1)
+
+    # normalize
+    psd = np.divide(psd.T, np.max(np.abs(psd), axis=-1)).T
+    # reshape and cast
+    return psd[:, :, np.newaxis, np.newaxis].transpose([2, 1, 3, 0]).astype(np.float32)
 
 
 # ----------------------------------------------------------------------------

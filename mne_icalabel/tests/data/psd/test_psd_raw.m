@@ -1,5 +1,6 @@
-% The files 'constants-raw.mat' and 'psdmed-raw.mat' were obtained from
-% the sample EEGLAB dataset 'sample-raw.set'.
+% The files 'constants-raw.mat', 'psdmed-raw.mat', 'psd-step-by-step-raw.mat'
+% and 'psd-raw.mat' were obtained from the sample EEGLAB dataset
+% 'sample-raw.set'.
 
 % 'constants-raw.mat' --------------------------
 % sha1:
@@ -8,6 +9,15 @@
 % 'psdmed-raw.mat' -----------------------------
 % sha1:
 % ----------------------------------------------
+
+% 'psd-step-by-step-raw.mat' -------------------
+% sha1:
+% ----------------------------------------------
+
+% 'psd-raw.mat' --------------------------------
+% sha1:
+% ----------------------------------------------
+
 
 % Load
 EEG = pop_loadset('sample-raw.set');
@@ -43,6 +53,7 @@ if exist('OCTAVE_VERSION', 'builtin') == 0
     rng('shuffle');
 end
 
+
 %% Export constants from eeg_rpsd.m
 constants = struct(...
     'ncomp', ncomp, ...
@@ -53,6 +64,7 @@ constants = struct(...
     'window', window, ...
     'subset', subset);
 save('constants-raw', 'constants');
+
 
 %% calculate windowed spectrums
 psdmed = zeros(ncomp, nfreqs);
@@ -69,5 +81,76 @@ for it = 1:ncomp
     psdmed(it, :) = 20 * log10(median(temp, 3));
 end
 
+
 %% Export psdmed from eeg_rpsd.m
 save('psdmed-raw', 'psdmed');
+
+
+%% Format and undo notch filter
+% extrapolate or prune as needed
+nfreq = size(psdmed, 2);
+if nfreq < 100
+    psdmed = [psdmed, repmat(psdmed(:, end), 1, 100 - nfreq)];
+end
+
+% undo notch filter
+for linenoise_ind = [50, 60]
+    linenoise_around = [linenoise_ind - 1, linenoise_ind + 1];
+    difference = bsxfun(@minus, psdmed(:, linenoise_around), ...
+        psdmed(:, linenoise_ind));
+    notch_ind = all(difference > 5, 2);
+    if any(notch_ind)
+        psdmed(notch_ind, linenoise_ind) = ...
+            mean(psdmed(notch_ind, linenoise_around), 2);
+    end
+end
+
+% normalize
+psd = bsxfun(@rdivide, psdmed, max(abs(psdmed), [], 2));
+
+% reshape and cast
+psd = single(permute(psd, [3 2 4 1]));
+
+%% Export psd
+save('psd-step-by-step-raw', 'psd')
+
+
+%% Re-create psd feature by using 'eeg_rpsd' directly
+
+% Load
+EEG = pop_loadset('sample-raw.set');
+EEG = eeg_checkset(EEG);
+
+% Calculate ICA activations
+EEG.icaact = eeg_getica(EEG);
+EEG.icaact = double(EEG.icaact);
+
+% Compute PSD
+psd = eeg_rpsd(EEG, 100);
+
+% extrapolate or prune as needed
+nfreq = size(psd, 2);
+if nfreq < 100
+    psd = [psd, repmat(psd(:, end), 1, 100 - nfreq)];
+end
+
+% undo notch filter
+for linenoise_ind = [50, 60]
+    linenoise_around = [linenoise_ind - 1, linenoise_ind + 1];
+    difference = bsxfun(@minus, psd(:, linenoise_around), ...
+        psd(:, linenoise_ind));
+    notch_ind = all(difference > 5, 2);
+    if any(notch_ind)
+        psd(notch_ind, linenoise_ind) = mean(psd(notch_ind, linenoise_around), 2);
+    end
+end
+
+% normalize
+psd = bsxfun(@rdivide, psd, max(abs(psd), [], 2));
+
+% reshape and cast
+psd = single(permute(psd, [3 2 4 1]));
+
+
+%% Export psd
+save('psd-raw', 'psd')

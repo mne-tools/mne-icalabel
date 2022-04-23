@@ -101,9 +101,17 @@ def eeg_rpsd(inst: Union[BaseRaw, BaseEpochs], ica: ICA, icaact: np.ndarray):
     assert isinstance(inst, (BaseRaw, BaseEpochs))  # sanity-check
 
     constants = _eeg_rpsd_constants(inst, ica)
-    psdmed = _eeg_rpsd_compute_psdmed(inst, icaact, *constants)
+    psd = _eeg_rpsd_compute_psdmed(inst, icaact, *constants)
 
-    return psdmed
+    # extrapolate or prune as needed
+    nfreq = psd.shape[1]
+    if nfreq < 100:
+        psd = np.concatenate([psd, np.tile(psd[:, -1:], (1, 100 - nfreq))], axis=1)
+
+    # undo notch filter
+
+
+    return psd
 
 
 def _eeg_rpsd_constants(inst: Union[BaseRaw, BaseEpochs], ica: ICA):

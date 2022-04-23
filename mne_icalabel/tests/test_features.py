@@ -82,6 +82,7 @@ autocorr_epo_path = str(
 )
 
 
+# ----------------------------------------------------------------------------
 def test_retrieve_eeglab_icawinv():
     """Test that the icawinv is correctly retrieved from an MNE ICA object."""
     # Raw instance
@@ -106,7 +107,7 @@ def test_compute_ica_activations():
     icaact = compute_ica_activations(raw, ica)
 
     icaact_eeglab = loadmat(raw_icaact_eeglab_path)["icaact"]
-    assert np.allclose(icaact, icaact_eeglab, rtol=1e-8, atol=1e-4)
+    assert np.allclose(icaact, icaact_eeglab, atol=1e-4)
 
     # Epoch instance
     epochs = read_epochs_eeglab(epo_eeglab_path)
@@ -114,9 +115,10 @@ def test_compute_ica_activations():
     icaact = compute_ica_activations(epochs, ica)
 
     icaact_eeglab = loadmat(epo_icaact_eeglab_path)["icaact"]
-    assert np.allclose(icaact, icaact_eeglab, rtol=1e-8, atol=1e-4)
+    assert np.allclose(icaact, icaact_eeglab, atol=1e-4)
 
 
+# ----------------------------------------------------------------------------
 def test_eeg_rpsd_constants():
     """Test _eeg_rpsd_constants function."""
     # Raw --------------------------------------------------------------------
@@ -304,6 +306,7 @@ def test_eeg_rpsd():
     assert np.allclose(psd, psd_eeglab, atol=1e-5)
 
 
+# ----------------------------------------------------------------------------
 def test_next_power_of_2():
     """Test that next_power_of_2 works as intended."""
     x = [0, 10, 200, 400]

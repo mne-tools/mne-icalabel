@@ -23,7 +23,7 @@ def get_features(inst: Union[BaseRaw, BaseEpochs], ica: ICA):
     icaact = compute_ica_activations(inst, ica)
 
     # compute topographic feature (float32)
-    topo = eeg_topoplot()
+    topo = eeg_topoplot(icawinv)
 
     # compute psd feature (float32)
     psd = eeg_rpsd(inst, ica, icaact)
@@ -61,10 +61,16 @@ def retrieve_eeglab_icawinv(
     u = ica.unmixing_matrix_ / s
     v = ica.pca_components_[:n_components, :]
     weights = (u * s) @ v
-    return np.linalg.pinv(weights), weights
+    icawinv = np.linalg.pinv(weights)
+    # sanity-check
+    assert icawinv.shape[-1] == ica.n_components_
+    assert icawinv.ndim == 2
+    return icawinv, weights
 
 
-def compute_ica_activations(inst: Union[BaseRaw, BaseEpochs], ica: ICA) -> NDArray[float]:
+def compute_ica_activations(
+    inst: Union[BaseRaw, BaseEpochs], ica: ICA
+) -> NDArray[float]:
     """Compute the ICA activations 'icaact' variable from an MNE ICA instance.
 
     Parameters
@@ -92,18 +98,27 @@ def compute_ica_activations(inst: Union[BaseRaw, BaseEpochs], ica: ICA) -> NDArr
 
 
 # ----------------------------------------------------------------------------
-def eeg_topoplot():
+def eeg_topoplot(icawinv: NDArray[float]) -> NDArray[float]:
     """Topoplot feature."""
-    pass
+    ncomp = icawinv.shape[-1]
+    topo = np.zeros((32, 32, 1, ncomp))
+    for it in range(ncomp):
+        temp_topo = _topoplotFast(icawinv[:, it])
+        np.nan_to_num(temp_topo, copy=False)  # set NaN values to 0 in-place
+        topo[:, :, 0, it] = temp_topo / np.max(np.abs(temp_topo))
+    return topo.astype(np.float32)
 
 
-def _topoplotFast(icawinv):
+def _topoplotFast(icawinv: NDArray[float]) -> NDArray[float]:
     """Implements topoplotFast.m from MATLAB."""
+    # Each topographic map is a 32x32 image.
     pass
 
 
 # ----------------------------------------------------------------------------
-def eeg_rpsd(inst: Union[BaseRaw, BaseEpochs], ica: ICA, icaact: NDArray[float]) -> NDArray[float]:
+def eeg_rpsd(
+    inst: Union[BaseRaw, BaseEpochs], ica: ICA, icaact: NDArray[float]
+) -> NDArray[float]:
     """PSD feature."""
     assert isinstance(inst, (BaseRaw, BaseEpochs))  # sanity-check
     constants = _eeg_rpsd_constants(inst, ica)
@@ -113,9 +128,9 @@ def eeg_rpsd(inst: Union[BaseRaw, BaseEpochs], ica: ICA, icaact: NDArray[float])
 
 
 def _eeg_rpsd_constants(
-        inst: Union[BaseRaw, BaseEpochs],
-        ica: ICA,
-        ) -> Tuple[int, int, int, int, NDArray[int], NDArray[float], NDArray[int]]:
+    inst: Union[BaseRaw, BaseEpochs],
+    ica: ICA,
+) -> Tuple[int, int, int, int, NDArray[int], NDArray[float], NDArray[int]]:
     """Computes the constants before ``randperm`` is used to compute the
     subset."""
     # in MATLAB, 'pct_data' variable is never provided and is always initialized
@@ -239,7 +254,9 @@ def _next_power_of_2(x) -> int:
     return 1 if x == 0 else 2 ** (x - 1).bit_length()
 
 
-def eeg_autocorr_welch(raw: BaseRaw, ica: ICA, icaact: NDArray[float]) -> NDArray[float]:
+def eeg_autocorr_welch(
+    raw: BaseRaw, ica: ICA, icaact: NDArray[float]
+) -> NDArray[float]:
     """Autocorrelation feature applied on raw object with at least 5 * fs
     samples (5 seconds).
     MATLAB: 'eeg_autocorr_welch.m'."""
@@ -349,7 +366,9 @@ def eeg_autocorr(raw: BaseRaw, ica: ICA, icaact: NDArray[float]) -> NDArray[floa
     return resamp.astype(np.float32)
 
 
-def eeg_autocorr_fftw(epochs: BaseEpochs, ica: ICA, icaact: NDArray[float]) -> NDArray[float]:
+def eeg_autocorr_fftw(
+    epochs: BaseEpochs, ica: ICA, icaact: NDArray[float]
+) -> NDArray[float]:
     """Autocorrelation feature applied on epoch object.
     MATLAB: 'eeg_autocorr_fftw.m'."""
     assert isinstance(epochs, BaseEpochs)  # sanity-check

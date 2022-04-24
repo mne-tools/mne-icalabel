@@ -21,8 +21,7 @@ from mne_icalabel.features import (
     eeg_autocorr,
     eeg_autocorr_fftw,
 )
-# TODO: Move this either to features.py or to utils.py
-from mne_icalabel.ica_features import mne_to_eeglab_locs
+from mne_icalabel.utils import mne_to_eeglab_locs
 
 
 # Raw/Epochs files with ICA decomposition

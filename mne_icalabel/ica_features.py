@@ -3,7 +3,6 @@ import math
 import scipy.signal
 import warnings
 from numpy.typing import ArrayLike
-import mne
 
 from .utils import gdatav4, pol2cart
 
@@ -229,75 +228,3 @@ def topoplot(
     Zi[mask] = np.nan
 
     return Zi.T
-
-
-def mne_to_eeglab_locs(raw: mne.io.BaseRaw):
-    """Obtain EEGLab-like spherical coordinate from EEG channel positions.
-
-    TODO: @JACOB:
-    - Where is (0,0,0) defined in MNE vs EEGLab?
-    - some text description of how the sphere coordinates differ between MNE
-    and EEGLab.
-
-    Parameters
-    ----------
-    raw : mne.io.BaseRaw
-        Instance of raw object with a `mne.montage.DigMontage` set with
-        ``n_channels`` channel positions.
-
-    Returns
-    -------
-    Rd : np.array of shape (1, n_channels)
-        Angle in spherical coordinates of each EEG channel.
-    Th : np.array of shape (1, n_channels)
-        Degree in spherical coordinates of each EEG channel.
-    """
-
-    def _sph2topo(_theta, _phi):
-        """
-        Convert spherical coordinates to topo.
-        """
-        az = _phi
-        horiz = _theta
-        angle = -1 * horiz
-        radius = (np.pi / 2 - az) / np.pi
-        return angle, radius
-
-    def _cart2sph(_x, _y, _z):
-        """
-        Convert cartesian coordinates to spherical.
-        """
-        azimuth = np.arctan2(_y, _x)
-        elevation = np.arctan2(_z, np.sqrt(_x**2 + _y**2))
-        r = np.sqrt(_x**2 + _y**2 + _z**2)
-        # theta,phi,r
-        return azimuth, elevation, r
-
-    # get the channel position dictionary
-    montage = raw.get_montage()
-    positions = montage.get_positions()
-    ch_pos = positions["ch_pos"]
-
-    # get locations as a 2D array
-    locs = np.vstack(list(ch_pos.values()))
-
-    # Obtain carthesian coordinates
-    x = locs[:, 1]
-
-    # be mindful of the nose orientation in eeglab and mne
-    # TODO: @Jacob, please expand on this.
-    y = -1 * locs[:, 0]
-    # see https://github.com/mne-tools/mne-python/blob/24377ad3200b6099ed47576e9cf8b27578d571ef/mne/io/eeglab/eeglab.py#L105  # noqa
-    z = locs[:, 2]
-
-    # Obtain Spherical Coordinates
-    sph = np.array([_cart2sph(x[i], y[i], z[i]) for i in range(len(x))])
-    theta = sph[:, 0]
-    phi = sph[:, 1]
-
-    # Obtain Polar coordinates (as in eeglab)
-    topo = np.array([_sph2topo(theta[i], phi[i]) for i in range(len(theta))])
-    rd = topo[:, 1]
-    th = topo[:, 0]
-
-    return rd.reshape([1, -1]), np.degrees(th).reshape([1, -1])

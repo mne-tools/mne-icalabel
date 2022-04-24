@@ -1,10 +1,10 @@
-from typing import Union
+from typing import Union, Tuple
 
 from mne import BaseEpochs
 from mne.io import BaseRaw
 from mne.preprocessing import ICA
 import numpy as np
-from numpy.typing import ArrayLike
+from numpy.typing import NDArray
 from scipy.signal import resample_poly
 
 
@@ -42,7 +42,7 @@ def get_features(inst: Union[BaseRaw, BaseEpochs], ica: ICA):
 
 def retrieve_eeglab_icawinv(
     ica: ICA,
-) -> ArrayLike:
+) -> Tuple[NDArray[float], NDArray[float]]:
     """
     Retrieves 'icawinv' from an MNE ICA instance.
 
@@ -64,7 +64,7 @@ def retrieve_eeglab_icawinv(
     return np.linalg.pinv(weights), weights
 
 
-def compute_ica_activations(inst: Union[BaseRaw, BaseEpochs], ica: ICA) -> ArrayLike:
+def compute_ica_activations(inst: Union[BaseRaw, BaseEpochs], ica: ICA) -> NDArray[float]:
     """Compute the ICA activations 'icaact' variable from an MNE ICA instance.
 
     Parameters
@@ -97,8 +97,13 @@ def eeg_topoplot():
     pass
 
 
+def _topoplotFast(icawinv):
+    """Implements topoplotFast.m from MATLAB."""
+    pass
+
+
 # ----------------------------------------------------------------------------
-def eeg_rpsd(inst: Union[BaseRaw, BaseEpochs], ica: ICA, icaact: np.ndarray):
+def eeg_rpsd(inst: Union[BaseRaw, BaseEpochs], ica: ICA, icaact: NDArray[float]) -> NDArray[float]:
     """PSD feature."""
     assert isinstance(inst, (BaseRaw, BaseEpochs))  # sanity-check
     constants = _eeg_rpsd_constants(inst, ica)
@@ -107,7 +112,10 @@ def eeg_rpsd(inst: Union[BaseRaw, BaseEpochs], ica: ICA, icaact: np.ndarray):
     return psd
 
 
-def _eeg_rpsd_constants(inst: Union[BaseRaw, BaseEpochs], ica: ICA):
+def _eeg_rpsd_constants(
+        inst: Union[BaseRaw, BaseEpochs],
+        ica: ICA,
+        ) -> Tuple[int, int, int, int, NDArray[int], NDArray[float], NDArray[int]]:
     """Computes the constants before ``randperm`` is used to compute the
     subset."""
     # in MATLAB, 'pct_data' variable is never provided and is always initialized
@@ -151,15 +159,15 @@ def _eeg_rpsd_constants(inst: Union[BaseRaw, BaseEpochs], ica: ICA):
 
 def _eeg_rpsd_compute_psdmed(
     inst: Union[BaseRaw, BaseEpochs],
-    icaact: np.ndarray,
+    icaact: NDArray[float],
     ncomp: int,
     nfreqs: int,
     n_points: int,
     nyquist: int,
-    index: np.ndarray,
-    window: np.ndarray,
-    subset: np.ndarray,
-) -> np.ndarray:
+    index: NDArray[int],
+    window: NDArray[float],
+    subset: NDArray[int],
+) -> NDArray[float]:
     """Compute the variable 'psdmed', annotated as windowed spectrums."""
     denominator = inst.info["sfreq"] * np.sum(np.power(window, 2))
     psdmed = np.zeros((ncomp, nfreqs))
@@ -188,8 +196,8 @@ def _eeg_rpsd_compute_psdmed(
 
 
 def _eeg_rpsd_format(
-    psd: np.ndarray,
-):
+    psd: NDArray[float],
+) -> NDArray[float]:
     """Apply the formatting steps after 'eeg_rpsd.m' from the MATLAB feature
     extraction."""
     # extrapolate or prune as needed
@@ -226,12 +234,12 @@ def _eeg_rpsd_format(
 
 
 # ----------------------------------------------------------------------------
-def next_power_of_2(x):
+def _next_power_of_2(x) -> int:
     """Equivalent to 2^nextpow2 in MATLAB."""
     return 1 if x == 0 else 2 ** (x - 1).bit_length()
 
 
-def eeg_autocorr_welch(raw: BaseRaw, ica: ICA, icaact: np.ndarray):
+def eeg_autocorr_welch(raw: BaseRaw, ica: ICA, icaact: NDArray[float]) -> NDArray[float]:
     """Autocorrelation feature applied on raw object with at least 5 * fs
     samples (5 seconds).
     MATLAB: 'eeg_autocorr_welch.m'."""
@@ -245,7 +253,7 @@ def eeg_autocorr_welch(raw: BaseRaw, ica: ICA, icaact: np.ndarray):
     # setup constants
     ncomp = ica.n_components_
     n_points = min(raw.times.size, int(raw.info["sfreq"] * 3))
-    nfft = next_power_of_2(2 * n_points - 1)
+    nfft = _next_power_of_2(2 * n_points - 1)
     cutoff = np.floor(raw.times.size / n_points) * n_points
     range_ = np.ceil(np.arange(0, cutoff - n_points + n_points / 2, n_points / 2))
     index = np.tile(range_, (n_points, 1)).T + np.arange(0, n_points)
@@ -307,7 +315,7 @@ def eeg_autocorr_welch(raw: BaseRaw, ica: ICA, icaact: np.ndarray):
     return resamp.astype(np.float32)
 
 
-def eeg_autocorr(raw: BaseRaw, ica: ICA, icaact: np.ndarray):
+def eeg_autocorr(raw: BaseRaw, ica: ICA, icaact: NDArray[float]) -> NDArray[float]:
     """Autocorrelation feature applied on raw object that do not have enough
     sampes for eeg_autocorr_welch.
     MATLAB: 'eeg_autocorr.m'."""
@@ -316,7 +324,7 @@ def eeg_autocorr(raw: BaseRaw, ica: ICA, icaact: np.ndarray):
     # in MATLAB, 'pct_data' variable is neither provided or used, thus it is
     # omitted here.
     ncomp = ica.n_components_
-    nfft = next_power_of_2(2 * raw.times.size - 1)
+    nfft = _next_power_of_2(2 * raw.times.size - 1)
 
     c = np.zeros((ncomp, nfft))
     for it in range(ncomp):
@@ -341,7 +349,7 @@ def eeg_autocorr(raw: BaseRaw, ica: ICA, icaact: np.ndarray):
     return resamp.astype(np.float32)
 
 
-def eeg_autocorr_fftw(epochs: BaseEpochs, ica: ICA, icaact: np.ndarray):
+def eeg_autocorr_fftw(epochs: BaseEpochs, ica: ICA, icaact: NDArray[float]) -> NDArray[float]:
     """Autocorrelation feature applied on epoch object.
     MATLAB: 'eeg_autocorr_fftw.m'."""
     assert isinstance(epochs, BaseEpochs)  # sanity-check
@@ -349,7 +357,7 @@ def eeg_autocorr_fftw(epochs: BaseEpochs, ica: ICA, icaact: np.ndarray):
     # in MATLAB, 'pct_data' variable is neither provided or used, thus it is
     # omitted here.
     ncomp = ica.n_components_
-    nfft = next_power_of_2(2 * epochs.times.size - 1)
+    nfft = _next_power_of_2(2 * epochs.times.size - 1)
 
     ac = np.zeros((ncomp, nfft))
     for it in range(ncomp):

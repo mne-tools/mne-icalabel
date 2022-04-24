@@ -77,7 +77,9 @@ def mne_to_eeglab_locs(raw: BaseRaw) -> Tuple[NDArray[float], NDArray[float]]:
     return rd.reshape([1, -1]), np.degrees(th).reshape([1, -1])
 
 
-def pol2cart(theta: NDArray[float], rho: NDArray[float]) -> Tuple[NDArray[float], NDArray[float]]:
+def pol2cart(
+    theta: NDArray[float], rho: NDArray[float]
+) -> Tuple[NDArray[float], NDArray[float]]:
     """
     Converts polar coordinates to cartesian coordinates.
 

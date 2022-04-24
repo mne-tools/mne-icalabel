@@ -13,7 +13,7 @@ from scipy.io import loadmat
 from mne_icalabel.features import (
     retrieve_eeglab_icawinv,
     compute_ica_activations,
-    next_power_of_2,
+    _next_power_of_2,
     _eeg_rpsd_constants,
     _eeg_rpsd_compute_psdmed,
     _eeg_rpsd_format,
@@ -21,6 +21,8 @@ from mne_icalabel.features import (
     eeg_autocorr,
     eeg_autocorr_fftw,
 )
+# TODO: Move this either to features.py or to utils.py
+from mne_icalabel.ica_features import mne_to_eeglab_locs
 
 
 # Raw/Epochs files with ICA decomposition
@@ -43,6 +45,14 @@ raw_icaact_eeglab_path = str(
 )
 epo_icaact_eeglab_path = str(
     files("mne_icalabel.tests").joinpath("data/icaact/icaact-epo.mat")
+)
+
+# Topography
+loc_raw_path = str(
+    files("mne_icalabel.tests").joinpath("data/topo/loc-raw.mat")
+)
+loc_epo_path = str(
+    files("mne_icalabel.tests").joinpath("data/topo/loc-raw.mat")
 )
 
 # PSD
@@ -116,6 +126,30 @@ def test_compute_ica_activations():
 
     icaact_eeglab = loadmat(epo_icaact_eeglab_path)["icaact"]
     assert np.allclose(icaact, icaact_eeglab, atol=1e-4)
+
+
+# ----------------------------------------------------------------------------
+def test_loc():
+    """Test conversion of MNE montage to EEGLAB loc. This test works because
+    MNE does the conversion form EEGLAB to MNE montage when loading the
+    datasets."""
+    # from raw
+    raw = read_raw(raw_eeglab_path, preload=True)
+    rd, th = mne_to_eeglab_locs(raw)
+    eeglab_loc = loadmat(loc_raw_path)['loc'][0, 0]
+    eeglab_rd = eeglab_loc['rd']
+    eeglab_th = eeglab_loc['th']
+    assert np.allclose(rd, eeglab_rd, atol=1e-8)
+    assert np.allclose(th, eeglab_th, atol=1e-8)
+
+    # from epochs
+    epochs = read_epochs_eeglab(epo_eeglab_path)
+    rd, th = mne_to_eeglab_locs(epochs)
+    eeglab_loc = loadmat(loc_epo_path)['loc'][0, 0]
+    eeglab_rd = eeglab_loc['rd']
+    eeglab_th = eeglab_loc['th']
+    assert np.allclose(rd, eeglab_rd, atol=1e-8)
+    assert np.allclose(th, eeglab_th, atol=1e-8)
 
 
 # ----------------------------------------------------------------------------
@@ -312,7 +346,7 @@ def test_next_power_of_2():
     x = [0, 10, 200, 400]
     expected = [1, 16, 256, 512]
     for k, exp in zip(x, expected):
-        val = next_power_of_2(k)
+        val = _next_power_of_2(k)
         assert exp == val
 
 

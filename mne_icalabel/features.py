@@ -7,7 +7,7 @@ import numpy as np
 from numpy.typing import NDArray
 from scipy.signal import resample_poly
 
-from .utils import pol2cart
+from .utils import pol2cart, mne_to_eeglab_locs
 
 
 def get_features(inst: Union[BaseRaw, BaseEpochs], ica: ICA):

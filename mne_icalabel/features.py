@@ -7,6 +7,8 @@ import numpy as np
 from numpy.typing import NDArray
 from scipy.signal import resample_poly
 
+from .utils import pol2cart
+
 
 def get_features(inst: Union[BaseRaw, BaseEpochs], ica: ICA):
     """
@@ -23,7 +25,7 @@ def get_features(inst: Union[BaseRaw, BaseEpochs], ica: ICA):
     icaact = compute_ica_activations(inst, ica)
 
     # compute topographic feature (float32)
-    topo = eeg_topoplot(icawinv)
+    topo = eeg_topoplot(inst, icawinv)
 
     # compute psd feature (float32)
     psd = eeg_rpsd(inst, ica, icaact)
@@ -98,21 +100,28 @@ def compute_ica_activations(
 
 
 # ----------------------------------------------------------------------------
-def eeg_topoplot(icawinv: NDArray[float]) -> NDArray[float]:
+def eeg_topoplot(
+    inst: Union[BaseRaw, BaseEpochs], icawinv: NDArray[float]
+) -> NDArray[float]:
     """Topoplot feature."""
     ncomp = icawinv.shape[-1]
     topo = np.zeros((32, 32, 1, ncomp))
+    rd, th = mne_to_eeglab_locs(inst)
+    th = np.pi / 180 * th  # convert degress to radians
     for it in range(ncomp):
-        temp_topo = _topoplotFast(icawinv[:, it])
+        temp_topo = _topoplotFast(icawinv[:, it], rd, th)
         np.nan_to_num(temp_topo, copy=False)  # set NaN values to 0 in-place
         topo[:, :, 0, it] = temp_topo / np.max(np.abs(temp_topo))
     return topo.astype(np.float32)
 
 
-def _topoplotFast(icawinv: NDArray[float]) -> NDArray[float]:
-    """Implements topoplotFast.m from MATLAB."""
-    # Each topographic map is a 32x32 image.
-    pass
+def _topoplotFast(
+    icawinv: NDArray[float], rd: NDArray[float], th: NDArray[float]
+) -> NDArray[float]:
+    """Implements topoplotFast.m from MATLAB. Each topographic map is a 32x32
+    images."""
+    # Convert electrode locations from polar to cartesian coordinates
+    x, y = pol2cart(th, rd)
 
 
 # ----------------------------------------------------------------------------

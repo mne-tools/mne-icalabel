@@ -125,11 +125,10 @@ def test_compute_ica_activations():
 
 # ----------------------------------------------------------------------------
 def test_loc():
-    """Test conversion of MNE montage to EEGLAB loc. 
-    
-    This test works because
-    MNE does the conversion from EEGLAB to MNE montage when loading the
-    datasets."""
+    """Test conversion of MNE montage to EEGLAB loc.
+
+    This test works because MNE does the conversion from EEGLAB to MNE montage
+    when loading the datasets."""
     # from raw
     raw = read_raw(raw_eeglab_path, preload=True)
     rd, th = mne_to_eeglab_locs(raw)

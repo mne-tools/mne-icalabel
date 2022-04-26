@@ -73,30 +73,16 @@ def test_gdatav4(file):
     eeglab_yi = eeglab_gdata["yi"]
     eeglab_xi = eeglab_gdata["xi"]
 
-    # compute output in Python
-    Xi, Yi, Zi = gdatav4(
-        eeglab_intx, eeglab_inty, eeglab_intValues, eeglab_xi, eeglab_yi
-    )
-
-    # load outputs from MATLAB
-    eeglab_Xi = eeglab_gdata["Xi"]
-    eeglab_Yi = eeglab_gdata["Yi"]
-    eeglab_Zi = eeglab_gdata["Zi"]
-
-    # output in EEGLAB repeats the same vector to form a square matrix.
-    # For Xi -> the row is repeated
-    # For Yi -> the column is repeated
-    # For Zi -> python outputs the diagonal
-    assert np.allclose(eeglab_Xi, np.tile(Xi, (Xi.size, 1)), atol=1e-8)
-    assert np.allclose(eeglab_Yi, np.tile(Yi.T, Yi.size), atol=1e-8)
-    assert np.allclose(np.diagonal(eeglab_Zi), Zi, atol=1e-8)
-
-    # --------------------------- Test with meshgrid -------------------------
     # create mesh
     xq, yq = np.meshgrid(eeglab_xi, eeglab_yi)
 
     # compute output in Python
     Xi, Yi, Zi = gdatav4(eeglab_intx, eeglab_inty, eeglab_intValues, xq, yq)
+
+    # load outputs from MATLAB
+    eeglab_Xi = eeglab_gdata["Xi"]
+    eeglab_Yi = eeglab_gdata["Yi"]
+    eeglab_Zi = eeglab_gdata["Zi"]
 
     # compare
     assert np.allclose(Xi, eeglab_Xi, atol=1e-8)

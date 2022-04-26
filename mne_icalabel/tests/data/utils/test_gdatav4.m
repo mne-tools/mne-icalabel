@@ -1,5 +1,5 @@
-% The file 'gdatav4-raw.mat' and 'gdatav4-epo.mat' were obtained by adding 
-% a breakpoint to line 960 in 'topoplotFast.m', running line 960 and 
+% The file 'gdatav4-raw.mat' and 'gdatav4-epo.mat' were obtained by adding
+% a breakpoint to line 960 in 'topoplotFast.m', running line 960 and
 % saving:
 %
 %     gdatav4 = struct(...

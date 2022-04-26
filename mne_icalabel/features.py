@@ -161,10 +161,10 @@ def _topoplotFast(
     # Interpolate scalp map data
     xi = np.linspace(xmin, xmax, GRID_SCALE).astype(np.float64).reshape((1, -1))
     yi = np.linspace(ymin, ymax, GRID_SCALE).astype(np.float64).reshape((1, -1))
-    # additional step for gdatav4 compared to MATLAB
+    # additional step for gdatav4 compared to MATLAB: linspace to meshgrid
     XQ, YQ = np.meshgrid(xi, yi)
     Xi, Yi, Zi = gdatav4(x, y, values.reshape((-1, 1)), XQ, YQ)
-    # additional step for gdatav4 compared to MATLAB: tranpose
+    # additional step for gdatav4 compared to MATLAB: transpose
     Zi = Zi.T
 
     # Mask out data outside the head

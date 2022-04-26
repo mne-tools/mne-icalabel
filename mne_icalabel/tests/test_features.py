@@ -2,6 +2,7 @@ try:
     from importlib.resources import files
 except ImportError:
     from importlib_resources import files
+from pathlib import Path
 
 from mne import read_epochs_eeglab
 from mne.io import read_raw
@@ -9,6 +10,7 @@ from mne.io.eeglab.eeglab import _check_load_mat
 from mne.preprocessing import read_ica_eeglab
 import numpy as np
 from scipy.io import loadmat
+import pytest
 
 from mne_icalabel.features import (
     retrieve_eeglab_icawinv,
@@ -49,11 +51,13 @@ epo_icaact_eeglab_path = str(
 )
 
 # Topography
-raw_topo1_path = str(
-    files("mne_icalabel.tests").joinpath("data/topo/topo1-raw.mat")
-)
+raw_topo1_path = str(files("mne_icalabel.tests").joinpath("data/topo/topo1-raw.mat"))
+epo_topo1_path = str(files("mne_icalabel.tests").joinpath("data/topo/topo1-epo.mat"))
 raw_topo_feature_path = str(
     files("mne_icalabel.tests").joinpath("data/topo/topo-feature-raw.mat")
+)
+epo_topo_feature_path = str(
+    files("mne_icalabel.tests").joinpath("data/topo/topo-feature-epo.mat")
 )
 
 # PSD
@@ -93,20 +97,19 @@ autocorr_epo_path = str(
 )
 
 
+# General readers
+reader = {'raw': read_raw, 'epo': read_epochs_eeglab}
+kwargs = {'raw': dict(preload=True), 'epo': dict()}
+
+
 # ----------------------------------------------------------------------------
-def test_retrieve_eeglab_icawinv():
+@pytest.mark.parametrize('file', (raw_eeglab_path, epo_eeglab_path))
+def test_retrieve_eeglab_icawinv(file):
     """Test that the icawinv is correctly retrieved from an MNE ICA object."""
-    # Raw instance
-    ica = read_ica_eeglab(raw_eeglab_path)
+    ica = read_ica_eeglab(file)
     icawinv, _ = retrieve_eeglab_icawinv(ica)
 
-    eeg = _check_load_mat(raw_eeglab_path, None)
-    assert np.allclose(icawinv, eeg.icawinv)
-
-    # Epoch instance
-    ica = read_ica_eeglab(epo_eeglab_path)
-    icawinv, _ = retrieve_eeglab_icawinv(ica)
-    eeg = _check_load_mat(epo_eeglab_path, None)
+    eeg = _check_load_mat(file, None)
     assert np.allclose(icawinv, eeg.icawinv)
 
 
@@ -130,33 +133,45 @@ def test_compute_ica_activations():
 
 
 # ----------------------------------------------------------------------------
-def test_topoplotFast():
+@pytest.mark.filterwarnings("ignore::RuntimeWarning")
+@pytest.mark.filterwarnings("ignore::FutureWarning")
+@pytest.mark.parametrize("file, eeglab_result_file", [(raw_eeglab_path, raw_topo1_path), (epo_eeglab_path, epo_topo1_path)])
+def test_topoplotFast(file, eeglab_result_file):
     """Test topoplotFast on a single component."""
-    raw = read_raw(raw_eeglab_path, preload=True)
-    ica = read_ica_eeglab(raw_eeglab_path)
+    # load inst
+    type_ = str(Path(file).stem)[-3:]
+    inst = reader[type_](file, **kwargs[type_])
+    # load ICA
+    ica = read_ica_eeglab(file)
     # convert coordinates
-    rd, th = mne_to_eeglab_locs(raw)
+    rd, th = mne_to_eeglab_locs(inst)
     th = np.pi / 180 * th
     # get icawinv
     icawinv, _ = retrieve_eeglab_icawinv(ica)
     # compute topo feature for the first component
     topo1 = _topoplotFast(icawinv[:, 0], rd, th)
     # load from eeglab
-    topo1_eeglab = loadmat(raw_topo1_path)['topo1']
+    topo1_eeglab = loadmat(eeglab_result_file)["topo1"]
     # convert nan to num
     assert np.allclose(topo1, topo1_eeglab, atol=1e-8, equal_nan=True)
 
 
-def test_eeg_topoplot():
+@pytest.mark.filterwarnings("ignore::RuntimeWarning")
+@pytest.mark.filterwarnings("ignore::FutureWarning")
+@pytest.mark.parametrize('file, eeglab_result_file', [(raw_eeglab_path, raw_topo_feature_path), (epo_eeglab_path, epo_topo_feature_path)])
+def test_eeg_topoplot(file, eeglab_result_file):
     """Test eeg_topoplot feature extraction."""
-    raw = read_raw(raw_eeglab_path, preload=True)
-    ica = read_ica_eeglab(raw_eeglab_path)
+    # load inst
+    type_ = str(Path(file).stem)[-3:]
+    inst = reader[type_](file, **kwargs[type_])
+    # load ICA
+    ica = read_ica_eeglab(file)
     # get icawinv
     icawinv, _ = retrieve_eeglab_icawinv(ica)
     # compute feature
-    topo = eeg_topoplot(raw, icawinv)
+    topo = eeg_topoplot(inst, icawinv)
     # load from eeglab
-    topo_eeglab = loadmat(raw_topo_feature_path)['topo']
+    topo_eeglab = loadmat(eeglab_result_file)["topo"]
     # compare
     assert np.allclose(topo, topo_eeglab, atol=1e-4, equal_nan=True)
 
@@ -359,6 +374,7 @@ def test_next_power_of_2():
         assert exp == val
 
 
+@pytest.mark.filterwarnings("ignore::numpy.ComplexWarning")
 def test_eeg_autocorr_welch():
     """Test eeg_autocorr_welch feature used on long raw datasets."""
     raw = read_raw(raw_eeglab_path, preload=True)
@@ -370,6 +386,7 @@ def test_eeg_autocorr_welch():
     assert np.allclose(autocorr, autocorr_eeglab, atol=1e-4)
 
 
+@pytest.mark.filterwarnings("ignore::numpy.ComplexWarning")
 def test_eeg_autocorr():
     """Test eeg_autocorr feature used on short raw datasets."""
     # Raw between 1 and 5 seconds
@@ -391,6 +408,7 @@ def test_eeg_autocorr():
     assert np.allclose(autocorr, autocorr_eeglab, atol=1e-4)
 
 
+@pytest.mark.filterwarnings("ignore::numpy.ComplexWarning")
 def test_eeg_autocorr_fftw():
     """Test eeg_autocorr_fftw feature used on epoch datasets."""
     epochs = read_epochs_eeglab(epo_eeglab_path)

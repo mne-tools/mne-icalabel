@@ -98,8 +98,8 @@ autocorr_epo_path = str(
 
 
 # General readers
-reader = {'raw': read_raw, 'epo': read_epochs_eeglab}
-kwargs = {'raw': dict(preload=True), 'epo': dict()}
+reader = {"raw": read_raw, "epo": read_epochs_eeglab}
+kwargs = {"raw": dict(preload=True), "epo": dict()}
 
 
 # ----------------------------------------------------------------------------
@@ -110,7 +110,7 @@ def test_get_features():
 
 
 # ----------------------------------------------------------------------------
-@pytest.mark.parametrize('file', (raw_eeglab_path, epo_eeglab_path))
+@pytest.mark.parametrize("file", (raw_eeglab_path, epo_eeglab_path))
 def test_retrieve_eeglab_icawinv(file):
     """Test that the icawinv is correctly retrieved from an MNE ICA object."""
     ica = read_ica_eeglab(file)
@@ -120,7 +120,13 @@ def test_retrieve_eeglab_icawinv(file):
     assert np.allclose(icawinv, eeg.icawinv)
 
 
-@pytest.mark.parametrize("file, eeglab_result_file", [(raw_eeglab_path, raw_icaact_eeglab_path), (epo_eeglab_path, epo_icaact_eeglab_path)])
+@pytest.mark.parametrize(
+    "file, eeglab_result_file",
+    [
+        (raw_eeglab_path, raw_icaact_eeglab_path),
+        (epo_eeglab_path, epo_icaact_eeglab_path),
+    ],
+)
 def test_compute_ica_activations(file, eeglab_result_file):
     """Test that the icaact is correctly retrieved from an MNE ICA object."""
     type_ = str(Path(file).stem)[-3:]
@@ -135,7 +141,10 @@ def test_compute_ica_activations(file, eeglab_result_file):
 # ----------------------------------------------------------------------------
 @pytest.mark.filterwarnings("ignore::RuntimeWarning")
 @pytest.mark.filterwarnings("ignore::FutureWarning")
-@pytest.mark.parametrize("file, eeglab_result_file", [(raw_eeglab_path, raw_topo1_path), (epo_eeglab_path, epo_topo1_path)])
+@pytest.mark.parametrize(
+    "file, eeglab_result_file",
+    [(raw_eeglab_path, raw_topo1_path), (epo_eeglab_path, epo_topo1_path)],
+)
 def test_topoplotFast(file, eeglab_result_file):
     """Test topoplotFast on a single component."""
     # load inst
@@ -158,7 +167,13 @@ def test_topoplotFast(file, eeglab_result_file):
 
 @pytest.mark.filterwarnings("ignore::RuntimeWarning")
 @pytest.mark.filterwarnings("ignore::FutureWarning")
-@pytest.mark.parametrize('file, eeglab_result_file', [(raw_eeglab_path, raw_topo_feature_path), (epo_eeglab_path, epo_topo_feature_path)])
+@pytest.mark.parametrize(
+    "file, eeglab_result_file",
+    [
+        (raw_eeglab_path, raw_topo_feature_path),
+        (epo_eeglab_path, epo_topo_feature_path),
+    ],
+)
 def test_eeg_topoplot(file, eeglab_result_file):
     """Test eeg_topoplot feature extraction."""
     # load inst

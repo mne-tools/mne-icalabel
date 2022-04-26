@@ -36,11 +36,14 @@ gdatav4_epo_path = str(
 
 
 # General readers
-reader = {'raw': read_raw, 'epo': read_epochs_eeglab}
-kwargs = {'raw': dict(preload=True), 'epo': dict()}
+reader = {"raw": read_raw, "epo": read_epochs_eeglab}
+kwargs = {"raw": dict(preload=True), "epo": dict()}
 
 
-@pytest.mark.parametrize("file, eeglab_result_file", [(raw_eeglab_path, loc_raw_path), (epo_eeglab_path, loc_epo_path)])
+@pytest.mark.parametrize(
+    "file, eeglab_result_file",
+    [(raw_eeglab_path, loc_raw_path), (epo_eeglab_path, loc_epo_path)],
+)
 def test_loc(file, eeglab_result_file):
     """Test conversion of MNE montage to EEGLAB loc.
 

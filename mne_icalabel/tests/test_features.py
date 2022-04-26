@@ -113,22 +113,15 @@ def test_retrieve_eeglab_icawinv(file):
     assert np.allclose(icawinv, eeg.icawinv)
 
 
-def test_compute_ica_activations():
+@pytest.mark.parametrize("file, eeglab_result_file", [(raw_eeglab_path, raw_icaact_eeglab_path), (epo_eeglab_path, epo_icaact_eeglab_path)])
+def test_compute_ica_activations(file, eeglab_result_file):
     """Test that the icaact is correctly retrieved from an MNE ICA object."""
-    # Raw instance
-    raw = read_raw(raw_eeglab_path, preload=True)
-    ica = read_ica_eeglab(raw_eeglab_path)
-    icaact = compute_ica_activations(raw, ica)
+    type_ = str(Path(file).stem)[-3:]
+    inst = reader[type_](file, **kwargs[type_])
+    ica = read_ica_eeglab(file)
+    icaact = compute_ica_activations(inst, ica)
 
-    icaact_eeglab = loadmat(raw_icaact_eeglab_path)["icaact"]
-    assert np.allclose(icaact, icaact_eeglab, atol=1e-4)
-
-    # Epoch instance
-    epochs = read_epochs_eeglab(epo_eeglab_path)
-    ica = read_ica_eeglab(epo_eeglab_path)
-    icaact = compute_ica_activations(epochs, ica)
-
-    icaact_eeglab = loadmat(epo_icaact_eeglab_path)["icaact"]
+    icaact_eeglab = loadmat(eeglab_result_file)["icaact"]
     assert np.allclose(icaact, icaact_eeglab, atol=1e-4)
 
 
@@ -374,6 +367,7 @@ def test_next_power_of_2():
         assert exp == val
 
 
+# TODO: Fix warning.
 @pytest.mark.filterwarnings("ignore::numpy.ComplexWarning")
 def test_eeg_autocorr_welch():
     """Test eeg_autocorr_welch feature used on long raw datasets."""
@@ -386,6 +380,7 @@ def test_eeg_autocorr_welch():
     assert np.allclose(autocorr, autocorr_eeglab, atol=1e-4)
 
 
+# TODO: Fix warning.
 @pytest.mark.filterwarnings("ignore::numpy.ComplexWarning")
 def test_eeg_autocorr():
     """Test eeg_autocorr feature used on short raw datasets."""
@@ -408,6 +403,7 @@ def test_eeg_autocorr():
     assert np.allclose(autocorr, autocorr_eeglab, atol=1e-4)
 
 
+# TODO: Fix warning.
 @pytest.mark.filterwarnings("ignore::numpy.ComplexWarning")
 def test_eeg_autocorr_fftw():
     """Test eeg_autocorr_fftw feature used on epoch datasets."""

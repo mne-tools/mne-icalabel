@@ -13,6 +13,7 @@ from scipy.io import loadmat
 from mne_icalabel.features import (
     retrieve_eeglab_icawinv,
     compute_ica_activations,
+    eeg_topoplot,
     _topoplotFast,
     _next_power_of_2,
     _eeg_rpsd_constants,
@@ -50,6 +51,9 @@ epo_icaact_eeglab_path = str(
 # Topography
 raw_topo1_path = str(
     files("mne_icalabel.tests").joinpath("data/topo/topo1-raw.mat")
+)
+raw_topo_feature_path = str(
+    files("mne_icalabel.tests").joinpath("data/topo/topo-feature-raw.mat")
 )
 
 # PSD
@@ -141,6 +145,20 @@ def test_topoplotFast():
     topo1_eeglab = loadmat(raw_topo1_path)['topo1']
     # convert nan to num
     assert np.allclose(topo1, topo1_eeglab, atol=1e-8, equal_nan=True)
+
+
+def test_eeg_topoplot():
+    """Test eeg_topoplot feature extraction."""
+    raw = read_raw(raw_eeglab_path, preload=True)
+    ica = read_ica_eeglab(raw_eeglab_path)
+    # get icawinv
+    icawinv, _ = retrieve_eeglab_icawinv(ica)
+    # compute feature
+    topo = eeg_topoplot(raw, icawinv)
+    # load from eeglab
+    topo_eeglab = loadmat(raw_topo_feature_path)['topo']
+    # compare
+    assert np.allclose(topo, topo_eeglab, atol=1e-4, equal_nan=True)
 
 
 # ----------------------------------------------------------------------------

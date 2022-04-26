@@ -21,7 +21,6 @@ from mne_icalabel.features import (
     eeg_autocorr,
     eeg_autocorr_fftw,
 )
-from mne_icalabel.utils import mne_to_eeglab_locs
 
 
 # Raw/Epochs files with ICA decomposition
@@ -47,8 +46,7 @@ epo_icaact_eeglab_path = str(
 )
 
 # Topography
-loc_raw_path = str(files("mne_icalabel.tests").joinpath("data/topo/loc-raw.mat"))
-loc_epo_path = str(files("mne_icalabel.tests").joinpath("data/topo/loc-raw.mat"))
+
 
 # PSD
 psd_constants_raw_path = str(
@@ -124,28 +122,6 @@ def test_compute_ica_activations():
 
 
 # ----------------------------------------------------------------------------
-def test_loc():
-    """Test conversion of MNE montage to EEGLAB loc.
-
-    This test works because MNE does the conversion from EEGLAB to MNE montage
-    when loading the datasets."""
-    # from raw
-    raw = read_raw(raw_eeglab_path, preload=True)
-    rd, th = mne_to_eeglab_locs(raw)
-    eeglab_loc = loadmat(loc_raw_path)["loc"][0, 0]
-    eeglab_rd = eeglab_loc["rd"]
-    eeglab_th = eeglab_loc["th"]
-    assert np.allclose(rd, eeglab_rd, atol=1e-8)
-    assert np.allclose(th, eeglab_th, atol=1e-8)
-
-    # from epochs
-    epochs = read_epochs_eeglab(epo_eeglab_path)
-    rd, th = mne_to_eeglab_locs(epochs)
-    eeglab_loc = loadmat(loc_epo_path)["loc"][0, 0]
-    eeglab_rd = eeglab_loc["rd"]
-    eeglab_th = eeglab_loc["th"]
-    assert np.allclose(rd, eeglab_rd, atol=1e-8)
-    assert np.allclose(th, eeglab_th, atol=1e-8)
 
 
 # ----------------------------------------------------------------------------

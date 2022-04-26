@@ -6,6 +6,3 @@
 # License: BSD (3-clause)
 
 __version__ = "0.1dev0"
-
-from .ica_features import rpsd, autocorr_fftw, topoplot
-from .ica_label import ica_eeg_features

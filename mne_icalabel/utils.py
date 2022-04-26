@@ -94,15 +94,21 @@ def pol2cart(
 
 # ----------------------------------------------------------------------------
 def gdatav4(
-    x: ArrayLike, y: ArrayLike, v: ArrayLike, xq: ArrayLike, yq: ArrayLike
+    x: ArrayLike,
+    y: ArrayLike,
+    v: ArrayLike,
+    xq: ArrayLike,
+    yq: ArrayLike
 ) -> Tuple[ArrayLike, ArrayLike, ArrayLike]:
     """
     GDATAV4 MATLAB 4 GRIDDATA interpolation
-    Reference:  David T. Sandwell, Biharmonic spline
-    interpolation of GEOS-3 and SEASAT altimeter
-    data, Geophysical Research Letters, 2, 139-142,
-    1987.  Describes interpolation using value or
-    gradient of value in any dimension.
+
+    Reference
+    ---------
+    David T. Sandwell, Biharmonic spline interpolation of GEOS-3 and SEASAT
+    altimeter data, Geophysical Research Letters, 2, 139-142, 1987.
+
+    Describes interpolation using value of gradient of value in any dimension.
 
     Args:
         x (np.array): x-coordinates

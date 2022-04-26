@@ -26,8 +26,12 @@ loc_raw_path = str(files("mne_icalabel.tests").joinpath("data/utils/loc-raw.mat"
 loc_epo_path = str(files("mne_icalabel.tests").joinpath("data/utils/loc-raw.mat"))
 
 # Grid data interpolation
-gdatav4_raw_path = str(files("mne_icalabel.tests").joinpath("data/utils/gdatav4-raw.mat"))
-gdatav4_epo_path = str(files("mne_icalabel.tests").joinpath("data/utils/gdatav4-epo.mat"))
+gdatav4_raw_path = str(
+    files("mne_icalabel.tests").joinpath("data/utils/gdatav4-raw.mat")
+)
+gdatav4_epo_path = str(
+    files("mne_icalabel.tests").joinpath("data/utils/gdatav4-epo.mat")
+)
 
 
 def test_loc():
@@ -55,26 +59,28 @@ def test_loc():
 
 
 # TODO: Warnings should be fixed at some point.
-@pytest.mark.filterwarnings('ignore::RuntimeWarning')
-@pytest.mark.filterwarnings('ignore::FutureWarning')
-@pytest.mark.parametrize('file', (gdatav4_raw_path, gdatav4_epo_path))
+@pytest.mark.filterwarnings("ignore::RuntimeWarning")
+@pytest.mark.filterwarnings("ignore::FutureWarning")
+@pytest.mark.parametrize("file", (gdatav4_raw_path, gdatav4_epo_path))
 def test_gdatav4(file):
     """Test grid data interpolation."""
     # load inputs from MATLAB
-    eeglab_gdata = loadmat(file)['gdatav4'][0, 0]
-    eeglab_inty = eeglab_gdata['inty']
-    eeglab_intx = eeglab_gdata['intx']
-    eeglab_intValues = eeglab_gdata['intValues']
-    eeglab_yi = eeglab_gdata['yi']
-    eeglab_xi = eeglab_gdata['xi']
+    eeglab_gdata = loadmat(file)["gdatav4"][0, 0]
+    eeglab_inty = eeglab_gdata["inty"]
+    eeglab_intx = eeglab_gdata["intx"]
+    eeglab_intValues = eeglab_gdata["intValues"]
+    eeglab_yi = eeglab_gdata["yi"]
+    eeglab_xi = eeglab_gdata["xi"]
 
     # compute output in Python
-    Xi, Yi, Zi = gdatav4(eeglab_intx, eeglab_inty, eeglab_intValues, eeglab_xi, eeglab_yi)
+    Xi, Yi, Zi = gdatav4(
+        eeglab_intx, eeglab_inty, eeglab_intValues, eeglab_xi, eeglab_yi
+    )
 
     # load outputs from MATLAB
-    eeglab_Xi = eeglab_gdata['Xi']
-    eeglab_Yi = eeglab_gdata['Yi']
-    eeglab_Zi = eeglab_gdata['Zi']
+    eeglab_Xi = eeglab_gdata["Xi"]
+    eeglab_Yi = eeglab_gdata["Yi"]
+    eeglab_Zi = eeglab_gdata["Zi"]
 
     # output in EEGLAB repeats the same vector to form a square matrix.
     # For Xi -> the row is repeated

@@ -94,11 +94,7 @@ def pol2cart(
 
 # ----------------------------------------------------------------------------
 def gdatav4(
-    x: ArrayLike,
-    y: ArrayLike,
-    v: ArrayLike,
-    xq: ArrayLike,
-    yq: ArrayLike
+    x: ArrayLike, y: ArrayLike, v: ArrayLike, xq: ArrayLike, yq: ArrayLike
 ) -> Tuple[ArrayLike, ArrayLike, ArrayLike]:
     """
     GDATAV4 MATLAB 4 GRIDDATA interpolation
@@ -136,7 +132,7 @@ def gdatav4(
     m, n = xq.shape
     vq = np.zeros(xq.shape)
 
-    # Evaluate at requested points (xq,yq).  Loop to save memory.
+    # Evaluate at requested points (xq,yq). Loop to save memory.
     for i in range(m):
         for j in range(n):
             d = np.abs(xq[i, j] + 1j * yq[i, j] - xy)

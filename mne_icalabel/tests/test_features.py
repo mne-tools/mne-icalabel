@@ -103,6 +103,13 @@ kwargs = {'raw': dict(preload=True), 'epo': dict()}
 
 
 # ----------------------------------------------------------------------------
+def test_get_features():
+    """Test that we get the correct set of features. Corresponds to the output
+    from 'ICL_feature_extractor.m'."""
+    pass
+
+
+# ----------------------------------------------------------------------------
 @pytest.mark.parametrize('file', (raw_eeglab_path, epo_eeglab_path))
 def test_retrieve_eeglab_icawinv(file):
     """Test that the icawinv is correctly retrieved from an MNE ICA object."""

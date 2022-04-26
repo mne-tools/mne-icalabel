@@ -39,7 +39,12 @@ def get_features(inst: Union[BaseRaw, BaseEpochs], ica: ICA):
     else:
         autocorr = eeg_autocorr_fftw(inst, ica, icaact)
 
-    # TODO: format with the 0.99 multiplication
+    # scale by 0.99
+    topo *= 0.99
+    psd *= 0.99
+    autocorr *= 0.99
+
+    return topo, psd, autocorr
 
 
 def retrieve_eeglab_icawinv(

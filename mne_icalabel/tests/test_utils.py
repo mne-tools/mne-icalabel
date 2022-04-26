@@ -2,6 +2,7 @@ try:
     from importlib.resources import files
 except ImportError:
     from importlib_resources import files
+from pathlib import Path
 
 from mne import read_epochs_eeglab
 from mne.io import read_raw
@@ -34,24 +35,21 @@ gdatav4_epo_path = str(
 )
 
 
-def test_loc():
+# General readers
+reader = {'raw': read_raw, 'epo': read_epochs_eeglab}
+kwargs = {'raw': dict(preload=True), 'epo': dict()}
+
+
+@pytest.mark.parametrize("file, eeglab_result_file", [(raw_eeglab_path, loc_raw_path), (epo_eeglab_path, loc_epo_path)])
+def test_loc(file, eeglab_result_file):
     """Test conversion of MNE montage to EEGLAB loc.
 
     This test works because MNE does the conversion from EEGLAB to MNE montage
     when loading the datasets."""
-    # from raw
-    raw = read_raw(raw_eeglab_path, preload=True)
-    rd, th = mne_to_eeglab_locs(raw)
-    eeglab_loc = loadmat(loc_raw_path)["loc"][0, 0]
-    eeglab_rd = eeglab_loc["rd"]
-    eeglab_th = eeglab_loc["th"]
-    assert np.allclose(rd, eeglab_rd, atol=1e-8)
-    assert np.allclose(th, eeglab_th, atol=1e-8)
-
-    # from epochs
-    epochs = read_epochs_eeglab(epo_eeglab_path)
-    rd, th = mne_to_eeglab_locs(epochs)
-    eeglab_loc = loadmat(loc_epo_path)["loc"][0, 0]
+    type_ = str(Path(file).stem)[-3:]
+    inst = reader[type_](file, **kwargs[type_])
+    rd, th = mne_to_eeglab_locs(inst)
+    eeglab_loc = loadmat(eeglab_result_file)["loc"][0, 0]
     eeglab_rd = eeglab_loc["rd"]
     eeglab_th = eeglab_loc["th"]
     assert np.allclose(rd, eeglab_rd, atol=1e-8)

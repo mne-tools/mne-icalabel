@@ -7,7 +7,7 @@ import numpy as np
 from numpy.typing import NDArray
 from scipy.signal import resample_poly
 
-from .utils import pol2cart, mne_to_eeglab_locs
+from .utils import pol2cart, mne_to_eeglab_locs, gdatav4
 
 
 def get_features(inst: Union[BaseRaw, BaseEpochs], ica: ICA):
@@ -104,6 +104,7 @@ def eeg_topoplot(
     inst: Union[BaseRaw, BaseEpochs], icawinv: NDArray[float]
 ) -> NDArray[float]:
     """Topoplot feature."""
+    # TODO: Selection of channels is missing.
     ncomp = icawinv.shape[-1]
     topo = np.zeros((32, 32, 1, ncomp))
     rd, th = mne_to_eeglab_locs(inst)
@@ -116,12 +117,59 @@ def eeg_topoplot(
 
 
 def _topoplotFast(
-    icawinv: NDArray[float], rd: NDArray[float], th: NDArray[float]
+    values: NDArray[float], rd: NDArray[float], th: NDArray[float]
 ) -> NDArray[float]:
     """Implements topoplotFast.m from MATLAB. Each topographic map is a 32x32
     images."""
-    # Convert electrode locations from polar to cartesian coordinates
+    # constants
+    GRID_SCALE = 32  # number of pixels
+    rmax = 0.5  # actual head radius
+
+    # convert electrode locations from polar to cartesian coordinates
     x, y = pol2cart(th, rd)
+
+    # prepare coordinates
+    # Comments in MATLAB (L750:753) are:
+    #   default: just outside the outermost electrode location
+    #   default: plot out to the 0.5 head boundary
+    #   don't plot channels with Rd > 1 (below head)
+    plotrad = min(1, np.max(rd) * 1.02)
+    plotrad = max(plotrad, 0.5)
+
+    # TODO: Selection of channels.
+    # For interpolation, only the channels inside the interpolation square are
+    # considered. c.f. L839:843.
+
+    # Squeeze channel location to <= rmax
+    # Comments in MATLAB (L894:908)
+    #   squeeze electrode arc_lengths towards the vertex to plot all inside the
+    #   head cartoon
+    squeezefac = rmax / plotrad
+    rd *= squeezefac
+    x *= squeezefac
+    y *= squeezefac
+    # convert to float63
+    x = x.astype(np.float64)
+    y = y.astype(np.float64)
+
+    # Find limits for interpolation
+    xmin = min(-rmax, np.min(x))
+    xmax = max(rmax, np.max(x))
+    ymin = min(-rmax, np.min(y))
+    ymax = max(rmax, np.max(y))
+
+    # Interpolate scalp map data
+    xi = np.linspace(xmin, xmax, GRID_SCALE).astype(np.float64).reshape((1, -1))
+    yi = np.linspace(ymin, ymax, GRID_SCALE).astype(np.float64).reshape((1, -1))
+    # additional step for gdatav4 compared to MATLAB
+    XQ, YQ = np.meshgrid(xi, yi)
+    Xi, Yi, Zi = gdatav4(x, y, values.reshape((-1, 1)), XQ, YQ)
+
+    # Mask out data outside the head
+    mask = np.sqrt(np.power(Xi, 2) + np.power(Yi, 2)) <= rmax
+    Zi[~mask] = np.nan
+
+    return Zi
 
 
 # ----------------------------------------------------------------------------

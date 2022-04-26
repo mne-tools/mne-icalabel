@@ -101,5 +101,5 @@ def test_gdatav4(file):
     # compare
     assert np.allclose(Xi, eeglab_Xi, atol=1e-8)
     assert np.allclose(Yi, eeglab_Yi, atol=1e-8)
-    assert np.allclose(Zi, eeglab_Zi, atol=1e-8)
-    # Zi are very different.
+    # Zi has to be transposed in Python
+    assert np.allclose(Zi.T, eeglab_Zi, atol=1e-8)

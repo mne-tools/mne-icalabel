@@ -13,6 +13,7 @@ from scipy.io import loadmat
 from mne_icalabel.features import (
     retrieve_eeglab_icawinv,
     compute_ica_activations,
+    _topoplotFast,
     _next_power_of_2,
     _eeg_rpsd_constants,
     _eeg_rpsd_compute_psdmed,
@@ -21,6 +22,7 @@ from mne_icalabel.features import (
     eeg_autocorr,
     eeg_autocorr_fftw,
 )
+from mne_icalabel.utils import mne_to_eeglab_locs
 
 
 # Raw/Epochs files with ICA decomposition
@@ -46,7 +48,9 @@ epo_icaact_eeglab_path = str(
 )
 
 # Topography
-
+raw_topo1_path = str(
+    files("mne_icalabel.tests").joinpath("data/topo/topo1-raw.mat")
+)
 
 # PSD
 psd_constants_raw_path = str(
@@ -122,6 +126,21 @@ def test_compute_ica_activations():
 
 
 # ----------------------------------------------------------------------------
+def test_topoplotFast():
+    """Test topoplotFast on a single component."""
+    raw = read_raw(raw_eeglab_path, preload=True)
+    ica = read_ica_eeglab(raw_eeglab_path)
+    # convert coordinates
+    rd, th = mne_to_eeglab_locs(raw)
+    th = np.pi / 180 * th
+    # get icawinv
+    icawinv, _ = retrieve_eeglab_icawinv(ica)
+    # compute topo feature for the first component
+    topo1 = _topoplotFast(icawinv[:, 0], rd, th)
+    # load from eeglab
+    topo1_eeglab = loadmat(raw_topo1_path)['topo1']
+    # convert nan to num
+    assert np.allclose(topo1, topo1_eeglab, atol=1e-8, equal_nan=True)
 
 
 # ----------------------------------------------------------------------------

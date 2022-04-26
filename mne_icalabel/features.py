@@ -164,6 +164,8 @@ def _topoplotFast(
     # additional step for gdatav4 compared to MATLAB
     XQ, YQ = np.meshgrid(xi, yi)
     Xi, Yi, Zi = gdatav4(x, y, values.reshape((-1, 1)), XQ, YQ)
+    # additional step for gdatav4 compared to MATLAB: tranpose
+    Zi = Zi.T
 
     # Mask out data outside the head
     mask = np.sqrt(np.power(Xi, 2) + np.power(Yi, 2)) <= rmax

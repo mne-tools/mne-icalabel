@@ -64,6 +64,7 @@ def test_loc():
 @pytest.mark.parametrize("file", (gdatav4_raw_path, gdatav4_epo_path))
 def test_gdatav4(file):
     """Test grid data interpolation."""
+    # ------------------------- Test without meshgrid ------------------------
     # load inputs from MATLAB
     eeglab_gdata = loadmat(file)["gdatav4"][0, 0]
     eeglab_inty = eeglab_gdata["inty"]
@@ -89,3 +90,16 @@ def test_gdatav4(file):
     assert np.allclose(eeglab_Xi, np.tile(Xi, (Xi.size, 1)), atol=1e-8)
     assert np.allclose(eeglab_Yi, np.tile(Yi.T, Yi.size), atol=1e-8)
     assert np.allclose(np.diagonal(eeglab_Zi), Zi, atol=1e-8)
+
+    # --------------------------- Test with meshgrid -------------------------
+    # create mesh
+    xq, yq = np.meshgrid(eeglab_xi, eeglab_yi)
+
+    # compute output in Python
+    Xi, Yi, Zi = gdatav4(eeglab_intx, eeglab_inty, eeglab_intValues, xq, yq)
+
+    # compare
+    assert np.allclose(Xi, eeglab_Xi, atol=1e-8)
+    assert np.allclose(Yi, eeglab_Yi, atol=1e-8)
+    assert np.allclose(Zi, eeglab_Zi, atol=1e-8)
+    # Zi are very different.

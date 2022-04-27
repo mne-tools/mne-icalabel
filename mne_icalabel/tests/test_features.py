@@ -15,6 +15,7 @@ import pytest
 from mne_icalabel.features import (
     retrieve_eeglab_icawinv,
     compute_ica_activations,
+    get_features,
     eeg_topoplot,
     _topoplotFast,
     _next_power_of_2,
@@ -96,6 +97,14 @@ autocorr_epo_path = str(
     files("mne_icalabel.tests").joinpath("data/autocorr/autocorr-epo.mat")
 )
 
+# Complete features
+features_raw_path = str(
+    files("mne_icalabel.tests").joinpath("data/features/features-raw.mat")
+)
+features_epo_path = str(
+    files("mne_icalabel.tests").joinpath("data/features/features-epo.mat")
+)
+
 
 # General readers
 reader = {"raw": read_raw, "epo": read_epochs_eeglab}
@@ -103,10 +112,50 @@ kwargs = {"raw": dict(preload=True), "epo": dict()}
 
 
 # ----------------------------------------------------------------------------
-def test_get_features():
-    """Test that we get the correct set of features. Corresponds to the output
-    from 'ICL_feature_extractor.m'."""
-    pass
+@pytest.mark.filterwarnings("ignore::RuntimeWarning")
+@pytest.mark.filterwarnings("ignore::FutureWarning")
+@pytest.mark.filterwarnings("ignore::numpy.ComplexWarning")
+@pytest.mark.parametrize(
+    "file, psd_constant_file, eeglab_feature_file",
+    [(raw_eeglab_path, psd_constants_raw_path, features_raw_path),
+     (epo_eeglab_path, psd_constants_epo_path, features_epo_path)],
+)
+def test_get_features(file, psd_constant_file, eeglab_feature_file):
+    """Test that we get the correct set of features from an MNE instance.
+    Corresponds to the output from 'ICL_feature_extractor.m'."""
+    type_ = str(Path(file).stem)[-3:]
+    inst = reader[type_](file, **kwargs[type_])
+    ica = read_ica_eeglab(file)
+
+    # Retrieve topo and autocorr
+    topo, _, autocorr = get_features(inst, ica)
+
+    # Build PSD feature manually to match the subset
+    # retrieve activation
+    icaact = compute_ica_activations(inst, ica)
+    # retrieve subset from eeglab
+    constants_eeglab = loadmat(psd_constant_file)["constants"][0, 0]
+    assert constants_eeglab["subset"].shape[0] == 1
+    subset_eeglab = constants_eeglab["subset"][0, :] - 1
+    # retrieve constants from python
+    ncomp, nfreqs, n_points, nyquist, index, window, _ = _eeg_rpsd_constants(inst, ica)
+    # compute psd
+    psdmed = _eeg_rpsd_compute_psdmed(
+        inst, icaact, ncomp, nfreqs, n_points, nyquist, index, window, subset_eeglab
+    )
+    psd = _eeg_rpsd_format(psdmed)
+    psd *= 0.99
+
+    # Compare with MATLAB
+    features_eeglab = loadmat(eeglab_feature_file)['features']
+    topo_eeglab = features_eeglab[0, 0]
+    psd_eeglab = features_eeglab[0, 1]
+    autocorr_eeglab = features_eeglab[0, 2]
+    assert np.allclose(topo, topo_eeglab)
+    assert np.allclose(psd, psd_eeglab, atol=1e-6)
+    # the autocorr for epoch does not have the same tolerance
+    atol = 1e-8 if type_ == 'raw' else 1e-4
+    assert np.allclose(autocorr, autocorr_eeglab, atol=atol)
 
 
 # ----------------------------------------------------------------------------

@@ -9,8 +9,7 @@ import numpy as np
 from scipy.io import loadmat
 import torch
 
-from mne_icalabel.ica_label import ica_eeg_features
-from mne_icalabel.ica_net import ICLabelNet, run_iclabel
+from mne_icalabel.network import ICLabelNet, run_iclabel
 
 
 # Network weights
@@ -126,23 +125,6 @@ def test_network_outputs():
     assert np.allclose(matlab_labels, torch_labels, rtol=1e-5, atol=1e-5)
 
 
-def test_labels():
-    """Test that the ICLabel network in python and matlab outputs the same
-    labels for a common ICA decomposition.
-
-    Notes
-    -----
-    The raw and its ICA decomposition have been obtained in EEGLAB from one of
-    its sample dataset.
-    The corresponding MATLAB code can be found in 'data/sample.txt'.
-    """
-    raw = read_raw(raw_eeglab_path, preload=True)
-    ica = read_ica_eeglab(raw_eeglab_path)
-
-    features = ica_eeg_features(raw, ica)
-    # TODO: Feature extraction is failing for now. To be completed when feature
-    # extraction is fully tested.
-    topo = features[0].astype(np.float32)
-    psds = features[1].astype(np.float32)
-    autocorr = features[2].astype(np.float32)
-    labels = run_iclabel(topo, psds, autocorr)
+def test_format_input():
+    """Test formatting of input feature before feeding them to the network."""
+    pass

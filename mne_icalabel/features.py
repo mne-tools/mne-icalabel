@@ -407,7 +407,7 @@ def eeg_autocorr_welch(
     # resample to 1 second at 100 samples/sec
     resamp = resample_poly(ac.T, 100, raw.info["sfreq"]).T
     resamp = resamp[:, 1:, np.newaxis, np.newaxis].transpose([2, 1, 3, 0])
-    return resamp.astype(np.float32)
+    return np.real(resamp).astype(np.float32)
 
 
 def eeg_autocorr(raw: BaseRaw, ica: ICA, icaact: NDArray[float]) -> NDArray[float]:
@@ -427,7 +427,7 @@ def eeg_autocorr(raw: BaseRaw, ica: ICA, icaact: NDArray[float]) -> NDArray[floa
         # for a case where epochs are provided, which never happens with this
         # autocorrelation function.
         x = np.power(np.abs(np.fft.fft(icaact[it, :], n=nfft)), 2)
-        c[it, :] = np.fft.ifft(x)
+        c[it, :] = np.real(np.fft.ifft(x))
 
     if raw.times.size < raw.info["sfreq"]:
         zeros = np.zeros((c.shape[0], int(raw.info["sfreq"]) - raw.times.size + 1))
@@ -476,4 +476,4 @@ def eeg_autocorr_fftw(
     # resample to 1 second at 100 samples/sec
     resamp = resample_poly(ac.T, 100, epochs.info["sfreq"]).T
     resamp = resamp[:, 1:, np.newaxis, np.newaxis].transpose([2, 1, 3, 0])
-    return resamp.astype(np.float32)
+    return np.real(resamp).astype(np.float32)

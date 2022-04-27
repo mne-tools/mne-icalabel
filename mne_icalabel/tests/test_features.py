@@ -114,7 +114,6 @@ kwargs = {"raw": dict(preload=True), "epo": dict()}
 # ----------------------------------------------------------------------------
 @pytest.mark.filterwarnings("ignore::RuntimeWarning")
 @pytest.mark.filterwarnings("ignore::FutureWarning")
-@pytest.mark.filterwarnings("ignore::numpy.ComplexWarning")
 @pytest.mark.parametrize(
     "file, psd_constant_file, eeglab_feature_file",
     [(raw_eeglab_path, psd_constants_raw_path, features_raw_path),
@@ -436,8 +435,6 @@ def test_next_power_of_2():
         assert exp == val
 
 
-# TODO: Fix warning.
-@pytest.mark.filterwarnings("ignore::numpy.ComplexWarning")
 def test_eeg_autocorr_welch():
     """Test eeg_autocorr_welch feature used on long raw datasets."""
     raw = read_raw(raw_eeglab_path, preload=True)
@@ -449,8 +446,6 @@ def test_eeg_autocorr_welch():
     assert np.allclose(autocorr, autocorr_eeglab)
 
 
-# TODO: Fix warning.
-@pytest.mark.filterwarnings("ignore::numpy.ComplexWarning")
 def test_eeg_autocorr():
     """Test eeg_autocorr feature used on short raw datasets."""
     # Raw between 1 and 5 seconds
@@ -472,8 +467,6 @@ def test_eeg_autocorr():
     assert np.allclose(autocorr, autocorr_eeglab, atol=1e-6)
 
 
-# TODO: Fix warning.
-@pytest.mark.filterwarnings("ignore::numpy.ComplexWarning")
 def test_eeg_autocorr_fftw():
     """Test eeg_autocorr_fftw feature used on epoch datasets."""
     epochs = read_epochs_eeglab(epo_eeglab_path)

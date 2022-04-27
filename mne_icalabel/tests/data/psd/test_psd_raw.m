@@ -1,6 +1,6 @@
-% The files 'constants-raw.mat', 'psdmed-raw.mat', 'psd-step-by-step-raw.mat'
-% and 'psd-raw.mat' were obtained from the sample EEGLAB dataset
-% 'sample-raw.set'.
+% The files 'constants-raw.mat', 'psdmed-raw.mat', 
+% 'psd-step-by-step-raw.mat' and 'psd-raw.mat' were obtained from the 
+% sample EEGLAB dataset 'sample-raw.set'.
 
 % 'constants-raw.mat' --------------------------
 % sha1:
@@ -26,6 +26,7 @@ EEG = eeg_checkset(EEG);
 % Calculate ICA activations
 EEG.icaact = eeg_getica(EEG);
 EEG.icaact = double(EEG.icaact);
+
 
 %% Calculate constants from eeg_rpsd.m
 % clean input cutoff freq
@@ -110,6 +111,7 @@ psd = bsxfun(@rdivide, psdmed, max(abs(psdmed), [], 2));
 
 % reshape and cast
 psd = single(permute(psd, [3 2 4 1]));
+
 
 %% Export psd
 save('psd-step-by-step-raw', 'psd')

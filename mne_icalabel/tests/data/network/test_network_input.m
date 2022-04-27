@@ -10,6 +10,10 @@
 EEG = pop_loadset('sample-raw.set');
 EEG = eeg_checkset(EEG);
 
+% Calculate ICA activations
+EEG.icaact = eeg_getica(EEG);
+EEG.icaact = double(EEG.icaact);
+
 % Extract features
 features = ICL_feature_extractor(EEG, true);
 images = features{1};

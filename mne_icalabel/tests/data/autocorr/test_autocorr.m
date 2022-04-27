@@ -81,8 +81,8 @@ save('autocorr-very-short-raw', 'autocorr');
 
 %% Test 'eeg_autocorr_fftw' for epoch instances
 
-% The file 'autocorr-very-short-raw.mat' was obtained by using the EEGLAB
-% sample dataset 'sample-epo.set'.
+% The file 'autocorr-epo.mat' was obtained by using the EEGLAB sample
+% dataset 'sample-epo.set'.
 
 % ----------------------------------------------
 % sha1:

@@ -2,7 +2,8 @@
 
 % The file 'sample-raw.set' was obtained by using the sample EEGLAB
 % dataset. The EOG channels have been dropped and the dataset has been
-% cropped between 0 and 10 seconds.
+% cropped between 0 and 10 seconds. Before computing ICA, the data has
+% been re-referenced to a common average.
 
 % ----------------------------------------------
 % sha1:
@@ -16,6 +17,9 @@ EEG = eeg_checkset(EEG);
 % Drop non-EEG channel and crop dataset
 idx = eeg_chaninds(EEG, {'EOG1', 'EOG2'});
 EEG = pop_select(EEG, 'nochannel', idx, 'time', [0, 10]);
+
+% Reref to CAR
+EEG = pop_reref(EEG, []);
 
 % Run ICA
 EEG = pop_runica(EEG, 'icatype', 'runica', 'extended', 1, 'interrupt', 'off');
@@ -39,7 +43,8 @@ ica = read_ica_eeglab(fname)
 
 % The file 'sample-raw.set' was obtained by using the sample EEGLAB
 % dataset. The EOG channels have been dropped and the dataset has been
-% cropped between 0 and 10 seconds.
+% cropped between 0 and 10 seconds. Before computing ICA, the data has
+% been re-referenced to a common average.
 
 % ----------------------------------------------
 % sha1:
@@ -53,6 +58,9 @@ EEG = eeg_checkset(EEG);
 % Drop non-EEG channel and crop dataset
 idx = eeg_chaninds(EEG, {'EOG1', 'EOG2'});
 EEG = pop_select(EEG, 'nochannel', idx, 'time', [0, 3]);
+
+% Reref to CAR
+EEG = pop_reref(EEG, []);
 
 % Run ICA
 EEG = pop_runica(EEG, 'icatype', 'runica', 'extended', 1, 'interrupt', 'off');
@@ -76,7 +84,8 @@ ica = read_ica_eeglab(fname)
 
 % The file 'sample-raw.set' was obtained by using the sample EEGLAB
 % dataset. The EOG channels have been dropped and the dataset has been
-% cropped between 0 and 10 seconds.
+% cropped between 0 and 10 seconds. Before computing ICA, the data has
+% been re-referenced to a common average.
 
 % ----------------------------------------------
 % sha1:
@@ -90,6 +99,9 @@ EEG = eeg_checkset(EEG);
 % Drop non-EEG channel and crop dataset
 idx = eeg_chaninds(EEG, {'EOG1', 'EOG2'});
 EEG = pop_select(EEG, 'nochannel', idx, 'time', [0, 0.5]);
+
+% Reref to CAR
+EEG = pop_reref(EEG, []);
 
 % Run ICA
 EEG = pop_runica(EEG, 'icatype', 'runica', 'extended', 1, 'interrupt', 'off');
@@ -114,6 +126,8 @@ ica = read_ica_eeglab(fname)
 % The file 'sample-epo.set' was obtained by using the sample EEGLAB
 % dataset. The EOG channels have been dropped and the dataset has been
 % cropped by selecting the 3 first 'rt' epochs with [tmin=0, tmax=1] (s).
+% Before computing ICA, the data has been re-referenced to a common 
+% average.
 
 % ----------------------------------------------
 % sha1:
@@ -131,6 +145,9 @@ EEG = pop_epoch(EEG, {'rt'}, [0, 1]);
 % Drop non-EEG channel and crop dataset
 idx = eeg_chaninds(EEG, {'EOG1', 'EOG2'});
 EEG = pop_select(EEG, 'nochannel', idx, 'trial', [1, 2, 3]);
+
+% Reref to CAR
+EEG = pop_reref(EEG, []);
 
 % Run ICA
 EEG = pop_runica(EEG, 'icatype', 'runica', 'extended', 1, 'interrupt', 'off');

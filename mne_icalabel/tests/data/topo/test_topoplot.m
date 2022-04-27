@@ -7,13 +7,8 @@
 % sha1:
 % ----------------------------------------------
 
-% Load
 EEG = pop_loadset('sample-raw.set');
 EEG = eeg_checkset(EEG);
-
-% Calculate ICA activations
-EEG.icaact = eeg_getica(EEG);
-EEG.icaact = double(EEG.icaact);
 
 it = 1;
 Values = EEG.icawinv(:, it);
@@ -36,10 +31,6 @@ save('topo1-raw', 'topo1')
 EEG = pop_loadset('sample-epo.set');
 EEG = eeg_checkset(EEG);
 
-% Calculate ICA activations
-EEG.icaact = eeg_getica(EEG);
-EEG.icaact = double(EEG.icaact);
-
 it = 1;
 Values = EEG.icawinv(:, it);
 loc_file = EEG.chanlocs(EEG.icachansind);
@@ -60,10 +51,6 @@ save('topo1-epo', 'topo1')
 % Load
 EEG = pop_loadset('sample-raw.set');
 EEG = eeg_checkset(EEG);
-
-% Calculate ICA activations
-EEG.icaact = eeg_getica(EEG);
-EEG.icaact = double(EEG.icaact);
 
 % Compute topographic feature
 ncomp = size(EEG.icawinv, 2);
@@ -95,10 +82,6 @@ save('topo-feature-raw', 'topo')
 % Load
 EEG = pop_loadset('sample-epo.set');
 EEG = eeg_checkset(EEG);
-
-% Calculate ICA activations
-EEG.icaact = eeg_getica(EEG);
-EEG.icaact = double(EEG.icaact);
 
 % Compute topographic feature
 ncomp = size(EEG.icawinv, 2);

@@ -11,7 +11,8 @@
 %         'Xi', Xi, ...
 %         'Yi', Yi, ...
 %         'Zi', Zi);
-%     save('gdatav4-raw', 'gdatav4');
+%     save('gdatav4-***', 'gdatav4');
+
 
 %% RAW
 
@@ -19,18 +20,14 @@
 % sha1:
 % ----------------------------------------------
 
-% Load
 EEG = pop_loadset('sample-raw.set');
 EEG = eeg_checkset(EEG);
-
-% Calculate ICA activations
-EEG.icaact = eeg_getica(EEG);
-EEG.icaact = double(EEG.icaact);
 
 it = 1;
 Values = EEG.icawinv(:, it);
 loc_file = EEG.chanlocs(EEG.icachansind);
 [~, temp_topo, ~] = topoplotFast(Values, loc_file, 'noplot', 'on');
+
 
 %% EPOCHS
 
@@ -38,13 +35,8 @@ loc_file = EEG.chanlocs(EEG.icachansind);
 % sha1:
 % ----------------------------------------------
 
-% Load
 EEG = pop_loadset('sample-epo.set');
 EEG = eeg_checkset(EEG);
-
-% Calculate ICA activations
-EEG.icaact = eeg_getica(EEG);
-EEG.icaact = double(EEG.icaact);
 
 it = 1;
 Values = EEG.icawinv(:, it);

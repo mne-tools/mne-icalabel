@@ -18,8 +18,8 @@ EEG = eeg_checkset(EEG);
 idx = eeg_chaninds(EEG, {'EOG1', 'EOG2'});
 EEG = pop_select(EEG, 'nochannel', idx, 'time', [0, 10]);
 
-% Reref to CAR
-EEG = pop_reref(EEG, []);
+% Change .ref field from 'common' to 'averef' to skip buggy 'pop_reref.m'
+EEG.ref = 'averef';
 
 % Run ICA
 EEG = pop_runica(EEG, 'icatype', 'runica', 'extended', 1, 'interrupt', 'off');
@@ -59,8 +59,8 @@ EEG = eeg_checkset(EEG);
 idx = eeg_chaninds(EEG, {'EOG1', 'EOG2'});
 EEG = pop_select(EEG, 'nochannel', idx, 'time', [0, 3]);
 
-% Reref to CAR
-EEG = pop_reref(EEG, []);
+% Change .ref field from 'common' to 'averef' to skip buggy 'pop_reref.m'
+EEG.ref = 'averef';
 
 % Run ICA
 EEG = pop_runica(EEG, 'icatype', 'runica', 'extended', 1, 'interrupt', 'off');
@@ -100,8 +100,8 @@ EEG = eeg_checkset(EEG);
 idx = eeg_chaninds(EEG, {'EOG1', 'EOG2'});
 EEG = pop_select(EEG, 'nochannel', idx, 'time', [0, 0.5]);
 
-% Reref to CAR
-EEG = pop_reref(EEG, []);
+% Change .ref field from 'common' to 'averef' to skip buggy 'pop_reref.m'
+EEG.ref = 'averef';
 
 % Run ICA
 EEG = pop_runica(EEG, 'icatype', 'runica', 'extended', 1, 'interrupt', 'off');
@@ -146,8 +146,8 @@ EEG = pop_epoch(EEG, {'rt'}, [0, 1]);
 idx = eeg_chaninds(EEG, {'EOG1', 'EOG2'});
 EEG = pop_select(EEG, 'nochannel', idx, 'trial', [1, 2, 3]);
 
-% Reref to CAR
-EEG = pop_reref(EEG, []);
+% Change .ref field from 'common' to 'averef' to skip buggy 'pop_reref.m'
+EEG.ref = 'averef';
 
 % Run ICA
 EEG = pop_runica(EEG, 'icatype', 'runica', 'extended', 1, 'interrupt', 'off');

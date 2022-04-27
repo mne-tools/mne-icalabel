@@ -162,7 +162,7 @@ def test_topoplotFast(file, eeglab_result_file):
     # load from eeglab
     topo1_eeglab = loadmat(eeglab_result_file)["topo1"]
     # convert nan to num
-    assert np.allclose(topo1, topo1_eeglab, atol=1e-8, equal_nan=True)
+    assert np.allclose(topo1, topo1_eeglab, equal_nan=True)
 
 
 @pytest.mark.filterwarnings("ignore::RuntimeWarning")
@@ -188,7 +188,7 @@ def test_eeg_topoplot(file, eeglab_result_file):
     # load from eeglab
     topo_eeglab = loadmat(eeglab_result_file)["topo"]
     # compare
-    assert np.allclose(topo, topo_eeglab, atol=1e-4, equal_nan=True)
+    assert np.allclose(topo, topo_eeglab, equal_nan=True)
 
 
 # ----------------------------------------------------------------------------
@@ -278,7 +278,7 @@ def test_eeg_rpsd_compute_psdmed():
     )
 
     psdmed_eeglab = loadmat(psd_psdmed_raw_path)["psdmed"]
-    assert np.allclose(psdmed, psdmed_eeglab, atol=1e-4)
+    assert np.allclose(psdmed, psdmed_eeglab, atol=1e-5)
 
     # Epochs -----------------------------------------------------------------
     epochs = read_epochs_eeglab(epo_eeglab_path)
@@ -301,9 +301,7 @@ def test_eeg_rpsd_compute_psdmed():
     )
 
     psdmed_eeglab = loadmat(psd_psdmed_epo_path)["psdmed"]
-    assert np.allclose(psdmed, psdmed_eeglab, atol=5e-2)
-    # TODO: investigate why the tolerance had to be brought this high for this
-    # particular case.
+    assert np.allclose(psdmed, psdmed_eeglab, atol=1e-5)
 
 
 def test_eeg_rpsd():
@@ -340,7 +338,7 @@ def test_eeg_rpsd():
 
     # format and compare
     psd = _eeg_rpsd_format(psdmed)
-    assert np.allclose(psd, psd_eeglab, atol=1e-4)
+    assert np.allclose(psd, psd_eeglab, atol=1e-5)
 
     # Epochs -----------------------------------------------------------------
     # Compare that both MATLAB files are identical (since rng('default') was
@@ -399,7 +397,7 @@ def test_eeg_autocorr_welch():
     autocorr = eeg_autocorr_welch(raw, ica, icaact)
 
     autocorr_eeglab = loadmat(autocorr_raw_path)["autocorr"]
-    assert np.allclose(autocorr, autocorr_eeglab, atol=1e-4)
+    assert np.allclose(autocorr, autocorr_eeglab)
 
 
 # TODO: Fix warning.
@@ -413,7 +411,7 @@ def test_eeg_autocorr():
     autocorr = eeg_autocorr(raw, ica, icaact)
 
     autocorr_eeglab = loadmat(autocorr_short_raw_path)["autocorr"]
-    assert np.allclose(autocorr, autocorr_eeglab, atol=1e-4)
+    assert np.allclose(autocorr, autocorr_eeglab, atol=1e-7)
 
     # Raw shorter than 1 second
     raw = read_raw(raw_very_short_eeglab_path, preload=True)
@@ -422,7 +420,7 @@ def test_eeg_autocorr():
     autocorr = eeg_autocorr(raw, ica, icaact)
 
     autocorr_eeglab = loadmat(autocorr_very_short_raw_path)["autocorr"]
-    assert np.allclose(autocorr, autocorr_eeglab, atol=1e-4)
+    assert np.allclose(autocorr, autocorr_eeglab, atol=1e-6)
 
 
 # TODO: Fix warning.
@@ -435,4 +433,4 @@ def test_eeg_autocorr_fftw():
     autocorr = eeg_autocorr_fftw(epochs, ica, icaact)
 
     autocorr_eeglab = loadmat(autocorr_epo_path)["autocorr"]
-    assert np.allclose(autocorr, autocorr_eeglab, atol=1e-4)
+    assert np.allclose(autocorr, autocorr_eeglab, atol=1e-7)

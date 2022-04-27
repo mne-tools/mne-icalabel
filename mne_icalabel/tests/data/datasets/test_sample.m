@@ -6,7 +6,7 @@
 % been re-referenced to a common average.
 
 % ----------------------------------------------
-% sha1:
+% sha1: 1137c8156c92427e4eac3420561f4226c7d1a9ab
 % ----------------------------------------------
 
 % Load
@@ -47,7 +47,7 @@ ica = read_ica_eeglab(fname)
 % been re-referenced to a common average.
 
 % ----------------------------------------------
-% sha1:
+% sha1: 71c05706ac5531ae19fbc0235ddd71e089d8e82b
 % ----------------------------------------------
 
 % Load
@@ -88,7 +88,7 @@ ica = read_ica_eeglab(fname)
 % been re-referenced to a common average.
 
 % ----------------------------------------------
-% sha1:
+% sha1: 5a65b589530af23c6db598627e552567440bdb2c
 % ----------------------------------------------
 
 % Load
@@ -126,11 +126,11 @@ ica = read_ica_eeglab(fname)
 % The file 'sample-epo.set' was obtained by using the sample EEGLAB
 % dataset. The EOG channels have been dropped and the dataset has been
 % cropped by selecting the 3 first 'rt' epochs with [tmin=0, tmax=1] (s).
-% Before computing ICA, the data has been re-referenced to a common 
+% Before computing ICA, the data has been re-referenced to a common
 % average.
 
 % ----------------------------------------------
-% sha1:
+% sha1: 92aa789f6012b3b58ba7dd5be3a99d0a99e9c6e5
 % ----------------------------------------------
 
 % Load

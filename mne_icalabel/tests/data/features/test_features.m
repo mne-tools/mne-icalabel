@@ -1,10 +1,14 @@
 %% RAW
 
-% The files 'features-raw.mat' and 'feature-formatted-raw' were obtained 
+% The files 'features-raw.mat' and 'feature-formatted-raw' were obtained
 % from the ICA decomposition in the 'sample-raw.set' dataset.
 
+% 'features-raw' -------------------------------
+% sha1: cb5ce64a66b13bc8a8535b5108a0a11b74403e36
 % ----------------------------------------------
-% sha1:
+
+% 'features-formatted-raw' ---------------------
+% sha1: 721412c67aa98d8b8505edd4a48d7fda80edf8a5
 % ----------------------------------------------
 
 EEG = pop_loadset('sample-raw.set');
@@ -27,11 +31,15 @@ save('features-formatted-raw', 'features')
 
 %% EPOCHS
 
-% The files 'features-epo.mat' and 'feature-formatted-epo' were obtained 
+% The files 'features-epo.mat' and 'feature-formatted-epo' were obtained
 % from the ICA decomposition in the 'sample-epo.set' dataset.
 
+% 'features-epo' -------------------------------
+% sha1: 487e3f0c24f67fb59554c452a5a809128d3d23bc
 % ----------------------------------------------
-% sha1:
+
+% 'features-formatted-epo' ---------------------
+% sha1: 2d5f240819007df1d7d228f0065d69e6b3739a68
 % ----------------------------------------------
 
 EEG = pop_loadset('sample-epo.set');

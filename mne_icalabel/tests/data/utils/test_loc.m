@@ -4,7 +4,7 @@
 % contains the 'th' and 'rd' electrode coordinates.
 
 % ----------------------------------------------
-% sha1:
+% sha1: 3c1cce887f635102c576e2d282d353c3686861c9
 % ----------------------------------------------
 
 EEG = pop_loadset('sample-raw.set');
@@ -25,7 +25,7 @@ save('loc-raw', 'loc');
 % contains the 'th' and 'rd' electrode coordinates.
 
 % ----------------------------------------------
-% sha1:
+% sha1: 3c1cce887f635102c576e2d282d353c3686861c9
 % ----------------------------------------------
 
 EEG = pop_loadset('sample-epo.set');

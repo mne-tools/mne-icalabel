@@ -17,7 +17,7 @@
 %% RAW
 
 % ----------------------------------------------
-% sha1:
+% sha1: e2ccab702a0a752cd6e6dc69ff3af50dc499daf8
 % ----------------------------------------------
 
 EEG = pop_loadset('sample-raw.set');
@@ -32,7 +32,7 @@ loc_file = EEG.chanlocs(EEG.icachansind);
 %% EPOCHS
 
 % ----------------------------------------------
-% sha1:
+% sha1: 8f7a2327e81d182d2aff92ccce36cb790fa1bf1e
 % ----------------------------------------------
 
 EEG = pop_loadset('sample-epo.set');

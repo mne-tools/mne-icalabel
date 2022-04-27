@@ -3,7 +3,7 @@
 % features were extracted from the 'sample-raw.set' dataset.
 
 % ----------------------------------------------
-% sha1:
+% sha1: f157823dc75cf656c89dd082a9efc83c270bcee7
 % ----------------------------------------------
 
 % Load

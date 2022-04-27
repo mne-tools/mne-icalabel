@@ -92,6 +92,20 @@ def compute_ica_activations(
     icaact : array
         raw: (n_components, n_samples)
         epoch: (n_components, n_samples, n_trials)
+
+    Notes
+    -----
+    In EEGLAB, the ICA activation are computed after the data and the ICA
+    decomposition are re-referenced to a common average, if the field 'EEG.ref'
+    is different from 'averef'. The EEGLAB sample dataset's field 'EEG.ref' is
+    set to 'common', thus triggering the re-referencing with 'pop_reref' which
+    seems to be buggy and breaks the ICA solution. After 'pop_reref' is called,
+    the relation 'inv(EEG.icaweights * EEG.icasphere) = EEG.icawinv' is not
+    respected anymore.
+
+    Additionnaly, 'pop_reref' changes the field 'EEG.ref' to 'average'. It is
+    assumed that 'common', 'average' and 'averef' are all denoting a common
+    average reference.
     """
     icawinv, weights = retrieve_eeglab_icawinv(ica)
     icasphere = np.eye(icawinv.shape[0])

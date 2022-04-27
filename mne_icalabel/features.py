@@ -103,7 +103,7 @@ def compute_ica_activations(
     the relation 'inv(EEG.icaweights * EEG.icasphere) = EEG.icawinv' is not
     respected anymore.
 
-    Additionnaly, 'pop_reref' changes the field 'EEG.ref' to 'average'. It is
+    Additionally, 'pop_reref' changes the field 'EEG.ref' to 'average'. It is
     assumed that 'common', 'average' and 'averef' are all denoting a common
     average reference.
     """
@@ -127,7 +127,7 @@ def eeg_topoplot(
     ncomp = icawinv.shape[-1]
     topo = np.zeros((32, 32, 1, ncomp))
     rd, th = mne_to_eeglab_locs(inst)
-    th = np.pi / 180 * th  # convert degress to radians
+    th = np.pi / 180 * th  # convert degrees to radians
     for it in range(ncomp):
         temp_topo = _topoplotFast(icawinv[:, it], rd, th)
         np.nan_to_num(temp_topo, copy=False)  # set NaN values to 0 in-place

@@ -175,24 +175,41 @@ class ICLabelNet(nn.Module):
         return labels
 
 
-def format_input(images: ArrayLike, psd: ArrayLike, autocorr: ArrayLike):
-    formatted_images = np.concatenate(
-        (images, -1 * images, np.flip(images, axis=1), np.flip(-1 * images, axis=1)),
+def format_input(topo: ArrayLike, psd: ArrayLike, autocorr: ArrayLike):
+    """Replicate the input formatting in EEGLAB -ICLabel.
+
+    .. code-block:: matlab
+
+       images = cat(4, images, -images, images(:, end:-1:1, :, :), ...
+                    -images(:, end:-1:1, :, :));
+       psds = repmat(psds, [1 1 1 4]);
+       autocorrs = repmat(autocorrs, [1 1 1 4]);
+    """
+    formatted_topo = np.concatenate(
+        (topo, -1 * topo, np.flip(topo, axis=1), np.flip(-1 * topo, axis=1)),
         axis=3,
     )
     formatted_psd = np.tile(psd, (1, 1, 1, 4))
     formatted_autocorr = np.tile(autocorr, (1, 1, 1, 4))
+    return formatted_topo, formatted_psd, formatted_autocorr
 
-    formatted_images = torch.from_numpy(np.transpose(formatted_images, (3, 2, 0, 1)))
-    formatted_psd = torch.from_numpy(np.transpose(formatted_psd, (3, 2, 0, 1)))
-    formatted_autocorr = torch.from_numpy(
-        np.transpose(formatted_autocorr, (3, 2, 0, 1))
-    )
 
-    return formatted_images, formatted_psd, formatted_autocorr
+def format_input_for_torch(topo: ArrayLike, psd: ArrayLike, autocorr: ArrayLike):
+    """Format the features to the correct shape and type for pytorch."""
+    topo = np.transpose(topo, (3, 2, 0, 1))
+    psd = np.transpose(psd, (3, 2, 0, 1))
+    autocorr = np.transpose(autocorr, (3, 2, 0, 1))
+
+    topo = torch.from_numpy(topo).float()
+    psd = torch.from_numpy(psd).float()
+    autocorr = torch.from_numpy(autocorr).float()
+
+    return topo, psd, autocorr
 
 
 def run_iclabel(images: ArrayLike, psds: ArrayLike, autocorr: ArrayLike) -> ArrayLike:
+    """Run the ICLabel network on the provided set of features. The features
+    are un-formatted and are as-returned by ``get_features``."""
     ica_network_file = files("mne_icalabel").joinpath("assets/iclabelNet.pt")
 
     # Get network and load weights
@@ -200,5 +217,5 @@ def run_iclabel(images: ArrayLike, psds: ArrayLike, autocorr: ArrayLike) -> Arra
     iclabel_net.load_state_dict(torch.load(ica_network_file))
 
     # Format input and get labels
-    labels = iclabel_net(*format_input(images, psds, autocorr))
+    labels = iclabel_net(*format_input_for_torch(*format_input(images, psds, autocorr)))
     return labels.detach().numpy()

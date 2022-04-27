@@ -3,13 +3,11 @@ try:
 except ImportError:
     from importlib_resources import files
 
-from mne.io import read_raw
-from mne.preprocessing import read_ica_eeglab
 import numpy as np
 from scipy.io import loadmat
 import torch
 
-from mne_icalabel.network import ICLabelNet, run_iclabel
+from mne_icalabel.network import ICLabelNet, format_input
 
 
 # Network weights
@@ -26,9 +24,12 @@ matconvnet_fw_output_path = str(
     files("mne_icalabel.tests").joinpath("data/network/network_output.mat")
 )
 
-# Raw files with ICA decomposition
-raw_eeglab_path = str(
-    files("mne_icalabel.tests").joinpath("data/datasets/sample-raw.set")
+# Features (similar to network_input)
+features_raw_path = str(
+    files("mne_icalabel.tests").joinpath("data/features/features-raw.mat")
+)
+features_epo_path = str(
+    files("mne_icalabel.tests").joinpath("data/features/features-epo.mat")
 )
 
 

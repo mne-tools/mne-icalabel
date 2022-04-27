@@ -116,8 +116,10 @@ kwargs = {"raw": dict(preload=True), "epo": dict()}
 @pytest.mark.filterwarnings("ignore::FutureWarning")
 @pytest.mark.parametrize(
     "file, psd_constant_file, eeglab_feature_file",
-    [(raw_eeglab_path, psd_constants_raw_path, features_raw_path),
-     (epo_eeglab_path, psd_constants_epo_path, features_epo_path)],
+    [
+        (raw_eeglab_path, psd_constants_raw_path, features_raw_path),
+        (epo_eeglab_path, psd_constants_epo_path, features_epo_path),
+    ],
 )
 def test_get_features(file, psd_constant_file, eeglab_feature_file):
     """Test that we get the correct set of features from an MNE instance.
@@ -146,14 +148,14 @@ def test_get_features(file, psd_constant_file, eeglab_feature_file):
     psd *= 0.99
 
     # Compare with MATLAB
-    features_eeglab = loadmat(eeglab_feature_file)['features']
+    features_eeglab = loadmat(eeglab_feature_file)["features"]
     topo_eeglab = features_eeglab[0, 0]
     psd_eeglab = features_eeglab[0, 1]
     autocorr_eeglab = features_eeglab[0, 2]
     assert np.allclose(topo, topo_eeglab)
     assert np.allclose(psd, psd_eeglab, atol=1e-6)
     # the autocorr for epoch does not have the same tolerance
-    atol = 1e-8 if type_ == 'raw' else 1e-4
+    atol = 1e-8 if type_ == "raw" else 1e-4
     assert np.allclose(autocorr, autocorr_eeglab, atol=atol)
 
 

@@ -145,16 +145,19 @@ def test_network_outputs():
 
 @pytest.mark.parametrize(
     "eeglab_feature_file, eeglab_feature_formatted_file",
-    [(features_raw_path, features_formatted_raw_path),
-     (features_epo_path, features_formatted_epo_path)],
+    [
+        (features_raw_path, features_formatted_raw_path),
+        (features_epo_path, features_formatted_epo_path),
+    ],
 )
 def test_format_input(eeglab_feature_file, eeglab_feature_formatted_file):
     """Test formatting of input feature before feeding them to the network."""
-    features_eeglab = loadmat(eeglab_feature_file)['features']
+    features_eeglab = loadmat(eeglab_feature_file)["features"]
     topo, psd, autocorr = format_input(
-        features_eeglab[0, 0], features_eeglab[0, 1], features_eeglab[0, 2])
+        features_eeglab[0, 0], features_eeglab[0, 1], features_eeglab[0, 2]
+    )
 
-    features_formatted_eeglab = loadmat(eeglab_feature_formatted_file)['features']
+    features_formatted_eeglab = loadmat(eeglab_feature_formatted_file)["features"]
     topo_eeglab = features_formatted_eeglab[0, 0]
     psd_eeglab = features_formatted_eeglab[0, 1]
     autocorr_eeglab = features_formatted_eeglab[0, 2]
@@ -166,18 +169,21 @@ def test_format_input(eeglab_feature_file, eeglab_feature_formatted_file):
 
 @pytest.mark.parametrize(
     "eeglab_feature_file, eeglab_output_file",
-    [(features_raw_path, iclabel_output_raw_path),
-     (features_epo_path, iclabel_output_epo_path)],
+    [
+        (features_raw_path, iclabel_output_raw_path),
+        (features_epo_path, iclabel_output_epo_path),
+    ],
 )
 def test_run_iclabel(eeglab_feature_file, eeglab_output_file):
     """Test that the network outputs the same values for the features in
     'features_raw_path' and 'features_epo_path' that contains the features
     extracted in EEGLAB. This set of feature is compared with the set of
     features retrieved in python in 'test_features.py:test_get_features'."""
-    features_eeglab = loadmat(eeglab_feature_file)['features']
+    features_eeglab = loadmat(eeglab_feature_file)["features"]
     # run the forward pass on pytorch
     labels = run_iclabel(
-        features_eeglab[0, 0], features_eeglab[0, 1], features_eeglab[0, 2])
+        features_eeglab[0, 0], features_eeglab[0, 1], features_eeglab[0, 2]
+    )
 
     # load the labels from EEGLAB
     matlab_labels = loadmat(eeglab_output_file)["labels"]  # (30, 7)

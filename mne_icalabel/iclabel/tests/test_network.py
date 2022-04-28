@@ -10,7 +10,6 @@ from scipy.io import loadmat
 
 from mne_icalabel.iclabel.network import ICLabelNet, _format_input, run_iclabel
 
-
 # Network weights
 torch_iclabel_path = str(files("mne_icalabel.iclabel").joinpath("assets/iclabelNet.pt"))
 matconvnet_iclabel_path = str(
@@ -35,14 +34,10 @@ features_epo_path = str(
 
 # Features formatted
 features_formatted_raw_path = str(
-    files("mne_icalabel.iclabel.tests").joinpath(
-        "data/features/features-formatted-raw.mat"
-    )
+    files("mne_icalabel.iclabel.tests").joinpath("data/features/features-formatted-raw.mat")
 )
 features_formatted_epo_path = str(
-    files("mne_icalabel.iclabel.tests").joinpath(
-        "data/features/features-formatted-epo.mat"
-    )
+    files("mne_icalabel.iclabel.tests").joinpath("data/features/features-formatted-epo.mat")
 )
 
 # ICLabel output

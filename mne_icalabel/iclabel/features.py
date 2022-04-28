@@ -75,10 +75,7 @@ def _retrieve_eeglab_icawinv(
     return icawinv, weights
 
 
-
-def _compute_ica_activations(
-    inst: Union[BaseRaw, BaseEpochs], ica: ICA
-) -> NDArray[float]:
+def _compute_ica_activations(inst: Union[BaseRaw, BaseEpochs], ica: ICA) -> NDArray[float]:
     """Compute the ICA activations 'icaact' variable from an MNE ICA instance.
 
     Parameters
@@ -120,9 +117,7 @@ def _compute_ica_activations(
 
 
 # ----------------------------------------------------------------------------
-def _eeg_topoplot(
-    inst: Union[BaseRaw, BaseEpochs], icawinv: NDArray[float]
-) -> NDArray[float]:
+def _eeg_topoplot(inst: Union[BaseRaw, BaseEpochs], icawinv: NDArray[float]) -> NDArray[float]:
     """Topoplot feature."""
     # TODO: Selection of channels is missing.
     ncomp = icawinv.shape[-1]
@@ -193,9 +188,7 @@ def _topoplotFast(values: NDArray[float], rd: NDArray[float], th: NDArray[float]
 
 
 # ----------------------------------------------------------------------------
-def _eeg_rpsd(
-    inst: Union[BaseRaw, BaseEpochs], ica: ICA, icaact: NDArray[float]
-) -> NDArray[float]:
+def _eeg_rpsd(inst: Union[BaseRaw, BaseEpochs], ica: ICA, icaact: NDArray[float]) -> NDArray[float]:
     """PSD feature."""
     assert isinstance(inst, (BaseRaw, BaseEpochs))  # sanity-check
     constants = _eeg_rpsd_constants(inst, ica)
@@ -323,9 +316,7 @@ def _eeg_rpsd_format(
     return psd[:, :, np.newaxis, np.newaxis].transpose([2, 1, 3, 0]).astype(np.float32)
 
 
-def _eeg_autocorr_welch(
-    raw: BaseRaw, ica: ICA, icaact: NDArray[float]
-) -> NDArray[float]:
+def _eeg_autocorr_welch(raw: BaseRaw, ica: ICA, icaact: NDArray[float]) -> NDArray[float]:
     """Autocorrelation feature applied on raw object with at least 5 * fs
     samples (5 seconds).
     MATLAB: 'eeg_autocorr_welch.m'."""
@@ -396,7 +387,7 @@ def _eeg_autocorr_welch(
     ac = np.divide(ac, den)
 
     # resample to 1 second at 100 samples/sec
-    resamp = resample_poly(ac.T, 100, np.round(raw.info['sfreq'])).T
+    resamp = resample_poly(ac.T, 100, np.round(raw.info["sfreq"])).T
     resamp = resamp[:, 1:, np.newaxis, np.newaxis].transpose([2, 1, 3, 0])
     return np.real(resamp).astype(np.float32)
 
@@ -430,14 +421,12 @@ def _eeg_autocorr(raw: BaseRaw, ica: ICA, icaact: NDArray[float]) -> NDArray[flo
     ac = np.divide(ac.T, ac[:, 0]).T
 
     # resample to 1 second at 100 samples/sec
-    resamp = resample_poly(ac.T, 100, np.round(raw.info['sfreq'])).T
+    resamp = resample_poly(ac.T, 100, np.round(raw.info["sfreq"])).T
     resamp = resamp[:, 1:, np.newaxis, np.newaxis].transpose([2, 1, 3, 0])
     return resamp.astype(np.float32)
 
 
-def _eeg_autocorr_fftw(
-    epochs: BaseEpochs, ica: ICA, icaact: NDArray[float]
-) -> NDArray[float]:
+def _eeg_autocorr_fftw(epochs: BaseEpochs, ica: ICA, icaact: NDArray[float]) -> NDArray[float]:
     """Autocorrelation feature applied on epoch object.
     MATLAB: 'eeg_autocorr_fftw.m'."""
     assert isinstance(epochs, BaseEpochs)  # sanity-check
@@ -463,6 +452,6 @@ def _eeg_autocorr_fftw(
     ac = np.divide(ac.T, ac[:, 0]).T
 
     # resample to 1 second at 100 samples/sec
-    resamp = resample_poly(ac.T, 100, np.round(epochs.info['sfreq'])).T
+    resamp = resample_poly(ac.T, 100, np.round(epochs.info["sfreq"])).T
     resamp = resamp[:, 1:, np.newaxis, np.newaxis].transpose([2, 1, 3, 0])
     return np.real(resamp).astype(np.float32)

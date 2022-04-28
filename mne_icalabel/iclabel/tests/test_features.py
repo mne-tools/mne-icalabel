@@ -13,32 +13,30 @@ from mne.io.eeglab.eeglab import _check_load_mat
 from mne.preprocessing import read_ica_eeglab
 from scipy.io import loadmat
 
-from mne_icalabel.iclabel.features import (_compute_ica_activations,
-                                           _eeg_autocorr, _eeg_autocorr_fftw,
-                                           _eeg_autocorr_welch,
-                                           _eeg_rpsd_compute_psdmed,
-                                           _eeg_rpsd_constants,
-                                           _eeg_rpsd_format, _eeg_topoplot,
-                                           _retrieve_eeglab_icawinv,
-                                           _topoplotFast, get_features)
+from mne_icalabel.iclabel.features import (
+    _compute_ica_activations,
+    _eeg_autocorr,
+    _eeg_autocorr_fftw,
+    _eeg_autocorr_welch,
+    _eeg_rpsd_compute_psdmed,
+    _eeg_rpsd_constants,
+    _eeg_rpsd_format,
+    _eeg_topoplot,
+    _retrieve_eeglab_icawinv,
+    _topoplotFast,
+    get_features,
+)
 from mne_icalabel.iclabel.utils import _mne_to_eeglab_locs
 
-
 # Raw/Epochs files with ICA decomposition
-raw_eeglab_path = str(
-    files("mne_icalabel.iclabel.tests").joinpath("data/datasets/sample-raw.set")
-)
+raw_eeglab_path = str(files("mne_icalabel.iclabel.tests").joinpath("data/datasets/sample-raw.set"))
 raw_short_eeglab_path = str(
     files("mne_icalabel.iclabel.tests").joinpath("data/datasets/sample-short-raw.set")
 )
 raw_very_short_eeglab_path = str(
-    files("mne_icalabel.iclabel.tests").joinpath(
-        "data/datasets/sample-very-short-raw.set"
-    )
+    files("mne_icalabel.iclabel.tests").joinpath("data/datasets/sample-very-short-raw.set")
 )
-epo_eeglab_path = str(
-    files("mne_icalabel.iclabel.tests").joinpath("data/datasets/sample-epo.set")
-)
+epo_eeglab_path = str(files("mne_icalabel.iclabel.tests").joinpath("data/datasets/sample-epo.set"))
 
 # ICA activation matrix for raw/epochs
 raw_icaact_eeglab_path = str(
@@ -49,12 +47,8 @@ epo_icaact_eeglab_path = str(
 )
 
 # Topography
-raw_topo1_path = str(
-    files("mne_icalabel.iclabel.tests").joinpath("data/topo/topo1-raw.mat")
-)
-epo_topo1_path = str(
-    files("mne_icalabel.iclabel.tests").joinpath("data/topo/topo1-epo.mat")
-)
+raw_topo1_path = str(files("mne_icalabel.iclabel.tests").joinpath("data/topo/topo1-raw.mat"))
+epo_topo1_path = str(files("mne_icalabel.iclabel.tests").joinpath("data/topo/topo1-epo.mat"))
 raw_topo_feature_path = str(
     files("mne_icalabel.iclabel.tests").joinpath("data/topo/topo-feature-raw.mat")
 )
@@ -86,9 +80,7 @@ autocorr_short_raw_path = str(
     files("mne_icalabel.iclabel.tests").joinpath("data/autocorr/autocorr-short-raw.mat")
 )
 autocorr_very_short_raw_path = str(
-    files("mne_icalabel.iclabel.tests").joinpath(
-        "data/autocorr/autocorr-very-short-raw.mat"
-    )
+    files("mne_icalabel.iclabel.tests").joinpath("data/autocorr/autocorr-very-short-raw.mat")
 )
 autocorr_epo_path = str(
     files("mne_icalabel.iclabel.tests").joinpath("data/autocorr/autocorr-epo.mat")

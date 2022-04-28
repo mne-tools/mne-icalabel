@@ -77,9 +77,7 @@ def _mne_to_eeglab_locs(raw: BaseRaw) -> Tuple[NDArray[float], NDArray[float]]:
     return rd.reshape([1, -1]), np.degrees(th).reshape([1, -1])
 
 
-def _pol2cart(
-    theta: NDArray[float], rho: NDArray[float]
-) -> Tuple[NDArray[float], NDArray[float]]:
+def _pol2cart(theta: NDArray[float], rho: NDArray[float]) -> Tuple[NDArray[float], NDArray[float]]:
     """
     Converts polar coordinates to cartesian coordinates.
 
@@ -195,9 +193,7 @@ def _mergepoints2D(
     return x, y, v
 
 
-def _mergesimpts(
-    data: ArrayLike, tols: List[ArrayLike], mode: str = "average"
-) -> ArrayLike:
+def _mergesimpts(data: ArrayLike, tols: List[ArrayLike], mode: str = "average") -> ArrayLike:
     """
 
     Args:

@@ -93,6 +93,12 @@ def pol2cart(
 
 
 # ----------------------------------------------------------------------------
+def _next_power_of_2(x) -> int:
+    """Equivalent to 2^nextpow2 in MATLAB."""
+    return 1 if x == 0 else 2 ** (x - 1).bit_length()
+
+
+# ----------------------------------------------------------------------------
 def gdatav4(
     x: ArrayLike, y: ArrayLike, v: ArrayLike, xq: ArrayLike, yq: ArrayLike
 ) -> Tuple[ArrayLike, ArrayLike, ArrayLike]:

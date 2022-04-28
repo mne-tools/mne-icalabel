@@ -10,7 +10,7 @@ import numpy as np
 from scipy.io import loadmat
 import pytest
 
-from mne_icalabel.utils import mne_to_eeglab_locs, gdatav4
+from mne_icalabel.utils import mne_to_eeglab_locs, gdatav4, _next_power_of_2
 
 
 # Raw/Epochs files with ICA decomposition
@@ -65,7 +65,6 @@ def test_loc(file, eeglab_result_file):
 @pytest.mark.parametrize("file", (gdatav4_raw_path, gdatav4_epo_path))
 def test_gdatav4(file):
     """Test grid data interpolation."""
-    # ------------------------- Test without meshgrid ------------------------
     # load inputs from MATLAB
     eeglab_gdata = loadmat(file)["gdatav4"][0, 0]
     eeglab_inty = eeglab_gdata["inty"]
@@ -90,3 +89,12 @@ def test_gdatav4(file):
     assert np.allclose(Yi, eeglab_Yi, atol=1e-8)
     # Zi has to be transposed in Python
     assert np.allclose(Zi.T, eeglab_Zi, atol=1e-8)
+
+
+def test_next_power_of_2():
+    """Test that next_power_of_2 works as intended."""
+    x = [0, 10, 200, 400]
+    expected = [1, 16, 256, 512]
+    for k, exp in zip(x, expected):
+        val = _next_power_of_2(k)
+        assert exp == val

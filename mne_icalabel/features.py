@@ -7,7 +7,7 @@ import numpy as np
 from numpy.typing import NDArray
 from scipy.signal import resample_poly
 
-from .utils import pol2cart, mne_to_eeglab_locs, gdatav4
+from .utils import pol2cart, mne_to_eeglab_locs, gdatav4, _next_power_of_2
 
 
 def get_features(inst: Union[BaseRaw, BaseEpochs], ica: ICA):
@@ -324,12 +324,6 @@ def _eeg_rpsd_format(
     psd = np.divide(psd.T, np.max(np.abs(psd), axis=-1)).T
     # reshape and cast
     return psd[:, :, np.newaxis, np.newaxis].transpose([2, 1, 3, 0]).astype(np.float32)
-
-
-# ----------------------------------------------------------------------------
-def _next_power_of_2(x) -> int:
-    """Equivalent to 2^nextpow2 in MATLAB."""
-    return 1 if x == 0 else 2 ** (x - 1).bit_length()
 
 
 def eeg_autocorr_welch(

@@ -18,7 +18,6 @@ from mne_icalabel.features import (
     get_features,
     eeg_topoplot,
     _topoplotFast,
-    _next_power_of_2,
     _eeg_rpsd_constants,
     _eeg_rpsd_compute_psdmed,
     _eeg_rpsd_format,
@@ -428,15 +427,6 @@ def test_eeg_rpsd():
 
 
 # ----------------------------------------------------------------------------
-def test_next_power_of_2():
-    """Test that next_power_of_2 works as intended."""
-    x = [0, 10, 200, 400]
-    expected = [1, 16, 256, 512]
-    for k, exp in zip(x, expected):
-        val = _next_power_of_2(k)
-        assert exp == val
-
-
 def test_eeg_autocorr_welch():
     """Test eeg_autocorr_welch feature used on long raw datasets."""
     raw = read_raw(raw_eeglab_path, preload=True)

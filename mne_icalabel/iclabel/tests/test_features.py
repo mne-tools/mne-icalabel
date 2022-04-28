@@ -1,7 +1,7 @@
 try:
     from importlib.resources import files
 except ImportError:
-    from importlib_resources import files
+    from importlib_resources import files  # type: ignore
 
 from pathlib import Path
 
@@ -22,6 +22,7 @@ from mne_icalabel.iclabel.features import (_compute_ica_activations,
                                            _retrieve_eeglab_icawinv,
                                            _topoplotFast, get_features)
 from mne_icalabel.iclabel.utils import _mne_to_eeglab_locs
+
 
 # Raw/Epochs files with ICA decomposition
 raw_eeglab_path = str(
@@ -117,9 +118,7 @@ kwargs = {"raw": dict(preload=True), "epo": dict()}
         (epo_eeglab_path, psd_constants_epo_path, features_epo_path),
     ],
 )
-def test_get_features_from_precomputed_ica(
-    file, psd_constant_file, eeglab_feature_file
-):
+def test_get_features_from_precomputed_ica(file, psd_constant_file, eeglab_feature_file):
     """Test that we get the correct set of features from an MNE instance.
     Corresponds to the output from 'ICL_feature_extractor.m'."""
     type_ = str(Path(file).stem)[-3:]
@@ -245,9 +244,7 @@ def test_eeg_rpsd_constants():
     # Raw --------------------------------------------------------------------
     raw = read_raw(raw_eeglab_path, preload=True)
     ica = read_ica_eeglab(raw_eeglab_path)
-    ncomp, nfreqs, n_points, nyquist, index, window, subset = _eeg_rpsd_constants(
-        raw, ica
-    )
+    ncomp, nfreqs, n_points, nyquist, index, window, subset = _eeg_rpsd_constants(raw, ica)
 
     constants_eeglab = loadmat(psd_constants_raw_path)["constants"][0, 0]
     ncomp_eeglab = constants_eeglab["ncomp"][0, 0]
@@ -276,9 +273,7 @@ def test_eeg_rpsd_constants():
     # Epochs -----------------------------------------------------------------
     epochs = read_epochs_eeglab(epo_eeglab_path)
     ica = read_ica_eeglab(epo_eeglab_path)
-    ncomp, nfreqs, n_points, nyquist, index, window, subset = _eeg_rpsd_constants(
-        epochs, ica
-    )
+    ncomp, nfreqs, n_points, nyquist, index, window, subset = _eeg_rpsd_constants(epochs, ica)
 
     constants_eeglab = loadmat(psd_constants_epo_path)["constants"][0, 0]
     ncomp_eeglab = constants_eeglab["ncomp"][0, 0]
@@ -364,9 +359,7 @@ def test_eeg_rpsd():
     subset_eeglab = constants_eeglab["subset"][0, :] - 1
 
     # retrieve the rest from python
-    ncomp, nfreqs, n_points, nyquist, index, window, _ = _eeg_rpsd_constants(
-        epochs, ica
-    )
+    ncomp, nfreqs, n_points, nyquist, index, window, _ = _eeg_rpsd_constants(epochs, ica)
 
     # compute psdmed
     psdmed = _eeg_rpsd_compute_psdmed(

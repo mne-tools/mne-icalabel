@@ -75,6 +75,7 @@ def _retrieve_eeglab_icawinv(
     return icawinv, weights
 
 
+
 def _compute_ica_activations(
     inst: Union[BaseRaw, BaseEpochs], ica: ICA
 ) -> NDArray[float]:
@@ -135,9 +136,7 @@ def _eeg_topoplot(
     return topo.astype(np.float32)
 
 
-def _topoplotFast(
-    values: NDArray[float], rd: NDArray[float], th: NDArray[float]
-) -> NDArray[float]:
+def _topoplotFast(values: NDArray[float], rd: NDArray[float], th: NDArray[float]) -> NDArray[float]:
     """Implements topoplotFast.m from MATLAB. Each topographic map is a 32x32
     images."""
     # constants
@@ -271,9 +270,7 @@ def _eeg_rpsd_compute_psdmed(
             temp = np.hstack([icaact[it, index[:, k]] for k in range(index.shape[-1])])
             temp = temp.reshape(*index.shape, order="F")
         elif isinstance(inst, BaseEpochs):
-            temp = np.hstack(
-                [icaact[it, index[:, k], :] for k in range(index.shape[-1])]
-            )
+            temp = np.hstack([icaact[it, index[:, k], :] for k in range(index.shape[-1])])
             temp = temp.reshape(index.shape[0], len(inst), order="F")
         else:
             raise RuntimeError  # should never happen
@@ -458,9 +455,7 @@ def _eeg_autocorr_fftw(
     ac = np.fft.ifft(ac)
 
     if epochs.times.size < epochs.info["sfreq"]:
-        zeros = np.zeros(
-            (ac.shape[0], int(epochs.info["sfreq"]) - epochs.times.size + 1)
-        )
+        zeros = np.zeros((ac.shape[0], int(epochs.info["sfreq"]) - epochs.times.size + 1))
         ac = np.hstack([ac[:, : epochs.times.size], zeros])
     else:
         ac = ac[:, : int(epochs.info["sfreq"]) + 1]

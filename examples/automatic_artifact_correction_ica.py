@@ -21,8 +21,9 @@ and classes from that submodule:
 # %%
 
 import os
+
 import mne
-from mne.preprocessing import ICA, create_eog_epochs, create_ecg_epochs
+from mne.preprocessing import ICA, create_ecg_epochs, create_eog_epochs
 
 sample_data_folder = mne.datasets.sample.data_path()
 sample_data_raw_file = os.path.join(
@@ -204,7 +205,5 @@ reconst_raw = raw.copy()
 ica.apply(reconst_raw)
 
 raw.plot(order=artifact_picks, n_channels=len(artifact_picks), show_scrollbars=False)
-reconst_raw.plot(
-    order=artifact_picks, n_channels=len(artifact_picks), show_scrollbars=False
-)
+reconst_raw.plot(order=artifact_picks, n_channels=len(artifact_picks), show_scrollbars=False)
 del reconst_raw

@@ -1,16 +1,25 @@
 include *.png
 include *.txt
+include *.md
 include Makefile
+
+# examples
 recursive-include examples *.py
 recursive-include examples *.txt
+
+# main files
 recursive-include mne_icalabel *.pt
 recursive-include mne_icalabel *.py
-recursive-include test_data *.mat
-
-recursive-exclude mne_icalabel *.fif
-recursive-exclude mne_icalabel *.m
 
 exclude .circleci/config.yml
+exclude .flake8
+
+recursive-exclude doc *
+
+# exclude all data files
+recursive-exclude mne_icalabel *.txt
+recursive-exclude mne_icalabel *.fif
+recursive-exclude mne_icalabel *.m
 recursive-exclude mne_icalabel *.fdt
 recursive-exclude mne_icalabel *.mat
 recursive-exclude mne_icalabel *.set

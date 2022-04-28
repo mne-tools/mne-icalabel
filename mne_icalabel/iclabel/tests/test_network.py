@@ -1,7 +1,7 @@
 try:
     from importlib.resources import files
 except ImportError:
-    from importlib_resources import files
+    from importlib_resources import files  # type: ignore
 
 import numpy as np
 import pytest
@@ -9,6 +9,7 @@ import torch
 from scipy.io import loadmat
 
 from mne_icalabel.iclabel.network import ICLabelNet, _format_input, run_iclabel
+
 
 # Network weights
 torch_iclabel_path = str(files("mne_icalabel.iclabel").joinpath("assets/iclabelNet.pt"))
@@ -67,9 +68,7 @@ def test_weights():
         elif weight.ndim == 3:
             weights_matlab[k] = weight.transpose((2, 0, 1))
 
-    network_python_layers = [
-        layer for layer in network_python.keys() if "seq" not in layer
-    ]
+    network_python_layers = [layer for layer in network_python.keys() if "seq" not in layer]
     network_matlab_layers = [elt[0] for elt in network_matlab["params"]["name"][0, :]]
 
     # match layer names torch -> matconvnet
@@ -184,9 +183,7 @@ def test_run_iclabel(eeglab_feature_file, eeglab_output_file):
     features retrieved in python in 'test_features.py:test_get_features'."""
     features_eeglab = loadmat(eeglab_feature_file)["features"]
     # run the forward pass on pytorch
-    labels = run_iclabel(
-        features_eeglab[0, 0], features_eeglab[0, 1], features_eeglab[0, 2]
-    )
+    labels = run_iclabel(features_eeglab[0, 0], features_eeglab[0, 1], features_eeglab[0, 2])
 
     # load the labels from EEGLAB
     matlab_labels = loadmat(eeglab_output_file)["labels"]  # (30, 7)

@@ -114,7 +114,7 @@ kwargs = {"raw": dict(preload=True), "epo": dict()}
         (epo_eeglab_path, psd_constants_epo_path, features_epo_path),
     ],
 )
-def test_get_features(file, psd_constant_file, eeglab_feature_file):
+def test_get_features_from_precomputed_ica(file, psd_constant_file, eeglab_feature_file):
     """Test that we get the correct set of features from an MNE instance.
     Corresponds to the output from 'ICL_feature_extractor.m'."""
     type_ = str(Path(file).stem)[-3:]

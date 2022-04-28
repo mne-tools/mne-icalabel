@@ -12,6 +12,9 @@ recursive-include mne_icalabel *.pt
 recursive-include mne_icalabel *.py
 
 exclude .circleci/config.yml
+exclude .flake8
+
+recursive-exclude doc *
 
 # exclude all data files
 recursive-exclude mne_icalabel *.txt

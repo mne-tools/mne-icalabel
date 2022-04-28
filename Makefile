@@ -133,7 +133,7 @@ run-checks:
 	isort --check .
 	black --check mne_icalabel examples
 	flake8 .
-	mypy .
+	mypy ./mne_icalabel
 	@$(MAKE) pydocstyle
 	check-manifest
 	@$(MAKE) codespell-error

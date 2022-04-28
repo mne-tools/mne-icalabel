@@ -1,8 +1,8 @@
-from typing import Tuple, List
+from typing import List, Tuple
 
-from mne.io import BaseRaw
-from numpy.typing import NDArray, ArrayLike
 import numpy as np
+from mne.io import BaseRaw
+from numpy.typing import ArrayLike, NDArray
 
 
 def mne_to_eeglab_locs(raw: BaseRaw) -> Tuple[NDArray[float], NDArray[float]]:
@@ -77,9 +77,7 @@ def mne_to_eeglab_locs(raw: BaseRaw) -> Tuple[NDArray[float], NDArray[float]]:
     return rd.reshape([1, -1]), np.degrees(th).reshape([1, -1])
 
 
-def pol2cart(
-    theta: NDArray[float], rho: NDArray[float]
-) -> Tuple[NDArray[float], NDArray[float]]:
+def pol2cart(theta: NDArray[float], rho: NDArray[float]) -> Tuple[NDArray[float], NDArray[float]]:
     """
     Converts polar coordinates to cartesian coordinates.
 
@@ -145,9 +143,7 @@ def gdatav4(
             g = np.square(d) * (np.log(d) - 1)
             # Value of Green's function at zero
             g[np.where(np.isclose(d, 0))] = 0
-            vq[i, j] = (np.expand_dims(g, axis=0) @ np.expand_dims(weights, axis=1))[0][
-                0
-            ]
+            vq[i, j] = (np.expand_dims(g, axis=0) @ np.expand_dims(weights, axis=1))[0][0]
     return xq, yq, vq
 
 
@@ -197,9 +193,7 @@ def mergepoints2D(
     return x, y, v
 
 
-def mergesimpts(
-    data: ArrayLike, tols: List[ArrayLike], mode: str = "average"
-) -> ArrayLike:
+def mergesimpts(data: ArrayLike, tols: List[ArrayLike], mode: str = "average") -> ArrayLike:
     """
 
     Args:
@@ -213,15 +207,13 @@ def mergesimpts(
     data_ = data.copy()[np.argsort(data[:, 0])]
     newdata = []
     tols_ = np.array(tols)
-    idxs_ready = []
+    idxs_ready: List[int] = []
     point = 0
     for point in range(data_.shape[0]):
         if point in idxs_ready:
             continue
         else:
-            similar_pts = np.where(
-                np.prod(np.abs(data_ - data_[point]) < tols_, axis=-1)
-            )
+            similar_pts = np.where(np.prod(np.abs(data_ - data_[point]) < tols_, axis=-1))
             similar_pts = np.array(list(set(similar_pts[0].tolist()) - set(idxs_ready)))
             idxs_ready += similar_pts.tolist()
             if mode == "average":

@@ -1,11 +1,11 @@
 try:
     from importlib.resources import files
 except ImportError:
-    from importlib_resources import files
+    from importlib_resources import files  # type: ignore
 
-import torch.nn as nn
-import torch
 import numpy as np
+import torch
+import torch.nn as nn
 from numpy.typing import ArrayLike
 
 

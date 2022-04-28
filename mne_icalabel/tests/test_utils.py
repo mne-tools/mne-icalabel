@@ -1,25 +1,21 @@
 try:
     from importlib.resources import files
 except ImportError:
-    from importlib_resources import files
+    from importlib_resources import files  # type: ignore
+
 from pathlib import Path
 
+import numpy as np
+import pytest
 from mne import read_epochs_eeglab
 from mne.io import read_raw
-import numpy as np
 from scipy.io import loadmat
-import pytest
 
-from mne_icalabel.utils import mne_to_eeglab_locs, gdatav4, _next_power_of_2
-
+from mne_icalabel.utils import _next_power_of_2, gdatav4, mne_to_eeglab_locs
 
 # Raw/Epochs files with ICA decomposition
-raw_eeglab_path = str(
-    files("mne_icalabel.tests").joinpath("data/datasets/sample-raw.set")
-)
-epo_eeglab_path = str(
-    files("mne_icalabel.tests").joinpath("data/datasets/sample-epo.set")
-)
+raw_eeglab_path = str(files("mne_icalabel.tests").joinpath("data/datasets/sample-raw.set"))
+epo_eeglab_path = str(files("mne_icalabel.tests").joinpath("data/datasets/sample-epo.set"))
 
 
 # Electrode locations
@@ -27,12 +23,8 @@ loc_raw_path = str(files("mne_icalabel.tests").joinpath("data/utils/loc-raw.mat"
 loc_epo_path = str(files("mne_icalabel.tests").joinpath("data/utils/loc-raw.mat"))
 
 # Grid data interpolation
-gdatav4_raw_path = str(
-    files("mne_icalabel.tests").joinpath("data/utils/gdatav4-raw.mat")
-)
-gdatav4_epo_path = str(
-    files("mne_icalabel.tests").joinpath("data/utils/gdatav4-epo.mat")
-)
+gdatav4_raw_path = str(files("mne_icalabel.tests").joinpath("data/utils/gdatav4-raw.mat"))
+gdatav4_epo_path = str(files("mne_icalabel.tests").joinpath("data/utils/gdatav4-epo.mat"))
 
 
 # General readers

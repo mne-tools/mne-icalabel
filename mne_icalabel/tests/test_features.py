@@ -1,79 +1,60 @@
-try:
-    from importlib.resources import files
-except ImportError:
-    from importlib_resources import files
 from pathlib import Path
 
+import numpy as np
+import pytest
 from mne import read_epochs_eeglab
 from mne.io import read_raw
 from mne.io.eeglab.eeglab import _check_load_mat
 from mne.preprocessing import read_ica_eeglab
-import numpy as np
 from scipy.io import loadmat
-import pytest
 
 from mne_icalabel.features import (
-    retrieve_eeglab_icawinv,
-    compute_ica_activations,
-    get_features,
-    eeg_topoplot,
-    _topoplotFast,
-    _eeg_rpsd_constants,
     _eeg_rpsd_compute_psdmed,
+    _eeg_rpsd_constants,
     _eeg_rpsd_format,
-    eeg_autocorr_welch,
+    _topoplotFast,
+    compute_ica_activations,
     eeg_autocorr,
     eeg_autocorr_fftw,
+    eeg_autocorr_welch,
+    eeg_topoplot,
+    get_features,
+    retrieve_eeglab_icawinv,
 )
 from mne_icalabel.utils import mne_to_eeglab_locs
 
+try:
+    from importlib.resources import files
+except ImportError:
+    from importlib_resources import files  # type: ignore
+
 
 # Raw/Epochs files with ICA decomposition
-raw_eeglab_path = str(
-    files("mne_icalabel.tests").joinpath("data/datasets/sample-raw.set")
-)
+raw_eeglab_path = str(files("mne_icalabel.tests").joinpath("data/datasets/sample-raw.set"))
 raw_short_eeglab_path = str(
     files("mne_icalabel.tests").joinpath("data/datasets/sample-short-raw.set")
 )
 raw_very_short_eeglab_path = str(
     files("mne_icalabel.tests").joinpath("data/datasets/sample-very-short-raw.set")
 )
-epo_eeglab_path = str(
-    files("mne_icalabel.tests").joinpath("data/datasets/sample-epo.set")
-)
+epo_eeglab_path = str(files("mne_icalabel.tests").joinpath("data/datasets/sample-epo.set"))
 
 # ICA activation matrix for raw/epochs
-raw_icaact_eeglab_path = str(
-    files("mne_icalabel.tests").joinpath("data/icaact/icaact-raw.mat")
-)
-epo_icaact_eeglab_path = str(
-    files("mne_icalabel.tests").joinpath("data/icaact/icaact-epo.mat")
-)
+raw_icaact_eeglab_path = str(files("mne_icalabel.tests").joinpath("data/icaact/icaact-raw.mat"))
+epo_icaact_eeglab_path = str(files("mne_icalabel.tests").joinpath("data/icaact/icaact-epo.mat"))
 
 # Topography
 raw_topo1_path = str(files("mne_icalabel.tests").joinpath("data/topo/topo1-raw.mat"))
 epo_topo1_path = str(files("mne_icalabel.tests").joinpath("data/topo/topo1-epo.mat"))
-raw_topo_feature_path = str(
-    files("mne_icalabel.tests").joinpath("data/topo/topo-feature-raw.mat")
-)
-epo_topo_feature_path = str(
-    files("mne_icalabel.tests").joinpath("data/topo/topo-feature-epo.mat")
-)
+raw_topo_feature_path = str(files("mne_icalabel.tests").joinpath("data/topo/topo-feature-raw.mat"))
+epo_topo_feature_path = str(files("mne_icalabel.tests").joinpath("data/topo/topo-feature-epo.mat"))
 
 # PSD
-psd_constants_raw_path = str(
-    files("mne_icalabel.tests").joinpath("data/psd/constants-raw.mat")
-)
-psd_steps_raw_path = str(
-    files("mne_icalabel.tests").joinpath("data/psd/psd-step-by-step-raw.mat")
-)
+psd_constants_raw_path = str(files("mne_icalabel.tests").joinpath("data/psd/constants-raw.mat"))
+psd_steps_raw_path = str(files("mne_icalabel.tests").joinpath("data/psd/psd-step-by-step-raw.mat"))
 psd_raw_path = str(files("mne_icalabel.tests").joinpath("data/psd/psd-raw.mat"))
-psd_constants_epo_path = str(
-    files("mne_icalabel.tests").joinpath("data/psd/constants-epo.mat")
-)
-psd_steps_epo_path = str(
-    files("mne_icalabel.tests").joinpath("data/psd/psd-step-by-step-epo.mat")
-)
+psd_constants_epo_path = str(files("mne_icalabel.tests").joinpath("data/psd/constants-epo.mat"))
+psd_steps_epo_path = str(files("mne_icalabel.tests").joinpath("data/psd/psd-step-by-step-epo.mat"))
 psd_epo_path = str(files("mne_icalabel.tests").joinpath("data/psd/psd-epo.mat"))
 
 # Autocorrelations
@@ -86,17 +67,11 @@ autocorr_short_raw_path = str(
 autocorr_very_short_raw_path = str(
     files("mne_icalabel.tests").joinpath("data/autocorr/autocorr-very-short-raw.mat")
 )
-autocorr_epo_path = str(
-    files("mne_icalabel.tests").joinpath("data/autocorr/autocorr-epo.mat")
-)
+autocorr_epo_path = str(files("mne_icalabel.tests").joinpath("data/autocorr/autocorr-epo.mat"))
 
 # Complete features
-features_raw_path = str(
-    files("mne_icalabel.tests").joinpath("data/features/features-raw.mat")
-)
-features_epo_path = str(
-    files("mne_icalabel.tests").joinpath("data/features/features-epo.mat")
-)
+features_raw_path = str(files("mne_icalabel.tests").joinpath("data/features/features-raw.mat"))
+features_epo_path = str(files("mne_icalabel.tests").joinpath("data/features/features-epo.mat"))
 
 
 # General readers
@@ -114,9 +89,7 @@ kwargs = {"raw": dict(preload=True), "epo": dict()}
         (epo_eeglab_path, psd_constants_epo_path, features_epo_path),
     ],
 )
-def test_get_features_from_precomputed_ica(
-    file, psd_constant_file, eeglab_feature_file
-):
+def test_get_features_from_precomputed_ica(file, psd_constant_file, eeglab_feature_file):
     """Test that we get the correct set of features from an MNE instance.
     Corresponds to the output from 'ICL_feature_extractor.m'."""
     type_ = str(Path(file).stem)[-3:]
@@ -242,9 +215,7 @@ def test_eeg_rpsd_constants():
     # Raw --------------------------------------------------------------------
     raw = read_raw(raw_eeglab_path, preload=True)
     ica = read_ica_eeglab(raw_eeglab_path)
-    ncomp, nfreqs, n_points, nyquist, index, window, subset = _eeg_rpsd_constants(
-        raw, ica
-    )
+    ncomp, nfreqs, n_points, nyquist, index, window, subset = _eeg_rpsd_constants(raw, ica)
 
     constants_eeglab = loadmat(psd_constants_raw_path)["constants"][0, 0]
     ncomp_eeglab = constants_eeglab["ncomp"][0, 0]
@@ -273,9 +244,7 @@ def test_eeg_rpsd_constants():
     # Epochs -----------------------------------------------------------------
     epochs = read_epochs_eeglab(epo_eeglab_path)
     ica = read_ica_eeglab(epo_eeglab_path)
-    ncomp, nfreqs, n_points, nyquist, index, window, subset = _eeg_rpsd_constants(
-        epochs, ica
-    )
+    ncomp, nfreqs, n_points, nyquist, index, window, subset = _eeg_rpsd_constants(epochs, ica)
 
     constants_eeglab = loadmat(psd_constants_epo_path)["constants"][0, 0]
     ncomp_eeglab = constants_eeglab["ncomp"][0, 0]
@@ -361,9 +330,7 @@ def test_eeg_rpsd():
     subset_eeglab = constants_eeglab["subset"][0, :] - 1
 
     # retrieve the rest from python
-    ncomp, nfreqs, n_points, nyquist, index, window, _ = _eeg_rpsd_constants(
-        epochs, ica
-    )
+    ncomp, nfreqs, n_points, nyquist, index, window, _ = _eeg_rpsd_constants(epochs, ica)
 
     # compute psdmed
     psdmed = _eeg_rpsd_compute_psdmed(

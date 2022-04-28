@@ -6,4 +6,3 @@ mne
 python-picard
 scikit-learn
 torch
-sklearn

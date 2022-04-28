@@ -3,9 +3,9 @@ try:
 except ImportError:
     from importlib_resources import files
 
-import torch.nn as nn
-import torch
 import numpy as np
+import torch
+import torch.nn as nn
 from numpy.typing import ArrayLike
 
 

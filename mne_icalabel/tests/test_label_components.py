@@ -1,7 +1,7 @@
+import pytest
 from mne.datasets import sample
 from mne.io import read_raw
 from mne.preprocessing import ICA
-import pytest
 
 from mne_icalabel import label_components
 

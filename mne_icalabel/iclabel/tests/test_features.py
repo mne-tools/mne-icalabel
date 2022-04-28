@@ -2,31 +2,26 @@ try:
     from importlib.resources import files
 except ImportError:
     from importlib_resources import files
+
 from pathlib import Path
 
+import numpy as np
+import pytest
 from mne import read_epochs_eeglab
 from mne.io import read_raw
 from mne.io.eeglab.eeglab import _check_load_mat
 from mne.preprocessing import read_ica_eeglab
-import numpy as np
 from scipy.io import loadmat
-import pytest
 
-from mne_icalabel.iclabel.features import (
-    _retrieve_eeglab_icawinv,
-    _compute_ica_activations,
-    get_features,
-    _eeg_topoplot,
-    _topoplotFast,
-    _eeg_rpsd_constants,
-    _eeg_rpsd_compute_psdmed,
-    _eeg_rpsd_format,
-    _eeg_autocorr_welch,
-    _eeg_autocorr,
-    _eeg_autocorr_fftw,
-)
+from mne_icalabel.iclabel.features import (_compute_ica_activations,
+                                           _eeg_autocorr, _eeg_autocorr_fftw,
+                                           _eeg_autocorr_welch,
+                                           _eeg_rpsd_compute_psdmed,
+                                           _eeg_rpsd_constants,
+                                           _eeg_rpsd_format, _eeg_topoplot,
+                                           _retrieve_eeglab_icawinv,
+                                           _topoplotFast, get_features)
 from mne_icalabel.iclabel.utils import _mne_to_eeglab_locs
-
 
 # Raw/Epochs files with ICA decomposition
 raw_eeglab_path = str(

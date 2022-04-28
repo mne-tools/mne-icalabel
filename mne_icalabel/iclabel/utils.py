@@ -1,8 +1,8 @@
-from typing import Tuple, List
+from typing import List, Tuple
 
-from mne.io import BaseRaw
-from numpy.typing import NDArray, ArrayLike
 import numpy as np
+from mne.io import BaseRaw
+from numpy.typing import ArrayLike, NDArray
 
 
 def _mne_to_eeglab_locs(raw: BaseRaw) -> Tuple[NDArray[float], NDArray[float]]:

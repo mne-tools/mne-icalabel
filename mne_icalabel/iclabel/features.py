@@ -1,13 +1,13 @@
-from typing import Union, Tuple
+from typing import Tuple, Union
 
+import numpy as np
 from mne import BaseEpochs
 from mne.io import BaseRaw
 from mne.preprocessing import ICA
-import numpy as np
 from numpy.typing import NDArray
 from scipy.signal import resample_poly
 
-from .utils import _pol2cart, _mne_to_eeglab_locs, _gdatav4, _next_power_of_2
+from .utils import _gdatav4, _mne_to_eeglab_locs, _next_power_of_2, _pol2cart
 
 
 def get_features(inst: Union[BaseRaw, BaseEpochs], ica: ICA):

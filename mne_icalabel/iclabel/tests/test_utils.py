@@ -2,16 +2,17 @@ try:
     from importlib.resources import files
 except ImportError:
     from importlib_resources import files
+
 from pathlib import Path
 
+import numpy as np
+import pytest
 from mne import read_epochs_eeglab
 from mne.io import read_raw
-import numpy as np
 from scipy.io import loadmat
-import pytest
 
-from mne_icalabel.iclabel.utils import _mne_to_eeglab_locs, _gdatav4, _next_power_of_2
-
+from mne_icalabel.iclabel.utils import (_gdatav4, _mne_to_eeglab_locs,
+                                        _next_power_of_2)
 
 # Raw/Epochs files with ICA decomposition
 raw_eeglab_path = str(

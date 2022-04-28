@@ -4,12 +4,11 @@ except ImportError:
     from importlib_resources import files
 
 import numpy as np
-from scipy.io import loadmat
-import torch
 import pytest
+import torch
+from scipy.io import loadmat
 
 from mne_icalabel.iclabel.network import ICLabelNet, _format_input, run_iclabel
-
 
 # Network weights
 torch_iclabel_path = str(files("mne_icalabel.iclabel").joinpath("assets/iclabelNet.pt"))

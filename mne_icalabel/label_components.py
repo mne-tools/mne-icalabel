@@ -7,7 +7,6 @@ from mne.utils.check import _check_option
 
 from .iclabel import label_components as label_components_iclabel
 
-
 methods = {
     "iclabel": label_components_iclabel,
 }

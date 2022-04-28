@@ -16,3 +16,4 @@ mne-bids
 importlib_resources
 pymatreader
 black
+isort

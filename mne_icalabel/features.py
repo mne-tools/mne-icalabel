@@ -1,13 +1,13 @@
-from typing import Union, Tuple
+from typing import Tuple, Union
 
+import numpy as np
 from mne import BaseEpochs
 from mne.io import BaseRaw
 from mne.preprocessing import ICA
-import numpy as np
 from numpy.typing import NDArray
 from scipy.signal import resample_poly
 
-from .utils import pol2cart, mne_to_eeglab_locs, gdatav4, _next_power_of_2
+from .utils import _next_power_of_2, gdatav4, mne_to_eeglab_locs, pol2cart
 
 
 def get_features(inst: Union[BaseRaw, BaseEpochs], ica: ICA):
@@ -75,9 +75,7 @@ def retrieve_eeglab_icawinv(
     return icawinv, weights
 
 
-def compute_ica_activations(
-    inst: Union[BaseRaw, BaseEpochs], ica: ICA
-) -> NDArray[float]:
+def compute_ica_activations(inst: Union[BaseRaw, BaseEpochs], ica: ICA) -> NDArray[float]:
     """Compute the ICA activations 'icaact' variable from an MNE ICA instance.
 
     Parameters
@@ -119,9 +117,7 @@ def compute_ica_activations(
 
 
 # ----------------------------------------------------------------------------
-def eeg_topoplot(
-    inst: Union[BaseRaw, BaseEpochs], icawinv: NDArray[float]
-) -> NDArray[float]:
+def eeg_topoplot(inst: Union[BaseRaw, BaseEpochs], icawinv: NDArray[float]) -> NDArray[float]:
     """Topoplot feature."""
     # TODO: Selection of channels is missing.
     ncomp = icawinv.shape[-1]
@@ -135,9 +131,7 @@ def eeg_topoplot(
     return topo.astype(np.float32)
 
 
-def _topoplotFast(
-    values: NDArray[float], rd: NDArray[float], th: NDArray[float]
-) -> NDArray[float]:
+def _topoplotFast(values: NDArray[float], rd: NDArray[float], th: NDArray[float]) -> NDArray[float]:
     """Implements topoplotFast.m from MATLAB. Each topographic map is a 32x32
     images."""
     # constants
@@ -194,9 +188,7 @@ def _topoplotFast(
 
 
 # ----------------------------------------------------------------------------
-def eeg_rpsd(
-    inst: Union[BaseRaw, BaseEpochs], ica: ICA, icaact: NDArray[float]
-) -> NDArray[float]:
+def eeg_rpsd(inst: Union[BaseRaw, BaseEpochs], ica: ICA, icaact: NDArray[float]) -> NDArray[float]:
     """PSD feature."""
     assert isinstance(inst, (BaseRaw, BaseEpochs))  # sanity-check
     constants = _eeg_rpsd_constants(inst, ica)
@@ -271,9 +263,7 @@ def _eeg_rpsd_compute_psdmed(
             temp = np.hstack([icaact[it, index[:, k]] for k in range(index.shape[-1])])
             temp = temp.reshape(*index.shape, order="F")
         elif isinstance(inst, BaseEpochs):
-            temp = np.hstack(
-                [icaact[it, index[:, k], :] for k in range(index.shape[-1])]
-            )
+            temp = np.hstack([icaact[it, index[:, k], :] for k in range(index.shape[-1])])
             temp = temp.reshape(index.shape[0], len(inst), order="F")
         else:
             raise RuntimeError  # should never happen
@@ -326,9 +316,7 @@ def _eeg_rpsd_format(
     return psd[:, :, np.newaxis, np.newaxis].transpose([2, 1, 3, 0]).astype(np.float32)
 
 
-def eeg_autocorr_welch(
-    raw: BaseRaw, ica: ICA, icaact: NDArray[float]
-) -> NDArray[float]:
+def eeg_autocorr_welch(raw: BaseRaw, ica: ICA, icaact: NDArray[float]) -> NDArray[float]:
     """Autocorrelation feature applied on raw object with at least 5 * fs
     samples (5 seconds).
     MATLAB: 'eeg_autocorr_welch.m'."""
@@ -438,9 +426,7 @@ def eeg_autocorr(raw: BaseRaw, ica: ICA, icaact: NDArray[float]) -> NDArray[floa
     return resamp.astype(np.float32)
 
 
-def eeg_autocorr_fftw(
-    epochs: BaseEpochs, ica: ICA, icaact: NDArray[float]
-) -> NDArray[float]:
+def eeg_autocorr_fftw(epochs: BaseEpochs, ica: ICA, icaact: NDArray[float]) -> NDArray[float]:
     """Autocorrelation feature applied on epoch object.
     MATLAB: 'eeg_autocorr_fftw.m'."""
     assert isinstance(epochs, BaseEpochs)  # sanity-check
@@ -458,9 +444,7 @@ def eeg_autocorr_fftw(
     ac = np.fft.ifft(ac)
 
     if epochs.times.size < epochs.info["sfreq"]:
-        zeros = np.zeros(
-            (ac.shape[0], int(epochs.info["sfreq"]) - epochs.times.size + 1)
-        )
+        zeros = np.zeros((ac.shape[0], int(epochs.info["sfreq"]) - epochs.times.size + 1))
         ac = np.hstack([ac[:, : epochs.times.size], zeros])
     else:
         ac = ac[:, : int(epochs.info["sfreq"]) + 1]

@@ -91,7 +91,7 @@ flake:
 black:
 	@if command -v black > /dev/null; then \
 		echo "Running black"; \
-		black --check mne_icalabel examples; \
+		black mne_icalabel examples; \
 	else \
 		echo "black not found, please install it!"; \
 		exit 1; \
@@ -114,10 +114,29 @@ check-manifest:
 check-readme:
 	python setup.py check --restructuredtext --strict
 
+isort:
+	@if command -v isort > /dev/null; then \
+		echo "Running isort"; \
+		isort mne_icalabel examples; \
+	else \
+		echo "isort not found, please install it!"; \
+		exit 1; \
+	fi;
+	@echo "isort passed"
+
 pep:
 	@$(MAKE) -k black pydocstyle codespell-error check-manifest
 
 docstyle: pydocstyle
+
+run-checks:
+	isort --check .
+	black --check mne_icalabel examples
+	flake8 .
+	mypy .
+	@$(MAKE) pydocstyle
+	check-manifest
+	@$(MAKE) codespell-error
 
 build-doc:
 	@echo "Building documentation"

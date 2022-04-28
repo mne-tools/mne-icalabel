@@ -7,7 +7,7 @@ import numpy as np
 from numpy.typing import NDArray
 from scipy.signal import resample_poly
 
-from .utils import pol2cart, mne_to_eeglab_locs, gdatav4, _next_power_of_2
+from .utils import _pol2cart, _mne_to_eeglab_locs, _gdatav4, _next_power_of_2
 
 
 def get_features(inst: Union[BaseRaw, BaseEpochs], ica: ICA):
@@ -21,23 +21,23 @@ def get_features(inst: Union[BaseRaw, BaseEpochs], ica: ICA):
     ica : ICA
         MNE ICA decomposition.
     """
-    icawinv, _ = retrieve_eeglab_icawinv(ica)
-    icaact = compute_ica_activations(inst, ica)
+    icawinv, _ = _retrieve_eeglab_icawinv(ica)
+    icaact = _compute_ica_activations(inst, ica)
 
     # compute topographic feature (float32)
-    topo = eeg_topoplot(inst, icawinv)
+    topo = _eeg_topoplot(inst, icawinv)
 
     # compute psd feature (float32)
-    psd = eeg_rpsd(inst, ica, icaact)
+    psd = _eeg_rpsd(inst, ica, icaact)
 
     # compute autocorr feature (float32)
     if isinstance(inst, BaseRaw):
         if 5 < inst.times.size / inst.info["sfreq"]:
-            autocorr = eeg_autocorr_welch(inst, ica, icaact)
+            autocorr = _eeg_autocorr_welch(inst, ica, icaact)
         else:
-            autocorr = eeg_autocorr(inst, ica, icaact)
+            autocorr = _eeg_autocorr(inst, ica, icaact)
     else:
-        autocorr = eeg_autocorr_fftw(inst, ica, icaact)
+        autocorr = _eeg_autocorr_fftw(inst, ica, icaact)
 
     # scale by 0.99
     topo *= 0.99
@@ -47,7 +47,7 @@ def get_features(inst: Union[BaseRaw, BaseEpochs], ica: ICA):
     return topo, psd, autocorr
 
 
-def retrieve_eeglab_icawinv(
+def _retrieve_eeglab_icawinv(
     ica: ICA,
 ) -> Tuple[NDArray[float], NDArray[float]]:
     """
@@ -75,7 +75,7 @@ def retrieve_eeglab_icawinv(
     return icawinv, weights
 
 
-def compute_ica_activations(
+def _compute_ica_activations(
     inst: Union[BaseRaw, BaseEpochs], ica: ICA
 ) -> NDArray[float]:
     """Compute the ICA activations 'icaact' variable from an MNE ICA instance.
@@ -107,7 +107,7 @@ def compute_ica_activations(
     assumed that 'common', 'average' and 'averef' are all denoting a common
     average reference.
     """
-    icawinv, weights = retrieve_eeglab_icawinv(ica)
+    icawinv, weights = _retrieve_eeglab_icawinv(ica)
     icasphere = np.eye(icawinv.shape[0])
     data = inst.get_data(picks=ica.ch_names) * 1e6
     icaact = (weights[0 : ica.n_components_, :] @ icasphere) @ data
@@ -119,14 +119,14 @@ def compute_ica_activations(
 
 
 # ----------------------------------------------------------------------------
-def eeg_topoplot(
+def _eeg_topoplot(
     inst: Union[BaseRaw, BaseEpochs], icawinv: NDArray[float]
 ) -> NDArray[float]:
     """Topoplot feature."""
     # TODO: Selection of channels is missing.
     ncomp = icawinv.shape[-1]
     topo = np.zeros((32, 32, 1, ncomp))
-    rd, th = mne_to_eeglab_locs(inst)
+    rd, th = _mne_to_eeglab_locs(inst)
     th = np.pi / 180 * th  # convert degrees to radians
     for it in range(ncomp):
         temp_topo = _topoplotFast(icawinv[:, it], rd, th)
@@ -145,7 +145,7 @@ def _topoplotFast(
     rmax = 0.5  # actual head radius
 
     # convert electrode locations from polar to cartesian coordinates
-    x, y = pol2cart(th, rd)
+    x, y = _pol2cart(th, rd)
 
     # prepare coordinates
     # Comments in MATLAB (L750:753) are:
@@ -182,7 +182,7 @@ def _topoplotFast(
     yi = np.linspace(ymin, ymax, GRID_SCALE).astype(np.float64).reshape((1, -1))
     # additional step for gdatav4 compared to MATLAB: linspace to meshgrid
     XQ, YQ = np.meshgrid(xi, yi)
-    Xi, Yi, Zi = gdatav4(x, y, values.reshape((-1, 1)), XQ, YQ)
+    Xi, Yi, Zi = _gdatav4(x, y, values.reshape((-1, 1)), XQ, YQ)
     # additional step for gdatav4 compared to MATLAB: transpose
     Zi = Zi.T
 
@@ -194,7 +194,7 @@ def _topoplotFast(
 
 
 # ----------------------------------------------------------------------------
-def eeg_rpsd(
+def _eeg_rpsd(
     inst: Union[BaseRaw, BaseEpochs], ica: ICA, icaact: NDArray[float]
 ) -> NDArray[float]:
     """PSD feature."""
@@ -326,7 +326,7 @@ def _eeg_rpsd_format(
     return psd[:, :, np.newaxis, np.newaxis].transpose([2, 1, 3, 0]).astype(np.float32)
 
 
-def eeg_autocorr_welch(
+def _eeg_autocorr_welch(
     raw: BaseRaw, ica: ICA, icaact: NDArray[float]
 ) -> NDArray[float]:
     """Autocorrelation feature applied on raw object with at least 5 * fs
@@ -404,7 +404,7 @@ def eeg_autocorr_welch(
     return np.real(resamp).astype(np.float32)
 
 
-def eeg_autocorr(raw: BaseRaw, ica: ICA, icaact: NDArray[float]) -> NDArray[float]:
+def _eeg_autocorr(raw: BaseRaw, ica: ICA, icaact: NDArray[float]) -> NDArray[float]:
     """Autocorrelation feature applied on raw object that do not have enough
     sampes for eeg_autocorr_welch.
     MATLAB: 'eeg_autocorr.m'."""
@@ -438,7 +438,7 @@ def eeg_autocorr(raw: BaseRaw, ica: ICA, icaact: NDArray[float]) -> NDArray[floa
     return resamp.astype(np.float32)
 
 
-def eeg_autocorr_fftw(
+def _eeg_autocorr_fftw(
     epochs: BaseEpochs, ica: ICA, icaact: NDArray[float]
 ) -> NDArray[float]:
     """Autocorrelation feature applied on epoch object.

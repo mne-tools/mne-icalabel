@@ -10,28 +10,32 @@ import numpy as np
 from scipy.io import loadmat
 import pytest
 
-from mne_icalabel.utils import mne_to_eeglab_locs, gdatav4, _next_power_of_2
+from mne_icalabel.iclabel.utils import _mne_to_eeglab_locs, _gdatav4, _next_power_of_2
 
 
 # Raw/Epochs files with ICA decomposition
 raw_eeglab_path = str(
-    files("mne_icalabel.tests").joinpath("data/datasets/sample-raw.set")
+    files("mne_icalabel.iclabel.tests").joinpath("data/datasets/sample-raw.set")
 )
 epo_eeglab_path = str(
-    files("mne_icalabel.tests").joinpath("data/datasets/sample-epo.set")
+    files("mne_icalabel.iclabel.tests").joinpath("data/datasets/sample-epo.set")
 )
 
 
 # Electrode locations
-loc_raw_path = str(files("mne_icalabel.tests").joinpath("data/utils/loc-raw.mat"))
-loc_epo_path = str(files("mne_icalabel.tests").joinpath("data/utils/loc-raw.mat"))
+loc_raw_path = str(
+    files("mne_icalabel.iclabel.tests").joinpath("data/utils/loc-raw.mat")
+)
+loc_epo_path = str(
+    files("mne_icalabel.iclabel.tests").joinpath("data/utils/loc-raw.mat")
+)
 
 # Grid data interpolation
 gdatav4_raw_path = str(
-    files("mne_icalabel.tests").joinpath("data/utils/gdatav4-raw.mat")
+    files("mne_icalabel.iclabel.tests").joinpath("data/utils/gdatav4-raw.mat")
 )
 gdatav4_epo_path = str(
-    files("mne_icalabel.tests").joinpath("data/utils/gdatav4-epo.mat")
+    files("mne_icalabel.iclabel.tests").joinpath("data/utils/gdatav4-epo.mat")
 )
 
 
@@ -51,7 +55,7 @@ def test_loc(file, eeglab_result_file):
     when loading the datasets."""
     type_ = str(Path(file).stem)[-3:]
     inst = reader[type_](file, **kwargs[type_])
-    rd, th = mne_to_eeglab_locs(inst)
+    rd, th = _mne_to_eeglab_locs(inst)
     eeglab_loc = loadmat(eeglab_result_file)["loc"][0, 0]
     eeglab_rd = eeglab_loc["rd"]
     eeglab_th = eeglab_loc["th"]
@@ -77,7 +81,7 @@ def test_gdatav4(file):
     xq, yq = np.meshgrid(eeglab_xi, eeglab_yi)
 
     # compute output in Python
-    Xi, Yi, Zi = gdatav4(eeglab_intx, eeglab_inty, eeglab_intValues, xq, yq)
+    Xi, Yi, Zi = _gdatav4(eeglab_intx, eeglab_inty, eeglab_intValues, xq, yq)
 
     # load outputs from MATLAB
     eeglab_Xi = eeglab_gdata["Xi"]

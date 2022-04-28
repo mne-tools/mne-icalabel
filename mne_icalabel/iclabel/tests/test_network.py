@@ -8,45 +8,49 @@ from scipy.io import loadmat
 import torch
 import pytest
 
-from mne_icalabel.network import ICLabelNet, format_input, run_iclabel
+from mne_icalabel.iclabel.network import ICLabelNet, _format_input, run_iclabel
 
 
 # Network weights
-torch_iclabel_path = str(files("mne_icalabel").joinpath("assets/iclabelNet.pt"))
+torch_iclabel_path = str(files("mne_icalabel.iclabel").joinpath("assets/iclabelNet.pt"))
 matconvnet_iclabel_path = str(
-    files("mne_icalabel.tests").joinpath("data/network/netICL.mat")
+    files("mne_icalabel.iclabel.tests").joinpath("data/network/netICL.mat")
 )
 
 # Network forward pass input/output
 matconvnet_fw_input_path = str(
-    files("mne_icalabel.tests").joinpath("data/network/network_input.mat")
+    files("mne_icalabel.iclabel.tests").joinpath("data/network/network_input.mat")
 )
 matconvnet_fw_output_path = str(
-    files("mne_icalabel.tests").joinpath("data/network/network_output.mat")
+    files("mne_icalabel.iclabel.tests").joinpath("data/network/network_output.mat")
 )
 
 # Features (similar to network_input)
 features_raw_path = str(
-    files("mne_icalabel.tests").joinpath("data/features/features-raw.mat")
+    files("mne_icalabel.iclabel.tests").joinpath("data/features/features-raw.mat")
 )
 features_epo_path = str(
-    files("mne_icalabel.tests").joinpath("data/features/features-epo.mat")
+    files("mne_icalabel.iclabel.tests").joinpath("data/features/features-epo.mat")
 )
 
 # Features formatted
 features_formatted_raw_path = str(
-    files("mne_icalabel.tests").joinpath("data/features/features-formatted-raw.mat")
+    files("mne_icalabel.iclabel.tests").joinpath(
+        "data/features/features-formatted-raw.mat"
+    )
 )
 features_formatted_epo_path = str(
-    files("mne_icalabel.tests").joinpath("data/features/features-formatted-epo.mat")
+    files("mne_icalabel.iclabel.tests").joinpath(
+        "data/features/features-formatted-epo.mat"
+    )
 )
 
 # ICLabel output
 iclabel_output_raw_path = str(
-    files("mne_icalabel.tests").joinpath("data/iclabel-output-raw.mat")
+    files("mne_icalabel.iclabel.tests").joinpath("data/iclabel-output-raw.mat")
 )
 iclabel_output_epo_path = str(
-    files("mne_icalabel.tests").joinpath("data/iclabel-output-epo.mat")
+    files("mne_icalabel.iclabel.tests").joinpath("data/iclabel-output-epo.mat")
 )
 
 
@@ -153,7 +157,7 @@ def test_network_outputs():
 def test_format_input(eeglab_feature_file, eeglab_feature_formatted_file):
     """Test formatting of input feature before feeding them to the network."""
     features_eeglab = loadmat(eeglab_feature_file)["features"]
-    topo, psd, autocorr = format_input(
+    topo, psd, autocorr = _format_input(
         features_eeglab[0, 0], features_eeglab[0, 1], features_eeglab[0, 2]
     )
 

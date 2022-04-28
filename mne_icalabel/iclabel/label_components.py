@@ -8,7 +8,7 @@ from .features import get_features
 from .network import run_iclabel
 
 
-def label(inst: Union[BaseRaw, BaseEpochs], ica: ICA):
+def label_components(inst: Union[BaseRaw, BaseEpochs], ica: ICA):
     """
     Label the provided ICA components with the ICLabel neural network. This
     network uses 3 features:

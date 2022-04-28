@@ -7,4 +7,4 @@
 
 __version__ = "0.1dev0"
 
-from .label import label  # noqa: F401
+from .label_components import label_components  # noqa: F401

@@ -64,18 +64,12 @@ epo_topo_feature_path = str(
 psd_constants_raw_path = str(
     files("mne_icalabel.tests").joinpath("data/psd/constants-raw.mat")
 )
-psd_psdmed_raw_path = str(
-    files("mne_icalabel.tests").joinpath("data/psd/psdmed-raw.mat")
-)
 psd_steps_raw_path = str(
     files("mne_icalabel.tests").joinpath("data/psd/psd-step-by-step-raw.mat")
 )
 psd_raw_path = str(files("mne_icalabel.tests").joinpath("data/psd/psd-raw.mat"))
 psd_constants_epo_path = str(
     files("mne_icalabel.tests").joinpath("data/psd/constants-epo.mat")
-)
-psd_psdmed_epo_path = str(
-    files("mne_icalabel.tests").joinpath("data/psd/psdmed-epo.mat")
 )
 psd_steps_epo_path = str(
     files("mne_icalabel.tests").joinpath("data/psd/psd-step-by-step-epo.mat")
@@ -304,53 +298,6 @@ def test_eeg_rpsd_constants():
     assert subset_eeglab.shape[0] == 1
     assert len(set(list(subset)).difference(set(list(subset_eeglab[0, :] - 1)))) == 0
     assert len(set(list(subset_eeglab[0, :] - 1)).difference(set(list(subset)))) == 0
-
-
-def test_eeg_rpsd_compute_psdmed():
-    """Test _eeg_rpsd_compute_psdmed function."""
-    # Raw --------------------------------------------------------------------
-    raw = read_raw(raw_eeglab_path, preload=True)
-    ica = read_ica_eeglab(raw_eeglab_path)
-    icaact = compute_ica_activations(raw, ica)
-
-    # retrieve subset from eeglab
-    constants_eeglab = loadmat(psd_constants_raw_path)["constants"][0, 0]
-    assert constants_eeglab["subset"].shape[0] == 1
-    subset_eeglab = constants_eeglab["subset"][0, :] - 1
-
-    # retrieve the rest from python
-    ncomp, nfreqs, n_points, nyquist, index, window, _ = _eeg_rpsd_constants(raw, ica)
-
-    # compute psdmed
-    psdmed = _eeg_rpsd_compute_psdmed(
-        raw, icaact, ncomp, nfreqs, n_points, nyquist, index, window, subset_eeglab
-    )
-
-    psdmed_eeglab = loadmat(psd_psdmed_raw_path)["psdmed"]
-    assert np.allclose(psdmed, psdmed_eeglab, atol=1e-5)
-
-    # Epochs -----------------------------------------------------------------
-    epochs = read_epochs_eeglab(epo_eeglab_path)
-    ica = read_ica_eeglab(epo_eeglab_path)
-    icaact = compute_ica_activations(epochs, ica)
-
-    # retrieve subset from eeglab
-    constants_eeglab = loadmat(psd_constants_epo_path)["constants"][0, 0]
-    assert constants_eeglab["subset"].shape[0] == 1
-    subset_eeglab = constants_eeglab["subset"][0, :] - 1
-
-    # retrieve the rest from python
-    ncomp, nfreqs, n_points, nyquist, index, window, _ = _eeg_rpsd_constants(
-        epochs, ica
-    )
-
-    # compute psdmed
-    psdmed = _eeg_rpsd_compute_psdmed(
-        epochs, icaact, ncomp, nfreqs, n_points, nyquist, index, window, subset_eeglab
-    )
-
-    psdmed_eeglab = loadmat(psd_psdmed_epo_path)["psdmed"]
-    assert np.allclose(psdmed, psdmed_eeglab, atol=1e-5)
 
 
 def test_eeg_rpsd():

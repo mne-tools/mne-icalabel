@@ -6,10 +6,6 @@
 % sha1: db06642036533b9fea56d5df8eb86e1cc600df28
 % ----------------------------------------------
 
-% 'psdmed-epo.mat' -----------------------------
-% sha1: faec6f416f0243e833a1cfacd26cc38e094f33ca
-% ----------------------------------------------
-
 % 'psd-step-by-step-epo.mat' -------------------
 % sha1: 538ea4b7026b23ef1d6a8566ac537c8a587b5dbf
 % ----------------------------------------------
@@ -81,10 +77,6 @@ for it = 1:ncomp
 
     psdmed(it, :) = 20 * log10(median(temp, 3));
 end
-
-
-%% Export psdmed from eeg_rpsd.m
-save('psdmed-epo', 'psdmed');
 
 
 %% Format and undo notch filter

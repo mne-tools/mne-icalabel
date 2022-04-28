@@ -1,0 +1,25 @@
+from mne.datasets import sample
+from mne.io import read_raw
+from mne.preprocessing import ICA
+import pytest
+
+from mne_icalabel.iclabel import label_components
+
+directory = sample.data_path() / "MEG" / "sample"
+raw = read_raw(directory / "sample_audvis_raw.fif", preload=False)
+raw.crop(0, 10).pick_types(eeg=True, exclude="bads")
+raw.load_data()
+# preprocess
+raw.filter(l_freq=1.0, h_freq=100.0)
+raw.set_eeg_reference("average")
+# fit ICA
+ica = ICA(method="picard")
+ica.fit(raw)
+
+
+@pytest.mark.filterwarnings("ignore::RuntimeWarning")
+@pytest.mark.filterwarnings("ignore::FutureWarning")
+def test_label_components():
+    """Simple test to check that label_components runs without raising."""
+    labels = label_components(raw, ica)
+    assert labels is not None

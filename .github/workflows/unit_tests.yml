@@ -31,7 +31,7 @@ jobs:
           pip install --upgrade --upgrade-strategy eager -r requirements.txt
           pip install --upgrade --upgrade-strategy eager -r requirements_testing.txt
       - name: Run style & documentation tests
-        run: make pep
+        run: make run-checks
 
   # Run installation tests
   build:

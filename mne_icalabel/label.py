@@ -9,8 +9,8 @@ from .iclabel import label as iclabel_label
 
 
 methods = {
-    'iclabel': iclabel_label,
-    }
+    "iclabel": iclabel_label,
+}
 
 
 def label(inst: Union[BaseRaw, BaseEpochs], ica: ICA, method: str):
@@ -23,5 +23,5 @@ def label(inst: Union[BaseRaw, BaseEpochs], ica: ICA, method: str):
     ica : ICA
     method : str
     """
-    _check_option('method', method, methods)
+    _check_option("method", method, methods)
     return methods[method](inst, ica)

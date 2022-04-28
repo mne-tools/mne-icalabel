@@ -1,13 +1,13 @@
 """Configure details for documentation with sphinx."""
-from datetime import date
 import os
 import sys
 import warnings
+from datetime import date
 
+import mne
 import sphinx_gallery  # noqa: F401
 from sphinx_gallery.sorting import ExampleTitleSortKey
 
-import mne
 sys.path.insert(0, os.path.abspath(".."))
 import mne_icalabel  # noqa: E402
 

@@ -392,8 +392,6 @@ def _eeg_autocorr_welch(raw: BaseRaw, ica: ICA, icaact: NDArray[float]) -> NDArr
     down = int(raw.info["sfreq"])
     if 101 < ac.shape[1] * 100 / down:
         down += 1
-    elif ac.shape[1] * 100 / down <= 100:
-        down -= 1
     resamp = resample_poly(ac.T, 100, down).T
     resamp = resamp[:, 1:, np.newaxis, np.newaxis].transpose([2, 1, 3, 0])
     return np.real(resamp).astype(np.float32)
@@ -433,8 +431,6 @@ def _eeg_autocorr(raw: BaseRaw, ica: ICA, icaact: NDArray[float]) -> NDArray[flo
     down = int(raw.info["sfreq"])
     if 101 < ac.shape[1] * 100 / down:
         down += 1
-    elif ac.shape[1] * 100 / down <= 100:
-        down -= 1
     resamp = resample_poly(ac.T, 100, down).T
     resamp = resamp[:, 1:, np.newaxis, np.newaxis].transpose([2, 1, 3, 0])
     return resamp.astype(np.float32)
@@ -471,8 +467,6 @@ def _eeg_autocorr_fftw(epochs: BaseEpochs, ica: ICA, icaact: NDArray[float]) -> 
     down = int(epochs.info["sfreq"])
     if 101 < ac.shape[1] * 100 / down:
         down += 1
-    if ac.shape[1] * 100 / down <= 100:
-        down -= 1
     resamp = resample_poly(ac.T, 100, down).T
     resamp = resamp[:, 1:, np.newaxis, np.newaxis].transpose([2, 1, 3, 0])
     return np.real(resamp).astype(np.float32)

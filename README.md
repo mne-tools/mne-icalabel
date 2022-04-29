@@ -45,16 +45,15 @@ or one can install directly using pip
     pip install --user -U https://api.github.com/repos/mne-tools/mne-icalabel/zipball/main
 
 Alternatively, you can also download a
-`zip file of the latest development version <https://github.com/mne-tools/mne-icalabel/archive/main.zip>`__.
+`zip file of the latest development version <https://github.com/mne-tools/mne-icalabel/archive/main.zip>`_.
 
-## Converting MatConvNet to PyTorch
+# Contributing
 
-Architecture in matconvnet:
+If you are interested in contributing, please read the [contributing guidelines](https://github.com/mne-tools/mne-icalabel/main/CONTRIBUTING.md).
 
-<img src="ICLabel_DagNN_Architecture.png" width="400"/>
 
-The PyTorch model is in the `PortToPytorch.ipynb` jupyter notebook. The state dict is in iclabelNet.pt.
-The model has three inputs: image, psd, and autocorrelation features. To encourage generalization, the image
-features are rotated and negated to quadruple the image features. The psd and autocorrelation features
-are coppied to the new image features. Then, the predicted probabilities are averaged over all four
-images.
+# Forum
+
+Please visit the MNE forum to ask relevant questions.
+
+https://mne.discourse.group

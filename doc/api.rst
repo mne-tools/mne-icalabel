@@ -39,7 +39,7 @@ Architecture in matconvnet:
 
 The model has three inputs: image, psd, and autocorrelation features. To encourage generalization, the image
 features are rotated and negated to quadruple the image features. The psd and autocorrelation features
-are coppied to the new image features. Then, the predicted probabilities are averaged over all four images.
+are copied to the new image features. Then, the predicted probabilities are averaged over all four images.
 
    get_iclabel_features
    ICLabelNet

@@ -15,6 +15,7 @@ exclude .circleci/config.yml
 exclude .flake8
 
 recursive-exclude doc *
+recursive-exclude scripts *
 
 # exclude all data files
 recursive-exclude mne_icalabel *.txt

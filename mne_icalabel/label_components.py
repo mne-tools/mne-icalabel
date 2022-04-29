@@ -19,8 +19,17 @@ def label_components(inst: Union[BaseRaw, BaseEpochs], ica: ICA, method: str):
     Parameters
     ----------
     inst : Raw | Epochs
+        The data instance.
     ica : ICA
+        The fitted ICA instance.
     method : str
+        The proposed method for labeling components. Must be one of
+        ('iclabel',).
+
+    Returns
+    -------
+    labels : np.ndarray of shape (n_components,)
+        The estimated numerical labels of each ICA component.
     """
     _check_option("method", method, methods)
     return methods[method](inst, ica)

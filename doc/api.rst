@@ -30,7 +30,7 @@ ICLabel
 .. autosummary::
    :toctree: generated/
 
-This is the model originally available in `EEGLab <https://github.com/sccn/ICLabel>`.
+This is the model originally available in `EEGLab <https://github.com/sccn/ICLabel>`_.
 The model was ported using matconvnet.
 
 Architecture in matconvnet:

@@ -13,7 +13,7 @@ raw.load_data()
 raw.filter(l_freq=1.0, h_freq=100.0)
 raw.set_eeg_reference("average")
 # fit ICA
-ica = ICA(method="picard")
+ica = ICA(n_components=15, method="picard")
 ica.fit(raw)
 
 

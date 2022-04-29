@@ -370,7 +370,7 @@ def test_eeg_autocorr_welch():
     ica = read_ica_eeglab(raw_eeglab_path)
     icaact = _compute_ica_activations(raw, ica)
     autocorr = _eeg_autocorr_welch(raw, ica, icaact)
-
+    assert autocorr.shape[1] == 100  # check resampling
     autocorr_eeglab = loadmat(autocorr_raw_path)["autocorr"]
     assert np.allclose(autocorr, autocorr_eeglab)
 
@@ -382,7 +382,7 @@ def test_eeg_autocorr():
     ica = read_ica_eeglab(raw_short_eeglab_path)
     icaact = _compute_ica_activations(raw, ica)
     autocorr = _eeg_autocorr(raw, ica, icaact)
-
+    assert autocorr.shape[1] == 100  # check resampling
     autocorr_eeglab = loadmat(autocorr_short_raw_path)["autocorr"]
     assert np.allclose(autocorr, autocorr_eeglab, atol=1e-7)
 
@@ -402,6 +402,6 @@ def test_eeg_autocorr_fftw():
     ica = read_ica_eeglab(epo_eeglab_path)
     icaact = _compute_ica_activations(epochs, ica)
     autocorr = _eeg_autocorr_fftw(epochs, ica, icaact)
-
+    assert autocorr.shape[1] == 100  # check resampling
     autocorr_eeglab = loadmat(autocorr_epo_path)["autocorr"]
     assert np.allclose(autocorr, autocorr_eeglab, atol=1e-7)

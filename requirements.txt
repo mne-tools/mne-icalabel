@@ -1,8 +1,0 @@
-numpy
-scipy
-matplotlib
-joblib
-mne
-python-picard
-scikit-learn
-torch

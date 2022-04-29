@@ -83,7 +83,7 @@ jobs:
             name: Install relevant dependencies
             command: |
               set -e
-              ./scripts/circleci_dependencies.sh
+              ./scripts/circle_ci_dependencies.sh
 
         - run:
             <<: *xvfb

@@ -389,7 +389,7 @@ def _eeg_autocorr_welch(raw: BaseRaw, ica: ICA, icaact: NDArray[float]) -> NDArr
     # resample to 1 second at 100 samples/sec
     # i.e. the resampling must output an array of shape (components, 101), thus
     # respecting '100 < ac.T.shape[0] * 100 / down <= 101'.
-    down = int(raw.info['sfreq'])
+    down = int(raw.info["sfreq"])
     if 101 < ac.shape[1] * 100 / down:
         down += 1
     elif ac.shape[1] * 100 / down <= 100:
@@ -430,7 +430,7 @@ def _eeg_autocorr(raw: BaseRaw, ica: ICA, icaact: NDArray[float]) -> NDArray[flo
     # resample to 1 second at 100 samples/sec
     # i.e. the resampling must output an array of shape (components, 101), thus
     # respecting '100 < ac.T.shape[0] * 100 / down <= 101'.
-    down = int(raw.info['sfreq'])
+    down = int(raw.info["sfreq"])
     if 101 < ac.shape[1] * 100 / down:
         down += 1
     elif ac.shape[1] * 100 / down <= 100:
@@ -468,7 +468,7 @@ def _eeg_autocorr_fftw(epochs: BaseEpochs, ica: ICA, icaact: NDArray[float]) -> 
     # resample to 1 second at 100 samples/sec
     # i.e. the resampling must output an array of shape (components, 101), thus
     # respecting '100 < ac.T.shape[0] * 100 / down <= 101'.
-    down = int(epochs.info['sfreq'])
+    down = int(epochs.info["sfreq"])
     if 101 < ac.shape[1] * 100 / down:
         down += 1
     if ac.shape[1] * 100 / down <= 100:

@@ -225,4 +225,3 @@ del reconst_raw
 # References
 # ^^^^^^^^^^
 # .. footbibliography::
-

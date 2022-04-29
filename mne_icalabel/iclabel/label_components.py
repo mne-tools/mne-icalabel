@@ -9,8 +9,8 @@ from .network import run_iclabel
 
 
 def label_components(inst: Union[BaseRaw, BaseEpochs], ica: ICA):
-    """Label the provided ICA components with the ICLabel neural network. 
-    
+    """Label the provided ICA components with the ICLabel neural network.
+
     This network uses 3 features:
 
     - Topographic maps, based on the ICA decomposition.
@@ -29,7 +29,7 @@ def label_components(inst: Union[BaseRaw, BaseEpochs], ica: ICA):
         100 Hz.
     ica : ICA
         ICA decomposition of the provided instance.
-      
+
     Returns
     -------
     labels : numpy.ndarray of shape (n_components,)

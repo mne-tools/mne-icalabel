@@ -15,10 +15,13 @@ exclude =
     .venv
     .git
     __pycache__
-    docs/build
+    doc/build
     dist
     .mypy_cache
     __init__.py
+    doc/_build
+    doc/generated
+    doc/auto_examples
 
 per-file-ignores =
     # __init__.py files are allowed to have unused imports and lines-too-long

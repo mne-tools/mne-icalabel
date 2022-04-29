@@ -1,7 +1,7 @@
 version: 2.1
 
 jobs:
-    build_docs:
+    build_doc:
       docker:
         - image: circleci/python:3.8.5-buster
       steps:
@@ -94,19 +94,19 @@ jobs:
             command: |
               python setup.py develop --user
 
-        # Build docs
+        # Build doc
         - run:
             name: make html
             command: |
-              cd docs;
+              cd doc;
               make html;
 
         # Save the outputs
         - store_artifacts:
-            path: docs/_build/html/
+            path: doc/_build/html/
             destination: dev
         - persist_to_workspace:
-            root: docs/_build
+            root: doc/_build
             paths:
               - html
 
@@ -117,14 +117,14 @@ jobs:
         #       - ~/.mne
         #       - ~/mne_data/MNE-sample-data
 
-    docs-deploy:
+    doc-deploy:
         docker:
           - image: node:8
         steps:
           - checkout
 
           - attach_workspace:
-              at: docs/_build
+              at: doc/_build
 
           - restore_cache:
               keys:
@@ -142,15 +142,15 @@ jobs:
                 - "d6:88:6b:a0:80:bf:14:8e:80:2e:ed:11:52:26:37:68"
 
           - run:
-              # push built docs into the `dev` directory on the `gh-pages` branch
-              name: Deploy docs to gh-pages branch
+              # push built doc into the `dev` directory on the `gh-pages` branch
+              name: Deploy doc to gh-pages branch
               command: |
                 if [ "${CIRCLE_BRANCH}" == "main" ]; then
-                  echo "Deploying dev docs for ${CIRCLE_BRANCH}.";
-                  gh-pages --dotfiles --message "docs updates [skip ci] (${CIRCLE_BUILD_NUM})" --dist docs/_build/html --dest ./dev
+                  echo "Deploying dev doc for ${CIRCLE_BRANCH}.";
+                  gh-pages --dotfiles --message "doc updates [skip ci] (${CIRCLE_BUILD_NUM})" --dist doc/_build/html --dest ./dev
                 else
-                  echo "Deploying stable docs for ${CIRCLE_BRANCH}.";
-                  gh-pages --dotfiles --message "docs updates [skip ci] (${CIRCLE_BUILD_NUM})" --dist docs/_build/html --dest ./stable
+                  echo "Deploying stable doc for ${CIRCLE_BRANCH}.";
+                  gh-pages --dotfiles --message "doc updates [skip ci] (${CIRCLE_BUILD_NUM})" --dist doc/_build/html --dest ./stable
                 fi;
 
           - save_cache:
@@ -163,10 +163,10 @@ workflows:
 
   default:
     jobs:
-      - build_docs
-      - docs-deploy:
+      - build_doc
+      - doc-deploy:
           requires:
-            - build_docs
+            - build_doc
           filters:
             branches:
               only:

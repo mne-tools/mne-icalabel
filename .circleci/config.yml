@@ -82,6 +82,7 @@ jobs:
         - run:
             name: Install relevant dependencies
             command: |
+              set -e
               ./scripts/circleci_dependencies.sh
 
         - run:

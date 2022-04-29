@@ -1,9 +1,9 @@
-# ICLabel-Python
+# mne-icalabel
 
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-[![Codecov](https://codecov.io/gh/jacobf18/iclabel-python/branch/main/graph/badge.svg)](https://codecov.io/gh/jacobf18/iclabel-python)
-[![unit_tests](https://github.com/jacobf18/iclabel-python/actions/workflows/unit_tests.yml/badge.svg?branch=main)](https://github.com/jacobf18/iclabel-python/actions/workflows/unit_tests.yml)
-[![CircleCI](https://circleci.com/gh/jacobf18/iclabel-python.svg?style=shield)](https://circleci.com/gh/jacobf18/iclabel-python)
+[![Codecov](https://codecov.io/gh/jacobf18/mne-icalabel/branch/main/graph/badge.svg)](https://codecov.io/gh/jacobf18/mne-icalabel)
+[![unit_tests](https://github.com/jacobf18/mne-icalabel/actions/workflows/unit_tests.yml/badge.svg?branch=main)](https://github.com/jacobf18/mne-icalabel/actions/workflows/unit_tests.yml)
+[![CircleCI](https://circleci.com/gh/jacobf18/mne-icalabel.svg?style=shield)](https://circleci.com/gh/jacobf18/mne-icalabel)
 [![PyPI Download count](https://pepy.tech/badge/mne-icalabel)](https://pepy.tech/project/mne-icalabel)
 [![Latest PyPI release](https://img.shields.io/pypi/v/mne-icalabel.svg)](https://pypi.org/project/mne-icalabel/)
 
@@ -27,7 +27,7 @@ TBD. Add example code for how this works.
 To get the latest code using [git](https://git-scm.com/), open a terminal and type:
 
     git clone git://github.com/mne-tools/mne-icalabel.git
-    cd iclabel-python
+    cd mne-icalabel
     pip install -e .    
 
 or one can install directly using pip

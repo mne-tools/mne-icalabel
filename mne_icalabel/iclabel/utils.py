@@ -5,7 +5,7 @@ from mne.io import BaseRaw
 from numpy.typing import ArrayLike, NDArray
 
 
-def mne_to_eeglab_locs(raw: BaseRaw) -> Tuple[NDArray[float], NDArray[float]]:
+def _mne_to_eeglab_locs(raw: BaseRaw) -> Tuple[NDArray[float], NDArray[float]]:
     """Obtain EEGLab-like spherical coordinate from EEG channel positions.
 
     TODO: @JACOB:
@@ -77,7 +77,7 @@ def mne_to_eeglab_locs(raw: BaseRaw) -> Tuple[NDArray[float], NDArray[float]]:
     return rd.reshape([1, -1]), np.degrees(th).reshape([1, -1])
 
 
-def pol2cart(theta: NDArray[float], rho: NDArray[float]) -> Tuple[NDArray[float], NDArray[float]]:
+def _pol2cart(theta: NDArray[float], rho: NDArray[float]) -> Tuple[NDArray[float], NDArray[float]]:
     """
     Converts polar coordinates to cartesian coordinates.
 
@@ -97,7 +97,7 @@ def _next_power_of_2(x) -> int:
 
 
 # ----------------------------------------------------------------------------
-def gdatav4(
+def _gdatav4(
     x: ArrayLike, y: ArrayLike, v: ArrayLike, xq: ArrayLike, yq: ArrayLike
 ) -> Tuple[ArrayLike, ArrayLike, ArrayLike]:
     """
@@ -120,7 +120,7 @@ def gdatav4(
     Returns:
         tuple[np.array, np.array, np.array]: tuple of Xi, Yi, Zi
     """
-    x, y, v = mergepoints2D(x, y, v)
+    x, y, v = _mergepoints2D(x, y, v)
 
     xy = x + 1j * y
     xy = np.squeeze(xy)
@@ -147,7 +147,7 @@ def gdatav4(
     return xq, yq, vq
 
 
-def mergepoints2D(
+def _mergepoints2D(
     x: ArrayLike, y: ArrayLike, v: ArrayLike
 ) -> Tuple[ArrayLike, ArrayLike, ArrayLike]:
     """
@@ -177,14 +177,14 @@ def mergepoints2D(
     # Average out the values for these points
     if np.all(np.isreal(v)):
         data = np.stack((y, x, v), axis=-1)
-        yxv = mergesimpts(data, [myepsy, myepsx, np.inf], "average")
+        yxv = _mergesimpts(data, [myepsy, myepsx, np.inf], "average")
         x = yxv[:, 1]
         y = yxv[:, 0]
         v = yxv[:, 2]
     else:
         # If z is imaginary split out the real and imaginary parts
         data = np.stack((y, x, np.real(v), np.imag(v)), axis=-1)
-        yxv = mergesimpts(data, [myepsy, myepsx, np.inf, np.inf], "average")
+        yxv = _mergesimpts(data, [myepsy, myepsx, np.inf, np.inf], "average")
         x = yxv[:, 1]
         y = yxv[:, 0]
         # Re-combine the real and imaginary parts
@@ -193,7 +193,7 @@ def mergepoints2D(
     return x, y, v
 
 
-def mergesimpts(data: ArrayLike, tols: List[ArrayLike], mode: str = "average") -> ArrayLike:
+def _mergesimpts(data: ArrayLike, tols: List[ArrayLike], mode: str = "average") -> ArrayLike:
     """
 
     Args:

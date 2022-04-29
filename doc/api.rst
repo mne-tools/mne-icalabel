@@ -10,9 +10,7 @@ API
 
 This is the application programming interface (API) reference
 for classes (``CamelCase`` names) and functions
-(``underscore_case`` names) of MNE-Connectivity, grouped thematically by analysis
-stage. The data structure classes contain different types of connectivity data
-and are described below.
+(``underscore_case`` names) of MNE-ICALabel.
 
 Most-used functions
 ===================
@@ -23,5 +21,17 @@ Most-used functions
    :toctree: generated/
 
    label_components
-   generate_features
+
+ICLabel
+=======
+
+.. currentmodule:: mne_icalabel.iclabel
+
+.. autosummary::
+   :toctree: generated/
+
+This is the model originally available in `EEGLab <https://github.com/sccn/ICLabel>`.
+
+   get_iclabel_features
    ICLabelNet
+   run_iclabel

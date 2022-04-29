@@ -2,10 +2,11 @@
 """
 .. _tut-auto-artifact-ica:
 
-WIP: Repairing artifacts with ICA automatically
-===============================================
+WIP: Repairing artifacts with ICA automatically using ICLabel Model
+===================================================================
 
-This tutorial covers automatically repairing signals using ICA. For conceptual
+This tutorial covers automatically repairing signals using ICA with
+the ICLabel model :footcite:`iclabel2019`. For conceptual
 background on ICA, see :ref:`this scikit-learn tutorial
 <sphx_glr_auto_examples_decomposition_plot_ica_blind_source_separation.py>`.
 For a basic understanding of how to use ICA to remove artifacts, see the
@@ -17,6 +18,18 @@ intense, we'll also crop the data to 60 seconds; and to save ourselves from
 repeatedly typing ``mne.preprocessing`` we'll directly import a few functions
 and classes from that submodule:
 """
+
+# .. LINKS
+#
+# .. _`blind source separation`:
+#    https://en.wikipedia.org/wiki/Signal_separation
+# .. _`statistically independent`:
+#    https://en.wikipedia.org/wiki/Independence_(probability_theory)
+# .. _`scikit-learn`: https://scikit-learn.org
+# .. _`random seed`: https://en.wikipedia.org/wiki/Random_seed
+# .. _`regular expression`: https://www.regular-expressions.info/
+# .. _`qrs`: https://en.wikipedia.org/wiki/QRS_complex
+# .. _`this EEGLAB tutorial`: https://labeling.ucsd.edu/tutorial/labels
 
 # %%
 
@@ -207,3 +220,9 @@ ica.apply(reconst_raw)
 raw.plot(order=artifact_picks, n_channels=len(artifact_picks), show_scrollbars=False)
 reconst_raw.plot(order=artifact_picks, n_channels=len(artifact_picks), show_scrollbars=False)
 del reconst_raw
+
+# %%
+# References
+# ^^^^^^^^^^
+# .. footbibliography::
+

@@ -1,9 +1,9 @@
 # ICLabel-Python
 
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-[![Codecov](https://codecov.io/gh/jacobf18/iclabel-python/branch/main/graph/badge.svg)](https://codecov.io/gh/jacobf18/iclabel-python)
-[![unit_tests](https://github.com/jacobf18/iclabel-python/actions/workflows/unit_tests.yml/badge.svg?branch=main)](https://github.com/jacobf18/iclabel-python/actions/workflows/unit_tests.yml)
-[![CircleCI](https://circleci.com/gh/jacobf18/iclabel-python.svg?style=shield)](https://circleci.com/gh/jacobf18/iclabel-python)
+[![Codecov](https://codecov.io/gh/adam2392/iclabel-python/branch/main/graph/badge.svg)](https://codecov.io/gh/adam2392/iclabel-python)
+[![unit_tests](https://github.com/adam2392/iclabel-python/actions/workflows/unit_tests.yml/badge.svg?branch=main)](https://github.com/adam2392/iclabel-python/actions/workflows/unit_tests.yml)
+[![CircleCI](https://circleci.com/gh/adam2392/iclabel-python.svg?style=shield)](https://circleci.com/gh/adam2392/iclabel-python)
 [![PyPI Download count](https://pepy.tech/badge/mne-icalabel)](https://pepy.tech/project/mne-icalabel)
 [![Latest PyPI release](https://img.shields.io/pypi/v/mne-icalabel.svg)](https://pypi.org/project/mne-icalabel/)
 
@@ -16,7 +16,17 @@ Scalp EEG is inherently noisy comprised commonly with heartbeat, eyeblink, muscl
 This package aims at automating that process conforming to the popular MNE-Python API for EEG, MEG and iEEG data.
 
 # Basic Usage
-TBD. Add example code for how this works.
+
+MNE-ICALabel will estimate the labels of the ICA components given
+a MNE-Python object and an ICA instance using the [ICA decomposition](https://mne.tools/stable/generated/mne.preprocessing.ICA.html) available
+in MNE-Python.
+
+```Python
+    from mne_icalabel import label_components
+
+    # assuming you have a Raw loaded and ICA instance previously ran
+    label_components(raw, ica)
+```
 
 # Documentation
 [Stable version](https://mne.tools/mne-icalabel/stable/index.html) documentation.

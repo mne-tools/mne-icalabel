@@ -24,7 +24,7 @@ from mne_icalabel.iclabel.features import (
     _eeg_topoplot,
     _retrieve_eeglab_icawinv,
     _topoplotFast,
-    get_features,
+    get_iclabel_features,
 )
 from mne_icalabel.iclabel.utils import _mne_to_eeglab_locs
 
@@ -118,7 +118,7 @@ def test_get_features_from_precomputed_ica(file, psd_constant_file, eeglab_featu
     ica = read_ica_eeglab(file)
 
     # Retrieve topo and autocorr
-    topo, _, autocorr = get_features(inst, ica)
+    topo, _, autocorr = get_iclabel_features(inst, ica)
 
     # Build PSD feature manually to match the subset
     # retrieve activation

@@ -1,9 +1,9 @@
 # ICLabel-Python
 
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-[![Codecov](https://codecov.io/gh/jacobf18/iclabel-python/branch/main/graph/badge.svg)](https://codecov.io/gh/jacobf18/iclabel-python)
-[![unit_tests](https://github.com/jacobf18/iclabel-python/actions/workflows/unit_tests.yml/badge.svg?branch=main)](https://github.com/jacobf18/iclabel-python/actions/workflows/unit_tests.yml)
-[![CircleCI](https://circleci.com/gh/jacobf18/iclabel-python.svg?style=shield)](https://circleci.com/gh/jacobf18/iclabel-python)
+[![Codecov](https://codecov.io/gh/adam2392/iclabel-python/branch/main/graph/badge.svg)](https://codecov.io/gh/adam2392/iclabel-python)
+[![unit_tests](https://github.com/adam2392/iclabel-python/actions/workflows/unit_tests.yml/badge.svg?branch=main)](https://github.com/adam2392/iclabel-python/actions/workflows/unit_tests.yml)
+[![CircleCI](https://circleci.com/gh/adam2392/iclabel-python.svg?style=shield)](https://circleci.com/gh/adam2392/iclabel-python)
 [![PyPI Download count](https://pepy.tech/badge/mne-icalabel)](https://pepy.tech/project/mne-icalabel)
 [![Latest PyPI release](https://img.shields.io/pypi/v/mne-icalabel.svg)](https://pypi.org/project/mne-icalabel/)
 
@@ -16,7 +16,17 @@ Scalp EEG is inherently noisy comprised commonly with heartbeat, eyeblink, muscl
 This package aims at automating that process conforming to the popular MNE-Python API for EEG, MEG and iEEG data.
 
 # Basic Usage
-TBD. Add example code for how this works.
+
+MNE-ICALabel will estimate the labels of the ICA components given
+a MNE-Python object and an ICA instance using the [ICA decomposition](https://mne.tools/stable/generated/mne.preprocessing.ICA.html) available
+in MNE-Python.
+
+```Python
+    from mne_icalabel import label_components
+
+    # assuming you have a Raw loaded and ICA instance previously ran
+    label_components(raw, ica)
+```
 
 # Documentation
 [Stable version](https://mne.tools/mne-icalabel/stable/index.html) documentation.
@@ -35,16 +45,15 @@ or one can install directly using pip
     pip install --user -U https://api.github.com/repos/mne-tools/mne-icalabel/zipball/main
 
 Alternatively, you can also download a
-`zip file of the latest development version <https://github.com/mne-tools/mne-icalabel/archive/main.zip>`__.
+`zip file of the latest development version <https://github.com/mne-tools/mne-icalabel/archive/main.zip>`_.
 
-## Converting MatConvNet to PyTorch
+# Contributing
 
-Architecture in matconvnet:
+If you are interested in contributing, please read the [contributing guidelines](https://github.com/mne-tools/mne-icalabel/main/CONTRIBUTING.md).
 
-<img src="ICLabel_DagNN_Architecture.png" width="400"/>
 
-The PyTorch model is in the `PortToPytorch.ipynb` jupyter notebook. The state dict is in iclabelNet.pt.
-The model has three inputs: image, psd, and autocorrelation features. To encourage generalization, the image
-features are rotated and negated to quadruple the image features. The psd and autocorrelation features
-are coppied to the new image features. Then, the predicted probabilities are averaged over all four
-images.
+# Forum
+
+Please visit the MNE forum to ask relevant questions.
+
+https://mne.discourse.group

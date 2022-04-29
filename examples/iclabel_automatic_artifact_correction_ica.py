@@ -9,8 +9,8 @@ This tutorial covers automatically repairing signals using ICA with
 the ICLabel model :footcite:`iclabel2019`. For conceptual
 background on ICA, see :ref:`this scikit-learn tutorial
 <sphx_glr_auto_examples_decomposition_plot_ica_blind_source_separation.py>`.
-For a basic understanding of how to use ICA to remove artifacts, see the
-tutorial `_tut-artifact-ica` in MNE-Python.
+For a basic understanding of how to use ICA to remove artifacts, see `the
+tutorial <https://mne.tools/stable/auto_tutorials/preprocessing/40_artifact_correction_ica.html>`_ in MNE-Python.
 
 We begin as always by importing the necessary Python modules and loading some
 :ref:`example data <sample-dataset>`. Because ICA can be computationally
@@ -18,18 +18,6 @@ intense, we'll also crop the data to 60 seconds; and to save ourselves from
 repeatedly typing ``mne.preprocessing`` we'll directly import a few functions
 and classes from that submodule:
 """
-
-# .. LINKS
-#
-# .. _`blind source separation`:
-#    https://en.wikipedia.org/wiki/Signal_separation
-# .. _`statistically independent`:
-#    https://en.wikipedia.org/wiki/Independence_(probability_theory)
-# .. _`scikit-learn`: https://scikit-learn.org
-# .. _`random seed`: https://en.wikipedia.org/wiki/Random_seed
-# .. _`regular expression`: https://www.regular-expressions.info/
-# .. _`qrs`: https://en.wikipedia.org/wiki/QRS_complex
-# .. _`this EEGLAB tutorial`: https://labeling.ucsd.edu/tutorial/labels
 
 # %%
 
@@ -172,6 +160,19 @@ ica.plot_sources(raw, show_scrollbars=False)
 # visualize the scalp field distribution of each component using
 # `~mne.preprocessing.ICA.plot_components`. These are interpolated based
 # on the values in the ICA mixing matrix:
+#
+# .. LINKS
+#
+# .. _`blind source separation`:
+#    https://en.wikipedia.org/wiki/Signal_separation
+# .. _`statistically independent`:
+#    https://en.wikipedia.org/wiki/Independence_(probability_theory)
+# .. _`scikit-learn`: https://scikit-learn.org
+# .. _`random seed`: https://en.wikipedia.org/wiki/Random_seed
+# .. _`regular expression`: https://www.regular-expressions.info/
+# .. _`qrs`: https://en.wikipedia.org/wiki/QRS_complex
+# .. _`this EEGLAB tutorial`: https://labeling.ucsd.edu/tutorial/labels
+
 
 # sphinx_gallery_thumbnail_number = 9
 ica.plot_components()

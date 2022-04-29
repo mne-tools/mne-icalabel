@@ -24,6 +24,7 @@ Version 0.1 (Unreleased)
 Enhancements
 ~~~~~~~~~~~~
 
+-
 
 Bug
 ~~~
@@ -39,7 +40,9 @@ Authors
 ~~~~~~~
 
 * `Adam Li`_
-* `TODO fill in other authors name and add to authors.inc`
+* `Jacob Feitelberg`_
+* `Anand Saini`_ 
+* `Mathieu Scheltienne`_
 
 :doc:`Find out what was new in previous releases <whats_new_previous_releases>`
 

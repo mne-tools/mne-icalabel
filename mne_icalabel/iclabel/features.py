@@ -10,7 +10,7 @@ from scipy.signal import resample_poly
 from .utils import _gdatav4, _mne_to_eeglab_locs, _next_power_of_2, _pol2cart
 
 
-def get_features(inst: Union[BaseRaw, BaseEpochs], ica: ICA):
+def get_iclabel_features(inst: Union[BaseRaw, BaseEpochs], ica: ICA):
     """
     Generates the features for ICLabel neural network.
 

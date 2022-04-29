@@ -22,6 +22,7 @@ from mne_icalabel.iclabel.features import (
     _eeg_rpsd_constants,
     _eeg_rpsd_format,
     _eeg_topoplot,
+    _resample,
     _retrieve_eeglab_icawinv,
     _topoplotFast,
     get_iclabel_features,
@@ -410,4 +411,32 @@ def test_eeg_autocorr_fftw():
 def test_resampling():
     """Test that we correctly resample the autocorrelation feature, no matter
     the sampling frequency."""
-    pass
+    # similar dataset shape to the MNE sample dataset
+    data = np.random.randint(1, 10, (15, 601))
+
+    # with integer
+    resamp = _resample(data, fs=600)
+    assert resamp.shape[1] == 101
+
+    # with floats
+    for fs in np.arange(599.2, 600, 0.1):
+        resamp = _resample(data, fs=fs)
+        assert resamp.shape[1] == 101
+    for fs in np.arange(600.1, 600.9, 0.1):
+        resamp = _resample(data, fs=fs)
+        assert resamp.shape[1] == 101
+
+    # similar dataset shape to the EEGLAB sample dataset
+    data = np.random.randint(1, 10, (30, 129))
+
+    # with integer
+    resamp = _resample(data, fs=128)
+    assert resamp.shape[1] == 101
+
+    # with floats
+    for fs in np.arange(127.2, 128, 0.1):
+        resamp = _resample(data, fs=fs)
+        assert resamp.shape[1] == 101
+    for fs in np.arange(128.1, 128.9, 0.1):
+        resamp = _resample(data, fs=fs)
+        assert resamp.shape[1] == 101

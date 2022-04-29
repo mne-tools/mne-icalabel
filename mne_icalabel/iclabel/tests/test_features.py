@@ -405,3 +405,9 @@ def test_eeg_autocorr_fftw():
     assert autocorr.shape[1] == 100  # check resampling
     autocorr_eeglab = loadmat(autocorr_epo_path)["autocorr"]
     assert np.allclose(autocorr, autocorr_eeglab, atol=1e-7)
+
+
+def test_resampling():
+    """Test that we correctly resample the autocorrelation feature, no matter
+    the sampling frequency."""
+    pass

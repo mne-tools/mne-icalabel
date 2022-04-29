@@ -387,12 +387,7 @@ def _eeg_autocorr_welch(raw: BaseRaw, ica: ICA, icaact: NDArray[float]) -> NDArr
     ac = np.divide(ac, den)
 
     # resample to 1 second at 100 samples/sec
-    # i.e. the resampling must output an array of shape (components, 101), thus
-    # respecting '100 < ac.T.shape[0] * 100 / down <= 101'.
-    down = int(raw.info["sfreq"])
-    if 101 < ac.shape[1] * 100 / down:
-        down += 1
-    resamp = resample_poly(ac.T, 100, down).T
+    resamp = _resample(ac, raw.info['sfreq'])
     resamp = resamp[:, 1:, np.newaxis, np.newaxis].transpose([2, 1, 3, 0])
     return np.real(resamp).astype(np.float32)
 
@@ -426,12 +421,7 @@ def _eeg_autocorr(raw: BaseRaw, ica: ICA, icaact: NDArray[float]) -> NDArray[flo
     ac = np.divide(ac.T, ac[:, 0]).T
 
     # resample to 1 second at 100 samples/sec
-    # i.e. the resampling must output an array of shape (components, 101), thus
-    # respecting '100 < ac.T.shape[0] * 100 / down <= 101'.
-    down = int(raw.info["sfreq"])
-    if 101 < ac.shape[1] * 100 / down:
-        down += 1
-    resamp = resample_poly(ac.T, 100, down).T
+    resamp = _resample(ac, raw.info['sfreq'])
     resamp = resamp[:, 1:, np.newaxis, np.newaxis].transpose([2, 1, 3, 0])
     return resamp.astype(np.float32)
 
@@ -462,11 +452,30 @@ def _eeg_autocorr_fftw(epochs: BaseEpochs, ica: ICA, icaact: NDArray[float]) -> 
     ac = np.divide(ac.T, ac[:, 0]).T
 
     # resample to 1 second at 100 samples/sec
-    # i.e. the resampling must output an array of shape (components, 101), thus
-    # respecting '100 < ac.T.shape[0] * 100 / down <= 101'.
-    down = int(epochs.info["sfreq"])
-    if 101 < ac.shape[1] * 100 / down:
-        down += 1
-    resamp = resample_poly(ac.T, 100, down).T
+    resamp = _resample(ac, epochs.info['sfreq'])
     resamp = resamp[:, 1:, np.newaxis, np.newaxis].transpose([2, 1, 3, 0])
     return np.real(resamp).astype(np.float32)
+
+
+def _resample(ac: NDArray[float], fs: Union[int, float]) -> NDArray[float]:
+    """Resample the autocorrelation feature. The comment in EEGLAB is:
+
+        resample to 1 second at 100 samples/sec
+
+    Which translates by: the output array must be of shape (n_comp, 101), thus
+    the resampling up variable is set to 100, and down variable must respect:
+        100 < ac.T.shape[0] * 100 / down <= 101
+    If the instance sampling frequency is an integer, then down is equal to the
+    sampling frequency.
+
+    Parameters
+    ----------
+    ac : array
+        Array of shape (n_comp, samples)
+    fs : int | float
+        Sampling frequency of the MNE instance.
+    """
+    down = int(fs)
+    if 101 < ac.shape[1] * 100 / down:
+        down += 1
+    return resample_poly(ac.T, 100, down).T

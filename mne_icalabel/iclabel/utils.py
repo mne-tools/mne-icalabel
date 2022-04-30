@@ -131,7 +131,7 @@ def _gdatav4(
     g = np.square(d) * (np.log(d) - 1)  # % Green's function.
     # Fixup value of Green's function along diagonal
     np.fill_diagonal(g, 0)
-    weights = np.linalg.lstsq(g, v)[0]
+    weights = np.linalg.lstsq(g, v, rcond=-1)[0]
 
     m, n = xq.shape
     vq = np.zeros(xq.shape)

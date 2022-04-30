@@ -53,7 +53,6 @@ def test_loc(file, eeglab_result_file):
 
 # TODO: Warnings should be fixed at some point.
 @pytest.mark.filterwarnings("ignore::RuntimeWarning")
-@pytest.mark.filterwarnings("ignore::FutureWarning")
 @pytest.mark.parametrize("file", (gdatav4_raw_path, gdatav4_epo_path))
 def test_gdatav4(file):
     """Test grid data interpolation."""

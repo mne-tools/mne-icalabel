@@ -103,7 +103,6 @@ kwargs = {"raw": dict(preload=True), "epo": dict()}
 
 # ----------------------------------------------------------------------------
 @pytest.mark.filterwarnings("ignore::RuntimeWarning")
-@pytest.mark.filterwarnings("ignore::FutureWarning")
 @pytest.mark.parametrize(
     "file, psd_constant_file, eeglab_feature_file",
     [
@@ -180,7 +179,6 @@ def test_compute_ica_activations(file, eeglab_result_file):
 
 # ----------------------------------------------------------------------------
 @pytest.mark.filterwarnings("ignore::RuntimeWarning")
-@pytest.mark.filterwarnings("ignore::FutureWarning")
 @pytest.mark.parametrize(
     "file, eeglab_result_file",
     [(raw_eeglab_path, raw_topo1_path), (epo_eeglab_path, epo_topo1_path)],
@@ -206,7 +204,6 @@ def test_topoplotFast(file, eeglab_result_file):
 
 
 @pytest.mark.filterwarnings("ignore::RuntimeWarning")
-@pytest.mark.filterwarnings("ignore::FutureWarning")
 @pytest.mark.parametrize(
     "file, eeglab_result_file",
     [

@@ -18,7 +18,6 @@ ica.fit(raw)
 
 
 @pytest.mark.filterwarnings("ignore::RuntimeWarning")
-@pytest.mark.filterwarnings("ignore::FutureWarning")
 def test_label_components():
     """Simple test to check that label_components runs without raising."""
     labels = label_components(raw, ica, method="iclabel")

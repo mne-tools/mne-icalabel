@@ -4,9 +4,9 @@ from mne import BaseEpochs
 from mne.io import BaseRaw
 from mne.preprocessing import ICA
 
+from ..utils import _validate_inst_and_ica
 from .features import get_iclabel_features
 from .network import run_iclabel
-from ..utils import _validate_inst_and_ica
 
 
 def label_components(inst: Union[BaseRaw, BaseEpochs], ica: ICA):

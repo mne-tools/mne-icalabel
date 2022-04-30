@@ -33,7 +33,7 @@ def label_components(inst: Union[BaseRaw, BaseEpochs], ica: ICA, method: str):
     labels : np.ndarray of shape (n_components,) or (n_components, n_class)
         The estimated numerical labels of each ICA component.
     """
-    _validate_type(method, str, 'method')
+    _validate_type(method, str, "method")
     _check_option("method", method, methods)
     _validate_inst_and_ica(inst, ica)
     return methods[method](inst, ica)

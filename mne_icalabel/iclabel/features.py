@@ -7,8 +7,8 @@ from mne.preprocessing import ICA
 from numpy.typing import NDArray
 from scipy.signal import resample_poly
 
-from .utils import _gdatav4, _mne_to_eeglab_locs, _next_power_of_2, _pol2cart
 from ..utils import _validate_inst_and_ica
+from .utils import _gdatav4, _mne_to_eeglab_locs, _next_power_of_2, _pol2cart
 
 
 def get_iclabel_features(inst: Union[BaseRaw, BaseEpochs], ica: ICA):

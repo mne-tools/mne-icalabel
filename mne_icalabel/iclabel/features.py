@@ -4,6 +4,7 @@ import numpy as np
 from mne import BaseEpochs
 from mne.io import BaseRaw
 from mne.preprocessing import ICA
+from mne.utils import _validate_type
 from numpy.typing import NDArray
 from scipy.signal import resample_poly
 
@@ -35,6 +36,9 @@ def get_iclabel_features(inst: Union[BaseRaw, BaseEpochs], ica: ICA):
     ----------
     .. footbibliography::
     """
+    _validate_type(inst, (BaseRaw, BaseEpochs), 'inst', 'Raw or Epochs')
+    _validate_type(ica, ICA, 'ica')
+
     icawinv, _ = _retrieve_eeglab_icawinv(ica)
     icaact = _compute_ica_activations(inst, ica)
 

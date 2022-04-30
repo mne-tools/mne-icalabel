@@ -25,21 +25,23 @@ Most-used functions
 ICLabel
 =======
 
-.. currentmodule:: mne_icalabel.iclabel
-
-.. autosummary::
-   :toctree: generated/
-
 This is the model originally available in `EEGLab <https://github.com/sccn/ICLabel>`_.
 The model was ported using matconvnet.
 
 Architecture in matconvnet:
 
-   <img src="ICLabel_DagNN_Architecture.png" width="400"/>
+.. image:: ICLabel_DagNN_Architecture.png
+   :width: 400
+   :alt: ICLabel Neural Network Architecture
 
 The model has three inputs: image, psd, and autocorrelation features. To encourage generalization, the image
 features are rotated and negated to quadruple the image features. The psd and autocorrelation features
 are copied to the new image features. Then, the predicted probabilities are averaged over all four images.
+
+.. currentmodule:: mne_icalabel.iclabel
+
+.. autosummary::
+   :toctree: generated/
 
    get_iclabel_features
    ICLabelNet

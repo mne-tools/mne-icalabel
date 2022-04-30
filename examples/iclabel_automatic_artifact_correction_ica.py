@@ -16,7 +16,7 @@ We begin as always by importing the necessary Python modules and loading some
 :ref:`example data <sample-dataset>`. Because ICA can be computationally
 intense, we'll also crop the data to 60 seconds; and to save ourselves from
 repeatedly typing ``mne.preprocessing`` we'll directly import a few functions
-and classes from that submodule:
+and classes from that submodule.
 """
 
 # %%
@@ -24,13 +24,17 @@ and classes from that submodule:
 import os
 
 import mne
+import numpy as np
 from mne.preprocessing import ICA, create_ecg_epochs, create_eog_epochs
+
+from mne_icalabel.iclabel.label_components import label_components
 
 sample_data_folder = mne.datasets.sample.data_path()
 sample_data_raw_file = os.path.join(
     sample_data_folder, "MEG", "sample", "sample_audvis_filt-0-40_raw.fif"
 )
 raw = mne.io.read_raw_fif(sample_data_raw_file)
+
 # Here we'll crop to 60 seconds and drop gradiometer channels for speed
 raw.crop(tmax=60.0).pick_types(meg="mag", eeg=True, stim=True, eog=True)
 raw.load_data()
@@ -54,8 +58,12 @@ raw.load_data()
 # Let's begin by visualizing the artifacts that we want to repair. In this
 # dataset they are big enough to see easily in the raw data:
 
+# Note: for this example, we are using ICLabel which has only
+# been validated and works for EEG systems with less than 32 electrodes.
+raw = raw.pick_types(eeg=True, eog=True, ecg=True, emg=True)
+
 # pick some channels that clearly show heartbeats and blinks
-regexp = r"(MEG [12][45][123]1|EEG 00.)"
+regexp = r"(EEG 00.)"
 artifact_picks = mne.pick_channels_regexp(raw.ch_names, regexp=regexp)
 raw.plot(order=artifact_picks, n_channels=len(artifact_picks), show_scrollbars=False)
 
@@ -194,18 +202,33 @@ ica.plot_properties(raw, picks=[0, 1])
 # Now that we've explored what components need to be removed, we can
 # apply the automatic ICA component labeling algorithm, which will
 # assign a probability value for each component being one of:
+#
 # - brain
 # - muscle artifact
 # - eye blink
 # - heart beat
-# - TODO: add rest
+# - line noise
+# - channel noise
+# - other
 #
+# The output of the ICLabel ``label_components`` function produces
+# predicted probability values for each of these classes in that order.
+#
+# To start this process, we will compute features of each ICA
+# component to be fed into our classification model. This is
+# done automatically underneath the hood. An autocorrelation,
+# power spectral density and topographic map feature is fed
+# into a 3-head neural network that has been pretrained.
+# See :footcite:`iclabel2019` for full details.
+
+ic_labels = label_components(raw, ica)
+print(np.round(ic_labels, 2))
+
 # Afterwards, we can hard threshold the probability values to assign
 # each component to be kept or not (i.e. it is part of brain signal).
-# To start this process, we need to compute features of each ICA
-# component to be fed into our classification model. TODO: add
-# description of final features.
-
+not_brain_index = np.argmax(ic_labels, axis=1) != 0
+exclude_idx = np.argwhere(not_brain_index).squeeze()
+print(f"Excluding these ICA components: {exclude_idx}")
 
 # %%
 # Now that the exclusions have been set, we can reconstruct the sensor signals
@@ -216,7 +239,7 @@ ica.plot_properties(raw, picks=[0, 1])
 
 # ica.apply() changes the Raw object in-place, so let's make a copy first:
 reconst_raw = raw.copy()
-ica.apply(reconst_raw)
+ica.apply(reconst_raw, exclude=exclude_idx)
 
 raw.plot(order=artifact_picks, n_channels=len(artifact_picks), show_scrollbars=False)
 reconst_raw.plot(order=artifact_picks, n_channels=len(artifact_picks), show_scrollbars=False)

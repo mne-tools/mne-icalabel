@@ -18,3 +18,7 @@ pymatreader
 black
 isort
 mypy
+matplotlib
+python-picard
+joblib
+scikit-learn

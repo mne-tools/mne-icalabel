@@ -212,7 +212,7 @@ def _format_input_for_torch(topo: ArrayLike, psd: ArrayLike, autocorr: ArrayLike
 def run_iclabel(images: ArrayLike, psds: ArrayLike, autocorr: ArrayLike):
     """Run the ICLabel network on the provided set of features.
 
-    The features are un-formatted and are as-returned by `~mne_icalabel.iclabel.get_features`.
+    The features are un-formatted and are as-returned by `~mne_icalabel.iclabel.get_iclabel_features`.
 
     Parameters
     ----------

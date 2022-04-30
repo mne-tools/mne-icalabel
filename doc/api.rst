@@ -30,7 +30,7 @@ The model was ported using matconvnet.
 
 Architecture in matconvnet:
 
-.. image:: ICLabel_DagNN_Architecture.png
+.. image:: _static/ICLabel_DagNN_Architecture.png
    :width: 400
    :alt: ICLabel Neural Network Architecture
 

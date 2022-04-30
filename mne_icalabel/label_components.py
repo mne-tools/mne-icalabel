@@ -23,8 +23,8 @@ def label_components(inst: Union[BaseRaw, BaseEpochs], ica: ICA, method: str):
     ica : ICA
         The fitted ICA instance.
     method : str
-        The proposed method for labeling components. Must be one of
-        ('iclabel',).
+        The proposed method for labeling components. Must be one of:
+        ``'iclabel'``.
 
     Returns
     -------

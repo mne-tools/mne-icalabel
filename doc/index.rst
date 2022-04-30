@@ -30,7 +30,7 @@ License
 -------
 
 **mne-icalabel** is licensed under `BSD 3.0 <https://opensource.org/licenses/BSD-3-Clause>`_.
-A full copy of the license can be found `on GitHub <https://github.com/adam2392/mne-icalabel/blob/main/LICENSE>`_.
+A full copy of the license can be found `on GitHub <https://raw.githubusercontent.com/mne-tools/mne-icalabel/main/LICENSE>`_.
 
 Indices and tables
 ------------------

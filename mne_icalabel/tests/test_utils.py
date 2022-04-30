@@ -24,7 +24,7 @@ def test_validate_inst_and_ica():
 
     # to avoid RuntimeWarning with fitting an unfiltered raw, let's fake the filter
     with raw.info._unlock():
-        raw.info['highpass'] = 1.0
+        raw.info["highpass"] = 1.0
     ica.fit(raw)
     # test valid
     _validate_inst_and_ica(raw, ica)

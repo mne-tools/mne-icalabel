@@ -11,15 +11,29 @@ from .utils import _gdatav4, _mne_to_eeglab_locs, _next_power_of_2, _pol2cart
 
 
 def get_iclabel_features(inst: Union[BaseRaw, BaseEpochs], ica: ICA):
-    """
-    Generates the features for ICLabel neural network.
+    """Generate the features for ICLabel neural network.
 
     Parameters
     ----------
-    inst : Raw | Epoch
+    inst : Raw | Epochs
         MNE Raw/Epoch instance with data array in Volts.
     ica : ICA
         MNE ICA decomposition.
+
+    Returns
+    -------
+    topo : np.ndarray of shape (32, 32, 1, n_components)
+        The topoplot feature.
+    psd : np.ndarray of shape (1, 100, 1, n_components)
+        The psd feature.
+    autocorr : np.ndarray of shape (1, 100, 1, n_components)
+        The autocorrelations feature. Depending on the length of the
+        raw data passed in, different methods of computing autocorrelation
+        will be used. See :footcite:`iclabel2019` for details.
+
+    References
+    ----------
+    .. footbibliography::
     """
     icawinv, _ = _retrieve_eeglab_icawinv(ica)
     icaact = _compute_ica_activations(inst, ica)

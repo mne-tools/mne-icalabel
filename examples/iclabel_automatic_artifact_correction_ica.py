@@ -25,7 +25,7 @@ import os
 
 import mne
 import numpy as np
-from mne.preprocessing import ICA, create_ecg_epochs, create_eog_epochs
+from mne.preprocessing import ICA
 
 from mne_icalabel.iclabel.label_components import label_components
 

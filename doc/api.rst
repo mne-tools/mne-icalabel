@@ -39,10 +39,10 @@ features are rotated and negated to quadruple the image features. The psd and au
 are copied to the new image features. Then, the predicted probabilities are averaged over all four images.
 
 .. currentmodule:: mne_icalabel.iclabel
-
+   
 .. autosummary::
    :toctree: generated/
 
    get_iclabel_features
-   ICLabelNet
    run_iclabel
+   

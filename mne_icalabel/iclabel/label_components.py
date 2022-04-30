@@ -3,10 +3,10 @@ from typing import Union
 from mne import BaseEpochs
 from mne.io import BaseRaw
 from mne.preprocessing import ICA
-from mne.utils import _validate_type
 
 from .features import get_iclabel_features
 from .network import run_iclabel
+from ..utils import _validate_inst_and_ica
 
 
 def label_components(inst: Union[BaseRaw, BaseEpochs], ica: ICA):
@@ -41,9 +41,7 @@ def label_components(inst: Union[BaseRaw, BaseEpochs], ica: ICA):
     ----------
     .. footbibliography::
     """
-    _validate_type(inst, (BaseRaw, BaseEpochs), 'inst', 'Raw or Epochs')
-    _validate_type(ica, ICA, 'ica')
-
+    _validate_inst_and_ica(inst, ica)
     features = get_iclabel_features(inst, ica)
     labels = run_iclabel(*features)
     return labels

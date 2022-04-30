@@ -48,7 +48,7 @@ def get_iclabel_features(inst: Union[BaseRaw, BaseEpochs], ica: ICA):
             "does not seems to be referenced to a common average reference (CAR). "
             "ICLabel was designed to classify features extracted from an EEG dataset "
             "referenced to a CAR (see the 'set_eeg_reference()' method for Raw and "
-            "Epochs instances."
+            "Epochs instances)."
         )
     if inst.info["highpass"] != 1 or inst.info["lowpass"] != 100:
         warn(
@@ -56,7 +56,7 @@ def get_iclabel_features(inst: Union[BaseRaw, BaseEpochs], ica: ICA):
             "is not filtered between 1 and 100 Hz. "
             "ICLabel was designed to classify features extracted from an EEG dataset "
             "bandpass filtered between 1 and 100 Hz (see the 'filter()' method for Raw "
-            "and Epochs instances."
+            "and Epochs instances)."
         )
 
     icawinv, _ = _retrieve_eeglab_icawinv(ica)

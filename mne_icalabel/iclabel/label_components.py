@@ -4,7 +4,6 @@ from mne import BaseEpochs
 from mne.io import BaseRaw
 from mne.preprocessing import ICA
 
-from ..utils import _validate_inst_and_ica
 from .features import get_iclabel_features
 from .network import run_iclabel
 
@@ -41,7 +40,6 @@ def label_components(inst: Union[BaseRaw, BaseEpochs], ica: ICA):
     ----------
     .. footbibliography::
     """
-    _validate_inst_and_ica(inst, ica)
     features = get_iclabel_features(inst, ica)
     labels = run_iclabel(*features)
     return labels

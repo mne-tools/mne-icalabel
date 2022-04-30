@@ -9,11 +9,7 @@ Dependencies
 * ``mne`` (>=1.0)
 * ``numpy`` (>=1.14)
 * ``scipy`` (>=1.5.0)
-* ``joblib`` (>=1.0.0)
-* ``scikit-learn`` (>=1.1)
 * ``torch`` (for running pytorch neural networks)
-* ``python-picard`` (for running ICA)
-* ``matplotlib`` (optional, for using the interactive data inspector)
 
 We require that you use Python 3.8 or higher.
 You may choose to install ``mne-icalabel`` `via pip <#Installation via pip>`_,

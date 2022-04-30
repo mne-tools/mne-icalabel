@@ -22,7 +22,7 @@ This package aims at automating that process conforming to the popular MNE-Pytho
 
 MNE-ICALabel will estimate the labels of the ICA components given
 a MNE-Python [Raw](https://mne.tools/stable/generated/mne.io.Raw.html) or
-[Epoch](https://mne.tools/stable/generated/mne.Epochs.html) object and an ICA instance using the
+[Epochs](https://mne.tools/stable/generated/mne.Epochs.html) object and an ICA instance using the
 [ICA decomposition](https://mne.tools/stable/generated/mne.preprocessing.ICA.html)
 available in MNE-Python.
 

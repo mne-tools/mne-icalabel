@@ -29,7 +29,7 @@ available in MNE-Python.
 ```
 from mne_icalabel import label_components
 
-# assuming you have a Raw loaded and ICA instance previously ran
+# assuming you have a Raw and ICA instance previously fitted
 label_components(raw, ica, method='iclabel')
 ```
 

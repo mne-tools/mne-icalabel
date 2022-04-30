@@ -7,26 +7,33 @@
 [![PyPI Download count](https://pepy.tech/badge/mne-icalabel)](https://pepy.tech/project/mne-icalabel)
 [![Latest PyPI release](https://img.shields.io/pypi/v/mne-icalabel.svg)](https://pypi.org/project/mne-icalabel/)
 
-This repository is a conversion of the popular ICLabel classifier for Python. In addition, we provide improvements in the form of other models.
+This repository is a conversion of the popular ICLabel classifier for Python. In addition, we provide
+improvements in the form of other models.
 
 # Why?
 
-Scalp EEG is inherently noisy comprised commonly with heartbeat, eyeblink, muscle and movement artifacts. Independent component analysis (ICA) is a common method to remove artifacts, but rely on a human manually annotating with independent components (IC) are noisy and which are brain signal.
+Scalp EEG is inherently noisy comprised commonly with heartbeat, eyeblink, muscle and movement artifacts.
+Independent component analysis (ICA) is a common method to remove artifacts, but rely on a human manually
+annotating with independent components (IC) are noisy and which are brain signal.
 
 This package aims at automating that process conforming to the popular MNE-Python API for EEG, MEG and iEEG data.
 
 # Basic Usage
 
 MNE-ICALabel will estimate the labels of the ICA components given
-a MNE-Python object and an ICA instance using the [ICA decomposition](https://mne.tools/stable/generated/mne.preprocessing.ICA.html) available
-in MNE-Python.
+a MNE-Python [Raw](https://mne.tools/stable/generated/mne.io.Raw.html) or
+[Epochs](https://mne.tools/stable/generated/mne.Epochs.html) object and an ICA instance using the
+[ICA decomposition](https://mne.tools/stable/generated/mne.preprocessing.ICA.html)
+available in MNE-Python.
 
-```Python
-    from mne_icalabel import label_components
-
-    # assuming you have a Raw loaded and ICA instance previously ran
-    label_components(raw, ica)
 ```
+from mne_icalabel import label_components
+
+# assuming you have a Raw and ICA instance previously fitted
+label_components(raw, ica, method='iclabel')
+```
+
+The only current available method is `'iclabel'`.
 
 # Documentation
 [Stable version](https://mne.tools/mne-icalabel/stable/index.html) documentation.
@@ -38,7 +45,7 @@ To get the latest code using [git](https://git-scm.com/), open a terminal and ty
 
     git clone git://github.com/mne-tools/mne-icalabel.git
     cd mne-icalabel
-    pip install -e .    
+    pip install -e .
 
 or one can install directly using pip
 

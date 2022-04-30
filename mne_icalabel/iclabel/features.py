@@ -42,7 +42,7 @@ def get_iclabel_features(inst: Union[BaseRaw, BaseEpochs], ica: ICA):
     # TODO: 'custom_ref_applied' does not necessarily correspond to a CAR reference.
     # At the moment, the reference of the EEG data is not stored in the info.
     # c.f. https://github.com/mne-tools/mne-python/issues/8962
-    if inst.info["custom_ref_applied"] == False:
+    if inst.info["custom_ref_applied"] == 0:
         warn(
             f"The provided {'Raw' if isinstance(inst, BaseRaw) else 'Epochs'} instance "
             "does not seems to be referenced to a common average reference (CAR). "

@@ -88,11 +88,12 @@ numpydoc_xref_ignore = {
     'n_node_names', 'n_tapers', 'n_signals', 'n_step', 'n_freqs',
     'epochs', 'freqs', 'times', 'arrays', 'lists', 'func', 'n_nodes',
     'n_estimated_nodes', 'n_samples', 'n_channels', 'Renderer',
-    'n_ytimes', 'n_ychannels', 'n_events'
+    'n_ytimes', 'n_ychannels', 'n_events', 'n_components',
 }
 numpydoc_xref_aliases = {
     # Python
     'file-like': ':term:`file-like <python:file object>`',
+    'ArrayLike': ':term:`array_like`',
     # Matplotlib
     'colormap': ':doc:`colormap <matplotlib:tutorials/colors/colormaps>`',
     'color': ':doc:`color <matplotlib:api/colors_api>`',
@@ -126,7 +127,8 @@ numpydoc_validation_exclude = {  # set of regex
     # we currently don't document these properly (probably okay)
     r'\.__getitem__', r'\.__contains__', r'\.__hash__', r'\.__mul__',
     r'\.__sub__', r'\.__add__', r'\.__iter__', r'\.__div__', r'\.__neg__',
-    r'plot_circle'
+    r'plot_circle',
+    r'nn.Module',
 }
 
 

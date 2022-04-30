@@ -118,6 +118,8 @@ class _ICLabelNetAutocorr(nn.Module):
 
 
 class ICLabelNet(nn.Module):
+    """The ICLabel neural network."""
+
     def __init__(self):
         super().__init__()
 
@@ -207,9 +209,25 @@ def _format_input_for_torch(topo: ArrayLike, psd: ArrayLike, autocorr: ArrayLike
     return topo, psd, autocorr
 
 
-def run_iclabel(images: ArrayLike, psds: ArrayLike, autocorr: ArrayLike) -> ArrayLike:
-    """Run the ICLabel network on the provided set of features. The features
-    are un-formatted and are as-returned by ``get_features``."""
+def run_iclabel(images: ArrayLike, psds: ArrayLike, autocorr: ArrayLike):
+    """Run the ICLabel network on the provided set of features.
+
+    The features are un-formatted and are as-returned by `~mne_icalabel.iclabel.get_iclabel_features`.
+
+    Parameters
+    ----------
+    images : np.ndarray of shape (n_components, 1, 32, 32)
+        The topoplot images.
+    psds : np.ndarray of shape (n_components, 1, 1, 100)
+        The power spectral density features.
+    autocorr : np.ndarray of shape (n_components, 1, 1, 100)
+        The autocorrelation features.
+
+    Returns
+    -------
+    labels : np.ndarray of shape (n_components)
+        The predicted numerical probability values for all labels in ICLabel output.
+    """
     ica_network_file = files("mne_icalabel.iclabel").joinpath("assets/iclabelNet.pt")
 
     # Get network and load weights
@@ -218,4 +236,5 @@ def run_iclabel(images: ArrayLike, psds: ArrayLike, autocorr: ArrayLike) -> Arra
 
     # Format input and get labels
     labels = iclabel_net(*_format_input_for_torch(*_format_input(images, psds, autocorr)))
-    return labels.detach().numpy()
+    labels = labels.detach().numpy()
+    return labels

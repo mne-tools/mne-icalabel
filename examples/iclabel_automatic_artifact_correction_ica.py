@@ -68,23 +68,6 @@ artifact_picks = mne.pick_channels_regexp(raw.ch_names, regexp=regexp)
 raw.plot(order=artifact_picks, n_channels=len(artifact_picks), show_scrollbars=False)
 
 # %%
-# We can get a summary of how the ocular artifact manifests across each channel
-# type using `~mne.preprocessing.create_eog_epochs` like we did in the
-# :ref:`tut-artifact-overview` tutorial:
-
-eog_evoked = create_eog_epochs(raw).average()
-eog_evoked.apply_baseline(baseline=(None, -0.2))
-eog_evoked.plot_joint()
-
-# %%
-# Now we'll do the same for the heartbeat artifacts, using
-# `~mne.preprocessing.create_ecg_epochs`:
-
-ecg_evoked = create_ecg_epochs(raw).average()
-ecg_evoked.apply_baseline(baseline=(None, -0.2))
-ecg_evoked.plot_joint()
-
-# %%
 # Filtering to remove slow drifts
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
@@ -187,8 +170,6 @@ ica.plot_components()
 
 # blinks
 ica.plot_overlay(raw, exclude=[0], picks="eeg")
-# heartbeats
-ica.plot_overlay(raw, exclude=[1], picks="mag")
 
 # %%
 # We can also plot some diagnostics of each IC using
@@ -226,6 +207,8 @@ print(np.round(ic_labels, 2))
 
 # Afterwards, we can hard threshold the probability values to assign
 # each component to be kept or not (i.e. it is part of brain signal).
+# The first component was visually an artifact, which was captured
+# for certain.
 not_brain_index = np.argmax(ic_labels, axis=1) != 0
 exclude_idx = np.argwhere(not_brain_index).squeeze()
 print(f"Excluding these ICA components: {exclude_idx}")

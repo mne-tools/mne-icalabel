@@ -169,6 +169,18 @@
   </a>
  </li>
 </ul>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="generated/mne_icalabel.iclabel.get_iclabel_features.html">
+   mne_icalabel.iclabel.get_iclabel_features
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="generated/mne_icalabel.iclabel.run_iclabel.html">
+   mne_icalabel.iclabel.run_iclabel
+  </a>
+ </li>
+</ul>
 
   </div>
 </nav>
@@ -245,28 +257,27 @@ for classes (<code class="docutils literal notranslate"><span class="pre">CamelC
 </section>
 <section id="iclabel">
 <h2>ICLabel<a class="headerlink" href="#iclabel" title="Permalink to this headline">#</a></h2>
+<p>This is the model originally available in <a class="reference external" href="https://github.com/sccn/ICLabel">EEGLab</a>.
+The model was ported using matconvnet.</p>
+<p>Architecture in matconvnet:</p>
+<a class="reference internal image-reference" href="_images/ICLabel_DagNN_Architecture.png"><img alt="ICLabel Neural Network Architecture" src="_images/ICLabel_DagNN_Architecture.png" style="width: 400px;" /></a>
+<p>The model has three inputs: image, psd, and autocorrelation features. To encourage generalization, the image
+features are rotated and negated to quadruple the image features. The psd and autocorrelation features
+are copied to the new image features. Then, the predicted probabilities are averaged over all four images.</p>
 <table class="autosummary longtable table autosummary">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 90%" />
 </colgroup>
 <tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/mne_icalabel.iclabel.get_iclabel_features.html#mne_icalabel.iclabel.get_iclabel_features" title="mne_icalabel.iclabel.get_iclabel_features"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_iclabel_features</span></code></a>(inst, ica)</p></td>
+<td><p>Generate the features for ICLabel neural network.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/mne_icalabel.iclabel.run_iclabel.html#mne_icalabel.iclabel.run_iclabel" title="mne_icalabel.iclabel.run_iclabel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">run_iclabel</span></code></a>(images, psds, autocorr)</p></td>
+<td><p>Run the ICLabel network on the provided set of features.</p></td>
+</tr>
 </tbody>
 </table>
-<p>This is the model originally available in <a class="reference external" href="https://github.com/sccn/ICLabel">EEGLab</a>.
-The model was ported using matconvnet.</p>
-<p>Architecture in matconvnet:</p>
-<blockquote>
-<div><p>&lt;img src=”ICLabel_DagNN_Architecture.png” width=”400”/&gt;</p>
-</div></blockquote>
-<p>The model has three inputs: image, psd, and autocorrelation features. To encourage generalization, the image
-features are rotated and negated to quadruple the image features. The psd and autocorrelation features
-are copied to the new image features. Then, the predicted probabilities are averaged over all four images.</p>
-<blockquote>
-<div><p>get_iclabel_features
-ICLabelNet
-run_iclabel</p>
-</div></blockquote>
 </section>
 </section>
 

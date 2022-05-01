@@ -257,12 +257,12 @@ for classes (<code class="docutils literal notranslate"><span class="pre">CamelC
 </section>
 <section id="iclabel">
 <h2>ICLabel<a class="headerlink" href="#iclabel" title="Permalink to this headline">#</a></h2>
-<p>This is the model originally available in <a class="reference external" href="https://github.com/sccn/ICLabel">EEGLab</a>.
-The model was ported using matconvnet.</p>
-<p>Architecture in matconvnet:</p>
+<p>This is the model originally available for <a class="reference external" href="https://github.com/sccn/ICLabel">EEGLab</a>.
+The model was ported from matconvnet using <a class="reference external" href="https://pytorch.org/">pytorch</a>.</p>
+<p>Architecture:</p>
 <a class="reference internal image-reference" href="_images/ICLabel_DagNN_Architecture.png"><img alt="ICLabel Neural Network Architecture" src="_images/ICLabel_DagNN_Architecture.png" style="width: 400px;" /></a>
 <p>The model has three inputs: image, psd, and autocorrelation features. To encourage generalization, the image
-features are rotated and negated to quadruple the image features. The psd and autocorrelation features
+features are rotated and negated, thus quadrupling the feature. The psd and autocorrelation features
 are copied to the new image features. Then, the predicted probabilities are averaged over all four images.</p>
 <table class="autosummary longtable table autosummary">
 <colgroup>
@@ -316,7 +316,7 @@ are copied to the new image features. Then, the predicted probabilities are aver
     
     <div class="footer-item">
       <p class="copyright">
-    &copy; Copyright 2021-2022, MNE Developers. Last updated on 2022-04-30.<br>
+    &copy; Copyright 2021-2022, MNE Developers. Last updated on 2022-05-01.<br>
 </p>
     </div>
     

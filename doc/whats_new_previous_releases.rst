@@ -2,7 +2,7 @@
 
 .. _whats_new_in_previous_releases:
 
-.. currentmodule:: mne_connectivity
+.. currentmodule:: mne_icalabel
 
 What was new in previous releases?
 ==================================

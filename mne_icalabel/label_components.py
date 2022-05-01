@@ -30,8 +30,20 @@ def label_components(inst: Union[BaseRaw, BaseEpochs], ica: ICA, method: str):
 
     Returns
     -------
-    labels : np.ndarray of shape (n_components,) or (n_components, n_class)
-        The estimated numerical labels of each ICA component.
+    labels : np.ndarray of shape (n_components,) or (n_components, n_classes)
+        The estimated corresponding predicted probabilities of output classes
+        for each independent component.
+
+    Notes
+    -----
+    For ICLabel model, the output classes are ordered:
+    - 'Brain'
+    - 'Muscle'
+    - 'Eye'
+    - 'Heart'
+    - 'Line Noise'
+    - 'Channel Noise'
+    - 'Other'
     """
     _validate_type(method, str, "method")
     _check_option("method", method, methods)

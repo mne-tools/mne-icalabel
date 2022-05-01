@@ -19,7 +19,7 @@ def label_components(inst: Union[BaseRaw, BaseEpochs], ica: ICA):
     - Autocorrelation, based on the ICA decomposition and the provided
       instance.
 
-    For more information, see :footcite:`iclabel2019`
+    For more information, see :footcite:`iclabel2019`.
 
     Parameters
     ----------
@@ -32,9 +32,10 @@ def label_components(inst: Union[BaseRaw, BaseEpochs], ica: ICA):
 
     Returns
     -------
-    labels : numpy.ndarray of shape (n_components,)
-        The estimated corresponding numerical labels for each independent
-        component.
+    labels : numpy.ndarray of shape (n_components, n_classes)
+        The estimated corresponding predicted probabilities of output classes
+        for each independent component. Columns are ordered with 'Brain',
+        'Muscle', 'Eye', 'Heart', 'Line Noise', 'Channel Noise', and 'Other'.
 
     References
     ----------

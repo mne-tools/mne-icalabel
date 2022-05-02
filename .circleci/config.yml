@@ -120,11 +120,6 @@ jobs:
                python -c "import mne; level = mne.get_config('MNE_LOGGING_LEVEL'); assert level.lower() == 'info', repr(level)"
                python -c "import numpy; numpy.show_config()"
 
-        # - run:
-        #     name: Get data
-        #     command: |
-        #       python setup.py develop --user
-
         # Build doc
         - run:
             name: make html
@@ -132,10 +127,18 @@ jobs:
               cd doc;
               make html;
 
+        # Save the JUnit file
+        - store_test_results:
+            path: doc/_build/test-results
+        - store_artifacts:
+            path: doc/_build/test-results
+            destination: test-results
+            
         # Save the outputs
         - store_artifacts:
             path: doc/_build/html/
             destination: dev
+
         - persist_to_workspace:
             root: doc/_build
             paths:

@@ -203,14 +203,12 @@ ica.plot_properties(raw, picks=[0, 1])
 # See :footcite:`iclabel2019` for full details.
 
 ic_labels = label_components(raw, ica)
-print(np.round(ic_labels, 2))
+print(ic_labels)
 
-# Afterwards, we can hard threshold the probability values to assign
-# each component to be kept or not (i.e. it is part of brain signal).
-# The first component was visually an artifact, which was captured
-# for certain.
-not_brain_index = np.argmax(ic_labels, axis=1) != 0
-exclude_idx = np.argwhere(not_brain_index).squeeze()
+# We can extract the labels of each component and exclude
+# non-brain classified components.
+labels = ic_labels["labels"]
+exclude_idx = np.argwhere(labels != "brain").squeeze()
 print(f"Excluding these ICA components: {exclude_idx}")
 
 # %%

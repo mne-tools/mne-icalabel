@@ -6,34 +6,14 @@ from mne.io import BaseRaw
 from mne.preprocessing import ICA
 from mne.utils import _validate_type
 from mne.utils.check import _check_option
-from sklearn.base import TransformerMixin, BaseEstimator
 
-from .iclabel import label_components as label_components_iclabel
+from .iclabel import iclabel_label_components
+from .iclabel.config import ICLABEL_NUMERICAL_TO_STRING
 from .utils import _validate_inst_and_ica
 
 methods = {
-    "iclabel": label_components_iclabel,
+    "iclabel": iclabel_label_components,
 }
-
-class AutoLabelICA(TransformerMixin):
-    def __init__(self, method:str ='iclabel') -> None:
-        self.method = method
-
-    def fit(self, X, y):
-        pass
-
-    def transform(self, raw, ica):
-        ic_labels = label_components(raw, ica, method=self.method)
-
-        # Afterwards, we can hard threshold the probability values to assign
-        # each component to be kept or not (i.e. it is part of brain signal).
-        # The first component was visually an artifact, which was captured
-        # for certain.
-        not_brain_index = np.argmax(ic_labels, axis=1) != 0
-        exclude_idx = np.argwhere(not_brain_index).squeeze()
-
-        ica.apply(raw, exclude=exclude_idx)
-        return raw
 
 
 def label_components(inst: Union[BaseRaw, BaseEpochs], ica: ICA, method: str):
@@ -52,9 +32,16 @@ def label_components(inst: Union[BaseRaw, BaseEpochs], ica: ICA, method: str):
 
     Returns
     -------
-    labels : np.ndarray of shape (n_components,) or (n_components, n_classes)
-        The estimated corresponding predicted probabilities of output classes
+    component_dict : dict
+        A dictionary with the following output:
+        - 'y_pred_proba' : np.ndarray of shape (n_components, n_classes)
+        Estimated corresponding predicted probabilities of output classes
         for each independent component.
+        - 'y_pred' : list of shape (n_components,)
+        The corresponding numerical label of the class with the highest
+        predicted probability.
+        - 'labels': list of shape (n_components,)
+        The corresponding string label of each class in 'y_pred'.
 
     Notes
     -----
@@ -70,4 +57,13 @@ def label_components(inst: Union[BaseRaw, BaseEpochs], ica: ICA, method: str):
     _validate_type(method, str, "method")
     _check_option("method", method, methods)
     _validate_inst_and_ica(inst, ica)
-    return methods[method](inst, ica)
+    labels_pred_proba = methods[method](inst, ica)
+    labels_pred = np.argmax(labels_pred_proba, axis=1)
+    labels = [ICLABEL_NUMERICAL_TO_STRING[label] for label in labels_pred]
+
+    component_dict = {
+        "y_pred_proba": labels_pred_proba,
+        "y_pred": labels_pred,
+        "labels": labels,
+    }
+    return component_dict

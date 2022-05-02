@@ -8,7 +8,7 @@ from .features import get_iclabel_features
 from .network import run_iclabel
 
 
-def label_components(inst: Union[BaseRaw, BaseEpochs], ica: ICA):
+def iclabel_label_components(inst: Union[BaseRaw, BaseEpochs], ica: ICA):
     """Label the provided ICA components with the ICLabel neural network.
 
     This network uses 3 features:
@@ -32,7 +32,7 @@ def label_components(inst: Union[BaseRaw, BaseEpochs], ica: ICA):
 
     Returns
     -------
-    labels : numpy.ndarray of shape (n_components, n_classes)
+    labels_pred_proba : numpy.ndarray of shape (n_components, n_classes)
         The estimated corresponding predicted probabilities of output classes
         for each independent component. Columns are ordered with 'Brain',
         'Muscle', 'Eye', 'Heart', 'Line Noise', 'Channel Noise', and 'Other'.
@@ -42,5 +42,5 @@ def label_components(inst: Union[BaseRaw, BaseEpochs], ica: ICA):
     .. footbibliography::
     """
     features = get_iclabel_features(inst, ica)
-    labels = run_iclabel(*features)
-    return labels
+    labels_pred_proba = run_iclabel(*features)
+    return labels_pred_proba

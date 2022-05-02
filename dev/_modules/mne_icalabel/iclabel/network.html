@@ -411,8 +411,10 @@
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    labels : np.ndarray of shape (n_components)</span>
+<span class="sd">    labels : np.ndarray of shape (n_components, n_classes)</span>
 <span class="sd">        The predicted numerical probability values for all labels in ICLabel output.</span>
+<span class="sd">        Columns are ordered with &#39;Brain&#39;, &#39;Muscle&#39;, &#39;Eye&#39;, &#39;Heart&#39;,</span>
+<span class="sd">        &#39;Line Noise&#39;, &#39;Channel Noise&#39;, and &#39;Other&#39;.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">ica_network_file</span> <span class="o">=</span> <span class="n">files</span><span class="p">(</span><span class="s2">&quot;mne_icalabel.iclabel&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="s2">&quot;assets/iclabelNet.pt&quot;</span><span class="p">)</span>
 
@@ -423,6 +425,9 @@
     <span class="c1"># Format input and get labels</span>
     <span class="n">labels</span> <span class="o">=</span> <span class="n">iclabel_net</span><span class="p">(</span><span class="o">*</span><span class="n">_format_input_for_torch</span><span class="p">(</span><span class="o">*</span><span class="n">_format_input</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="n">psds</span><span class="p">,</span> <span class="n">autocorr</span><span class="p">)))</span>
     <span class="n">labels</span> <span class="o">=</span> <span class="n">labels</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+
+    <span class="c1"># outputs are:</span>
+    <span class="c1"># ordered as in https://github.com/sccn/ICLabel/blob/e8abc99e0c371ff49eff115cf7955fafc7f7969a/iclabel.m#L60-L62</span>
     <span class="k">return</span> <span class="n">labels</span></div>
 </pre></div>
 
@@ -446,7 +451,7 @@
     
     <div class="footer-item">
       <p class="copyright">
-    &copy; Copyright 2021-2022, MNE Developers. Last updated on 2022-05-01.<br>
+    &copy; Copyright 2021-2022, MNE Developers. Last updated on 2022-05-02.<br>
 </p>
     </div>
     

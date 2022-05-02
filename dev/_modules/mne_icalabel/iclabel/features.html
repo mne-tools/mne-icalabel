@@ -190,9 +190,11 @@
 <span class="kn">from</span> <span class="nn">mne</span> <span class="kn">import</span> <span class="n">BaseEpochs</span>
 <span class="kn">from</span> <span class="nn">mne.io</span> <span class="kn">import</span> <span class="n">BaseRaw</span>
 <span class="kn">from</span> <span class="nn">mne.preprocessing</span> <span class="kn">import</span> <span class="n">ICA</span>
+<span class="kn">from</span> <span class="nn">mne.utils</span> <span class="kn">import</span> <span class="n">warn</span>
 <span class="kn">from</span> <span class="nn">numpy.typing</span> <span class="kn">import</span> <span class="n">NDArray</span>
 <span class="kn">from</span> <span class="nn">scipy.signal</span> <span class="kn">import</span> <span class="n">resample_poly</span>
 
+<span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">_validate_inst_and_ica</span>
 <span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">_gdatav4</span><span class="p">,</span> <span class="n">_mne_to_eeglab_locs</span><span class="p">,</span> <span class="n">_next_power_of_2</span><span class="p">,</span> <span class="n">_pol2cart</span>
 
 
@@ -221,6 +223,28 @@
 <span class="sd">    ----------</span>
 <span class="sd">    .. footbibliography::</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_validate_inst_and_ica</span><span class="p">(</span><span class="n">inst</span><span class="p">,</span> <span class="n">ica</span><span class="p">)</span>
+
+    <span class="c1"># TODO: &#39;custom_ref_applied&#39; does not necessarily correspond to a CAR reference.</span>
+    <span class="c1"># At the moment, the reference of the EEG data is not stored in the info.</span>
+    <span class="c1"># c.f. https://github.com/mne-tools/mne-python/issues/8962</span>
+    <span class="k">if</span> <span class="n">inst</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;custom_ref_applied&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">warn</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;The provided </span><span class="si">{</span><span class="s1">&#39;Raw&#39;</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">inst</span><span class="p">,</span> <span class="n">BaseRaw</span><span class="p">)</span> <span class="k">else</span> <span class="s1">&#39;Epochs&#39;</span><span class="si">}</span><span class="s2"> instance &quot;</span>
+            <span class="s2">&quot;does not seems to be referenced to a common average reference (CAR). &quot;</span>
+            <span class="s2">&quot;ICLabel was designed to classify features extracted from an EEG dataset &quot;</span>
+            <span class="s2">&quot;referenced to a CAR (see the &#39;set_eeg_reference()&#39; method for Raw and &quot;</span>
+            <span class="s2">&quot;Epochs instances).&quot;</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="n">inst</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;highpass&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">inst</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;lowpass&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">100</span><span class="p">:</span>
+        <span class="n">warn</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;The provided </span><span class="si">{</span><span class="s1">&#39;Raw&#39;</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">inst</span><span class="p">,</span> <span class="n">BaseRaw</span><span class="p">)</span> <span class="k">else</span> <span class="s1">&#39;Epochs&#39;</span><span class="si">}</span><span class="s2"> instance &quot;</span>
+            <span class="s2">&quot;is not filtered between 1 and 100 Hz. &quot;</span>
+            <span class="s2">&quot;ICLabel was designed to classify features extracted from an EEG dataset &quot;</span>
+            <span class="s2">&quot;bandpass filtered between 1 and 100 Hz (see the &#39;filter()&#39; method for Raw &quot;</span>
+            <span class="s2">&quot;and Epochs instances).&quot;</span>
+        <span class="p">)</span>
+
     <span class="n">icawinv</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_retrieve_eeglab_icawinv</span><span class="p">(</span><span class="n">ica</span><span class="p">)</span>
     <span class="n">icaact</span> <span class="o">=</span> <span class="n">_compute_ica_activations</span><span class="p">(</span><span class="n">inst</span><span class="p">,</span> <span class="n">ica</span><span class="p">)</span>
 
@@ -701,7 +725,7 @@
     
     <div class="footer-item">
       <p class="copyright">
-    &copy; Copyright 2021-2022, MNE Developers. Last updated on 2022-05-01.<br>
+    &copy; Copyright 2021-2022, MNE Developers. Last updated on 2022-05-02.<br>
 </p>
     </div>
     

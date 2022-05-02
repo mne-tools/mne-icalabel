@@ -202,7 +202,7 @@ ica.plot_properties(raw, picks=[0, 1])
 # into a 3-head neural network that has been pretrained.
 # See :footcite:`iclabel2019` for full details.
 
-ic_labels = label_components(raw, ica)
+ic_labels = label_components(raw, ica, method='iclabel')
 print(ic_labels)
 
 # We can extract the labels of each component and exclude

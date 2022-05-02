@@ -17,8 +17,7 @@ methods = {
 
 
 def label_components(inst: Union[BaseRaw, BaseEpochs], ica: ICA, method: str):
-    """
-    Automatically label the ICA components with the selected method.
+    """Automatically label the ICA components with the selected method.
 
     Parameters
     ----------

@@ -24,7 +24,6 @@ and classes from that submodule.
 import os
 
 import mne
-import numpy as np
 from mne.preprocessing import ICA
 
 from mne_icalabel import label_components
@@ -202,13 +201,15 @@ ica.plot_properties(raw, picks=[0, 1])
 # into a 3-head neural network that has been pretrained.
 # See :footcite:`iclabel2019` for full details.
 
-ic_labels = label_components(raw, ica, method='iclabel')
+ic_labels = label_components(raw, ica, method="iclabel")
 print(ic_labels)
 
 # We can extract the labels of each component and exclude
-# non-brain classified components.
+# non-brain classified components, keeping 'brain' and 'other'.
+# "Other" is a catch-all that for non-classifiable components.
+# We will ere on the side of caution and assume we cannot blindly remove these.
 labels = ic_labels["labels"]
-exclude_idx = np.argwhere(labels != "brain").squeeze()
+exclude_idx = [idx for idx, label in enumerate(labels) if label not in ["brain", "other"]]
 print(f"Excluding these ICA components: {exclude_idx}")
 
 # %%

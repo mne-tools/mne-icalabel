@@ -27,7 +27,7 @@ import mne
 import numpy as np
 from mne.preprocessing import ICA
 
-from mne_icalabel.iclabel import label_components
+from mne_icalabel import label_components
 
 sample_data_folder = mne.datasets.sample.data_path()
 sample_data_raw_file = os.path.join(

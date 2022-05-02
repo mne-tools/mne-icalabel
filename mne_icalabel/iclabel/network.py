@@ -225,8 +225,10 @@ def run_iclabel(images: ArrayLike, psds: ArrayLike, autocorr: ArrayLike):
 
     Returns
     -------
-    labels : np.ndarray of shape (n_components)
+    labels : np.ndarray of shape (n_components, n_classes)
         The predicted numerical probability values for all labels in ICLabel output.
+        Columns are ordered with 'Brain', 'Muscle', 'Eye', 'Heart',
+        'Line Noise', 'Channel Noise', and 'Other'.
     """
     ica_network_file = files("mne_icalabel.iclabel").joinpath("assets/iclabelNet.pt")
 
@@ -237,4 +239,7 @@ def run_iclabel(images: ArrayLike, psds: ArrayLike, autocorr: ArrayLike):
     # Format input and get labels
     labels = iclabel_net(*_format_input_for_torch(*_format_input(images, psds, autocorr)))
     labels = labels.detach().numpy()
+
+    # outputs are:
+    # ordered as in https://github.com/sccn/ICLabel/blob/e8abc99e0c371ff49eff115cf7955fafc7f7969a/iclabel.m#L60-L62
     return labels

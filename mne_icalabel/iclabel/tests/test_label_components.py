@@ -3,7 +3,7 @@ from mne.datasets import sample
 from mne.io import read_raw
 from mne.preprocessing import ICA
 
-from mne_icalabel.iclabel import label_components
+from mne_icalabel.iclabel import iclabel_label_components
 
 directory = sample.data_path() / "MEG" / "sample"
 raw = read_raw(directory / "sample_audvis_raw.fif", preload=False)
@@ -20,5 +20,5 @@ ica.fit(raw)
 @pytest.mark.filterwarnings("ignore::RuntimeWarning")
 def test_label_components():
     """Simple test to check that label_components runs without raising."""
-    labels = label_components(raw, ica)
+    labels = iclabel_label_components(raw, ica)
     assert labels is not None

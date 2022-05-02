@@ -88,7 +88,7 @@ numpydoc_xref_ignore = {
     'n_node_names', 'n_tapers', 'n_signals', 'n_step', 'n_freqs',
     'epochs', 'freqs', 'times', 'arrays', 'lists', 'func', 'n_nodes',
     'n_estimated_nodes', 'n_samples', 'n_channels', 'Renderer',
-    'n_ytimes', 'n_ychannels', 'n_events', 'n_components',
+    'n_ytimes', 'n_ychannels', 'n_events', 'n_components', 'n_classes',
 }
 numpydoc_xref_aliases = {
     # Python

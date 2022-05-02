@@ -24,10 +24,9 @@ and classes from that submodule.
 import os
 
 import mne
-import numpy as np
 from mne.preprocessing import ICA
 
-from mne_icalabel.iclabel import label_components
+from mne_icalabel import label_components
 
 sample_data_folder = mne.datasets.sample.data_path()
 sample_data_raw_file = os.path.join(
@@ -202,15 +201,15 @@ ica.plot_properties(raw, picks=[0, 1])
 # into a 3-head neural network that has been pretrained.
 # See :footcite:`iclabel2019` for full details.
 
-ic_labels = label_components(raw, ica)
-print(np.round(ic_labels, 2))
+ic_labels = label_components(raw, ica, method="iclabel")
+print(ic_labels)
 
-# Afterwards, we can hard threshold the probability values to assign
-# each component to be kept or not (i.e. it is part of brain signal).
-# The first component was visually an artifact, which was captured
-# for certain.
-not_brain_index = np.argmax(ic_labels, axis=1) != 0
-exclude_idx = np.argwhere(not_brain_index).squeeze()
+# We can extract the labels of each component and exclude
+# non-brain classified components, keeping 'brain' and 'other'.
+# "Other" is a catch-all that for non-classifiable components.
+# We will ere on the side of caution and assume we cannot blindly remove these.
+labels = ic_labels["labels"]
+exclude_idx = [idx for idx, label in enumerate(labels) if label not in ["brain", "other"]]
 print(f"Excluding these ICA components: {exclude_idx}")
 
 # %%

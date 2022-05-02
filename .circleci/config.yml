@@ -134,6 +134,13 @@ jobs:
             path: doc/_build/test-results
             destination: test-results
             
+
+        # Save the SG RST
+        - store_artifacts:
+            path: doc/auto_examples.zip
+        - store_artifacts:
+            path: doc/generated.zip
+
         # Save the outputs
         - store_artifacts:
             path: doc/_build/html/

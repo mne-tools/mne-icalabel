@@ -79,8 +79,6 @@ jobs:
               set -e
               ./scripts/circle_ci_dependencies.sh
 
-
-
         # Load pip cache
         - restore_cache:
             keys:

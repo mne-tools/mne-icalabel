@@ -3,50 +3,38 @@ try:
 except ImportError:
     from importlib_resources import files  # type: ignore
 
+from pathlib import Path
+
 import numpy as np
 import pytest
 import torch
 from scipy.io import loadmat
 
+from mne_icalabel.datasets import icalabel
 from mne_icalabel.iclabel.network import ICLabelNet, _format_input, run_iclabel
+
+dataset_path = Path(icalabel.data_path()) / "iclabel"
+
 
 # Network weights
 torch_iclabel_path = str(files("mne_icalabel.iclabel").joinpath("assets/iclabelNet.pt"))
-matconvnet_iclabel_path = str(
-    files("mne_icalabel.iclabel.tests").joinpath("data/network/netICL.mat")
-)
+matconvnet_iclabel_path = dataset_path / "network/netICL.mat"
 
 # Network forward pass input/output
-matconvnet_fw_input_path = str(
-    files("mne_icalabel.iclabel.tests").joinpath("data/network/network_input.mat")
-)
-matconvnet_fw_output_path = str(
-    files("mne_icalabel.iclabel.tests").joinpath("data/network/network_output.mat")
-)
+matconvnet_fw_input_path = dataset_path / "network/network_input.mat"
+matconvnet_fw_output_path = dataset_path / "network/network_output.mat"
 
 # Features (similar to network_input)
-features_raw_path = str(
-    files("mne_icalabel.iclabel.tests").joinpath("data/features/features-raw.mat")
-)
-features_epo_path = str(
-    files("mne_icalabel.iclabel.tests").joinpath("data/features/features-epo.mat")
-)
+features_raw_path = dataset_path / "features/features-raw.mat"
+features_epo_path = dataset_path / "features/features-epo.mat"
 
 # Features formatted
-features_formatted_raw_path = str(
-    files("mne_icalabel.iclabel.tests").joinpath("data/features/features-formatted-raw.mat")
-)
-features_formatted_epo_path = str(
-    files("mne_icalabel.iclabel.tests").joinpath("data/features/features-formatted-epo.mat")
-)
+features_formatted_raw_path = dataset_path / "features/features-formatted-raw.mat"
+features_formatted_epo_path = dataset_path / "features/features-formatted-epo.mat"
 
 # ICLabel output
-iclabel_output_raw_path = str(
-    files("mne_icalabel.iclabel.tests").joinpath("data/iclabel-output-raw.mat")
-)
-iclabel_output_epo_path = str(
-    files("mne_icalabel.iclabel.tests").joinpath("data/iclabel-output-epo.mat")
-)
+iclabel_output_raw_path = dataset_path / "iclabel-output-raw.mat"
+iclabel_output_epo_path = dataset_path / "iclabel-output-epo.mat"
 
 
 def test_weights():

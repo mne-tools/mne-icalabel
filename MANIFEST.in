@@ -13,6 +13,7 @@ recursive-include mne_icalabel *.py
 
 exclude .circleci/config.yml
 exclude .flake8
+exclude azure-pipelines.yml
 
 recursive-exclude doc *
 recursive-exclude scripts *

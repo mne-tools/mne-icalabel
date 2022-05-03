@@ -1,8 +1,3 @@
-try:
-    from importlib.resources import files  # type: ignore
-except ImportError:
-    from importlib_resources import files  # type: ignore
-
 from pathlib import Path
 
 import numpy as np
@@ -13,6 +8,7 @@ from mne.io.eeglab.eeglab import _check_load_mat
 from mne.preprocessing import read_ica_eeglab
 from scipy.io import loadmat
 
+from mne_icalabel.datasets import icalabel
 from mne_icalabel.iclabel.features import (
     _compute_ica_activations,
     _eeg_autocorr,
@@ -29,72 +25,41 @@ from mne_icalabel.iclabel.features import (
 )
 from mne_icalabel.iclabel.utils import _mne_to_eeglab_locs
 
+dataset_path = Path(icalabel.data_path()) / "iclabel"
+
 # Raw/Epochs files with ICA decomposition
-raw_eeglab_path = str(files("mne_icalabel.iclabel.tests").joinpath("data/datasets/sample-raw.set"))
-raw_short_eeglab_path = str(
-    files("mne_icalabel.iclabel.tests").joinpath("data/datasets/sample-short-raw.set")
-)
-raw_very_short_eeglab_path = str(
-    files("mne_icalabel.iclabel.tests").joinpath("data/datasets/sample-very-short-raw.set")
-)
-epo_eeglab_path = str(files("mne_icalabel.iclabel.tests").joinpath("data/datasets/sample-epo.set"))
+raw_eeglab_path = dataset_path / "datasets/sample-raw.set"
+raw_short_eeglab_path = dataset_path / "datasets/sample-short-raw.set"
+raw_very_short_eeglab_path = dataset_path / "datasets/sample-very-short-raw.set"
+epo_eeglab_path = dataset_path / "datasets/sample-epo.set"
 
 # ICA activation matrix for raw/epochs
-raw_icaact_eeglab_path = str(
-    files("mne_icalabel.iclabel.tests").joinpath("data/icaact/icaact-raw.mat")
-)
-epo_icaact_eeglab_path = str(
-    files("mne_icalabel.iclabel.tests").joinpath("data/icaact/icaact-epo.mat")
-)
+raw_icaact_eeglab_path = dataset_path / "icaact/icaact-raw.mat"
+epo_icaact_eeglab_path = dataset_path / "icaact/icaact-epo.mat"
 
 # Topography
-raw_topo1_path = str(files("mne_icalabel.iclabel.tests").joinpath("data/topo/topo1-raw.mat"))
-epo_topo1_path = str(files("mne_icalabel.iclabel.tests").joinpath("data/topo/topo1-epo.mat"))
-raw_topo_feature_path = str(
-    files("mne_icalabel.iclabel.tests").joinpath("data/topo/topo-feature-raw.mat")
-)
-epo_topo_feature_path = str(
-    files("mne_icalabel.iclabel.tests").joinpath("data/topo/topo-feature-epo.mat")
-)
+raw_topo1_path = dataset_path / "topo/topo1-raw.mat"
+epo_topo1_path = dataset_path / "topo/topo1-epo.mat"
+raw_topo_feature_path = dataset_path / "topo/topo-feature-raw.mat"
+epo_topo_feature_path = dataset_path / "topo/topo-feature-epo.mat"
 
 # PSD
-psd_constants_raw_path = str(
-    files("mne_icalabel.iclabel.tests").joinpath("data/psd/constants-raw.mat")
-)
-psd_steps_raw_path = str(
-    files("mne_icalabel.iclabel.tests").joinpath("data/psd/psd-step-by-step-raw.mat")
-)
-psd_raw_path = str(files("mne_icalabel.iclabel.tests").joinpath("data/psd/psd-raw.mat"))
-psd_constants_epo_path = str(
-    files("mne_icalabel.iclabel.tests").joinpath("data/psd/constants-epo.mat")
-)
-psd_steps_epo_path = str(
-    files("mne_icalabel.iclabel.tests").joinpath("data/psd/psd-step-by-step-epo.mat")
-)
-psd_epo_path = str(files("mne_icalabel.iclabel.tests").joinpath("data/psd/psd-epo.mat"))
+psd_constants_raw_path = dataset_path / "psd/constants-raw.mat"
+psd_steps_raw_path = dataset_path / "psd/psd-step-by-step-raw.mat"
+psd_raw_path = dataset_path / "psd/psd-raw.mat"
+psd_constants_epo_path = dataset_path / "psd/constants-epo.mat"
+psd_steps_epo_path = dataset_path / "psd/psd-step-by-step-epo.mat"
+psd_epo_path = dataset_path / "psd/psd-epo.mat"
 
 # Autocorrelations
-autocorr_raw_path = autocorr_short_raw_path = str(
-    files("mne_icalabel.iclabel.tests").joinpath("data/autocorr/autocorr-raw.mat")
-)
-autocorr_short_raw_path = str(
-    files("mne_icalabel.iclabel.tests").joinpath("data/autocorr/autocorr-short-raw.mat")
-)
-autocorr_very_short_raw_path = str(
-    files("mne_icalabel.iclabel.tests").joinpath("data/autocorr/autocorr-very-short-raw.mat")
-)
-autocorr_epo_path = str(
-    files("mne_icalabel.iclabel.tests").joinpath("data/autocorr/autocorr-epo.mat")
-)
+autocorr_raw_path = dataset_path / "autocorr/autocorr-raw.mat"
+autocorr_short_raw_path = dataset_path / "autocorr/autocorr-short-raw.mat"
+autocorr_very_short_raw_path = dataset_path / "autocorr/autocorr-very-short-raw.mat"
+autocorr_epo_path = dataset_path / "autocorr/autocorr-epo.mat"
 
 # Complete features
-features_raw_path = str(
-    files("mne_icalabel.iclabel.tests").joinpath("data/features/features-raw.mat")
-)
-features_epo_path = str(
-    files("mne_icalabel.iclabel.tests").joinpath("data/features/features-epo.mat")
-)
-
+features_raw_path = dataset_path / "features/features-raw.mat"
+features_epo_path = dataset_path / "features/features-epo.mat"
 
 # General readers
 reader = {"raw": read_raw, "epo": read_epochs_eeglab}

@@ -16,7 +16,7 @@ Here we list a changelog of MNE-ICALabel.
 
 .. _current:
 
-Version 0.1 (Unreleased)
+Version 0.2 (Unreleased)
 ------------------------
 
 ...
@@ -39,10 +39,7 @@ API
 Authors
 ~~~~~~~
 
-* `Adam Li`_
-* `Jacob Feitelberg`_
-* `Anand Saini`_ 
-* `Mathieu Scheltienne`_
+* 
 
 :doc:`Find out what was new in previous releases <whats_new_previous_releases>`
 

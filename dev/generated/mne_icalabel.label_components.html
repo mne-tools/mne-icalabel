@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>mne_icalabel.label_components &#8212; MNE-ICALabel 0.1dev0 documentation</title>
+    <title>mne_icalabel.label_components &#8212; MNE-ICALabel 0.1 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -127,7 +127,7 @@
       <div class="navbar-end-item">
         <div class="dropdown">
     <button type="button" class="btn btn-primary btn-sm navbar-btn dropdown-toggle" id="dLabelMore" data-toggle="dropdown">
-        v0.1dev0
+        v0.1
         <span class="caret"></span>
     </button>
     <div class="dropdown-menu list-group-flush py-0" aria-labelledby="dLabelMore">
@@ -260,12 +260,9 @@
 <dd class="field-even"><p><strong>component_dict</strong> : <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><code class="docutils literal notranslate"><span class="pre">dict</span></code></a></p>
 <blockquote>
 <div><p>A dictionary with the following output:
-- ‘y_pred_proba’ : np.ndarray of shape (n_components, n_classes)
-Estimated corresponding predicted probabilities of output classes
+- ‘y_pred_proba’ : np.ndarray of shape (n_components,)
+Estimated corresponding predicted probability of the output class
 for each independent component.
-- ‘y_pred’ : list of shape (n_components,)
-The corresponding numerical label of the class with the highest
-predicted probability.
 - ‘labels’: list of shape (n_components,)
 The corresponding string label of each class in ‘y_pred’.</p>
 </div></blockquote>
@@ -273,13 +270,13 @@ The corresponding string label of each class in ‘y_pred’.</p>
 </dl>
 <p class="rubric">Notes</p>
 <p>For ICLabel model, the output classes are ordered:
-- ‘Brain’
-- ‘Muscle’
-- ‘Eye’
-- ‘Heart’
-- ‘Line Noise’
-- ‘Channel Noise’
-- ‘Other’</p>
+- ‘brain’
+- ‘muscle artifact’
+- ‘eye blink’
+- ‘heart beat’
+- ‘line noise’
+- ‘channel noise’
+- ‘other’</p>
 </dd></dl>
 
 <section id="examples-using-mne-icalabel-label-components">

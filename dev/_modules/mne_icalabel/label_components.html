@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mne_icalabel.label_components &#8212; MNE-ICALabel 0.1dev0 documentation</title>
+    <title>mne_icalabel.label_components &#8212; MNE-ICALabel 0.1 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -124,7 +124,7 @@
       <div class="navbar-end-item">
         <div class="dropdown">
     <button type="button" class="btn btn-primary btn-sm navbar-btn dropdown-toggle" id="dLabelMore" data-toggle="dropdown">
-        v0.1dev0
+        v0.1
         <span class="caret"></span>
     </button>
     <div class="dropdown-menu list-group-flush py-0" aria-labelledby="dLabelMore">
@@ -219,25 +219,22 @@
 <span class="sd">    -------</span>
 <span class="sd">    component_dict : dict</span>
 <span class="sd">        A dictionary with the following output:</span>
-<span class="sd">        - &#39;y_pred_proba&#39; : np.ndarray of shape (n_components, n_classes)</span>
-<span class="sd">        Estimated corresponding predicted probabilities of output classes</span>
+<span class="sd">        - &#39;y_pred_proba&#39; : np.ndarray of shape (n_components,)</span>
+<span class="sd">        Estimated corresponding predicted probability of the output class</span>
 <span class="sd">        for each independent component.</span>
-<span class="sd">        - &#39;y_pred&#39; : list of shape (n_components,)</span>
-<span class="sd">        The corresponding numerical label of the class with the highest</span>
-<span class="sd">        predicted probability.</span>
 <span class="sd">        - &#39;labels&#39;: list of shape (n_components,)</span>
 <span class="sd">        The corresponding string label of each class in &#39;y_pred&#39;.</span>
 
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
 <span class="sd">    For ICLabel model, the output classes are ordered:</span>
-<span class="sd">    - &#39;Brain&#39;</span>
-<span class="sd">    - &#39;Muscle&#39;</span>
-<span class="sd">    - &#39;Eye&#39;</span>
-<span class="sd">    - &#39;Heart&#39;</span>
-<span class="sd">    - &#39;Line Noise&#39;</span>
-<span class="sd">    - &#39;Channel Noise&#39;</span>
-<span class="sd">    - &#39;Other&#39;</span>
+<span class="sd">    - &#39;brain&#39;</span>
+<span class="sd">    - &#39;muscle artifact&#39;</span>
+<span class="sd">    - &#39;eye blink&#39;</span>
+<span class="sd">    - &#39;heart beat&#39;</span>
+<span class="sd">    - &#39;line noise&#39;</span>
+<span class="sd">    - &#39;channel noise&#39;</span>
+<span class="sd">    - &#39;other&#39;</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">_validate_type</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="s2">&quot;method&quot;</span><span class="p">)</span>
     <span class="n">_check_option</span><span class="p">(</span><span class="s2">&quot;method&quot;</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">methods</span><span class="p">)</span>
@@ -245,10 +242,10 @@
     <span class="n">labels_pred_proba</span> <span class="o">=</span> <span class="n">methods</span><span class="p">[</span><span class="n">method</span><span class="p">](</span><span class="n">inst</span><span class="p">,</span> <span class="n">ica</span><span class="p">)</span>
     <span class="n">labels_pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">labels_pred_proba</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="n">ICLABEL_NUMERICAL_TO_STRING</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">labels_pred</span><span class="p">]</span>
+    <span class="n">y_pred_proba</span> <span class="o">=</span> <span class="n">labels_pred_proba</span><span class="p">[:,</span> <span class="n">labels_pred</span><span class="p">]</span>
 
     <span class="n">component_dict</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;y_pred_proba&quot;</span><span class="p">:</span> <span class="n">labels_pred_proba</span><span class="p">,</span>
-        <span class="s2">&quot;y_pred&quot;</span><span class="p">:</span> <span class="n">labels_pred</span><span class="p">,</span>
+        <span class="s2">&quot;y_pred_proba&quot;</span><span class="p">:</span> <span class="n">y_pred_proba</span><span class="p">,</span>
         <span class="s2">&quot;labels&quot;</span><span class="p">:</span> <span class="n">labels</span><span class="p">,</span>
     <span class="p">}</span>
     <span class="k">return</span> <span class="n">component_dict</span></div>

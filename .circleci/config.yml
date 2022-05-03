@@ -130,6 +130,7 @@ jobs:
         # Save the JUnit file
         - store_test_results:
             path: doc/_build/test-results
+
         - store_artifacts:
             path: doc/_build/test-results
             destination: test-results
@@ -153,7 +154,7 @@ jobs:
 
     doc-deploy:
         docker:
-          - image: node:8
+          - image: cimg/node:lts
         steps:
           - checkout
 
@@ -166,6 +167,8 @@ jobs:
 
           - run:
               name: Install and configure dependencies
+              # do not update gh-pages above 3.0.0
+              # see: https://github.com/tschaub/gh-pages/issues/354
               command: |
                 npm install --global gh-pages@3.0
                 git config --global user.email "circle@mne.com"
@@ -181,10 +184,10 @@ jobs:
               command: |
                 if [ "${CIRCLE_BRANCH}" == "main" ]; then
                   echo "Deploying dev doc for ${CIRCLE_BRANCH}.";
-                  gh-pages --dotfiles --message "doc updates [skip ci] (${CIRCLE_BUILD_NUM})" --dist doc/_build/html --dest ./dev
+                  node_modules/gh-pages/bin/gh-pages.js --dotfiles --message "doc updates [skip ci]" --dist doc/_build/html --dest ./dev
                 else
                   echo "Deploying stable doc for ${CIRCLE_BRANCH}.";
-                  gh-pages --dotfiles --message "doc updates [skip ci] (${CIRCLE_BUILD_NUM})" --dist doc/_build/html --dest ./stable
+                  node_modules/gh-pages/bin/gh-pages.js --dotfiles --message "doc updates [skip ci]" --dist doc/_build/html --dest ./stable
                 fi;
 
           - save_cache:

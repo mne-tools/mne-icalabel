@@ -1,0 +1,14 @@
+[run]
+branch = True
+source = mne_icalabel
+omit =
+    */bin/*
+    */setup.py
+    */mne_icalabel/conftest.py
+
+[report]
+exclude_lines =
+    pragma: no cover
+    if __name__ == .__main__.:
+    @abstractmethod
+    @abstractclassmethod

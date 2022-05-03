@@ -216,6 +216,7 @@ intersphinx_mapping = {
     'sklearn': ('https://scikit-learn.org/stable', None),
     'joblib': ('https://joblib.readthedocs.io/en/latest', None),
     "torch": ("https://pytorch.org/docs/stable", None),
+    'pooch': ('https://www.fatiando.org/pooch/latest/', None),
 }
 intersphinx_timeout = 5
 

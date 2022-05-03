@@ -33,12 +33,9 @@ def label_components(inst: Union[BaseRaw, BaseEpochs], ica: ICA, method: str):
     -------
     component_dict : dict
         A dictionary with the following output:
-        - 'y_pred_proba' : np.ndarray of shape (n_components, n_classes)
-        Estimated corresponding predicted probabilities of output classes
+        - 'y_pred_proba' : np.ndarray of shape (n_components,)
+        Estimated corresponding predicted probability of the output class
         for each independent component.
-        - 'y_pred' : list of shape (n_components,)
-        The corresponding numerical label of the class with the highest
-        predicted probability.
         - 'labels': list of shape (n_components,)
         The corresponding string label of each class in 'y_pred'.
 
@@ -59,10 +56,10 @@ def label_components(inst: Union[BaseRaw, BaseEpochs], ica: ICA, method: str):
     labels_pred_proba = methods[method](inst, ica)
     labels_pred = np.argmax(labels_pred_proba, axis=1)
     labels = [ICLABEL_NUMERICAL_TO_STRING[label] for label in labels_pred]
+    y_pred_proba = labels_pred_proba[:, labels_pred]
 
     component_dict = {
-        "y_pred_proba": labels_pred_proba,
-        "y_pred": labels_pred,
+        "y_pred_proba": y_pred_proba,
         "labels": labels,
     }
     return component_dict

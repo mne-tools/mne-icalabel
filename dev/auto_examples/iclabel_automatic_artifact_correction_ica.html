@@ -4,8 +4,9 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>WIP: Repairing artifacts with ICA automatically using ICLabel Model &#8212; MNE-ICALabel 0.1dev0 documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Repairing artifacts with ICA automatically using ICLabel Model &#8212; MNE-ICALabel 0.1dev0 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -163,7 +164,7 @@
     <ul class="current nav bd-sidenav">
  <li class="toctree-l1 current active">
   <a class="current reference internal" href="#">
-   WIP: Repairing artifacts with ICA automatically using ICLabel Model
+   Repairing artifacts with ICA automatically using ICLabel Model
   </a>
  </li>
 </ul>
@@ -232,11 +233,11 @@
 <p>Click <a class="reference internal" href="#sphx-glr-download-auto-examples-iclabel-automatic-artifact-correction-ica-py"><span class="std std-ref">here</span></a>
 to download the full example code</p>
 </div>
-<div class="sphx-glr-example-title section" id="wip-repairing-artifacts-with-ica-automatically-using-iclabel-model">
-<span id="tut-auto-artifact-ica"></span><span id="sphx-glr-auto-examples-iclabel-automatic-artifact-correction-ica-py"></span><h1>WIP: Repairing artifacts with ICA automatically using ICLabel Model<a class="headerlink" href="#wip-repairing-artifacts-with-ica-automatically-using-iclabel-model" title="Permalink to this headline">#</a></h1>
+<section class="sphx-glr-example-title" id="repairing-artifacts-with-ica-automatically-using-iclabel-model">
+<span id="tut-auto-artifact-ica"></span><span id="sphx-glr-auto-examples-iclabel-automatic-artifact-correction-ica-py"></span><h1>Repairing artifacts with ICA automatically using ICLabel Model<a class="headerlink" href="#repairing-artifacts-with-ica-automatically-using-iclabel-model" title="Permalink to this headline">#</a></h1>
 <p>This tutorial covers automatically repairing signals using ICA with
-the ICLabel model <a class="footnote-reference brackets" href="#footcite-iclabel2019" id="id1">1</a>. For conceptual
-background on ICA, see <a class="reference external" href="https://scikit-learn.org/stable/auto_examples/decomposition/plot_ica_blind_source_separation.html#sphx-glr-auto-examples-decomposition-plot-ica-blind-source-separation-py" title="(in scikit-learn v1.0)"><span class="xref std std-ref">this scikit-learn tutorial</span></a>.
+the ICLabel model <a class="footnote-reference brackets" href="#footcite-iclabel2019" id="id1">1</a>, which originates in EEGLab.
+For conceptual background on ICA, see <a class="reference external" href="https://scikit-learn.org/stable/auto_examples/decomposition/plot_ica_blind_source_separation.html#sphx-glr-auto-examples-decomposition-plot-ica-blind-source-separation-py" title="(in scikit-learn v1.0)"><span class="xref std std-ref">this scikit-learn tutorial</span></a>.
 For a basic understanding of how to use ICA to remove artifacts, see <a class="reference external" href="https://mne.tools/stable/auto_tutorials/preprocessing/40_artifact_correction_ica.html">the
 tutorial</a> in MNE-Python.</p>
 <p>We begin as always by importing the necessary Python modules and loading some
@@ -263,7 +264,200 @@ and classes from that submodule.</p>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Opening raw data file /Users/adam2392/mne_data/MNE-sample-data/MEG/sample/sample_audvis_filt-0-40_raw.fif...
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Using default location ~/mne_data for sample...
+Creating ~/mne_data
+Downloading file &#39;MNE-sample-data-processed.tar.gz&#39; from &#39;https://osf.io/86qa2/download?version=6&#39; to &#39;/home/circleci/mne_data&#39;.
+
+  0%|                                              | 0.00/1.65G [00:00&lt;?, ?B/s]
+  0%|▏                                    | 7.42M/1.65G [00:00&lt;00:22, 74.2MB/s]
+  1%|▎                                    | 14.8M/1.65G [00:00&lt;00:23, 70.6MB/s]
+  1%|▌                                    | 24.7M/1.65G [00:00&lt;00:19, 83.0MB/s]
+  2%|▊                                    | 34.6M/1.65G [00:00&lt;00:18, 89.4MB/s]
+  3%|█                                    | 45.0M/1.65G [00:00&lt;00:17, 94.6MB/s]
+  3%|█▏                                   | 55.2M/1.65G [00:00&lt;00:16, 96.9MB/s]
+  4%|█▍                                   | 65.4M/1.65G [00:00&lt;00:16, 98.6MB/s]
+  5%|█▋                                    | 75.7M/1.65G [00:00&lt;00:15, 100MB/s]
+  5%|█▉                                    | 86.1M/1.65G [00:00&lt;00:15, 101MB/s]
+  6%|██▏                                   | 96.5M/1.65G [00:01&lt;00:15, 102MB/s]
+  6%|██▌                                    | 107M/1.65G [00:01&lt;00:15, 102MB/s]
+  7%|██▊                                    | 117M/1.65G [00:01&lt;00:14, 103MB/s]
+  8%|███                                    | 127M/1.65G [00:01&lt;00:14, 103MB/s]
+  8%|███▎                                   | 138M/1.65G [00:01&lt;00:14, 103MB/s]
+  9%|███▍                                   | 148M/1.65G [00:01&lt;00:14, 103MB/s]
+ 10%|███▋                                   | 158M/1.65G [00:01&lt;00:14, 103MB/s]
+ 10%|███▉                                   | 169M/1.65G [00:01&lt;00:14, 103MB/s]
+ 11%|████▏                                  | 179M/1.65G [00:01&lt;00:14, 103MB/s]
+ 11%|████▍                                  | 189M/1.65G [00:01&lt;00:14, 102MB/s]
+ 12%|████▋                                  | 199M/1.65G [00:02&lt;00:14, 102MB/s]
+ 13%|████▉                                  | 210M/1.65G [00:02&lt;00:14, 102MB/s]
+ 13%|█████▏                                 | 220M/1.65G [00:02&lt;00:14, 102MB/s]
+ 14%|█████▎                                | 230M/1.65G [00:02&lt;00:16, 85.1MB/s]
+ 14%|█████▍                                | 239M/1.65G [00:02&lt;00:17, 82.3MB/s]
+ 15%|█████▋                                | 248M/1.65G [00:02&lt;00:17, 81.3MB/s]
+ 15%|█████▉                                | 256M/1.65G [00:02&lt;00:17, 81.9MB/s]
+ 16%|██████                                | 265M/1.65G [00:02&lt;00:16, 83.5MB/s]
+ 17%|██████▎                               | 273M/1.65G [00:02&lt;00:17, 78.9MB/s]
+ 17%|██████▍                               | 281M/1.65G [00:03&lt;00:18, 75.9MB/s]
+ 17%|██████▋                               | 289M/1.65G [00:03&lt;00:18, 72.4MB/s]
+ 18%|██████▊                               | 297M/1.65G [00:03&lt;00:18, 74.6MB/s]
+ 18%|███████                               | 305M/1.65G [00:03&lt;00:18, 72.8MB/s]
+ 19%|███████▏                              | 312M/1.65G [00:03&lt;00:20, 66.4MB/s]
+ 19%|███████▎                              | 320M/1.65G [00:03&lt;00:18, 71.5MB/s]
+ 20%|███████▌                              | 328M/1.65G [00:03&lt;00:20, 63.2MB/s]
+ 20%|███████▋                              | 336M/1.65G [00:03&lt;00:19, 66.9MB/s]
+ 21%|███████▊                              | 342M/1.65G [00:04&lt;00:23, 56.9MB/s]
+ 21%|████████                              | 349M/1.65G [00:04&lt;00:23, 56.3MB/s]
+ 21%|████████▏                             | 354M/1.65G [00:04&lt;00:23, 54.7MB/s]
+ 22%|████████▎                             | 363M/1.65G [00:04&lt;00:20, 63.7MB/s]
+ 23%|████████▌                             | 372M/1.65G [00:04&lt;00:18, 70.0MB/s]
+ 23%|████████▊                             | 382M/1.65G [00:04&lt;00:16, 77.7MB/s]
+ 24%|█████████                             | 392M/1.65G [00:04&lt;00:15, 83.2MB/s]
+ 24%|█████████▏                            | 402M/1.65G [00:04&lt;00:14, 88.1MB/s]
+ 25%|█████████▍                            | 411M/1.65G [00:04&lt;00:14, 87.7MB/s]
+ 25%|█████████▋                            | 419M/1.65G [00:05&lt;00:18, 68.1MB/s]
+ 26%|█████████▊                            | 427M/1.65G [00:05&lt;00:22, 55.4MB/s]
+ 26%|█████████▉                            | 434M/1.65G [00:05&lt;00:20, 59.0MB/s]
+ 27%|██████████▏                           | 441M/1.65G [00:05&lt;00:20, 58.2MB/s]
+ 27%|██████████▎                           | 450M/1.65G [00:05&lt;00:18, 65.8MB/s]
+ 28%|██████████▌                           | 460M/1.65G [00:05&lt;00:15, 74.9MB/s]
+ 28%|██████████▊                           | 470M/1.65G [00:05&lt;00:14, 82.1MB/s]
+ 29%|███████████                           | 480M/1.65G [00:05&lt;00:13, 87.1MB/s]
+ 30%|███████████▎                          | 490M/1.65G [00:05&lt;00:12, 90.9MB/s]
+ 30%|███████████▌                          | 500M/1.65G [00:06&lt;00:12, 94.2MB/s]
+ 31%|███████████▋                          | 511M/1.65G [00:06&lt;00:11, 96.5MB/s]
+ 32%|███████████▉                          | 521M/1.65G [00:06&lt;00:11, 98.0MB/s]
+ 32%|████████████▏                         | 531M/1.65G [00:06&lt;00:11, 98.9MB/s]
+ 33%|████████████▊                          | 541M/1.65G [00:06&lt;00:11, 100MB/s]
+ 33%|████████████▋                         | 551M/1.65G [00:06&lt;00:12, 90.6MB/s]
+ 34%|████████████▉                         | 560M/1.65G [00:06&lt;00:12, 88.9MB/s]
+ 34%|█████████████                         | 569M/1.65G [00:06&lt;00:12, 84.9MB/s]
+ 35%|█████████████▎                        | 578M/1.65G [00:06&lt;00:13, 81.6MB/s]
+ 35%|█████████████▍                        | 586M/1.65G [00:07&lt;00:14, 74.4MB/s]
+ 36%|█████████████▋                        | 594M/1.65G [00:07&lt;00:15, 66.6MB/s]
+ 36%|█████████████▊                        | 602M/1.65G [00:07&lt;00:14, 70.5MB/s]
+ 37%|██████████████                        | 611M/1.65G [00:07&lt;00:13, 75.1MB/s]
+ 38%|██████████████▎                       | 620M/1.65G [00:07&lt;00:13, 79.0MB/s]
+ 38%|██████████████▍                       | 628M/1.65G [00:07&lt;00:14, 72.9MB/s]
+ 38%|██████████████▌                       | 635M/1.65G [00:07&lt;00:14, 69.3MB/s]
+ 39%|██████████████▊                       | 643M/1.65G [00:07&lt;00:15, 66.5MB/s]
+ 39%|██████████████▉                       | 649M/1.65G [00:08&lt;00:15, 65.0MB/s]
+ 40%|███████████████                       | 656M/1.65G [00:08&lt;00:15, 63.8MB/s]
+ 40%|███████████████▏                      | 662M/1.65G [00:08&lt;00:15, 62.9MB/s]
+ 40%|███████████████▎                      | 669M/1.65G [00:08&lt;00:15, 62.5MB/s]
+ 41%|███████████████▌                      | 675M/1.65G [00:08&lt;00:15, 62.0MB/s]
+ 41%|███████████████▋                      | 681M/1.65G [00:08&lt;00:15, 61.8MB/s]
+ 42%|███████████████▊                      | 687M/1.65G [00:08&lt;00:15, 61.7MB/s]
+ 42%|███████████████▉                      | 693M/1.65G [00:08&lt;00:15, 61.4MB/s]
+ 42%|████████████████                      | 700M/1.65G [00:08&lt;00:15, 61.5MB/s]
+ 43%|████████████████▏                     | 706M/1.65G [00:08&lt;00:15, 61.3MB/s]
+ 43%|████████████████▎                     | 712M/1.65G [00:09&lt;00:15, 61.1MB/s]
+ 43%|████████████████▌                     | 718M/1.65G [00:09&lt;00:15, 61.1MB/s]
+ 44%|████████████████▋                     | 724M/1.65G [00:09&lt;00:15, 61.0MB/s]
+ 44%|████████████████▊                     | 733M/1.65G [00:09&lt;00:13, 69.7MB/s]
+ 45%|█████████████████                     | 742M/1.65G [00:09&lt;00:11, 76.2MB/s]
+ 45%|█████████████████▎                    | 751M/1.65G [00:09&lt;00:11, 80.5MB/s]
+ 46%|█████████████████▍                    | 760M/1.65G [00:09&lt;00:10, 83.1MB/s]
+ 47%|█████████████████▋                    | 770M/1.65G [00:09&lt;00:10, 86.6MB/s]
+ 47%|█████████████████▉                    | 780M/1.65G [00:09&lt;00:09, 91.4MB/s]
+ 48%|██████████████████▏                   | 790M/1.65G [00:09&lt;00:09, 94.9MB/s]
+ 48%|██████████████████▍                   | 801M/1.65G [00:10&lt;00:08, 97.1MB/s]
+ 49%|██████████████████▋                   | 811M/1.65G [00:10&lt;00:08, 99.1MB/s]
+ 50%|███████████████████▍                   | 821M/1.65G [00:10&lt;00:08, 100MB/s]
+ 50%|███████████████████▌                   | 832M/1.65G [00:10&lt;00:08, 101MB/s]
+ 51%|███████████████████▎                  | 842M/1.65G [00:10&lt;00:08, 94.0MB/s]
+ 52%|███████████████████▌                  | 851M/1.65G [00:10&lt;00:08, 93.1MB/s]
+ 52%|███████████████████▊                  | 861M/1.65G [00:10&lt;00:08, 94.8MB/s]
+ 53%|████████████████████                  | 871M/1.65G [00:10&lt;00:08, 88.2MB/s]
+ 53%|████████████████████▏                 | 881M/1.65G [00:10&lt;00:08, 91.2MB/s]
+ 54%|████████████████████▍                 | 890M/1.65G [00:11&lt;00:09, 82.9MB/s]
+ 54%|████████████████████▋                 | 898M/1.65G [00:11&lt;00:09, 77.6MB/s]
+ 55%|████████████████████▊                 | 906M/1.65G [00:11&lt;00:09, 75.0MB/s]
+ 55%|█████████████████████                 | 916M/1.65G [00:11&lt;00:09, 80.8MB/s]
+ 56%|█████████████████████▎                | 924M/1.65G [00:11&lt;00:08, 81.8MB/s]
+ 56%|█████████████████████▍                | 933M/1.65G [00:11&lt;00:09, 76.4MB/s]
+ 57%|█████████████████████▌                | 940M/1.65G [00:11&lt;00:09, 76.0MB/s]
+ 57%|█████████████████████▊                | 948M/1.65G [00:11&lt;00:09, 75.0MB/s]
+ 58%|██████████████████████                | 958M/1.65G [00:11&lt;00:08, 81.3MB/s]
+ 59%|██████████████████████▏               | 967M/1.65G [00:12&lt;00:08, 85.2MB/s]
+ 59%|██████████████████████▍               | 976M/1.65G [00:12&lt;00:07, 84.7MB/s]
+ 60%|██████████████████████▋               | 985M/1.65G [00:12&lt;00:07, 87.8MB/s]
+ 60%|██████████████████████▊               | 994M/1.65G [00:12&lt;00:08, 78.7MB/s]
+ 61%|██████████████████████▍              | 1.00G/1.65G [00:12&lt;00:07, 83.4MB/s]
+ 61%|██████████████████████▋              | 1.01G/1.65G [00:12&lt;00:07, 88.1MB/s]
+ 62%|██████████████████████▉              | 1.02G/1.65G [00:12&lt;00:07, 80.8MB/s]
+ 62%|███████████████████████              | 1.03G/1.65G [00:12&lt;00:08, 75.7MB/s]
+ 63%|███████████████████████▎             | 1.04G/1.65G [00:12&lt;00:07, 78.6MB/s]
+ 63%|███████████████████████▍             | 1.05G/1.65G [00:13&lt;00:07, 82.7MB/s]
+ 64%|███████████████████████▋             | 1.06G/1.65G [00:13&lt;00:06, 87.0MB/s]
+ 65%|███████████████████████▉             | 1.07G/1.65G [00:13&lt;00:07, 82.1MB/s]
+ 65%|████████████████████████             | 1.08G/1.65G [00:13&lt;00:07, 72.2MB/s]
+ 66%|████████████████████████▎            | 1.08G/1.65G [00:13&lt;00:07, 73.8MB/s]
+ 66%|████████████████████████▍            | 1.09G/1.65G [00:13&lt;00:07, 70.4MB/s]
+ 67%|████████████████████████▋            | 1.10G/1.65G [00:13&lt;00:07, 75.9MB/s]
+ 67%|████████████████████████▊            | 1.11G/1.65G [00:13&lt;00:07, 70.5MB/s]
+ 68%|█████████████████████████            | 1.12G/1.65G [00:13&lt;00:07, 73.6MB/s]
+ 68%|█████████████████████████▏           | 1.13G/1.65G [00:14&lt;00:06, 76.5MB/s]
+ 69%|█████████████████████████▍           | 1.13G/1.65G [00:14&lt;00:06, 80.5MB/s]
+ 69%|█████████████████████████▌           | 1.14G/1.65G [00:14&lt;00:06, 83.6MB/s]
+ 70%|█████████████████████████▊           | 1.15G/1.65G [00:14&lt;00:05, 85.8MB/s]
+ 70%|██████████████████████████           | 1.16G/1.65G [00:14&lt;00:05, 87.3MB/s]
+ 71%|██████████████████████████▏          | 1.17G/1.65G [00:14&lt;00:05, 88.5MB/s]
+ 71%|██████████████████████████▍          | 1.18G/1.65G [00:14&lt;00:05, 89.5MB/s]
+ 72%|██████████████████████████▌          | 1.19G/1.65G [00:14&lt;00:05, 90.3MB/s]
+ 73%|██████████████████████████▊          | 1.20G/1.65G [00:14&lt;00:05, 90.7MB/s]
+ 73%|███████████████████████████          | 1.21G/1.65G [00:14&lt;00:04, 91.0MB/s]
+ 74%|███████████████████████████▏         | 1.22G/1.65G [00:15&lt;00:04, 91.3MB/s]
+ 74%|███████████████████████████▍         | 1.23G/1.65G [00:15&lt;00:04, 91.4MB/s]
+ 75%|███████████████████████████▋         | 1.24G/1.65G [00:15&lt;00:04, 91.4MB/s]
+ 75%|███████████████████████████▊         | 1.24G/1.65G [00:15&lt;00:04, 91.3MB/s]
+ 76%|████████████████████████████         | 1.25G/1.65G [00:15&lt;00:04, 91.3MB/s]
+ 76%|████████████████████████████▎        | 1.26G/1.65G [00:15&lt;00:04, 91.1MB/s]
+ 77%|████████████████████████████▍        | 1.27G/1.65G [00:15&lt;00:04, 82.9MB/s]
+ 77%|████████████████████████████▋        | 1.28G/1.65G [00:15&lt;00:04, 83.7MB/s]
+ 78%|████████████████████████████▊        | 1.29G/1.65G [00:15&lt;00:04, 85.6MB/s]
+ 79%|█████████████████████████████        | 1.30G/1.65G [00:15&lt;00:04, 87.2MB/s]
+ 79%|█████████████████████████████▎       | 1.31G/1.65G [00:16&lt;00:03, 88.3MB/s]
+ 80%|█████████████████████████████▍       | 1.32G/1.65G [00:16&lt;00:03, 89.1MB/s]
+ 80%|█████████████████████████████▋       | 1.33G/1.65G [00:16&lt;00:03, 83.7MB/s]
+ 81%|█████████████████████████████▊       | 1.33G/1.65G [00:16&lt;00:04, 78.4MB/s]
+ 81%|██████████████████████████████       | 1.34G/1.65G [00:16&lt;00:03, 81.9MB/s]
+ 82%|██████████████████████████████▎      | 1.35G/1.65G [00:16&lt;00:03, 84.5MB/s]
+ 82%|██████████████████████████████▍      | 1.36G/1.65G [00:16&lt;00:03, 86.5MB/s]
+ 83%|██████████████████████████████▋      | 1.37G/1.65G [00:16&lt;00:03, 87.9MB/s]
+ 83%|██████████████████████████████▉      | 1.38G/1.65G [00:16&lt;00:03, 88.8MB/s]
+ 84%|███████████████████████████████      | 1.39G/1.65G [00:17&lt;00:02, 89.4MB/s]
+ 85%|███████████████████████████████▎     | 1.40G/1.65G [00:17&lt;00:02, 89.9MB/s]
+ 85%|███████████████████████████████▍     | 1.41G/1.65G [00:17&lt;00:02, 90.2MB/s]
+ 86%|███████████████████████████████▋     | 1.42G/1.65G [00:17&lt;00:02, 90.4MB/s]
+ 86%|███████████████████████████████▉     | 1.42G/1.65G [00:17&lt;00:02, 90.7MB/s]
+ 87%|████████████████████████████████     | 1.43G/1.65G [00:17&lt;00:02, 90.8MB/s]
+ 87%|████████████████████████████████▎    | 1.44G/1.65G [00:17&lt;00:02, 90.9MB/s]
+ 88%|████████████████████████████████▌    | 1.45G/1.65G [00:17&lt;00:02, 90.9MB/s]
+ 88%|████████████████████████████████▋    | 1.46G/1.65G [00:17&lt;00:02, 90.8MB/s]
+ 89%|████████████████████████████████▉    | 1.47G/1.65G [00:17&lt;00:02, 90.8MB/s]
+ 90%|█████████████████████████████████    | 1.48G/1.65G [00:18&lt;00:01, 91.0MB/s]
+ 90%|█████████████████████████████████▎   | 1.49G/1.65G [00:18&lt;00:01, 91.1MB/s]
+ 91%|█████████████████████████████████▌   | 1.50G/1.65G [00:18&lt;00:01, 91.2MB/s]
+ 91%|█████████████████████████████████▋   | 1.51G/1.65G [00:18&lt;00:01, 91.5MB/s]
+ 92%|█████████████████████████████████▉   | 1.52G/1.65G [00:18&lt;00:01, 91.5MB/s]
+ 92%|██████████████████████████████████▏  | 1.53G/1.65G [00:18&lt;00:01, 91.7MB/s]
+ 93%|██████████████████████████████████▎  | 1.53G/1.65G [00:18&lt;00:01, 91.4MB/s]
+ 93%|██████████████████████████████████▌  | 1.54G/1.65G [00:18&lt;00:01, 90.9MB/s]
+ 94%|██████████████████████████████████▊  | 1.55G/1.65G [00:18&lt;00:01, 91.1MB/s]
+ 95%|██████████████████████████████████▉  | 1.56G/1.65G [00:18&lt;00:00, 91.0MB/s]
+ 95%|███████████████████████████████████▏ | 1.57G/1.65G [00:19&lt;00:00, 91.1MB/s]
+ 96%|███████████████████████████████████▍ | 1.58G/1.65G [00:19&lt;00:00, 91.0MB/s]
+ 96%|███████████████████████████████████▌ | 1.59G/1.65G [00:19&lt;00:00, 90.6MB/s]
+ 97%|███████████████████████████████████▊ | 1.60G/1.65G [00:19&lt;00:00, 90.7MB/s]
+ 97%|███████████████████████████████████▉ | 1.61G/1.65G [00:19&lt;00:00, 90.7MB/s]
+ 98%|████████████████████████████████████▏| 1.62G/1.65G [00:19&lt;00:00, 90.8MB/s]
+ 98%|████████████████████████████████████▍| 1.63G/1.65G [00:19&lt;00:00, 90.9MB/s]
+ 99%|████████████████████████████████████▌| 1.63G/1.65G [00:19&lt;00:00, 90.8MB/s]
+ 99%|████████████████████████████████████▊| 1.64G/1.65G [00:19&lt;00:00, 90.9MB/s]
+  0%|                                              | 0.00/1.65G [00:00&lt;?, ?B/s]
+100%|█████████████████████████████████████| 1.65G/1.65G [00:00&lt;00:00, 3.49TB/s]
+Untarring contents of &#39;/home/circleci/mne_data/MNE-sample-data-processed.tar.gz&#39; to &#39;/home/circleci/mne_data&#39;
+Opening raw data file /home/circleci/mne_data/MNE-sample-data/MEG/sample/sample_audvis_filt-0-40_raw.fif...
     Read a total of 4 projection items:
         PCA-v1 (1 x 102)  idle
         PCA-v2 (1 x 102)  idle
@@ -379,19 +573,17 @@ visualizing various types of artifact.</p>
 <a href="https://mne.tools/dev/generated/mne.io.Raw.html#mne.io.Raw.plot" title="mne.io.Raw.plot" class="sphx-glr-backref-module-mne-io sphx-glr-backref-type-py-method"><span class="n">raw</span><span class="o">.</span><span class="n">plot</span></a><span class="p">(</span><span class="n">order</span><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">artifact_picks</span></a><span class="p">,</span> <span class="n">n_channels</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">artifact_picks</span></a><span class="p">),</span> <span class="n">show_scrollbars</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
-<p class="sphx-glr-script-out">Out:</p>
+<img src="../_images/sphx_glr_iclabel_automatic_artifact_correction_ica_001.png" srcset="../_images/sphx_glr_iclabel_automatic_artifact_correction_ica_001.png" alt="iclabel automatic artifact correction ica" class = "sphx-glr-single-img"/><p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Removing projector &lt;Projection | PCA-v1, active : False, n_channels : 102&gt;
 Removing projector &lt;Projection | PCA-v2, active : False, n_channels : 102&gt;
 Removing projector &lt;Projection | PCA-v3, active : False, n_channels : 102&gt;
-Using qt as 2D backend.
+Using matplotlib as 2D backend.
 Opening raw-browser...
-For Dark-Mode &quot;qdarkstyle&quot; has to be installed! You can install it with `pip install qdarkstyle`
-Using pyopengl with version 3.1.6
 
-&lt;mne_qt_browser._pg_figure.PyQtGraphBrowser object at 0x7fbc0aec9b80&gt;
+&lt;MNEBrowseFigure size 800x800 with 5 Axes&gt;
 </pre></div>
 </div>
-<div class="section" id="filtering-to-remove-slow-drifts">
+<section id="filtering-to-remove-slow-drifts">
 <h2>Filtering to remove slow drifts<a class="headerlink" href="#filtering-to-remove-slow-drifts" title="Permalink to this headline">#</a></h2>
 <p>Before we run the ICA, an important step is filtering the data to remove
 low-frequency drifts, which can negatively affect the quality of the ICA fit.
@@ -423,10 +615,10 @@ Designing a one-pass, zero-phase, non-causal highpass filter:
 - Filter length: 497 samples (3.310 sec)
 </pre></div>
 </div>
-</div>
-<div class="section" id="fitting-and-plotting-the-ica-solution">
+</section>
+<section id="fitting-and-plotting-the-ica-solution">
 <h2>Fitting and plotting the ICA solution<a class="headerlink" href="#fitting-and-plotting-the-ica-solution" title="Permalink to this headline">#</a></h2>
-<div class="sidebar">
+<aside class="sidebar">
 <p class="sidebar-title">Ignoring the time domain</p>
 <p>The ICA algorithms implemented in MNE-Python find patterns across
 channels, but ignore the time domain. This means you can compute ICA on
@@ -441,7 +633,7 @@ introduce DC offsets, we suggest to baseline correct your data
 <strong>after</strong> cleaning (and not before), should you require
 baseline correction.</p>
 </div>
-</div>
+</aside>
 <p>Now we’re ready to set up and fit the ICA. Since we know (from observing our
 raw data) that the EOG and ECG artifacts are fairly strong, we would expect
 those artifacts to be captured in the first few dimensions of the PCA
@@ -466,7 +658,7 @@ time this tutorial is built by our web servers.</p>
 <p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Fitting ICA to data using 59 channels (please be patient, this may take a while)
 Selecting by number: 15 components
-Fitting ICA took 0.4s.
+Fitting ICA took 0.2s.
 </pre></div>
 </div>
 <div class="output_subarea output_html rendered_html output_result">
@@ -518,15 +710,13 @@ can use the original, unfiltered <a class="reference external" href="https://mne
 <a href="https://mne.tools/dev/generated/mne.preprocessing.ICA.html#mne.preprocessing.ICA.plot_sources" title="mne.preprocessing.ICA.plot_sources" class="sphx-glr-backref-module-mne-preprocessing sphx-glr-backref-type-py-method"><span class="n">ica</span><span class="o">.</span><span class="n">plot_sources</span></a><span class="p">(</span><a href="https://mne.tools/dev/generated/mne.io.Raw.html#mne.io.Raw" title="mne.io.Raw" class="sphx-glr-backref-module-mne-io sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">raw</span></a><span class="p">,</span> <span class="n">show_scrollbars</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
-<p class="sphx-glr-script-out">Out:</p>
+<img src="../_images/sphx_glr_iclabel_automatic_artifact_correction_ica_002.png" srcset="../_images/sphx_glr_iclabel_automatic_artifact_correction_ica_002.png" alt="iclabel automatic artifact correction ica" class = "sphx-glr-single-img"/><p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Creating RawArray with float64 data, n_channels=16, n_times=9010
     Range : 6450 ... 15459 =     42.956 ...   102.954 secs
 Ready.
 Opening ica-browser...
-For Dark-Mode &quot;qdarkstyle&quot; has to be installed! You can install it with `pip install qdarkstyle`
-Using pyopengl with version 3.1.6
 
-&lt;mne_qt_browser._pg_figure.PyQtGraphBrowser object at 0x7fbbf904cdc0&gt;
+&lt;MNEBrowseFigure size 800x800 with 4 Axes&gt;
 </pre></div>
 </div>
 <p>Here we can pretty clearly see that the first component (<code class="docutils literal notranslate"><span class="pre">ICA000</span></code>) captures
@@ -544,8 +734,8 @@ on the values in the ICA mixing matrix:</p>
 </pre></div>
 </div>
 <ul class="sphx-glr-horizontal">
-<li><img src="../_images/sphx_glr_iclabel_automatic_artifact_correction_ica_001.png" srcset="../_images/sphx_glr_iclabel_automatic_artifact_correction_ica_001.png" alt="ICA components, ICA000, ICA001, ICA002, ICA003, ICA004, ICA005, ICA006, ICA007, ICA008, ICA009, ICA010, ICA011, ICA012, ICA013, ICA014" class = "sphx-glr-multi-img"/></li>
-<li><img src="../_images/sphx_glr_iclabel_automatic_artifact_correction_ica_002.png" srcset="../_images/sphx_glr_iclabel_automatic_artifact_correction_ica_002.png" alt="Signals before (red) and after (black) cleaning, Raw data, Average across channels (EEG)" class = "sphx-glr-multi-img"/></li>
+<li><img src="../_images/sphx_glr_iclabel_automatic_artifact_correction_ica_003.png" srcset="../_images/sphx_glr_iclabel_automatic_artifact_correction_ica_003.png" alt="ICA components, ICA000, ICA001, ICA002, ICA003, ICA004, ICA005, ICA006, ICA007, ICA008, ICA009, ICA010, ICA011, ICA012, ICA013, ICA014" class = "sphx-glr-multi-img"/></li>
+<li><img src="../_images/sphx_glr_iclabel_automatic_artifact_correction_ica_004.png" srcset="../_images/sphx_glr_iclabel_automatic_artifact_correction_ica_004.png" alt="Signals before (red) and after (black) cleaning, Raw data, Average across channels (EEG)" class = "sphx-glr-multi-img"/></li>
 </ul>
 <p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Applying ICA to Raw instance
@@ -598,8 +788,8 @@ on the values in the ICA mixing matrix:</p>
 </pre></div>
 </div>
 <ul class="sphx-glr-horizontal">
-<li><img src="../_images/sphx_glr_iclabel_automatic_artifact_correction_ica_003.png" srcset="../_images/sphx_glr_iclabel_automatic_artifact_correction_ica_003.png" alt="ICA000, Segment image and ERP/ERF, Spectrum, Dropped segments: 0.00 %" class = "sphx-glr-multi-img"/></li>
-<li><img src="../_images/sphx_glr_iclabel_automatic_artifact_correction_ica_004.png" srcset="../_images/sphx_glr_iclabel_automatic_artifact_correction_ica_004.png" alt="ICA001, Segment image and ERP/ERF, Spectrum, Dropped segments: 0.00 %" class = "sphx-glr-multi-img"/></li>
+<li><img src="../_images/sphx_glr_iclabel_automatic_artifact_correction_ica_005.png" srcset="../_images/sphx_glr_iclabel_automatic_artifact_correction_ica_005.png" alt="ICA000, Segment image and ERP/ERF, Spectrum, Dropped segments: 0.00 %" class = "sphx-glr-multi-img"/></li>
+<li><img src="../_images/sphx_glr_iclabel_automatic_artifact_correction_ica_006.png" srcset="../_images/sphx_glr_iclabel_automatic_artifact_correction_ica_006.png" alt="ICA001, Segment image and ERP/ERF, Spectrum, Dropped segments: 0.00 %" class = "sphx-glr-multi-img"/></li>
 </ul>
 <p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>    Using multitaper spectrum estimation with 7 DPSS windows
@@ -613,44 +803,44 @@ Not setting metadata
 No baseline correction applied
 0 projection items activated
 0 bad epochs dropped
-/Users/adam2392/Documents/mne-icalabel/mne_icalabel/iclabel/features.py:46: RuntimeWarning: The provided Raw instance does not seems to be referenced to a common average reference (CAR). ICLabel was designed to classify features extracted from an EEG dataset referenced to a CAR (see the &#39;set_eeg_reference()&#39; method for Raw and Epochs instances).
+/home/circleci/project/mne_icalabel/iclabel/features.py:46: RuntimeWarning: The provided Raw instance does not seems to be referenced to a common average reference (CAR). ICLabel was designed to classify features extracted from an EEG dataset referenced to a CAR (see the &#39;set_eeg_reference()&#39; method for Raw and Epochs instances).
   warn(
-/Users/adam2392/Documents/mne-icalabel/mne_icalabel/iclabel/features.py:54: RuntimeWarning: The provided Raw instance is not filtered between 1 and 100 Hz. ICLabel was designed to classify features extracted from an EEG dataset bandpass filtered between 1 and 100 Hz (see the &#39;filter()&#39; method for Raw and Epochs instances).
+/home/circleci/project/mne_icalabel/iclabel/features.py:54: RuntimeWarning: The provided Raw instance is not filtered between 1 and 100 Hz. ICLabel was designed to classify features extracted from an EEG dataset bandpass filtered between 1 and 100 Hz (see the &#39;filter()&#39; method for Raw and Epochs instances).
   warn(
-/Users/adam2392/Documents/mne-icalabel/mne_icalabel/iclabel/utils.py:131: RuntimeWarning: divide by zero encountered in log
+/home/circleci/project/mne_icalabel/iclabel/utils.py:131: RuntimeWarning: divide by zero encountered in log
   g = np.square(d) * (np.log(d) - 1)  # % Green&#39;s function.
-/Users/adam2392/Documents/mne-icalabel/mne_icalabel/iclabel/utils.py:131: RuntimeWarning: invalid value encountered in multiply
+/home/circleci/project/mne_icalabel/iclabel/utils.py:131: RuntimeWarning: invalid value encountered in multiply
   g = np.square(d) * (np.log(d) - 1)  # % Green&#39;s function.
-{&#39;y_pred_proba&#39;: array([[1.14134233e-02, 3.04525602e-03, 8.75862658e-01, 3.29304719e-03,
-        7.17465708e-04, 2.37405160e-03, 1.03294119e-01],
-       [9.99690890e-01, 2.74945814e-05, 9.85993847e-06, 9.96107556e-05,
-        3.64621701e-05, 1.57391405e-05, 1.19856835e-04],
-       [9.08191323e-01, 1.48155564e-03, 1.38783106e-03, 2.43533077e-03,
-        1.20709674e-03, 5.79169500e-05, 8.52390155e-02],
-       [9.51796174e-01, 4.90991026e-03, 7.18828960e-06, 2.53964012e-04,
-        1.83441176e-03, 4.88304831e-05, 4.11494598e-02],
-       [9.62073624e-01, 1.15181123e-04, 3.08254705e-04, 7.22850091e-04,
-        1.36270812e-02, 1.05123781e-03, 2.21017823e-02],
-       [6.91964865e-01, 6.90639950e-03, 1.12915644e-02, 2.03231722e-02,
-        3.22445761e-03, 1.52033567e-03, 2.64769197e-01],
-       [3.39498937e-01, 3.17857862e-02, 1.19207101e-02, 3.00699961e-04,
-        1.31858038e-02, 5.55650797e-03, 5.97751617e-01],
-       [3.90273243e-01, 2.37265751e-02, 6.03471370e-03, 1.26977952e-03,
-        3.16561805e-03, 1.96159980e-03, 5.73568463e-01],
-       [1.00301616e-01, 1.99288040e-01, 1.29300868e-03, 4.16061317e-04,
-        8.94415425e-04, 1.65626705e-02, 6.81244195e-01],
-       [1.91664666e-01, 3.70128383e-03, 5.42456005e-03, 2.04039202e-03,
-        4.47145524e-03, 2.21277568e-02, 7.70569861e-01],
-       [9.97676134e-01, 5.26823133e-05, 5.37795277e-05, 2.66383344e-04,
-        1.11119807e-04, 1.66782138e-05, 1.82318687e-03],
-       [3.01334977e-01, 8.21827948e-02, 3.51023048e-01, 2.99057434e-03,
-        1.93653663e-03, 2.23071370e-02, 2.38224894e-01],
-       [5.09710014e-02, 5.79883873e-01, 3.83769977e-03, 9.07790891e-05,
-        2.57876789e-04, 2.81094108e-03, 3.62147838e-01],
-       [5.27202450e-02, 1.42773554e-01, 1.21064283e-01, 2.68755830e-03,
-        4.51383321e-03, 3.02183330e-02, 6.46022201e-01],
-       [9.16130394e-02, 7.55041599e-01, 9.34534986e-03, 1.51955627e-03,
-        2.76829000e-04, 8.55896343e-03, 1.33644715e-01]], dtype=float32), &#39;y_pred&#39;: array([2, 0, 0, 0, 0, 0, 6, 6, 6, 6, 0, 2, 1, 6, 1]), &#39;labels&#39;: [&#39;eye blink&#39;, &#39;brain&#39;, &#39;brain&#39;, &#39;brain&#39;, &#39;brain&#39;, &#39;brain&#39;, &#39;other&#39;, &#39;other&#39;, &#39;other&#39;, &#39;other&#39;, &#39;brain&#39;, &#39;eye blink&#39;, &#39;muscle artifact&#39;, &#39;other&#39;, &#39;muscle artifact&#39;]}
+{&#39;y_pred_proba&#39;: array([[1.14134122e-02, 3.04524181e-03, 8.75862777e-01, 3.29305511e-03,
+        7.17465417e-04, 2.37404811e-03, 1.03294015e-01],
+       [9.99690890e-01, 2.74947761e-05, 9.85998486e-06, 9.96107992e-05,
+        3.64622356e-05, 1.57392187e-05, 1.19857265e-04],
+       [9.08191144e-01, 1.48156122e-03, 1.38783397e-03, 2.43533729e-03,
+        1.20709604e-03, 5.79167172e-05, 8.52391720e-02],
+       [9.51796174e-01, 4.90991306e-03, 7.18824776e-06, 2.53963430e-04,
+        1.83440815e-03, 4.88303413e-05, 4.11494970e-02],
+       [9.62073684e-01, 1.15180948e-04, 3.08254908e-04, 7.22847937e-04,
+        1.36270411e-02, 1.05123606e-03, 2.21017413e-02],
+       [6.91964686e-01, 6.90640509e-03, 1.12915346e-02, 2.03231517e-02,
+        3.22445738e-03, 1.52034219e-03, 2.64769405e-01],
+       [3.39499503e-01, 3.17858979e-02, 1.19207250e-02, 3.00701737e-04,
+        1.31857870e-02, 5.55651495e-03, 5.97750843e-01],
+       [3.90272737e-01, 2.37265974e-02, 6.03471603e-03, 1.26977789e-03,
+        3.16562178e-03, 1.96160190e-03, 5.73569000e-01],
+       [1.00301445e-01, 1.99287668e-01, 1.29300950e-03, 4.16061346e-04,
+        8.94418918e-04, 1.65626630e-02, 6.81244671e-01],
+       [1.91664532e-01, 3.70126870e-03, 5.42455306e-03, 2.04038899e-03,
+        4.47145104e-03, 2.21277289e-02, 7.70570159e-01],
+       [9.97676134e-01, 5.26821241e-05, 5.37794440e-05, 2.66383664e-04,
+        1.11120316e-04, 1.66782102e-05, 1.82319363e-03],
+       [3.01334977e-01, 8.21827129e-02, 3.51023138e-01, 2.99057853e-03,
+        1.93653291e-03, 2.23071184e-02, 2.38224939e-01],
+       [5.09709977e-02, 5.79883695e-01, 3.83769232e-03, 9.07786962e-05,
+        2.57876411e-04, 2.81093642e-03, 3.62147987e-01],
+       [5.27202375e-02, 1.42773643e-01, 1.21064030e-01, 2.68754154e-03,
+        4.51383786e-03, 3.02183833e-02, 6.46022320e-01],
+       [9.16132554e-02, 7.55041003e-01, 9.34536383e-03, 1.51955592e-03,
+        2.76829320e-04, 8.55898671e-03, 1.33644998e-01]], dtype=float32), &#39;y_pred&#39;: array([2, 0, 0, 0, 0, 0, 6, 6, 6, 6, 0, 2, 1, 6, 1]), &#39;labels&#39;: [&#39;eye blink&#39;, &#39;brain&#39;, &#39;brain&#39;, &#39;brain&#39;, &#39;brain&#39;, &#39;brain&#39;, &#39;other&#39;, &#39;other&#39;, &#39;other&#39;, &#39;other&#39;, &#39;brain&#39;, &#39;eye blink&#39;, &#39;muscle artifact&#39;, &#39;other&#39;, &#39;muscle artifact&#39;]}
 Excluding these ICA components: [0, 11, 12, 14]
 </pre></div>
 </div>
@@ -668,22 +858,23 @@ reconstructed data shows that the heartbeat and blink artifacts are repaired.</p
 <span class="k">del</span> <span class="n">reconst_raw</span>
 </pre></div>
 </div>
+<ul class="sphx-glr-horizontal">
+<li><img src="../_images/sphx_glr_iclabel_automatic_artifact_correction_ica_007.png" srcset="../_images/sphx_glr_iclabel_automatic_artifact_correction_ica_007.png" alt="iclabel automatic artifact correction ica" class = "sphx-glr-multi-img"/></li>
+<li><img src="../_images/sphx_glr_iclabel_automatic_artifact_correction_ica_008.png" srcset="../_images/sphx_glr_iclabel_automatic_artifact_correction_ica_008.png" alt="iclabel automatic artifact correction ica" class = "sphx-glr-multi-img"/></li>
+</ul>
 <p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Applying ICA to Raw instance
     Transforming to ICA space (15 components)
     Zeroing out 4 ICA components
     Projecting back using 59 PCA components
 Opening raw-browser...
-For Dark-Mode &quot;qdarkstyle&quot; has to be installed! You can install it with `pip install qdarkstyle`
-Using pyopengl with version 3.1.6
 Opening raw-browser...
-For Dark-Mode &quot;qdarkstyle&quot; has to be installed! You can install it with `pip install qdarkstyle`
-Using pyopengl with version 3.1.6
 </pre></div>
 </div>
-<div class="section" id="references">
+<section id="references">
 <h3>References<a class="headerlink" href="#references" title="Permalink to this headline">#</a></h3>
-<p id="id3"><dl class="footnote brackets">
+<div class="docutils container" id="id3">
+<dl class="footnote brackets">
 <dt class="label" id="footcite-iclabel2019"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
 <dd><p>Luca Pion-Tonachini, Ken Kreutz-Delgado, and Scott Makeig. Iclabel: an automated electroencephalographic independent component classifier, dataset, and website. <em>NeuroImage</em>, 198:181–197, 2019. URL: <a class="reference external" href="https://www.sciencedirect.com/science/article/pii/S1053811919304185">https://www.sciencedirect.com/science/article/pii/S1053811919304185</a>, <a class="reference external" href="https://doi.org/https://doi.org/10.1016/j.neuroimage.2019.05.026">doi:https://doi.org/10.1016/j.neuroimage.2019.05.026</a>.</p>
 </dd>
@@ -691,8 +882,8 @@ Using pyopengl with version 3.1.6
 <dd><p>Irene Winkler, Stefan Debener, Klaus-Robert Müller, and Michael Tangermann. On the influence of high-pass filtering on ICA-based artifact reduction in EEG-ERP. In <em>Proceedings of EMBC-2015</em>, 4101–4105. Milan, 2015. IEEE. <a class="reference external" href="https://doi.org/10.1109/EMBC.2015.7319296">doi:10.1109/EMBC.2015.7319296</a>.</p>
 </dd>
 </dl>
-</p>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  11.721 seconds)</p>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  53.068 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-iclabel-automatic-artifact-correction-ica-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/59f8c8f9ff57a99049f45e3817855764/iclabel_automatic_artifact_correction_ica.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">iclabel_automatic_artifact_correction_ica.py</span></code></a></p>
@@ -702,9 +893,9 @@ Using pyopengl with version 3.1.6
 </div>
 </div>
 <p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
-</div>
-</div>
-</div>
+</section>
+</section>
+</section>
 
 
               </div>
@@ -734,7 +925,7 @@ Using pyopengl with version 3.1.6
     
     <div class="footer-item">
       <p class="copyright">
-    &copy; Copyright 2021-2022, MNE Developers. Last updated on 2022-05-02.<br>
+    &copy; Copyright 2021-2022, MNE Developers. Last updated on 2022-05-03.<br>
 </p>
     </div>
     

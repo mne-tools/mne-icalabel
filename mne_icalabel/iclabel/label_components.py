@@ -34,8 +34,9 @@ def iclabel_label_components(inst: Union[BaseRaw, BaseEpochs], ica: ICA):
     -------
     labels_pred_proba : numpy.ndarray of shape (n_components, n_classes)
         The estimated corresponding predicted probabilities of output classes
-        for each independent component. Columns are ordered with 'Brain',
-        'Muscle', 'Eye', 'Heart', 'Line Noise', 'Channel Noise', and 'Other'.
+        for each independent component. Columns are ordered with 'brain',
+        'muscle artifact', 'eye blink', 'heart beat', 'line noise',
+        'channel noise', 'other'.
 
     References
     ----------

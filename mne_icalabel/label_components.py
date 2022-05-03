@@ -42,13 +42,13 @@ def label_components(inst: Union[BaseRaw, BaseEpochs], ica: ICA, method: str):
     Notes
     -----
     For ICLabel model, the output classes are ordered:
-    - 'Brain'
-    - 'Muscle'
-    - 'Eye'
-    - 'Heart'
-    - 'Line Noise'
-    - 'Channel Noise'
-    - 'Other'
+    - 'brain'
+    - 'muscle artifact'
+    - 'eye blink'
+    - 'heart beat'
+    - 'line noise'
+    - 'channel noise'
+    - 'other'
     """
     _validate_type(method, str, "method")
     _check_option("method", method, methods)

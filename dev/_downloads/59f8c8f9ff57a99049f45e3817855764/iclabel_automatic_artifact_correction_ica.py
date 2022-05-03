@@ -2,12 +2,12 @@
 """
 .. _tut-auto-artifact-ica:
 
-WIP: Repairing artifacts with ICA automatically using ICLabel Model
-===================================================================
+Repairing artifacts with ICA automatically using ICLabel Model
+==============================================================
 
 This tutorial covers automatically repairing signals using ICA with
-the ICLabel model :footcite:`iclabel2019`. For conceptual
-background on ICA, see :ref:`this scikit-learn tutorial
+the ICLabel model :footcite:`iclabel2019`, which originates in EEGLab.
+For conceptual background on ICA, see :ref:`this scikit-learn tutorial
 <sphx_glr_auto_examples_decomposition_plot_ica_blind_source_separation.py>`.
 For a basic understanding of how to use ICA to remove artifacts, see `the
 tutorial <https://mne.tools/stable/auto_tutorials/preprocessing/40_artifact_correction_ica.html>`_ in MNE-Python.

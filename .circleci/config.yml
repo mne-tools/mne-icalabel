@@ -203,8 +203,6 @@ jobs:
                 - ~/mne-icalabel
 
 workflows:
-  version: 2
-
   default:
     jobs:
       - build_doc

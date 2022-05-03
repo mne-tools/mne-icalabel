@@ -1,0 +1,743 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>mne_icalabel.iclabel.features &#8212; MNE-ICALabel 0.1 documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/style.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/clipboard.min.js"></script>
+    <script src="../../../_static/copybutton.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="canonical" href="https://mne.tools/mne-icalabel/stable/index.html" />
+    <script type="text/javascript" src="../../../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../../../_static/scrollfix.js"></script>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main"><div class="container-xl">
+
+  <div id="navbar-start">
+    
+    
+<a class="navbar-brand" href="../../../index.html">
+<p class="title">MNE-ICALabel</p>
+</a>
+
+    
+  </div>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapsible" aria-controls="navbar-collapsible" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  
+  <div id="navbar-collapsible" class="col-lg-9 collapse navbar-collapse">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <ul id="navbar-main-elements" class="navbar-nav">
+    <li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../../whats_new.html">
+  What’s new?
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../../install.html">
+  Installation
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../../api.html">
+  API
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../../auto_examples/index.html">
+  Examples
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference external nav-link" href="https://raw.githubusercontent.com/mne-tools/mne-icalabel/main/LICENSE">
+  License
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference external nav-link" href="https://github.com/mne-tools/mne-icalabel/main/CONTRIBUTING.md">
+  Contributing
+ </a>
+</li>
+
+    
+</ul>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+      <div class="navbar-end-item">
+        <div class="dropdown">
+    <button type="button" class="btn btn-primary btn-sm navbar-btn dropdown-toggle" id="dLabelMore" data-toggle="dropdown">
+        v0.1
+        <span class="caret"></span>
+    </button>
+    <div class="dropdown-menu list-group-flush py-0" aria-labelledby="dLabelMore">
+        <a class="list-group-item list-group-item-action py-1" href="https://mne.tools/mne-icalabel/dev/index.html">v0.2 (devel)</a>
+        <a class="list-group-item list-group-item-action py-1" href="https://mne.tools/mne-icalabel/stable/index.html">v0.1</a>
+        <a class="list-group-item list-group-item-action py-1" href="https://mne.tools/mne-icalabel/v0.1/index.html">v0.1</a>
+    </div>
+</div>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          <a class="nav-link" href="https://github.com/mne-tools/MNE-ICALabel" rel="noopener" target="_blank" title="GitHub"><span><i class="fab fa-github-square"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+            
+            <!-- Only show if we have sidebars configured, else just a small margin  -->
+            <div class="col-12 col-md-3 bd-sidebar">
+              <div class="sidebar-start-items"><form class="bd-search d-flex align-items-center" action="../../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <div class="bd-toc-item active">
+    
+  </div>
+</nav>
+              </div>
+              <div class="sidebar-end-items">
+              </div>
+            </div>
+            
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+            
+          </div>
+          
+
+          
+          
+            
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  <h1>Source code for mne_icalabel.iclabel.features</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">mne</span> <span class="kn">import</span> <span class="n">BaseEpochs</span>
+<span class="kn">from</span> <span class="nn">mne.io</span> <span class="kn">import</span> <span class="n">BaseRaw</span>
+<span class="kn">from</span> <span class="nn">mne.preprocessing</span> <span class="kn">import</span> <span class="n">ICA</span>
+<span class="kn">from</span> <span class="nn">mne.utils</span> <span class="kn">import</span> <span class="n">warn</span>
+<span class="kn">from</span> <span class="nn">numpy.typing</span> <span class="kn">import</span> <span class="n">NDArray</span>
+<span class="kn">from</span> <span class="nn">scipy.signal</span> <span class="kn">import</span> <span class="n">resample_poly</span>
+
+<span class="kn">from</span> <span class="nn">..utils</span> <span class="kn">import</span> <span class="n">_validate_inst_and_ica</span>
+<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">_gdatav4</span><span class="p">,</span> <span class="n">_mne_to_eeglab_locs</span><span class="p">,</span> <span class="n">_next_power_of_2</span><span class="p">,</span> <span class="n">_pol2cart</span>
+
+
+<div class="viewcode-block" id="get_iclabel_features"><a class="viewcode-back" href="../../../generated/mne_icalabel.iclabel.get_iclabel_features.html#mne_icalabel.iclabel.get_iclabel_features">[docs]</a><span class="k">def</span> <span class="nf">get_iclabel_features</span><span class="p">(</span><span class="n">inst</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">BaseRaw</span><span class="p">,</span> <span class="n">BaseEpochs</span><span class="p">],</span> <span class="n">ica</span><span class="p">:</span> <span class="n">ICA</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Generate the features for ICLabel neural network.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    inst : Raw | Epochs</span>
+<span class="sd">        MNE Raw/Epoch instance with data array in Volts.</span>
+<span class="sd">    ica : ICA</span>
+<span class="sd">        MNE ICA decomposition.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    topo : np.ndarray of shape (32, 32, 1, n_components)</span>
+<span class="sd">        The topoplot feature.</span>
+<span class="sd">    psd : np.ndarray of shape (1, 100, 1, n_components)</span>
+<span class="sd">        The psd feature.</span>
+<span class="sd">    autocorr : np.ndarray of shape (1, 100, 1, n_components)</span>
+<span class="sd">        The autocorrelations feature. Depending on the length of the</span>
+<span class="sd">        raw data passed in, different methods of computing autocorrelation</span>
+<span class="sd">        will be used. See :footcite:`iclabel2019` for details.</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    .. footbibliography::</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_validate_inst_and_ica</span><span class="p">(</span><span class="n">inst</span><span class="p">,</span> <span class="n">ica</span><span class="p">)</span>
+
+    <span class="c1"># TODO: &#39;custom_ref_applied&#39; does not necessarily correspond to a CAR reference.</span>
+    <span class="c1"># At the moment, the reference of the EEG data is not stored in the info.</span>
+    <span class="c1"># c.f. https://github.com/mne-tools/mne-python/issues/8962</span>
+    <span class="k">if</span> <span class="n">inst</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;custom_ref_applied&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">warn</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;The provided </span><span class="si">{</span><span class="s1">&#39;Raw&#39;</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">inst</span><span class="p">,</span> <span class="n">BaseRaw</span><span class="p">)</span> <span class="k">else</span> <span class="s1">&#39;Epochs&#39;</span><span class="si">}</span><span class="s2"> instance &quot;</span>
+            <span class="s2">&quot;does not seems to be referenced to a common average reference (CAR). &quot;</span>
+            <span class="s2">&quot;ICLabel was designed to classify features extracted from an EEG dataset &quot;</span>
+            <span class="s2">&quot;referenced to a CAR (see the &#39;set_eeg_reference()&#39; method for Raw and &quot;</span>
+            <span class="s2">&quot;Epochs instances).&quot;</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="n">inst</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;highpass&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">inst</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;lowpass&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">100</span><span class="p">:</span>
+        <span class="n">warn</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;The provided </span><span class="si">{</span><span class="s1">&#39;Raw&#39;</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">inst</span><span class="p">,</span> <span class="n">BaseRaw</span><span class="p">)</span> <span class="k">else</span> <span class="s1">&#39;Epochs&#39;</span><span class="si">}</span><span class="s2"> instance &quot;</span>
+            <span class="s2">&quot;is not filtered between 1 and 100 Hz. &quot;</span>
+            <span class="s2">&quot;ICLabel was designed to classify features extracted from an EEG dataset &quot;</span>
+            <span class="s2">&quot;bandpass filtered between 1 and 100 Hz (see the &#39;filter()&#39; method for Raw &quot;</span>
+            <span class="s2">&quot;and Epochs instances).&quot;</span>
+        <span class="p">)</span>
+
+    <span class="n">icawinv</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_retrieve_eeglab_icawinv</span><span class="p">(</span><span class="n">ica</span><span class="p">)</span>
+    <span class="n">icaact</span> <span class="o">=</span> <span class="n">_compute_ica_activations</span><span class="p">(</span><span class="n">inst</span><span class="p">,</span> <span class="n">ica</span><span class="p">)</span>
+
+    <span class="c1"># compute topographic feature (float32)</span>
+    <span class="n">topo</span> <span class="o">=</span> <span class="n">_eeg_topoplot</span><span class="p">(</span><span class="n">inst</span><span class="p">,</span> <span class="n">icawinv</span><span class="p">)</span>
+
+    <span class="c1"># compute psd feature (float32)</span>
+    <span class="n">psd</span> <span class="o">=</span> <span class="n">_eeg_rpsd</span><span class="p">(</span><span class="n">inst</span><span class="p">,</span> <span class="n">ica</span><span class="p">,</span> <span class="n">icaact</span><span class="p">)</span>
+
+    <span class="c1"># compute autocorr feature (float32)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">inst</span><span class="p">,</span> <span class="n">BaseRaw</span><span class="p">):</span>
+        <span class="k">if</span> <span class="mi">5</span> <span class="o">&lt;</span> <span class="n">inst</span><span class="o">.</span><span class="n">times</span><span class="o">.</span><span class="n">size</span> <span class="o">/</span> <span class="n">inst</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;sfreq&quot;</span><span class="p">]:</span>
+            <span class="n">autocorr</span> <span class="o">=</span> <span class="n">_eeg_autocorr_welch</span><span class="p">(</span><span class="n">inst</span><span class="p">,</span> <span class="n">ica</span><span class="p">,</span> <span class="n">icaact</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">autocorr</span> <span class="o">=</span> <span class="n">_eeg_autocorr</span><span class="p">(</span><span class="n">inst</span><span class="p">,</span> <span class="n">ica</span><span class="p">,</span> <span class="n">icaact</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">autocorr</span> <span class="o">=</span> <span class="n">_eeg_autocorr_fftw</span><span class="p">(</span><span class="n">inst</span><span class="p">,</span> <span class="n">ica</span><span class="p">,</span> <span class="n">icaact</span><span class="p">)</span>
+
+    <span class="c1"># scale by 0.99</span>
+    <span class="n">topo</span> <span class="o">*=</span> <span class="mf">0.99</span>
+    <span class="n">psd</span> <span class="o">*=</span> <span class="mf">0.99</span>
+    <span class="n">autocorr</span> <span class="o">*=</span> <span class="mf">0.99</span>
+
+    <span class="k">return</span> <span class="n">topo</span><span class="p">,</span> <span class="n">psd</span><span class="p">,</span> <span class="n">autocorr</span></div>
+
+
+<span class="k">def</span> <span class="nf">_retrieve_eeglab_icawinv</span><span class="p">(</span>
+    <span class="n">ica</span><span class="p">:</span> <span class="n">ICA</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">NDArray</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">NDArray</span><span class="p">[</span><span class="nb">float</span><span class="p">]]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Retrieves &#39;icawinv&#39; from an MNE ICA instance.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ica : ICA</span>
+<span class="sd">        MNE ICA decomposition.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    icawinv : array</span>
+<span class="sd">    weights : array</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">n_components</span> <span class="o">=</span> <span class="n">ica</span><span class="o">.</span><span class="n">n_components_</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">ica</span><span class="o">.</span><span class="n">pca_explained_variance_</span><span class="p">)[:</span><span class="n">n_components</span><span class="p">]</span>
+    <span class="n">u</span> <span class="o">=</span> <span class="n">ica</span><span class="o">.</span><span class="n">unmixing_matrix_</span> <span class="o">/</span> <span class="n">s</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">ica</span><span class="o">.</span><span class="n">pca_components_</span><span class="p">[:</span><span class="n">n_components</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="n">weights</span> <span class="o">=</span> <span class="p">(</span><span class="n">u</span> <span class="o">*</span> <span class="n">s</span><span class="p">)</span> <span class="o">@</span> <span class="n">v</span>
+    <span class="n">icawinv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">pinv</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span>
+    <span class="c1"># sanity-check</span>
+    <span class="k">assert</span> <span class="n">icawinv</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">ica</span><span class="o">.</span><span class="n">n_components_</span>
+    <span class="k">assert</span> <span class="n">icawinv</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span>
+    <span class="k">return</span> <span class="n">icawinv</span><span class="p">,</span> <span class="n">weights</span>
+
+
+<span class="k">def</span> <span class="nf">_compute_ica_activations</span><span class="p">(</span><span class="n">inst</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">BaseRaw</span><span class="p">,</span> <span class="n">BaseEpochs</span><span class="p">],</span> <span class="n">ica</span><span class="p">:</span> <span class="n">ICA</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;Compute the ICA activations &#39;icaact&#39; variable from an MNE ICA instance.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    inst : Raw | Epoch</span>
+<span class="sd">        MNE Raw/Epoch instance with data array in Volts.</span>
+<span class="sd">    ica : ICA</span>
+<span class="sd">        MNE ICA decomposition.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    icaact : array</span>
+<span class="sd">        raw: (n_components, n_samples)</span>
+<span class="sd">        epoch: (n_components, n_samples, n_trials)</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    In EEGLAB, the ICA activation are computed after the data and the ICA</span>
+<span class="sd">    decomposition are re-referenced to a common average, if the field &#39;EEG.ref&#39;</span>
+<span class="sd">    is different from &#39;averef&#39;. The EEGLAB sample dataset&#39;s field &#39;EEG.ref&#39; is</span>
+<span class="sd">    set to &#39;common&#39;, thus triggering the re-referencing with &#39;pop_reref&#39; which</span>
+<span class="sd">    seems to be buggy and breaks the ICA solution. After &#39;pop_reref&#39; is called,</span>
+<span class="sd">    the relation &#39;inv(EEG.icaweights * EEG.icasphere) = EEG.icawinv&#39; is not</span>
+<span class="sd">    respected anymore.</span>
+
+<span class="sd">    Additionally, &#39;pop_reref&#39; changes the field &#39;EEG.ref&#39; to &#39;average&#39;. It is</span>
+<span class="sd">    assumed that &#39;common&#39;, &#39;average&#39; and &#39;averef&#39; are all denoting a common</span>
+<span class="sd">    average reference.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">icawinv</span><span class="p">,</span> <span class="n">weights</span> <span class="o">=</span> <span class="n">_retrieve_eeglab_icawinv</span><span class="p">(</span><span class="n">ica</span><span class="p">)</span>
+    <span class="n">icasphere</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">icawinv</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">inst</span><span class="o">.</span><span class="n">get_data</span><span class="p">(</span><span class="n">picks</span><span class="o">=</span><span class="n">ica</span><span class="o">.</span><span class="n">ch_names</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1e6</span>
+    <span class="n">icaact</span> <span class="o">=</span> <span class="p">(</span><span class="n">weights</span><span class="p">[</span><span class="mi">0</span> <span class="p">:</span> <span class="n">ica</span><span class="o">.</span><span class="n">n_components_</span><span class="p">,</span> <span class="p">:]</span> <span class="o">@</span> <span class="n">icasphere</span><span class="p">)</span> <span class="o">@</span> <span class="n">data</span>
+    <span class="c1"># move trial (epoch) dimension to the end</span>
+    <span class="k">if</span> <span class="n">icaact</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">inst</span><span class="p">,</span> <span class="n">BaseEpochs</span><span class="p">)</span>  <span class="c1"># sanity-check</span>
+        <span class="n">icaact</span> <span class="o">=</span> <span class="n">icaact</span><span class="o">.</span><span class="n">transpose</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">icaact</span>
+
+
+<span class="c1"># ----------------------------------------------------------------------------</span>
+<span class="k">def</span> <span class="nf">_eeg_topoplot</span><span class="p">(</span><span class="n">inst</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">BaseRaw</span><span class="p">,</span> <span class="n">BaseEpochs</span><span class="p">],</span> <span class="n">icawinv</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;Topoplot feature.&quot;&quot;&quot;</span>
+    <span class="c1"># TODO: Selection of channels is missing.</span>
+    <span class="n">ncomp</span> <span class="o">=</span> <span class="n">icawinv</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">topo</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">32</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ncomp</span><span class="p">))</span>
+    <span class="n">rd</span><span class="p">,</span> <span class="n">th</span> <span class="o">=</span> <span class="n">_mne_to_eeglab_locs</span><span class="p">(</span><span class="n">inst</span><span class="p">)</span>
+    <span class="n">th</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">180</span> <span class="o">*</span> <span class="n">th</span>  <span class="c1"># convert degrees to radians</span>
+    <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ncomp</span><span class="p">):</span>
+        <span class="n">temp_topo</span> <span class="o">=</span> <span class="n">_topoplotFast</span><span class="p">(</span><span class="n">icawinv</span><span class="p">[:,</span> <span class="n">it</span><span class="p">],</span> <span class="n">rd</span><span class="p">,</span> <span class="n">th</span><span class="p">)</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">temp_topo</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>  <span class="c1"># set NaN values to 0 in-place</span>
+        <span class="n">topo</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">it</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp_topo</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">temp_topo</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">topo</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_topoplotFast</span><span class="p">(</span><span class="n">values</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">rd</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">th</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;Implements topoplotFast.m from MATLAB. Each topographic map is a 32x32</span>
+<span class="sd">    images.&quot;&quot;&quot;</span>
+    <span class="c1"># constants</span>
+    <span class="n">GRID_SCALE</span> <span class="o">=</span> <span class="mi">32</span>  <span class="c1"># number of pixels</span>
+    <span class="n">rmax</span> <span class="o">=</span> <span class="mf">0.5</span>  <span class="c1"># actual head radius</span>
+
+    <span class="c1"># convert electrode locations from polar to cartesian coordinates</span>
+    <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">_pol2cart</span><span class="p">(</span><span class="n">th</span><span class="p">,</span> <span class="n">rd</span><span class="p">)</span>
+
+    <span class="c1"># prepare coordinates</span>
+    <span class="c1"># Comments in MATLAB (L750:753) are:</span>
+    <span class="c1">#   default: just outside the outermost electrode location</span>
+    <span class="c1">#   default: plot out to the 0.5 head boundary</span>
+    <span class="c1">#   don&#39;t plot channels with Rd &gt; 1 (below head)</span>
+    <span class="n">plotrad</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">rd</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1.02</span><span class="p">)</span>
+    <span class="n">plotrad</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">plotrad</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+
+    <span class="c1"># TODO: Selection of channels.</span>
+    <span class="c1"># For interpolation, only the channels inside the interpolation square are</span>
+    <span class="c1"># considered. c.f. L839:843.</span>
+
+    <span class="c1"># Squeeze channel location to &lt;= rmax</span>
+    <span class="c1"># Comments in MATLAB (L894:908)</span>
+    <span class="c1">#   squeeze electrode arc_lengths towards the vertex to plot all inside the</span>
+    <span class="c1">#   head cartoon</span>
+    <span class="n">squeezefac</span> <span class="o">=</span> <span class="n">rmax</span> <span class="o">/</span> <span class="n">plotrad</span>
+    <span class="n">rd</span> <span class="o">*=</span> <span class="n">squeezefac</span>
+    <span class="n">x</span> <span class="o">*=</span> <span class="n">squeezefac</span>
+    <span class="n">y</span> <span class="o">*=</span> <span class="n">squeezefac</span>
+    <span class="c1"># convert to float63</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+
+    <span class="c1"># Find limits for interpolation</span>
+    <span class="n">xmin</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="o">-</span><span class="n">rmax</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+    <span class="n">xmax</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">rmax</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+    <span class="n">ymin</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="o">-</span><span class="n">rmax</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
+    <span class="n">ymax</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">rmax</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
+
+    <span class="c1"># Interpolate scalp map data</span>
+    <span class="n">xi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">,</span> <span class="n">GRID_SCALE</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">yi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="p">,</span> <span class="n">GRID_SCALE</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+    <span class="c1"># additional step for gdatav4 compared to MATLAB: linspace to meshgrid</span>
+    <span class="n">XQ</span><span class="p">,</span> <span class="n">YQ</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">xi</span><span class="p">,</span> <span class="n">yi</span><span class="p">)</span>
+    <span class="n">Xi</span><span class="p">,</span> <span class="n">Yi</span><span class="p">,</span> <span class="n">Zi</span> <span class="o">=</span> <span class="n">_gdatav4</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">values</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span> <span class="n">XQ</span><span class="p">,</span> <span class="n">YQ</span><span class="p">)</span>
+    <span class="c1"># additional step for gdatav4 compared to MATLAB: transpose</span>
+    <span class="n">Zi</span> <span class="o">=</span> <span class="n">Zi</span><span class="o">.</span><span class="n">T</span>
+
+    <span class="c1"># Mask out data outside the head</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">Xi</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">Yi</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span> <span class="o">&lt;=</span> <span class="n">rmax</span>
+    <span class="n">Zi</span><span class="p">[</span><span class="o">~</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+    <span class="k">return</span> <span class="n">Zi</span>
+
+
+<span class="c1"># ----------------------------------------------------------------------------</span>
+<span class="k">def</span> <span class="nf">_eeg_rpsd</span><span class="p">(</span><span class="n">inst</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">BaseRaw</span><span class="p">,</span> <span class="n">BaseEpochs</span><span class="p">],</span> <span class="n">ica</span><span class="p">:</span> <span class="n">ICA</span><span class="p">,</span> <span class="n">icaact</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;PSD feature.&quot;&quot;&quot;</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">inst</span><span class="p">,</span> <span class="p">(</span><span class="n">BaseRaw</span><span class="p">,</span> <span class="n">BaseEpochs</span><span class="p">))</span>  <span class="c1"># sanity-check</span>
+    <span class="n">constants</span> <span class="o">=</span> <span class="n">_eeg_rpsd_constants</span><span class="p">(</span><span class="n">inst</span><span class="p">,</span> <span class="n">ica</span><span class="p">)</span>
+    <span class="n">psd</span> <span class="o">=</span> <span class="n">_eeg_rpsd_compute_psdmed</span><span class="p">(</span><span class="n">inst</span><span class="p">,</span> <span class="n">icaact</span><span class="p">,</span> <span class="o">*</span><span class="n">constants</span><span class="p">)</span>
+    <span class="n">psd</span> <span class="o">=</span> <span class="n">_eeg_rpsd_format</span><span class="p">(</span><span class="n">psd</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">psd</span>
+
+
+<span class="k">def</span> <span class="nf">_eeg_rpsd_constants</span><span class="p">(</span>
+    <span class="n">inst</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">BaseRaw</span><span class="p">,</span> <span class="n">BaseEpochs</span><span class="p">],</span>
+    <span class="n">ica</span><span class="p">:</span> <span class="n">ICA</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="n">NDArray</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">NDArray</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">NDArray</span><span class="p">[</span><span class="nb">int</span><span class="p">]]:</span>
+    <span class="sd">&quot;&quot;&quot;Computes the constants before ``randperm`` is used to compute the</span>
+<span class="sd">    subset.&quot;&quot;&quot;</span>
+    <span class="c1"># in MATLAB, &#39;pct_data&#39; variable is never provided and is always initialized</span>
+    <span class="c1"># to 100. &#39;pct_data&#39; is only used in a division by 100.. and thus has no</span>
+    <span class="c1"># impact and is omitted here.</span>
+    <span class="c1"># in MATLAB, &#39;nfreqs&#39; variable is always provided as 100 to this function,</span>
+    <span class="c1"># thus it is either equal to 100 or to the nyquist frequency depending on</span>
+    <span class="c1"># the nyquist frequency.</span>
+
+    <span class="n">nyquist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">inst</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;sfreq&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="n">nfreqs</span> <span class="o">=</span> <span class="n">nyquist</span> <span class="k">if</span> <span class="n">nyquist</span> <span class="o">&lt;</span> <span class="mi">100</span> <span class="k">else</span> <span class="mi">100</span>
+
+    <span class="n">ncomp</span> <span class="o">=</span> <span class="n">ica</span><span class="o">.</span><span class="n">n_components_</span>
+    <span class="n">n_points</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">inst</span><span class="o">.</span><span class="n">times</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">inst</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;sfreq&quot;</span><span class="p">]))</span>
+    <span class="n">window</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hamming</span><span class="p">(</span><span class="n">n_points</span><span class="p">)</span>
+    <span class="n">cutoff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">inst</span><span class="o">.</span><span class="n">times</span><span class="o">.</span><span class="n">size</span> <span class="o">/</span> <span class="n">n_points</span><span class="p">)</span> <span class="o">*</span> <span class="n">n_points</span>
+
+    <span class="c1"># python is 0-index while matlab is 1-index, thus (1:n_points) becomes</span>
+    <span class="c1"># np.arange(0, n_points) since &#39;index&#39; is used to select from arrays.</span>
+    <span class="n">range_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">cutoff</span> <span class="o">-</span> <span class="n">n_points</span> <span class="o">+</span> <span class="n">n_points</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">n_points</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))</span>
+    <span class="n">index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">range_</span><span class="p">,</span> <span class="p">(</span><span class="n">n_points</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">T</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n_points</span><span class="p">)</span>
+    <span class="n">index</span> <span class="o">=</span> <span class="n">index</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+
+    <span class="c1"># different behaviors based on EEG.trials, i.e. raw or epoch</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">inst</span><span class="p">,</span> <span class="n">BaseRaw</span><span class="p">):</span>
+        <span class="n">n_seg</span> <span class="o">=</span> <span class="n">index</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">inst</span><span class="p">,</span> <span class="n">BaseEpochs</span><span class="p">):</span>
+        <span class="n">n_seg</span> <span class="o">=</span> <span class="n">index</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">inst</span><span class="p">)</span>
+
+    <span class="c1"># in MATLAB: &#39;subset = randperm(n_seg, ceil(n_seg * pct_data / 100));&#39;</span>
+    <span class="c1"># which is basically: &#39;subset = randperm(n_seg, n_seg);&#39;</span>
+    <span class="c1"># np.random.seed() can be used to fix the seed to the same value as MATLAB,</span>
+    <span class="c1"># but since the &#39;randperm&#39; equivalent in numpy does not exist, it is not</span>
+    <span class="c1"># possible to reproduce the output in python.</span>
+    <span class="c1"># &#39;subset&#39; is used to select from arrays and is 0-index in Python while its</span>
+    <span class="c1"># 1-index in MATLAB.</span>
+    <span class="n">subset</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">permutation</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">n_seg</span><span class="p">))</span>  <span class="c1"># 0-index</span>
+
+    <span class="k">return</span> <span class="n">ncomp</span><span class="p">,</span> <span class="n">nfreqs</span><span class="p">,</span> <span class="n">n_points</span><span class="p">,</span> <span class="n">nyquist</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">window</span><span class="p">,</span> <span class="n">subset</span>
+
+
+<span class="k">def</span> <span class="nf">_eeg_rpsd_compute_psdmed</span><span class="p">(</span>
+    <span class="n">inst</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">BaseRaw</span><span class="p">,</span> <span class="n">BaseEpochs</span><span class="p">],</span>
+    <span class="n">icaact</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+    <span class="n">ncomp</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">nfreqs</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">n_points</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">nyquist</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">index</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+    <span class="n">window</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+    <span class="n">subset</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;Compute the variable &#39;psdmed&#39;, annotated as windowed spectrums.&quot;&quot;&quot;</span>
+    <span class="n">denominator</span> <span class="o">=</span> <span class="n">inst</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;sfreq&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">window</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+    <span class="n">psdmed</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">ncomp</span><span class="p">,</span> <span class="n">nfreqs</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ncomp</span><span class="p">):</span>
+        <span class="c1"># Compared to MATLAB, shapes differ as the component dimension (size 1)</span>
+        <span class="c1"># was squeezed.</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">inst</span><span class="p">,</span> <span class="n">BaseRaw</span><span class="p">):</span>
+            <span class="n">temp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">icaact</span><span class="p">[</span><span class="n">it</span><span class="p">,</span> <span class="n">index</span><span class="p">[:,</span> <span class="n">k</span><span class="p">]]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">index</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])])</span>
+            <span class="n">temp</span> <span class="o">=</span> <span class="n">temp</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">*</span><span class="n">index</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">&quot;F&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">inst</span><span class="p">,</span> <span class="n">BaseEpochs</span><span class="p">):</span>
+            <span class="n">temp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">icaact</span><span class="p">[</span><span class="n">it</span><span class="p">,</span> <span class="n">index</span><span class="p">[:,</span> <span class="n">k</span><span class="p">],</span> <span class="p">:]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">index</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])])</span>
+            <span class="n">temp</span> <span class="o">=</span> <span class="n">temp</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">index</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">len</span><span class="p">(</span><span class="n">inst</span><span class="p">),</span> <span class="n">order</span><span class="o">=</span><span class="s2">&quot;F&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span>  <span class="c1"># should never happen</span>
+        <span class="n">temp</span> <span class="o">=</span> <span class="p">(</span><span class="n">temp</span><span class="p">[:,</span> <span class="n">subset</span><span class="p">]</span><span class="o">.</span><span class="n">T</span> <span class="o">*</span> <span class="n">window</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+        <span class="n">temp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">temp</span><span class="p">,</span> <span class="n">n_points</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">temp</span> <span class="o">=</span> <span class="n">temp</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">conjugate</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span>
+        <span class="n">temp</span> <span class="o">=</span> <span class="n">temp</span><span class="p">[</span><span class="mi">1</span> <span class="p">:</span> <span class="n">nfreqs</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">/</span> <span class="n">denominator</span>
+        <span class="k">if</span> <span class="n">nfreqs</span> <span class="o">==</span> <span class="n">nyquist</span><span class="p">:</span>
+            <span class="n">temp</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">temp</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">/</span> <span class="mi">2</span>
+        <span class="n">psdmed</span><span class="p">[</span><span class="n">it</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mi">20</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">temp</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)))</span>
+
+    <span class="k">return</span> <span class="n">psdmed</span>
+
+
+<span class="k">def</span> <span class="nf">_eeg_rpsd_format</span><span class="p">(</span>
+    <span class="n">psd</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;Apply the formatting steps after &#39;eeg_rpsd.m&#39; from the MATLAB feature</span>
+<span class="sd">    extraction.&quot;&quot;&quot;</span>
+    <span class="c1"># extrapolate or prune as needed</span>
+    <span class="n">nfreq</span> <span class="o">=</span> <span class="n">psd</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">nfreq</span> <span class="o">&lt;</span> <span class="mi">100</span><span class="p">:</span>
+        <span class="n">psd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">psd</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">psd</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">:],</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">100</span> <span class="o">-</span> <span class="n">nfreq</span><span class="p">))],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># undo notch filter</span>
+    <span class="k">for</span> <span class="n">linenoise_ind</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">60</span><span class="p">):</span>
+        <span class="c1"># &#39;linenoise_ind&#39; is used for array selection in psd, which is</span>
+        <span class="c1"># 0-index in Python and 1-index in MATLAB.</span>
+        <span class="n">linenoise_ind</span> <span class="o">-=</span> <span class="mi">1</span>
+        <span class="n">linenoise_around</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">linenoise_ind</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">linenoise_ind</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+        <span class="c1"># &#39;linenoise_around&#39; is used for array selection in psd, which is</span>
+        <span class="c1"># 0-index in Python and 1-index in MATLAB.</span>
+        <span class="n">difference</span> <span class="o">=</span> <span class="p">(</span><span class="n">psd</span><span class="p">[:,</span> <span class="n">linenoise_around</span><span class="p">]</span><span class="o">.</span><span class="n">T</span> <span class="o">-</span> <span class="n">psd</span><span class="p">[:,</span> <span class="n">linenoise_ind</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
+        <span class="n">notch_ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="mi">5</span> <span class="o">&lt;</span> <span class="n">difference</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">notch_ind</span><span class="p">):</span>
+            <span class="c1"># Numpy doesn&#39;t like the selection &#39;[notch_ind, linenoise_ind]&#39; with</span>
+            <span class="c1"># &#39;notch_ind&#39; as a bool mask. &#39;notch_ind&#39; is first converted to int.</span>
+            <span class="c1"># Numpy doesn&#39;t like the selection &#39;[notch_ind, linenoise_around]&#39;</span>
+            <span class="c1"># with both defined as multi-values 1D arrays (or list). To get</span>
+            <span class="c1"># around, the syntax [notch_ind[:, None], linenoise_around] is used.</span>
+            <span class="c1"># That syntax works only with arrays (not list).</span>
+            <span class="n">notch_ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">notch_ind</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">psd</span><span class="p">[</span><span class="n">notch_ind</span><span class="p">,</span> <span class="n">linenoise_ind</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span>
+                <span class="n">psd</span><span class="p">[</span><span class="n">notch_ind</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">],</span> <span class="n">linenoise_around</span><span class="p">],</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span>
+            <span class="p">)</span>
+
+    <span class="c1"># normalize</span>
+    <span class="n">psd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="n">psd</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">psd</span><span class="p">),</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">T</span>
+    <span class="c1"># reshape and cast</span>
+    <span class="k">return</span> <span class="n">psd</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span><span class="o">.</span><span class="n">transpose</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_eeg_autocorr_welch</span><span class="p">(</span><span class="n">raw</span><span class="p">:</span> <span class="n">BaseRaw</span><span class="p">,</span> <span class="n">ica</span><span class="p">:</span> <span class="n">ICA</span><span class="p">,</span> <span class="n">icaact</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;Autocorrelation feature applied on raw object with at least 5 * fs</span>
+<span class="sd">    samples (5 seconds).</span>
+<span class="sd">    MATLAB: &#39;eeg_autocorr_welch.m&#39;.&quot;&quot;&quot;</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">raw</span><span class="p">,</span> <span class="n">BaseRaw</span><span class="p">)</span>  <span class="c1"># sanity-check</span>
+
+    <span class="c1"># in MATLAB, &#39;pct_data&#39; variable is never provided and is always initialized</span>
+    <span class="c1"># to 100. &#39;pct_data&#39; is only used in an &#39;if&#39; statement reached if &#39;pct_data&#39;</span>
+    <span class="c1"># is different than 100.. thus, &#39;pct_data&#39; is not used by this autocorrelation</span>
+    <span class="c1"># function and is omitted here.</span>
+
+    <span class="c1"># setup constants</span>
+    <span class="n">ncomp</span> <span class="o">=</span> <span class="n">ica</span><span class="o">.</span><span class="n">n_components_</span>
+    <span class="n">n_points</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">raw</span><span class="o">.</span><span class="n">times</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">raw</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;sfreq&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span><span class="p">))</span>
+    <span class="n">nfft</span> <span class="o">=</span> <span class="n">_next_power_of_2</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">n_points</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">cutoff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">raw</span><span class="o">.</span><span class="n">times</span><span class="o">.</span><span class="n">size</span> <span class="o">/</span> <span class="n">n_points</span><span class="p">)</span> <span class="o">*</span> <span class="n">n_points</span>
+    <span class="n">range_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">cutoff</span> <span class="o">-</span> <span class="n">n_points</span> <span class="o">+</span> <span class="n">n_points</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">n_points</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))</span>
+    <span class="n">index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">range_</span><span class="p">,</span> <span class="p">(</span><span class="n">n_points</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">T</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n_points</span><span class="p">)</span>
+    <span class="c1"># python uses 0-index and matlab uses 1-index</span>
+    <span class="c1"># python is 0-index while matlab is 1-index, thus (1:n_points) becomes</span>
+    <span class="c1"># np.arange(0, n_points) since &#39;index&#39; is used to select from arrays.</span>
+    <span class="n">index</span> <span class="o">=</span> <span class="n">index</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+
+    <span class="c1"># separate data segments</span>
+    <span class="n">temp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">icaact</span><span class="p">[:,</span> <span class="n">index</span><span class="p">[:,</span> <span class="n">k</span><span class="p">]]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">index</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])])</span>
+    <span class="n">segments</span> <span class="o">=</span> <span class="n">temp</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">ncomp</span><span class="p">,</span> <span class="o">*</span><span class="n">index</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">&quot;F&quot;</span><span class="p">)</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    # Just in case, here is the &#39;if&#39; statement when &#39;pct_data&#39; is different</span>
+<span class="sd">    # than 100.</span>
+
+<span class="sd">    n_seg = index.shape[1]</span>
+<span class="sd">    # In MATLAB: n_seg = size(index, 2) * EEG.trials;</span>
+<span class="sd">    # However, this function is only called on RAW dataset with EEG.trials</span>
+<span class="sd">    # equal to 1.</span>
+
+<span class="sd">    # in MATLAB: &#39;subset = randperm(n_seg, ceil(n_seg * pct_data / 100));&#39;</span>
+<span class="sd">    # which is basically: &#39;subset = randperm(n_seg, n_seg);&#39;</span>
+<span class="sd">    # np.random.seed() can be used to fix the seed to the same value as MATLAB,</span>
+<span class="sd">    # but since the &#39;randperm&#39; equivalent in numpy does not exist, it is not</span>
+<span class="sd">    # possible to reproduce the output in python.</span>
+<span class="sd">    # &#39;subset&#39; is used to select from arrays and is 0-index in Python while its</span>
+<span class="sd">    # 1-index in MATLAB.</span>
+<span class="sd">    subset = np.random.permutation(range(n_seg))  # 0-index</span>
+<span class="sd">    temp = np.hstack([icaact[:, index[:, k]] for k in range(index.shape[-1])])</span>
+<span class="sd">    temp = temp.reshape(ncomp, *index.shape, order=&#39;F&#39;)</span>
+<span class="sd">    segments = temp[:, :, subset]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># calc autocorrelation</span>
+    <span class="n">ac</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">ncomp</span><span class="p">,</span> <span class="n">nfft</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ncomp</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">segments</span><span class="p">[</span><span class="n">it</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:],</span> <span class="n">nfft</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">ac</span><span class="p">[</span><span class="n">it</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="mi">2</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">ac</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">ifft</span><span class="p">(</span><span class="n">ac</span><span class="p">)</span>
+
+    <span class="c1"># normalize</span>
+    <span class="c1"># In MATLAB, 2 scenarios are defined:</span>
+    <span class="c1"># - EEG.pnts &lt; EEG.srate, which never occurs since then raw provided to</span>
+    <span class="c1"># this autocorrelation function last at least 5 second.</span>
+    <span class="c1"># - EEG.pnts &gt; EEG.srate, implemented below.</span>
+    <span class="n">ac</span> <span class="o">=</span> <span class="n">ac</span><span class="p">[:,</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">raw</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;sfreq&quot;</span><span class="p">])</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="c1"># build the (3-line!) denominator</span>
+    <span class="n">arr1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n_points</span><span class="p">,</span> <span class="n">n_points</span> <span class="o">-</span> <span class="nb">int</span><span class="p">(</span><span class="n">raw</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;sfreq&quot;</span><span class="p">]),</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">arr1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">arr1</span><span class="p">,</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_points</span> <span class="o">-</span> <span class="nb">int</span><span class="p">(</span><span class="n">raw</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;sfreq&quot;</span><span class="p">])])]])</span>
+    <span class="n">den</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">ac</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">(</span><span class="n">arr1</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">den</span> <span class="o">=</span> <span class="n">den</span><span class="o">.</span><span class="n">T</span> <span class="o">*</span> <span class="n">arr1</span> <span class="o">/</span> <span class="n">n_points</span>
+    <span class="c1"># finally..</span>
+    <span class="n">ac</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="n">ac</span><span class="p">,</span> <span class="n">den</span><span class="p">)</span>
+
+    <span class="c1"># resample to 1 second at 100 samples/sec</span>
+    <span class="n">resamp</span> <span class="o">=</span> <span class="n">_resample</span><span class="p">(</span><span class="n">ac</span><span class="p">,</span> <span class="n">raw</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;sfreq&quot;</span><span class="p">])</span>
+    <span class="n">resamp</span> <span class="o">=</span> <span class="n">resamp</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span><span class="o">.</span><span class="n">transpose</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">resamp</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_eeg_autocorr</span><span class="p">(</span><span class="n">raw</span><span class="p">:</span> <span class="n">BaseRaw</span><span class="p">,</span> <span class="n">ica</span><span class="p">:</span> <span class="n">ICA</span><span class="p">,</span> <span class="n">icaact</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;Autocorrelation feature applied on raw object that do not have enough</span>
+<span class="sd">    sampes for eeg_autocorr_welch.</span>
+<span class="sd">    MATLAB: &#39;eeg_autocorr.m&#39;.&quot;&quot;&quot;</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">raw</span><span class="p">,</span> <span class="n">BaseRaw</span><span class="p">)</span>  <span class="c1"># sanity-check</span>
+
+    <span class="c1"># in MATLAB, &#39;pct_data&#39; variable is neither provided or used, thus it is</span>
+    <span class="c1"># omitted here.</span>
+    <span class="n">ncomp</span> <span class="o">=</span> <span class="n">ica</span><span class="o">.</span><span class="n">n_components_</span>
+    <span class="n">nfft</span> <span class="o">=</span> <span class="n">_next_power_of_2</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">raw</span><span class="o">.</span><span class="n">times</span><span class="o">.</span><span class="n">size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">ncomp</span><span class="p">,</span> <span class="n">nfft</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ncomp</span><span class="p">):</span>
+        <span class="c1"># in MATLAB, &#39;mean&#39; does nothing here. It looks like it was included</span>
+        <span class="c1"># for a case where epochs are provided, which never happens with this</span>
+        <span class="c1"># autocorrelation function.</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">icaact</span><span class="p">[</span><span class="n">it</span><span class="p">,</span> <span class="p">:],</span> <span class="n">n</span><span class="o">=</span><span class="n">nfft</span><span class="p">)),</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">c</span><span class="p">[</span><span class="n">it</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">ifft</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">raw</span><span class="o">.</span><span class="n">times</span><span class="o">.</span><span class="n">size</span> <span class="o">&lt;</span> <span class="n">raw</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;sfreq&quot;</span><span class="p">]:</span>
+        <span class="n">zeros</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">c</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">int</span><span class="p">(</span><span class="n">raw</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;sfreq&quot;</span><span class="p">])</span> <span class="o">-</span> <span class="n">raw</span><span class="o">.</span><span class="n">times</span><span class="o">.</span><span class="n">size</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">ac</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">c</span><span class="p">[:,</span> <span class="p">:</span> <span class="n">raw</span><span class="o">.</span><span class="n">times</span><span class="o">.</span><span class="n">size</span><span class="p">],</span> <span class="n">zeros</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">ac</span> <span class="o">=</span> <span class="n">c</span><span class="p">[:,</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">raw</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;sfreq&quot;</span><span class="p">])</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+
+    <span class="c1"># normalize by 0-tap autocorrelation</span>
+    <span class="n">ac</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="n">ac</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">ac</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
+
+    <span class="c1"># resample to 1 second at 100 samples/sec</span>
+    <span class="n">resamp</span> <span class="o">=</span> <span class="n">_resample</span><span class="p">(</span><span class="n">ac</span><span class="p">,</span> <span class="n">raw</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;sfreq&quot;</span><span class="p">])</span>
+    <span class="n">resamp</span> <span class="o">=</span> <span class="n">resamp</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span><span class="o">.</span><span class="n">transpose</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">resamp</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_eeg_autocorr_fftw</span><span class="p">(</span><span class="n">epochs</span><span class="p">:</span> <span class="n">BaseEpochs</span><span class="p">,</span> <span class="n">ica</span><span class="p">:</span> <span class="n">ICA</span><span class="p">,</span> <span class="n">icaact</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;Autocorrelation feature applied on epoch object.</span>
+<span class="sd">    MATLAB: &#39;eeg_autocorr_fftw.m&#39;.&quot;&quot;&quot;</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">epochs</span><span class="p">,</span> <span class="n">BaseEpochs</span><span class="p">)</span>  <span class="c1"># sanity-check</span>
+
+    <span class="c1"># in MATLAB, &#39;pct_data&#39; variable is neither provided or used, thus it is</span>
+    <span class="c1"># omitted here.</span>
+    <span class="n">ncomp</span> <span class="o">=</span> <span class="n">ica</span><span class="o">.</span><span class="n">n_components_</span>
+    <span class="n">nfft</span> <span class="o">=</span> <span class="n">_next_power_of_2</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">epochs</span><span class="o">.</span><span class="n">times</span><span class="o">.</span><span class="n">size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">ac</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">ncomp</span><span class="p">,</span> <span class="n">nfft</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">it</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ncomp</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">icaact</span><span class="p">[</span><span class="n">it</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:],</span> <span class="n">nfft</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">ac</span><span class="p">[</span><span class="n">it</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="mi">2</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">ac</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">ifft</span><span class="p">(</span><span class="n">ac</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">epochs</span><span class="o">.</span><span class="n">times</span><span class="o">.</span><span class="n">size</span> <span class="o">&lt;</span> <span class="n">epochs</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;sfreq&quot;</span><span class="p">]:</span>
+        <span class="n">zeros</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">ac</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">int</span><span class="p">(</span><span class="n">epochs</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;sfreq&quot;</span><span class="p">])</span> <span class="o">-</span> <span class="n">epochs</span><span class="o">.</span><span class="n">times</span><span class="o">.</span><span class="n">size</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">ac</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">([</span><span class="n">ac</span><span class="p">[:,</span> <span class="p">:</span> <span class="n">epochs</span><span class="o">.</span><span class="n">times</span><span class="o">.</span><span class="n">size</span><span class="p">],</span> <span class="n">zeros</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">ac</span> <span class="o">=</span> <span class="n">ac</span><span class="p">[:,</span> <span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">epochs</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;sfreq&quot;</span><span class="p">])</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+
+    <span class="n">ac</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">divide</span><span class="p">(</span><span class="n">ac</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">ac</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
+
+    <span class="c1"># resample to 1 second at 100 samples/sec</span>
+    <span class="n">resamp</span> <span class="o">=</span> <span class="n">_resample</span><span class="p">(</span><span class="n">ac</span><span class="p">,</span> <span class="n">epochs</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;sfreq&quot;</span><span class="p">])</span>
+    <span class="n">resamp</span> <span class="o">=</span> <span class="n">resamp</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span><span class="o">.</span><span class="n">transpose</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">resamp</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_resample</span><span class="p">(</span><span class="n">ac</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">fs</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;Resample the autocorrelation feature. The comment in EEGLAB is:</span>
+
+<span class="sd">        resample to 1 second at 100 samples/sec</span>
+
+<span class="sd">    Which translates by: the output array must be of shape (n_comp, 101), thus</span>
+<span class="sd">    the resampling up variable is set to 100, and down variable must respect:</span>
+<span class="sd">        100 &lt; ac.T.shape[0] * 100 / down &lt;= 101</span>
+<span class="sd">    If the instance sampling frequency is an integer, then down is equal to the</span>
+<span class="sd">    sampling frequency.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ac : array</span>
+<span class="sd">        Array of shape (n_comp, samples)</span>
+<span class="sd">    fs : int | float</span>
+<span class="sd">        Sampling frequency of the MNE instance.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">down</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">fs</span><span class="p">)</span>
+    <span class="k">if</span> <span class="mi">101</span> <span class="o">&lt;</span> <span class="n">ac</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="mi">100</span> <span class="o">/</span> <span class="n">down</span><span class="p">:</span>
+        <span class="n">down</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">resample_poly</span><span class="p">(</span><span class="n">ac</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">down</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+</pre></div>
+
+              </div>
+              
+              
+              <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+              
+          </main>
+          
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+<footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    
+    <div class="footer-item">
+      <p class="copyright">
+    &copy; Copyright 2021-2022, MNE Developers. Last updated on 2022-05-03.<br>
+</p>
+    </div>
+    
+    <div class="footer-item">
+      <p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0.<br>
+</p>
+    </div>
+    
+  </div>
+</footer>
+  </body>
+</html>

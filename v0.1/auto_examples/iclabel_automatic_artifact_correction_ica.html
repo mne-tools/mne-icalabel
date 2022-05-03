@@ -1,0 +1,782 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Repairing artifacts with ICA automatically using ICLabel Model &#8212; MNE-ICALabel 0.1 documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/style.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Examples" href="index.html" />
+    <link rel="canonical" href="https://mne.tools/mne-icalabel/stable/index.html" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/scrollfix.js"></script>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main"><div class="container-xl">
+
+  <div id="navbar-start">
+    
+    
+<a class="navbar-brand" href="../index.html">
+<p class="title">MNE-ICALabel</p>
+</a>
+
+    
+  </div>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapsible" aria-controls="navbar-collapsible" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  
+  <div id="navbar-collapsible" class="col-lg-9 collapse navbar-collapse">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <ul id="navbar-main-elements" class="navbar-nav">
+    <li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../whats_new.html">
+  What’s new?
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../install.html">
+  Installation
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../api.html">
+  API
+ </a>
+</li>
+
+<li class="toctree-l1 current active nav-item">
+ <a class="reference internal nav-link" href="index.html">
+  Examples
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference external nav-link" href="https://raw.githubusercontent.com/mne-tools/mne-icalabel/main/LICENSE">
+  License
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference external nav-link" href="https://github.com/mne-tools/mne-icalabel/main/CONTRIBUTING.md">
+  Contributing
+ </a>
+</li>
+
+    
+</ul>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+      <div class="navbar-end-item">
+        <div class="dropdown">
+    <button type="button" class="btn btn-primary btn-sm navbar-btn dropdown-toggle" id="dLabelMore" data-toggle="dropdown">
+        v0.1
+        <span class="caret"></span>
+    </button>
+    <div class="dropdown-menu list-group-flush py-0" aria-labelledby="dLabelMore">
+        <a class="list-group-item list-group-item-action py-1" href="https://mne.tools/mne-icalabel/dev/index.html">v0.2 (devel)</a>
+        <a class="list-group-item list-group-item-action py-1" href="https://mne.tools/mne-icalabel/stable/index.html">v0.1</a>
+        <a class="list-group-item list-group-item-action py-1" href="https://mne.tools/mne-icalabel/v0.1/index.html">v0.1</a>
+    </div>
+</div>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          <a class="nav-link" href="https://github.com/mne-tools/MNE-ICALabel" rel="noopener" target="_blank" title="GitHub"><span><i class="fab fa-github-square"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+            
+            <!-- Only show if we have sidebars configured, else just a small margin  -->
+            <div class="col-12 col-md-3 bd-sidebar">
+              <div class="sidebar-start-items"><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <div class="bd-toc-item active">
+    <ul class="current nav bd-sidenav">
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Repairing artifacts with ICA automatically using ICLabel Model
+  </a>
+ </li>
+</ul>
+
+  </div>
+</nav>
+              </div>
+              <div class="sidebar-end-items">
+              </div>
+            </div>
+            
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+            
+              
+              <div class="toc-item">
+                
+<div class="tocsection onthispage mt-5 pt-1 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
+
+<nav id="bd-toc-nav">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#filtering-to-remove-slow-drifts">
+   Filtering to remove slow drifts
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#fitting-and-plotting-the-ica-solution">
+   Fitting and plotting the ICA solution
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#references">
+     References
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+</nav>
+              </div>
+              
+              <div class="toc-item">
+                
+              </div>
+              
+            
+          </div>
+          
+
+          
+          
+            
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p>Click <a class="reference internal" href="#sphx-glr-download-auto-examples-iclabel-automatic-artifact-correction-ica-py"><span class="std std-ref">here</span></a>
+to download the full example code</p>
+</div>
+<div class="sphx-glr-example-title section" id="repairing-artifacts-with-ica-automatically-using-iclabel-model">
+<span id="tut-auto-artifact-ica"></span><span id="sphx-glr-auto-examples-iclabel-automatic-artifact-correction-ica-py"></span><h1>Repairing artifacts with ICA automatically using ICLabel Model<a class="headerlink" href="#repairing-artifacts-with-ica-automatically-using-iclabel-model" title="Permalink to this headline">#</a></h1>
+<p>This tutorial covers automatically repairing signals using ICA with
+the ICLabel model <a class="footnote-reference brackets" href="#footcite-iclabel2019" id="id1">1</a>, which originates in EEGLab.
+For conceptual background on ICA, see <a class="reference external" href="https://scikit-learn.org/stable/auto_examples/decomposition/plot_ica_blind_source_separation.html#sphx-glr-auto-examples-decomposition-plot-ica-blind-source-separation-py" title="(in scikit-learn v1.0)"><span class="xref std std-ref">this scikit-learn tutorial</span></a>.
+For a basic understanding of how to use ICA to remove artifacts, see <a class="reference external" href="https://mne.tools/stable/auto_tutorials/preprocessing/40_artifact_correction_ica.html">the
+tutorial</a> in MNE-Python.</p>
+<p>We begin as always by importing the necessary Python modules and loading some
+<a class="reference external" href="https://mne.tools/dev/overview/datasets_index.html#sample-dataset" title="(in MNE v1.1)"><span class="xref std std-ref">example data</span></a>. Because ICA can be computationally
+intense, we’ll also crop the data to 60 seconds; and to save ourselves from
+repeatedly typing <code class="docutils literal notranslate"><span class="pre">mne.preprocessing</span></code> we’ll directly import a few functions
+and classes from that submodule.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+
+<span class="kn">import</span> <span class="nn">mne</span>
+<span class="kn">from</span> <span class="nn">mne.preprocessing</span> <span class="kn">import</span> <a href="https://mne.tools/dev/generated/mne.preprocessing.ICA.html#mne.preprocessing.ICA" title="mne.preprocessing.ICA" class="sphx-glr-backref-module-mne-preprocessing sphx-glr-backref-type-py-class"><span class="n">ICA</span></a>
+
+<span class="kn">from</span> <span class="nn">mne_icalabel</span> <span class="kn">import</span> <a href="../generated/mne_icalabel.label_components.html#mne_icalabel.label_components" title="mne_icalabel.label_components" class="sphx-glr-backref-module-mne_icalabel sphx-glr-backref-type-py-function"><span class="n">label_components</span></a>
+
+<span class="n">sample_data_folder</span> <span class="o">=</span> <a href="https://mne.tools/dev/generated/mne.datasets.sample.data_path.html#mne.datasets.sample.data_path" title="mne.datasets.sample.data_path" class="sphx-glr-backref-module-mne-datasets-sample sphx-glr-backref-type-py-function"><span class="n">mne</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">sample</span><span class="o">.</span><span class="n">data_path</span></a><span class="p">()</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">sample_data_raw_file</span></a> <span class="o">=</span> <a href="https://docs.python.org/3/library/os.path.html#os.path.join" title="os.path.join" class="sphx-glr-backref-module-os-path sphx-glr-backref-type-py-function"><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span></a><span class="p">(</span>
+    <span class="n">sample_data_folder</span><span class="p">,</span> <span class="s2">&quot;MEG&quot;</span><span class="p">,</span> <span class="s2">&quot;sample&quot;</span><span class="p">,</span> <span class="s2">&quot;sample_audvis_filt-0-40_raw.fif&quot;</span>
+<span class="p">)</span>
+<a href="https://mne.tools/dev/generated/mne.io.Raw.html#mne.io.Raw" title="mne.io.Raw" class="sphx-glr-backref-module-mne-io sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">raw</span></a> <span class="o">=</span> <a href="https://mne.tools/dev/generated/mne.io.read_raw_fif.html#mne.io.read_raw_fif" title="mne.io.read_raw_fif" class="sphx-glr-backref-module-mne-io sphx-glr-backref-type-py-function"><span class="n">mne</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_raw_fif</span></a><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">sample_data_raw_file</span></a><span class="p">)</span>
+
+<span class="c1"># Here we&#39;ll crop to 60 seconds and drop gradiometer channels for speed</span>
+<a href="https://mne.tools/dev/generated/mne.io.Raw.html#mne.io.Raw.crop" title="mne.io.Raw.crop" class="sphx-glr-backref-module-mne-io sphx-glr-backref-type-py-method"><span class="n">raw</span><span class="o">.</span><span class="n">crop</span></a><span class="p">(</span><span class="n">tmax</span><span class="o">=</span><span class="mf">60.0</span><span class="p">)</span><span class="o">.</span><span class="n">pick_types</span><span class="p">(</span><span class="n">meg</span><span class="o">=</span><span class="s2">&quot;mag&quot;</span><span class="p">,</span> <span class="n">eeg</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">stim</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">eog</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<a href="https://mne.tools/dev/generated/mne.io.Raw.html#mne.io.Raw.load_data" title="mne.io.Raw.load_data" class="sphx-glr-backref-module-mne-io sphx-glr-backref-type-py-method"><span class="n">raw</span><span class="o">.</span><span class="n">load_data</span></a><span class="p">()</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Opening raw data file /Users/adam2392/mne_data/MNE-sample-data/MEG/sample/sample_audvis_filt-0-40_raw.fif...
+    Read a total of 4 projection items:
+        PCA-v1 (1 x 102)  idle
+        PCA-v2 (1 x 102)  idle
+        PCA-v3 (1 x 102)  idle
+        Average EEG reference (1 x 60)  idle
+    Range : 6450 ... 48149 =     42.956 ...   320.665 secs
+Ready.
+Reading 0 ... 9009  =      0.000 ...    59.999 secs...
+</pre></div>
+</div>
+<div class="output_subarea output_html rendered_html output_result">
+<table class="table table-hover table-striped table-sm table-responsive small">
+    <tr>
+        <th>Measurement date</th>
+
+        <td>December 03, 2002  19:01:10 GMT</td>
+
+    </tr>
+    <tr>
+        <th>Experimenter</th>
+
+        <td>Unknown</td>
+
+    </tr>
+        <th>Participant</th>
+
+        <td>Unknown</td>
+
+    </tr>
+    <tr>
+        <th>Digitized points</th>
+
+        <td>0 points</td>
+
+    </tr>
+    <tr>
+        <th>Good channels</th>
+        <td>102 Magnetometers, 9 Stimulus, 59 EEG, 1 EOG</td>
+    </tr>
+    <tr>
+        <th>Bad channels</th>
+        <td>None</td>
+    </tr>
+    <tr>
+        <th>EOG channels</th>
+        <td>EOG 061</td>
+    </tr>
+    <tr>
+        <th>ECG channels</th>
+        <td>Not available</td>
+
+    <tr>
+        <th>Sampling frequency</th>
+        <td>150.15 Hz</td>
+    </tr>
+
+
+    <tr>
+        <th>Highpass</th>
+        <td>0.10 Hz</td>
+    </tr>
+
+
+    <tr>
+        <th>Lowpass</th>
+        <td>40.00 Hz</td>
+    </tr>
+
+
+    <tr>
+        <th>Projections</th>
+        <td>PCA-v1 : off<br/>PCA-v2 : off<br/>PCA-v3 : off<br/>Average EEG reference : off</td>
+    </tr>
+
+
+    <tr>
+        <th>Filenames</th>
+        <td>sample_audvis_filt-0-40_raw.fif</td>
+    </tr>
+
+    <tr>
+        <th>Duration</th>
+        <td>00:00:59 (HH:MM:SS)</td>
+    </tr>
+</table>
+</div>
+<br />
+<br /><div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Before applying ICA (or any artifact repair strategy), be sure to observe
+the artifacts in your data to make sure you choose the right repair tool.
+Sometimes the right tool is no tool at all — if the artifacts are small
+enough you may not even need to repair them to get good analysis results.
+See <a class="reference external" href="https://mne.tools/dev/auto_tutorials/preprocessing/10_preprocessing_overview.html#tut-artifact-overview" title="(in MNE v1.1)"><span>Overview of artifact detection</span></a> for guidance on detecting and
+visualizing various types of artifact.</p>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example: EOG and ECG artifact repair</span>
+<span class="c1"># ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</span>
+<span class="c1">#</span>
+<span class="c1"># Visualizing the artifacts</span>
+<span class="c1"># ~~~~~~~~~~~~~~~~~~~~~~~~~</span>
+<span class="c1">#</span>
+<span class="c1"># Let&#39;s begin by visualizing the artifacts that we want to repair. In this</span>
+<span class="c1"># dataset they are big enough to see easily in the raw data:</span>
+
+<span class="c1"># Note: for this example, we are using ICLabel which has only</span>
+<span class="c1"># been validated and works for EEG systems with less than 32 electrodes.</span>
+<a href="https://mne.tools/dev/generated/mne.io.Raw.html#mne.io.Raw" title="mne.io.Raw" class="sphx-glr-backref-module-mne-io sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">raw</span></a> <span class="o">=</span> <a href="https://mne.tools/dev/generated/mne.io.Raw.html#mne.io.Raw.pick_types" title="mne.io.Raw.pick_types" class="sphx-glr-backref-module-mne-io sphx-glr-backref-type-py-method"><span class="n">raw</span><span class="o">.</span><span class="n">pick_types</span></a><span class="p">(</span><span class="n">eeg</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">eog</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">ecg</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">emg</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># pick some channels that clearly show heartbeats and blinks</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">regexp</span></a> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;(EEG 00.)&quot;</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">artifact_picks</span></a> <span class="o">=</span> <a href="https://mne.tools/dev/generated/mne.pick_channels_regexp.html#mne.pick_channels_regexp" title="mne.pick_channels_regexp" class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-function"><span class="n">mne</span><span class="o">.</span><span class="n">pick_channels_regexp</span></a><span class="p">(</span><a href="https://mne.tools/dev/generated/mne.io.Raw.html#mne.io.Raw.ch_names" title="mne.io.Raw.ch_names" class="sphx-glr-backref-module-mne-io sphx-glr-backref-type-py-property"><span class="n">raw</span><span class="o">.</span><span class="n">ch_names</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">regexp</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">regexp</span></a><span class="p">)</span>
+<a href="https://mne.tools/dev/generated/mne.io.Raw.html#mne.io.Raw.plot" title="mne.io.Raw.plot" class="sphx-glr-backref-module-mne-io sphx-glr-backref-type-py-method"><span class="n">raw</span><span class="o">.</span><span class="n">plot</span></a><span class="p">(</span><span class="n">order</span><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">artifact_picks</span></a><span class="p">,</span> <span class="n">n_channels</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">artifact_picks</span></a><span class="p">),</span> <span class="n">show_scrollbars</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Removing projector &lt;Projection | PCA-v1, active : False, n_channels : 102&gt;
+Removing projector &lt;Projection | PCA-v2, active : False, n_channels : 102&gt;
+Removing projector &lt;Projection | PCA-v3, active : False, n_channels : 102&gt;
+Using qt as 2D backend.
+Opening raw-browser...
+For Dark-Mode &quot;qdarkstyle&quot; has to be installed! You can install it with `pip install qdarkstyle`
+Using pyopengl with version 3.1.6
+
+&lt;mne_qt_browser._pg_figure.PyQtGraphBrowser object at 0x7fd7b6b7bca0&gt;
+</pre></div>
+</div>
+<div class="section" id="filtering-to-remove-slow-drifts">
+<h2>Filtering to remove slow drifts<a class="headerlink" href="#filtering-to-remove-slow-drifts" title="Permalink to this headline">#</a></h2>
+<p>Before we run the ICA, an important step is filtering the data to remove
+low-frequency drifts, which can negatively affect the quality of the ICA fit.
+The slow drifts are problematic because they reduce the independence of the
+assumed-to-be-independent sources (e.g., during a slow upward drift, the
+neural, heartbeat, blink, and other muscular sources will all tend to have
+higher values), making it harder for the algorithm to find an accurate
+solution. A high-pass filter with 1 Hz cutoff frequency is recommended.
+However, because filtering is a linear operation, the ICA solution found from
+the filtered signal can be applied to the unfiltered signal (see
+<a class="footnote-reference brackets" href="#footcite-winkleretal2015" id="id2">2</a> for
+more information), so we’ll keep a copy of the unfiltered
+<a class="reference external" href="https://mne.tools/dev/generated/mne.io.Raw.html#mne.io.Raw" title="(in MNE v1.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Raw</span></code></a> object around so we can apply the ICA solution to it
+later.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://mne.tools/dev/generated/mne.io.Raw.html#mne.io.Raw" title="mne.io.Raw" class="sphx-glr-backref-module-mne-io sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">filt_raw</span></a> <span class="o">=</span> <a href="https://mne.tools/dev/generated/mne.io.Raw.html#mne.io.Raw.copy" title="mne.io.Raw.copy" class="sphx-glr-backref-module-mne-io sphx-glr-backref-type-py-method"><span class="n">raw</span><span class="o">.</span><span class="n">copy</span></a><span class="p">()</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">l_freq</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">h_freq</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Filtering raw data in 1 contiguous segment
+Setting up high-pass filter at 1 Hz
+
+FIR filter parameters
+---------------------
+Designing a one-pass, zero-phase, non-causal highpass filter:
+- Windowed time-domain design (firwin) method
+- Hamming window with 0.0194 passband ripple and 53 dB stopband attenuation
+- Lower passband edge: 1.00
+- Lower transition bandwidth: 1.00 Hz (-6 dB cutoff frequency: 0.50 Hz)
+- Filter length: 497 samples (3.310 sec)
+</pre></div>
+</div>
+</div>
+<div class="section" id="fitting-and-plotting-the-ica-solution">
+<h2>Fitting and plotting the ICA solution<a class="headerlink" href="#fitting-and-plotting-the-ica-solution" title="Permalink to this headline">#</a></h2>
+<div class="sidebar">
+<p class="sidebar-title">Ignoring the time domain</p>
+<p>The ICA algorithms implemented in MNE-Python find patterns across
+channels, but ignore the time domain. This means you can compute ICA on
+discontinuous <a class="reference external" href="https://mne.tools/dev/generated/mne.Epochs.html#mne.Epochs" title="(in MNE v1.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Epochs</span></code></a> or <a class="reference external" href="https://mne.tools/dev/generated/mne.Evoked.html#mne.Evoked" title="(in MNE v1.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Evoked</span></code></a> objects (not
+just continuous <a class="reference external" href="https://mne.tools/dev/generated/mne.io.Raw.html#mne.io.Raw" title="(in MNE v1.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Raw</span></code></a> objects), or only use every Nth
+sample by passing the <code class="docutils literal notranslate"><span class="pre">decim</span></code> parameter to <code class="docutils literal notranslate"><span class="pre">ICA.fit()</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference external" href="https://mne.tools/dev/generated/mne.Epochs.html#mne.Epochs" title="(in MNE v1.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Epochs</span></code></a> used for fitting ICA should not be
+baseline-corrected. Because cleaning the data via ICA may
+introduce DC offsets, we suggest to baseline correct your data
+<strong>after</strong> cleaning (and not before), should you require
+baseline correction.</p>
+</div>
+</div>
+<p>Now we’re ready to set up and fit the ICA. Since we know (from observing our
+raw data) that the EOG and ECG artifacts are fairly strong, we would expect
+those artifacts to be captured in the first few dimensions of the PCA
+decomposition that happens before the ICA. Therefore, we probably don’t need
+a huge number of components to do a good job of isolating our artifacts
+(though it is usually preferable to include more components for a more
+accurate solution). As a first guess, we’ll run ICA with <code class="docutils literal notranslate"><span class="pre">n_components=15</span></code>
+(use only the first 15 PCA components to compute the ICA decomposition) — a
+very small number given that our data has over 300 channels, but with the
+advantage that it will run quickly and we will able to tell easily whether it
+worked or not (because we already know what the EOG / ECG artifacts should
+look like).</p>
+<p>ICA fitting is not deterministic (e.g., the components may get a sign
+flip on different runs, or may not always be returned in the same order), so
+we’ll also specify a <a class="reference external" href="https://en.wikipedia.org/wiki/Random_seed">random seed</a> so that we get identical results each
+time this tutorial is built by our web servers.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://mne.tools/dev/generated/mne.preprocessing.ICA.html#mne.preprocessing.ICA" title="mne.preprocessing.ICA" class="sphx-glr-backref-module-mne-preprocessing sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ica</span></a> <span class="o">=</span> <a href="https://mne.tools/dev/generated/mne.preprocessing.ICA.html#mne.preprocessing.ICA" title="mne.preprocessing.ICA" class="sphx-glr-backref-module-mne-preprocessing sphx-glr-backref-type-py-class"><span class="n">ICA</span></a><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">97</span><span class="p">)</span>
+<a href="https://mne.tools/dev/generated/mne.preprocessing.ICA.html#mne.preprocessing.ICA.fit" title="mne.preprocessing.ICA.fit" class="sphx-glr-backref-module-mne-preprocessing sphx-glr-backref-type-py-method"><span class="n">ica</span><span class="o">.</span><span class="n">fit</span></a><span class="p">(</span><a href="https://mne.tools/dev/generated/mne.io.Raw.html#mne.io.Raw" title="mne.io.Raw" class="sphx-glr-backref-module-mne-io sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">filt_raw</span></a><span class="p">)</span>
+<a href="https://mne.tools/dev/generated/mne.preprocessing.ICA.html#mne.preprocessing.ICA" title="mne.preprocessing.ICA" class="sphx-glr-backref-module-mne-preprocessing sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ica</span></a>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Fitting ICA to data using 59 channels (please be patient, this may take a while)
+Selecting by number: 15 components
+Fitting ICA took 0.5s.
+</pre></div>
+</div>
+<div class="output_subarea output_html rendered_html output_result">
+<table class="table table-hover table-striped table-sm table-responsive small">
+    <tr>
+        <th>Method</th>
+        <td>fastica</td>
+    </tr>
+    <tr>
+        <th>Fit</th>
+        <td>92 iterations on raw data (9010 samples)</td>
+    </tr>
+
+    <tr>
+        <th>ICA components</th>
+        <td>15</td>
+    </tr>
+    <tr>
+        <th>Explained variance</th>
+        <td>97.9&nbsp;%</td>
+    </tr>
+    <tr>
+        <th>Available PCA components</th>
+        <td>59</td>
+    </tr>
+    <tr>
+        <th>Channel types</th>
+        <td>eeg</td>
+    </tr>
+    <tr>
+        <th>ICA components marked for exclusion</th>
+        <td>&mdash;</td>
+    </tr>
+
+</table>
+</div>
+<br />
+<br /><p>Some optional parameters that we could have passed to the
+<a class="reference external" href="https://mne.tools/dev/generated/mne.preprocessing.ICA.html#mne.preprocessing.ICA.fit" title="(in MNE v1.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fit</span></code></a> method include <code class="docutils literal notranslate"><span class="pre">decim</span></code> (to use only
+every Nth sample in computing the ICs, which can yield a considerable
+speed-up) and <code class="docutils literal notranslate"><span class="pre">reject</span></code> (for providing a rejection dictionary for maximum
+acceptable peak-to-peak amplitudes for each channel type, just like we used
+when creating epoched data in the <a class="reference external" href="https://mne.tools/dev/auto_tutorials/intro/10_overview.html#tut-overview" title="(in MNE v1.1)"><span>Overview of MEG/EEG analysis with MNE-Python</span></a> tutorial).</p>
+<p>Now we can examine the ICs to see what they captured.
+<a class="reference external" href="https://mne.tools/dev/generated/mne.preprocessing.ICA.html#mne.preprocessing.ICA.plot_sources" title="(in MNE v1.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_sources</span></code></a> will show the time series of the
+ICs. Note that in our call to <a class="reference external" href="https://mne.tools/dev/generated/mne.preprocessing.ICA.html#mne.preprocessing.ICA.plot_sources" title="(in MNE v1.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_sources</span></code></a> we
+can use the original, unfiltered <a class="reference external" href="https://mne.tools/dev/generated/mne.io.Raw.html#mne.io.Raw" title="(in MNE v1.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Raw</span></code></a> object:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://mne.tools/dev/generated/mne.io.Raw.html#mne.io.Raw.load_data" title="mne.io.Raw.load_data" class="sphx-glr-backref-module-mne-io sphx-glr-backref-type-py-method"><span class="n">raw</span><span class="o">.</span><span class="n">load_data</span></a><span class="p">()</span>
+<a href="https://mne.tools/dev/generated/mne.preprocessing.ICA.html#mne.preprocessing.ICA.plot_sources" title="mne.preprocessing.ICA.plot_sources" class="sphx-glr-backref-module-mne-preprocessing sphx-glr-backref-type-py-method"><span class="n">ica</span><span class="o">.</span><span class="n">plot_sources</span></a><span class="p">(</span><a href="https://mne.tools/dev/generated/mne.io.Raw.html#mne.io.Raw" title="mne.io.Raw" class="sphx-glr-backref-module-mne-io sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">raw</span></a><span class="p">,</span> <span class="n">show_scrollbars</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Creating RawArray with float64 data, n_channels=16, n_times=9010
+    Range : 6450 ... 15459 =     42.956 ...   102.954 secs
+Ready.
+Opening ica-browser...
+For Dark-Mode &quot;qdarkstyle&quot; has to be installed! You can install it with `pip install qdarkstyle`
+Using pyopengl with version 3.1.6
+
+&lt;mne_qt_browser._pg_figure.PyQtGraphBrowser object at 0x7fd7b7351040&gt;
+</pre></div>
+</div>
+<p>Here we can pretty clearly see that the first component (<code class="docutils literal notranslate"><span class="pre">ICA000</span></code>) captures
+the EOG signal quite well, and the second component (<code class="docutils literal notranslate"><span class="pre">ICA001</span></code>) looks a lot
+like <a class="reference external" href="https://en.wikipedia.org/wiki/QRS_complex">a heartbeat</a> (for more info on visually identifying Independent
+Components, <a class="reference external" href="https://labeling.ucsd.edu/tutorial/labels">this EEGLAB tutorial</a> is a good resource). We can also
+visualize the scalp field distribution of each component using
+<a class="reference external" href="https://mne.tools/dev/generated/mne.preprocessing.ICA.html#mne.preprocessing.ICA.plot_components" title="(in MNE v1.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_components</span></code></a>. These are interpolated based
+on the values in the ICA mixing matrix:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># sphinx_gallery_thumbnail_number = 9</span>
+<a href="https://mne.tools/dev/generated/mne.preprocessing.ICA.html#mne.preprocessing.ICA.plot_components" title="mne.preprocessing.ICA.plot_components" class="sphx-glr-backref-module-mne-preprocessing sphx-glr-backref-type-py-method"><span class="n">ica</span><span class="o">.</span><span class="n">plot_components</span></a><span class="p">()</span>
+
+<span class="c1"># blinks</span>
+<a href="https://mne.tools/dev/generated/mne.preprocessing.ICA.html#mne.preprocessing.ICA.plot_overlay" title="mne.preprocessing.ICA.plot_overlay" class="sphx-glr-backref-module-mne-preprocessing sphx-glr-backref-type-py-method"><span class="n">ica</span><span class="o">.</span><span class="n">plot_overlay</span></a><span class="p">(</span><a href="https://mne.tools/dev/generated/mne.io.Raw.html#mne.io.Raw" title="mne.io.Raw" class="sphx-glr-backref-module-mne-io sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">raw</span></a><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">picks</span><span class="o">=</span><span class="s2">&quot;eeg&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="sphx-glr-horizontal">
+<li><img src="../_images/sphx_glr_iclabel_automatic_artifact_correction_ica_001.png" srcset="../_images/sphx_glr_iclabel_automatic_artifact_correction_ica_001.png" alt="ICA components, ICA000, ICA001, ICA002, ICA003, ICA004, ICA005, ICA006, ICA007, ICA008, ICA009, ICA010, ICA011, ICA012, ICA013, ICA014" class = "sphx-glr-multi-img"/></li>
+<li><img src="../_images/sphx_glr_iclabel_automatic_artifact_correction_ica_002.png" srcset="../_images/sphx_glr_iclabel_automatic_artifact_correction_ica_002.png" alt="Signals before (red) and after (black) cleaning, Raw data, Average across channels (EEG)" class = "sphx-glr-multi-img"/></li>
+</ul>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Applying ICA to Raw instance
+    Transforming to ICA space (15 components)
+    Zeroing out 1 ICA component
+    Projecting back using 59 PCA components
+
+&lt;Figure size 640x480 with 2 Axes&gt;
+</pre></div>
+</div>
+<p>We can also plot some diagnostics of each IC using
+<a class="reference external" href="https://mne.tools/dev/generated/mne.preprocessing.ICA.html#mne.preprocessing.ICA.plot_properties" title="(in MNE v1.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_properties</span></code></a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://mne.tools/dev/generated/mne.preprocessing.ICA.html#mne.preprocessing.ICA.plot_properties" title="mne.preprocessing.ICA.plot_properties" class="sphx-glr-backref-module-mne-preprocessing sphx-glr-backref-type-py-method"><span class="n">ica</span><span class="o">.</span><span class="n">plot_properties</span></a><span class="p">(</span><a href="https://mne.tools/dev/generated/mne.io.Raw.html#mne.io.Raw" title="mne.io.Raw" class="sphx-glr-backref-module-mne-io sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">raw</span></a><span class="p">,</span> <span class="n">picks</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+
+<span class="c1"># Selecting ICA components automatically</span>
+<span class="c1"># ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</span>
+<span class="c1">#</span>
+<span class="c1"># Now that we&#39;ve explored what components need to be removed, we can</span>
+<span class="c1"># apply the automatic ICA component labeling algorithm, which will</span>
+<span class="c1"># assign a probability value for each component being one of:</span>
+<span class="c1">#</span>
+<span class="c1"># - brain</span>
+<span class="c1"># - muscle artifact</span>
+<span class="c1"># - eye blink</span>
+<span class="c1"># - heart beat</span>
+<span class="c1"># - line noise</span>
+<span class="c1"># - channel noise</span>
+<span class="c1"># - other</span>
+<span class="c1">#</span>
+<span class="c1"># The output of the ICLabel ``label_components`` function produces</span>
+<span class="c1"># predicted probability values for each of these classes in that order.</span>
+<span class="c1">#</span>
+<span class="c1"># To start this process, we will compute features of each ICA</span>
+<span class="c1"># component to be fed into our classification model. This is</span>
+<span class="c1"># done automatically underneath the hood. An autocorrelation,</span>
+<span class="c1"># power spectral density and topographic map feature is fed</span>
+<span class="c1"># into a 3-head neural network that has been pretrained.</span>
+<span class="c1"># See :footcite:`iclabel2019` for full details.</span>
+
+<a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ic_labels</span></a> <span class="o">=</span> <a href="../generated/mne_icalabel.label_components.html#mne_icalabel.label_components" title="mne_icalabel.label_components" class="sphx-glr-backref-module-mne_icalabel sphx-glr-backref-type-py-function"><span class="n">label_components</span></a><span class="p">(</span><a href="https://mne.tools/dev/generated/mne.io.Raw.html#mne.io.Raw" title="mne.io.Raw" class="sphx-glr-backref-module-mne-io sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">raw</span></a><span class="p">,</span> <a href="https://mne.tools/dev/generated/mne.preprocessing.ICA.html#mne.preprocessing.ICA" title="mne.preprocessing.ICA" class="sphx-glr-backref-module-mne-preprocessing sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ica</span></a><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;iclabel&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ic_labels</span></a><span class="p">)</span>
+
+<span class="c1"># We can extract the labels of each component and exclude</span>
+<span class="c1"># non-brain classified components, keeping &#39;brain&#39; and &#39;other&#39;.</span>
+<span class="c1"># &quot;Other&quot; is a catch-all that for non-classifiable components.</span>
+<span class="c1"># We will ere on the side of caution and assume we cannot blindly remove these.</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">labels</span></a> <span class="o">=</span> <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ic_labels</span></a><span class="p">[</span><span class="s2">&quot;labels&quot;</span><span class="p">]</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">exclude_idx</span></a> <span class="o">=</span> <span class="p">[</span><span class="n">idx</span> <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">labels</span></a><span class="p">)</span> <span class="k">if</span> <span class="n">label</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;brain&quot;</span><span class="p">,</span> <span class="s2">&quot;other&quot;</span><span class="p">]]</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Excluding these ICA components: </span><span class="si">{</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">exclude_idx</span></a><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="sphx-glr-horizontal">
+<li><img src="../_images/sphx_glr_iclabel_automatic_artifact_correction_ica_003.png" srcset="../_images/sphx_glr_iclabel_automatic_artifact_correction_ica_003.png" alt="ICA000, Segment image and ERP/ERF, Spectrum, Dropped segments: 0.00 %" class = "sphx-glr-multi-img"/></li>
+<li><img src="../_images/sphx_glr_iclabel_automatic_artifact_correction_ica_004.png" srcset="../_images/sphx_glr_iclabel_automatic_artifact_correction_ica_004.png" alt="ICA001, Segment image and ERP/ERF, Spectrum, Dropped segments: 0.00 %" class = "sphx-glr-multi-img"/></li>
+</ul>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>    Using multitaper spectrum estimation with 7 DPSS windows
+Not setting metadata
+30 matching events found
+No baseline correction applied
+0 projection items activated
+0 bad epochs dropped
+Not setting metadata
+30 matching events found
+No baseline correction applied
+0 projection items activated
+0 bad epochs dropped
+/Users/adam2392/Documents/mne-icalabel/mne_icalabel/iclabel/features.py:46: RuntimeWarning: The provided Raw instance does not seems to be referenced to a common average reference (CAR). ICLabel was designed to classify features extracted from an EEG dataset referenced to a CAR (see the &#39;set_eeg_reference()&#39; method for Raw and Epochs instances).
+  warn(
+/Users/adam2392/Documents/mne-icalabel/mne_icalabel/iclabel/features.py:54: RuntimeWarning: The provided Raw instance is not filtered between 1 and 100 Hz. ICLabel was designed to classify features extracted from an EEG dataset bandpass filtered between 1 and 100 Hz (see the &#39;filter()&#39; method for Raw and Epochs instances).
+  warn(
+/Users/adam2392/Documents/mne-icalabel/mne_icalabel/iclabel/utils.py:131: RuntimeWarning: divide by zero encountered in log
+  g = np.square(d) * (np.log(d) - 1)  # % Green&#39;s function.
+/Users/adam2392/Documents/mne-icalabel/mne_icalabel/iclabel/utils.py:131: RuntimeWarning: invalid value encountered in multiply
+  g = np.square(d) * (np.log(d) - 1)  # % Green&#39;s function.
+{&#39;y_pred_proba&#39;: array([[8.75862658e-01, 1.14134233e-02, 1.14134233e-02, 1.14134233e-02,
+        1.14134233e-02, 1.14134233e-02, 1.03294119e-01, 1.03294119e-01,
+        1.03294119e-01, 1.03294119e-01, 1.14134233e-02, 8.75862658e-01,
+        3.04525602e-03, 1.03294119e-01, 3.04525602e-03],
+       [9.85993847e-06, 9.99690890e-01, 9.99690890e-01, 9.99690890e-01,
+        9.99690890e-01, 9.99690890e-01, 1.19856835e-04, 1.19856835e-04,
+        1.19856835e-04, 1.19856835e-04, 9.99690890e-01, 9.85993847e-06,
+        2.74945814e-05, 1.19856835e-04, 2.74945814e-05],
+       [1.38783106e-03, 9.08191323e-01, 9.08191323e-01, 9.08191323e-01,
+        9.08191323e-01, 9.08191323e-01, 8.52390155e-02, 8.52390155e-02,
+        8.52390155e-02, 8.52390155e-02, 9.08191323e-01, 1.38783106e-03,
+        1.48155564e-03, 8.52390155e-02, 1.48155564e-03],
+       [7.18828960e-06, 9.51796174e-01, 9.51796174e-01, 9.51796174e-01,
+        9.51796174e-01, 9.51796174e-01, 4.11494598e-02, 4.11494598e-02,
+        4.11494598e-02, 4.11494598e-02, 9.51796174e-01, 7.18828960e-06,
+        4.90991026e-03, 4.11494598e-02, 4.90991026e-03],
+       [3.08254705e-04, 9.62073624e-01, 9.62073624e-01, 9.62073624e-01,
+        9.62073624e-01, 9.62073624e-01, 2.21017823e-02, 2.21017823e-02,
+        2.21017823e-02, 2.21017823e-02, 9.62073624e-01, 3.08254705e-04,
+        1.15181123e-04, 2.21017823e-02, 1.15181123e-04],
+       [1.12915644e-02, 6.91964865e-01, 6.91964865e-01, 6.91964865e-01,
+        6.91964865e-01, 6.91964865e-01, 2.64769197e-01, 2.64769197e-01,
+        2.64769197e-01, 2.64769197e-01, 6.91964865e-01, 1.12915644e-02,
+        6.90639950e-03, 2.64769197e-01, 6.90639950e-03],
+       [1.19207101e-02, 3.39498937e-01, 3.39498937e-01, 3.39498937e-01,
+        3.39498937e-01, 3.39498937e-01, 5.97751617e-01, 5.97751617e-01,
+        5.97751617e-01, 5.97751617e-01, 3.39498937e-01, 1.19207101e-02,
+        3.17857862e-02, 5.97751617e-01, 3.17857862e-02],
+       [6.03471370e-03, 3.90273243e-01, 3.90273243e-01, 3.90273243e-01,
+        3.90273243e-01, 3.90273243e-01, 5.73568463e-01, 5.73568463e-01,
+        5.73568463e-01, 5.73568463e-01, 3.90273243e-01, 6.03471370e-03,
+        2.37265751e-02, 5.73568463e-01, 2.37265751e-02],
+       [1.29300868e-03, 1.00301616e-01, 1.00301616e-01, 1.00301616e-01,
+        1.00301616e-01, 1.00301616e-01, 6.81244195e-01, 6.81244195e-01,
+        6.81244195e-01, 6.81244195e-01, 1.00301616e-01, 1.29300868e-03,
+        1.99288040e-01, 6.81244195e-01, 1.99288040e-01],
+       [5.42456005e-03, 1.91664666e-01, 1.91664666e-01, 1.91664666e-01,
+        1.91664666e-01, 1.91664666e-01, 7.70569861e-01, 7.70569861e-01,
+        7.70569861e-01, 7.70569861e-01, 1.91664666e-01, 5.42456005e-03,
+        3.70128383e-03, 7.70569861e-01, 3.70128383e-03],
+       [5.37795277e-05, 9.97676134e-01, 9.97676134e-01, 9.97676134e-01,
+        9.97676134e-01, 9.97676134e-01, 1.82318687e-03, 1.82318687e-03,
+        1.82318687e-03, 1.82318687e-03, 9.97676134e-01, 5.37795277e-05,
+        5.26823133e-05, 1.82318687e-03, 5.26823133e-05],
+       [3.51023048e-01, 3.01334977e-01, 3.01334977e-01, 3.01334977e-01,
+        3.01334977e-01, 3.01334977e-01, 2.38224894e-01, 2.38224894e-01,
+        2.38224894e-01, 2.38224894e-01, 3.01334977e-01, 3.51023048e-01,
+        8.21827948e-02, 2.38224894e-01, 8.21827948e-02],
+       [3.83769977e-03, 5.09710014e-02, 5.09710014e-02, 5.09710014e-02,
+        5.09710014e-02, 5.09710014e-02, 3.62147838e-01, 3.62147838e-01,
+        3.62147838e-01, 3.62147838e-01, 5.09710014e-02, 3.83769977e-03,
+        5.79883873e-01, 3.62147838e-01, 5.79883873e-01],
+       [1.21064283e-01, 5.27202450e-02, 5.27202450e-02, 5.27202450e-02,
+        5.27202450e-02, 5.27202450e-02, 6.46022201e-01, 6.46022201e-01,
+        6.46022201e-01, 6.46022201e-01, 5.27202450e-02, 1.21064283e-01,
+        1.42773554e-01, 6.46022201e-01, 1.42773554e-01],
+       [9.34534986e-03, 9.16130394e-02, 9.16130394e-02, 9.16130394e-02,
+        9.16130394e-02, 9.16130394e-02, 1.33644715e-01, 1.33644715e-01,
+        1.33644715e-01, 1.33644715e-01, 9.16130394e-02, 9.34534986e-03,
+        7.55041599e-01, 1.33644715e-01, 7.55041599e-01]], dtype=float32), &#39;labels&#39;: [&#39;eye blink&#39;, &#39;brain&#39;, &#39;brain&#39;, &#39;brain&#39;, &#39;brain&#39;, &#39;brain&#39;, &#39;other&#39;, &#39;other&#39;, &#39;other&#39;, &#39;other&#39;, &#39;brain&#39;, &#39;eye blink&#39;, &#39;muscle artifact&#39;, &#39;other&#39;, &#39;muscle artifact&#39;]}
+Excluding these ICA components: [0, 11, 12, 14]
+</pre></div>
+</div>
+<p>Now that the exclusions have been set, we can reconstruct the sensor signals
+with artifacts removed using the <a class="reference external" href="https://mne.tools/dev/generated/mne.preprocessing.ICA.html#mne.preprocessing.ICA.apply" title="(in MNE v1.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">apply</span></code></a> method
+(remember, we’re applying the ICA solution from the <em>filtered</em> data to the
+original <em>unfiltered</em> signal). Plotting the original raw data alongside the
+reconstructed data shows that the heartbeat and blink artifacts are repaired.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># ica.apply() changes the Raw object in-place, so let&#39;s make a copy first:</span>
+<span class="n">reconst_raw</span> <span class="o">=</span> <a href="https://mne.tools/dev/generated/mne.io.Raw.html#mne.io.Raw.copy" title="mne.io.Raw.copy" class="sphx-glr-backref-module-mne-io sphx-glr-backref-type-py-method"><span class="n">raw</span><span class="o">.</span><span class="n">copy</span></a><span class="p">()</span>
+<a href="https://mne.tools/dev/generated/mne.preprocessing.ICA.html#mne.preprocessing.ICA.apply" title="mne.preprocessing.ICA.apply" class="sphx-glr-backref-module-mne-preprocessing sphx-glr-backref-type-py-method"><span class="n">ica</span><span class="o">.</span><span class="n">apply</span></a><span class="p">(</span><span class="n">reconst_raw</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">exclude_idx</span></a><span class="p">)</span>
+
+<a href="https://mne.tools/dev/generated/mne.io.Raw.html#mne.io.Raw.plot" title="mne.io.Raw.plot" class="sphx-glr-backref-module-mne-io sphx-glr-backref-type-py-method"><span class="n">raw</span><span class="o">.</span><span class="n">plot</span></a><span class="p">(</span><span class="n">order</span><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">artifact_picks</span></a><span class="p">,</span> <span class="n">n_channels</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">artifact_picks</span></a><span class="p">),</span> <span class="n">show_scrollbars</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">reconst_raw</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">order</span><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">artifact_picks</span></a><span class="p">,</span> <span class="n">n_channels</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">artifact_picks</span></a><span class="p">),</span> <span class="n">show_scrollbars</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="k">del</span> <span class="n">reconst_raw</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Applying ICA to Raw instance
+    Transforming to ICA space (15 components)
+    Zeroing out 4 ICA components
+    Projecting back using 59 PCA components
+Opening raw-browser...
+For Dark-Mode &quot;qdarkstyle&quot; has to be installed! You can install it with `pip install qdarkstyle`
+Using pyopengl with version 3.1.6
+Opening raw-browser...
+For Dark-Mode &quot;qdarkstyle&quot; has to be installed! You can install it with `pip install qdarkstyle`
+Using pyopengl with version 3.1.6
+</pre></div>
+</div>
+<div class="section" id="references">
+<h3>References<a class="headerlink" href="#references" title="Permalink to this headline">#</a></h3>
+<p id="id3"><dl class="footnote brackets">
+<dt class="label" id="footcite-iclabel2019"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p>Luca Pion-Tonachini, Ken Kreutz-Delgado, and Scott Makeig. Iclabel: an automated electroencephalographic independent component classifier, dataset, and website. <em>NeuroImage</em>, 198:181–197, 2019. URL: <a class="reference external" href="https://www.sciencedirect.com/science/article/pii/S1053811919304185">https://www.sciencedirect.com/science/article/pii/S1053811919304185</a>, <a class="reference external" href="https://doi.org/https://doi.org/10.1016/j.neuroimage.2019.05.026">doi:https://doi.org/10.1016/j.neuroimage.2019.05.026</a>.</p>
+</dd>
+<dt class="label" id="footcite-winkleretal2015"><span class="brackets"><a class="fn-backref" href="#id2">2</a></span></dt>
+<dd><p>Irene Winkler, Stefan Debener, Klaus-Robert Müller, and Michael Tangermann. On the influence of high-pass filtering on ICA-based artifact reduction in EEG-ERP. In <em>Proceedings of EMBC-2015</em>, 4101–4105. Milan, 2015. IEEE. <a class="reference external" href="https://doi.org/10.1109/EMBC.2015.7319296">doi:10.1109/EMBC.2015.7319296</a>.</p>
+</dd>
+</dl>
+</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  11.725 seconds)</p>
+<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-iclabel-automatic-artifact-correction-ica-py">
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/59f8c8f9ff57a99049f45e3817855764/iclabel_automatic_artifact_correction_ica.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">iclabel_automatic_artifact_correction_ica.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/1c9eb06eb1731736c1c34358cab65d24/iclabel_automatic_artifact_correction_ica.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">iclabel_automatic_artifact_correction_ica.ipynb</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</div>
+</div>
+</div>
+
+
+              </div>
+              
+              
+              <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="index.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Examples</p>
+        </div>
+    </a>
+</div>
+              
+          </main>
+          
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+<footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    
+    <div class="footer-item">
+      <p class="copyright">
+    &copy; Copyright 2021-2022, MNE Developers. Last updated on 2022-05-03.<br>
+</p>
+    </div>
+    
+    <div class="footer-item">
+      <p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0.<br>
+</p>
+    </div>
+    
+  </div>
+</footer>
+  </body>
+</html>

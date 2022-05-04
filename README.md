@@ -6,6 +6,7 @@
 [![CircleCI](https://circleci.com/gh/mne-tools/mne-icalabel/tree/main.svg?style=svg)](https://circleci.com/gh/mne-tools/mne-icalabel/tree/main)
 [![PyPI Download count](https://pepy.tech/badge/mne-icalabel)](https://pepy.tech/project/mne-icalabel)
 [![Latest PyPI release](https://img.shields.io/pypi/v/mne-icalabel.svg)](https://pypi.org/project/mne-icalabel/)
+[![Checked with mypy](http://www.mypy-lang.org/static/mypy_badge.svg)](http://mypy-lang.org/)
 
 This repository is a conversion of the popular ICLabel classifier for Python. In addition, we provide
 improvements in the form of other models.

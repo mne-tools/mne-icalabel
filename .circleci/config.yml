@@ -15,9 +15,9 @@ jobs:
             name: Complete checkout
             command: |
               if ! git remote -v | grep upstream; then
-                git remote add upstream https://github.com/adam2392/mne-icalabel.git
+                git remote add upstream https://github.com/mne-tools/mne-icalabel.git
               fi
-              git remote set-url upstream https://github.com/adam2392/mne-icalabel.git
+              git remote set-url upstream https://github.com/mne-tools/mne-icalabel.git
               git fetch upstream
 
         - save_cache:
@@ -157,6 +157,57 @@ jobs:
         #       - ~/.mne
         #       - ~/mne_data/MNE-sample-data
 
+    linkcheck:
+      # there are a few files excluded from this for expediency, see Makefile
+      parameters:
+        scheduled:
+          type: string
+          default: "false"
+      docker:
+        - image: circleci/python:3.9.2-buster
+      steps:
+        - restore_cache:
+            keys:
+              - source-cache
+        - checkout
+        - run:
+            name: Set BASH_ENV
+            command: |
+              set -e
+              echo "set -e" >> $BASH_ENV
+              echo "export PATH=~/.local/bin/:$PATH" >> $BASH_ENV
+        - run:
+            name: Check-skip
+            command: |
+              export COMMIT_MESSAGE=$(git log --format=oneline -n 1);
+              if [[ "$COMMIT_MESSAGE" != *"[circle linkcheck]"* ]] && [ "<< parameters.scheduled >>" != "true" ]; then
+                echo "Skip detected, exiting job ${CIRCLE_JOB}."
+                circleci-agent step halt;
+              fi
+        - restore_cache:
+            keys:
+              - pip-cache
+        - run:
+            name: Get Python running
+            command: |
+              ./scripts/circleci_dependencies.sh
+        - run:
+            name: Check installation
+            command: |
+              mne sys_info -pd
+        - run:
+            name: make linkcheck
+            command: |
+              make -C doc linkcheck
+        - run:
+            name: make linkcheck-grep
+            when: always
+            command: |
+              make -C doc linkcheck-grep
+        - store_artifacts:
+            path: doc/_build/linkcheck
+            destination: linkcheck
+
     doc-deploy:
         docker:
           - image: cimg/node:lts
@@ -203,7 +254,10 @@ jobs:
 workflows:
   default:
     jobs:
-      - build_doc
+      - build_doc:
+          name: build_doc
+      - linkcheck:
+          name: linkcheck
       - doc-deploy:
           requires:
             - build_doc

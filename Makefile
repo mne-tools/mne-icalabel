@@ -17,7 +17,7 @@ clean-so:
 	find . -name "*.pyd" | xargs rm -f
 
 clean-build:
-	rm -rf _build
+	rm -rf _build build dist mne_icalabel.egg-info
 
 clean-ctags:
 	rm -f tags
@@ -25,7 +25,11 @@ clean-ctags:
 clean-cache:
 	find . -name "__pycache__" | xargs rm -rf
 
-clean: clean-build clean-pyc clean-so clean-ctags clean-cache
+clean-test:
+	rm -rf .pytest_cache .mypy_cache .ipynb_checkpoints
+	rm junit-results.xml
+
+clean: clean-build clean-pyc clean-so clean-ctags clean-cache clean-test
 
 in: inplace # just a shortcut
 inplace:

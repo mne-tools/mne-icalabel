@@ -23,8 +23,8 @@ Contents
    :hidden:
    :caption: Development
 
-   License <https://raw.githubusercontent.com/mne-tools/mne-icalabel/main/LICENSE>
-   Contributing <https://github.com/mne-tools/mne-icalabel/main/CONTRIBUTING.md>
+   License <https://raw.githubusercontent.com/mne-tools/mne-icalabel/blob/main/LICENSE>
+   Contributing <https://github.com/mne-tools/mne-icalabel/blob/main/CONTRIBUTING.md>
 
 License
 -------

@@ -1,9 +1,9 @@
 # mne-icalabel
 
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-[![Codecov](https://codecov.io/gh/adam2392/mne-icalabel/branch/main/graph/badge.svg)](https://codecov.io/gh/adam2392/mne-icalabel)
-[![unit_tests](https://github.com/adam2392/mne-icalabel/actions/workflows/unit_tests.yml/badge.svg?branch=main)](https://github.com/adam2392/mne-icalabel/actions/workflows/unit_tests.yml)
-[![CircleCI](https://circleci.com/gh/adam2392/mne-icalabel/tree/main.svg?style=svg)](https://circleci.com/gh/adam2392/mne-icalabel/tree/main)
+[![Codecov](https://codecov.io/gh/mne-tools/mne-icalabel/branch/main/graph/badge.svg)](https://codecov.io/gh/mne-tools/mne-icalabel)
+[![unit_tests](https://github.com/mne-tools/mne-icalabel/actions/workflows/unit_tests.yml/badge.svg?branch=main)](https://github.com/mne-tools/mne-icalabel/actions/workflows/unit_tests.yml)
+[![CircleCI](https://circleci.com/gh/mne-tools/mne-icalabel/tree/main.svg?style=svg)](https://circleci.com/gh/mne-tools/mne-icalabel/tree/main)
 [![PyPI Download count](https://pepy.tech/badge/mne-icalabel)](https://pepy.tech/project/mne-icalabel)
 [![Latest PyPI release](https://img.shields.io/pypi/v/mne-icalabel.svg)](https://pypi.org/project/mne-icalabel/)
 

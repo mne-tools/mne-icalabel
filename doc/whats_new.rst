@@ -29,17 +29,17 @@ Enhancements
 Bug
 ~~~
 
-- 
+- Fix shape of ``'y_pred_proba'`` output from `mne_icalabel.label_components`
 
 API
 ~~~
 
-- 
+-
 
 Authors
 ~~~~~~~
 
-* 
+* `Mathieu Scheltienne`_
 
 :doc:`Find out what was new in previous releases <whats_new_previous_releases>`
 

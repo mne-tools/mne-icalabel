@@ -21,7 +21,9 @@ ica.fit(raw)
 def test_label_components():
     """Simple test to check that label_components runs without raising."""
     labels = label_components(raw, ica, method="iclabel")
-    assert labels is not None
+    assert isinstance(labels, dict)
+    assert labels['y_pred_proba'].ndim == 1
+    assert labels['y_pred_proba'].shape[0] == ica.n_components_
 
 
 def test_label_components_with_wrong_arguments():

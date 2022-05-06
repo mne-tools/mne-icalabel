@@ -56,7 +56,7 @@ def label_components(inst: Union[BaseRaw, BaseEpochs], ica: ICA, method: str):
     labels_pred_proba = methods[method](inst, ica)
     labels_pred = np.argmax(labels_pred_proba, axis=1)
     labels = [ICLABEL_NUMERICAL_TO_STRING[label] for label in labels_pred]
-    y_pred_proba = labels_pred_proba[:, labels_pred]
+    y_pred_proba = labels_pred_proba[np.arange(15), labels_pred]
 
     component_dict = {
         "y_pred_proba": y_pred_proba,

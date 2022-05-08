@@ -1,5 +1,6 @@
-import pytest
 from pathlib import Path
+
+import pytest
 from mne.datasets import sample
 from mne.io import read_raw
 from mne.preprocessing import ICA

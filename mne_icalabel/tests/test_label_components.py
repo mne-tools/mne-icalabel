@@ -1,5 +1,3 @@
-from pathlib import Path
-
 import pytest
 from mne.datasets import sample
 from mne.io import read_raw
@@ -7,7 +5,7 @@ from mne.preprocessing import ICA
 
 from mne_icalabel import label_components
 
-directory = Path(sample.data_path()) / "MEG" / "sample"
+directory = sample.data_path() / "MEG" / "sample"
 raw = read_raw(directory / "sample_audvis_raw.fif", preload=False)
 raw.crop(0, 10).pick_types(eeg=True, exclude="bads")
 raw.load_data()

@@ -41,7 +41,7 @@ def test_warnings():
         RuntimeWarning, match="not filtered between 1 and 100 Hz"
     ):
         iclabel_label_components(raw, ica)
-    # correct raw, wrong ica
+
     raw.filter(1.0, 100.0)
     raw.set_eeg_reference("average")
     # infomax

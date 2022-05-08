@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Union, Optional
 
 import numpy as np
 from mne import BaseEpochs
@@ -16,15 +16,17 @@ methods = {
 }
 
 
-def label_components(inst: Union[BaseRaw, BaseEpochs], ica: ICA, method: str):
+def label_components(inst: Union[BaseRaw, BaseEpochs], ica: Optional[ICA], method: str):
     """Automatically label the ICA components with the selected method.
 
     Parameters
     ----------
     inst : Raw | Epochs
         The data instance used to fit the ICA instance.
-    ica : ICA
-        The fitted ICA instance.
+    ica : ICA | None
+        The fitted ICA instance. If None, an ICA decomposition is fitted on the
+        provided instance, using the Preconditioned ICA for Real Data (PICARD)
+        method and the instance good channels.
     method : str
         The proposed method for labeling components. Must be one of:
         ``'iclabel'``.

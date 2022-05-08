@@ -38,3 +38,5 @@ def _validate_inst_and_ica(inst: Union[BaseRaw, BaseEpochs], ica: Optional[ICA])
             "The provided ICA instance was not fitted. Please use the '.fit()' method to "
             "determine the independent components before trying to label them."
         )
+
+    return inst, ica

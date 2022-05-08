@@ -41,6 +41,9 @@ def label_components(inst: Union[BaseRaw, BaseEpochs], ica: Optional[ICA] = None
         for each independent component.
         - 'labels': list of shape (n_components,)
         The corresponding string label of each class in 'y_pred'.
+    ica : ICA
+        Either the provided ICA, or the ICA decomposition fitted on the
+        provided instance if ``ica=None`` was provided.
 
     Notes
     -----
@@ -61,7 +64,7 @@ def label_components(inst: Union[BaseRaw, BaseEpochs], ica: Optional[ICA] = None
         # default method for each datatype.
         #   EEG -> ICLabel
         method = "iclabel"
-    _validate_inst_and_ica(inst, ica)
+    inst, ica = _validate_inst_and_ica(inst, ica)
     labels_pred_proba = methods[method](inst, ica)
     labels_pred = np.argmax(labels_pred_proba, axis=1)
     labels = [ICLABEL_NUMERICAL_TO_STRING[label] for label in labels_pred]
@@ -73,4 +76,4 @@ def label_components(inst: Union[BaseRaw, BaseEpochs], ica: Optional[ICA] = None
         "y_pred_proba": y_pred_proba,
         "labels": labels,
     }
-    return component_dict
+    return component_dict, ica

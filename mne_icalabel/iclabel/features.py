@@ -59,10 +59,10 @@ def get_iclabel_features(inst: Union[BaseRaw, BaseEpochs], ica: ICA):
             "and Epochs instances)."
         )
     # confirm that the ICA uses an infomax extended
-    method_ = ica.method not in ('infomax', 'picard')
-    extended_ = 'extended' not in ica.fit_params or ica.fit_params['extended'] is False
-    ortho_ = 'ortho' not in ica.fit_params or ica.fit_params['ortho'] is True
-    ortho_ = ortho_ if ica.method == 'picard' else False
+    method_ = ica.method not in ("infomax", "picard")
+    extended_ = "extended" not in ica.fit_params or ica.fit_params["extended"] is False
+    ortho_ = "ortho" not in ica.fit_params or ica.fit_params["ortho"] is True
+    ortho_ = ortho_ if ica.method == "picard" else False
     if any((method_, extended_, ortho_)):
         warn(
             f"The provided ICA instance was fitted with a '{ica.method}' algorithm. "
@@ -70,7 +70,7 @@ def get_iclabel_features(inst: Union[BaseRaw, BaseEpochs], ica: ICA):
             "extended infomax algorithm, use the 'mne.preprocessing.ICA' instance with the "
             "arguments 'ICA(method='infomax', fit_params=dict(extended=True))' (scikit-learn) or "
             "'ICA(method='picard', fit_params=dict(ortho=False, extended=True))' (python-picard)."
-            )
+        )
 
     icawinv, _ = _retrieve_eeglab_icawinv(ica)
     icaact = _compute_ica_activations(inst, ica)

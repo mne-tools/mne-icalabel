@@ -91,6 +91,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python-version: ["3.7", "3.10"]  # Oldest and newest supported versions
+        mne-version: [mne-stable]
+
         include:
           - os: ubuntu-latest
             python-version: 3.8
@@ -130,6 +134,12 @@ jobs:
         if: "matrix.mne-version == 'mne-main'"
         run: |
           git clone --depth 1 https://github.com/mne-tools/mne-python.git -b main
+          pip install -e ./mne-python
+
+      - name: Install MNE (stable)
+        if: "matrix.mne-version == 'mne-stable'"
+        run: |
+          git clone --depth 1 https://github.com/mne-tools/mne-python.git -b maint/0.24
           pip install -e ./mne-python
 
       - name: Display versions and environment information

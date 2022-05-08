@@ -16,7 +16,7 @@ methods = {
 }
 
 
-def label_components(inst: Union[BaseRaw, BaseEpochs], ica: Optional[ICA], method: str):
+def label_components(inst: Union[BaseRaw, BaseEpochs], ica: Optional[ICA] = None, method: str = "auto"):
     """Automatically label the ICA components with the selected method.
 
     Parameters
@@ -29,7 +29,8 @@ def label_components(inst: Union[BaseRaw, BaseEpochs], ica: Optional[ICA], metho
         method and the instance good channels.
     method : str
         The proposed method for labeling components. Must be one of:
-        ``'iclabel'``.
+        ``"iclabel"``. The default "auto" will use:
+            - ``"iclabel"`` for EEG data.
 
     Returns
     -------
@@ -53,7 +54,13 @@ def label_components(inst: Union[BaseRaw, BaseEpochs], ica: Optional[ICA], metho
     - 'other'
     """
     _validate_type(method, str, "method")
-    _check_option("method", method, methods)
+    if method != "auto":
+        _check_option("method", method, methods)
+    else:
+        # TODO: As additional data types are supported, let's define one
+        # default method for each datatype.
+        #   EEG -> ICLabel
+        method = "iclabel"
     _validate_inst_and_ica(inst, ica)
     labels_pred_proba = methods[method](inst, ica)
     labels_pred = np.argmax(labels_pred_proba, axis=1)

@@ -13,7 +13,7 @@ raw.load_data()
 raw.filter(l_freq=1.0, h_freq=100.0)
 raw.set_eeg_reference("average")
 # fit ICA
-ica = ICA(n_components=15, method="picard")
+ica = ICA(n_components=5, method="picard")
 ica.fit(raw)
 
 
@@ -21,4 +21,4 @@ ica.fit(raw)
 def test_label_components():
     """Simple test to check that label_components runs without raising."""
     labels = iclabel_label_components(raw, ica)
-    assert labels is not None
+    assert labels.shape == (ica.n_components_, 7)

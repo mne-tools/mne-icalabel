@@ -3,8 +3,6 @@ try:
 except ImportError:
     from importlib_resources import files  # type: ignore
 
-from pathlib import Path
-
 import numpy as np
 import pytest
 import torch
@@ -13,7 +11,7 @@ from scipy.io import loadmat
 from mne_icalabel.datasets import icalabel
 from mne_icalabel.iclabel.network import ICLabelNet, _format_input, run_iclabel
 
-dataset_path = Path(icalabel.data_path()) / "iclabel"
+dataset_path = icalabel.data_path() / "iclabel"
 
 
 # Network weights

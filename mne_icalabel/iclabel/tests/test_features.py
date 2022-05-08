@@ -25,7 +25,7 @@ from mne_icalabel.iclabel.features import (
 )
 from mne_icalabel.iclabel.utils import _mne_to_eeglab_locs
 
-dataset_path = Path(icalabel.data_path()) / "iclabel"
+dataset_path = icalabel.data_path() / "iclabel"
 
 # Raw/Epochs files with ICA decomposition
 raw_eeglab_path = dataset_path / "datasets/sample-raw.set"

@@ -22,4 +22,3 @@ matplotlib
 python-picard
 joblib
 scikit-learn
-pooch

@@ -277,7 +277,7 @@
     <span class="n">ica</span><span class="p">:</span> <span class="n">ICA</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">NDArray</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">NDArray</span><span class="p">[</span><span class="nb">float</span><span class="p">]]:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Retrieves &#39;icawinv&#39; from an MNE ICA instance.</span>
+<span class="sd">    Retrieve &#39;icawinv&#39; from an MNE ICA instance.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -358,8 +358,7 @@
 
 
 <span class="k">def</span> <span class="nf">_topoplotFast</span><span class="p">(</span><span class="n">values</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">rd</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">th</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
-    <span class="sd">&quot;&quot;&quot;Implements topoplotFast.m from MATLAB. Each topographic map is a 32x32</span>
-<span class="sd">    images.&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Implement topoplotFast.m from MATLAB. Each topographic map is a 32x32 images.&quot;&quot;&quot;</span>
     <span class="c1"># constants</span>
     <span class="n">GRID_SCALE</span> <span class="o">=</span> <span class="mi">32</span>  <span class="c1"># number of pixels</span>
     <span class="n">rmax</span> <span class="o">=</span> <span class="mf">0.5</span>  <span class="c1"># actual head radius</span>
@@ -427,8 +426,7 @@
     <span class="n">inst</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">BaseRaw</span><span class="p">,</span> <span class="n">BaseEpochs</span><span class="p">],</span>
     <span class="n">ica</span><span class="p">:</span> <span class="n">ICA</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="n">NDArray</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">NDArray</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">NDArray</span><span class="p">[</span><span class="nb">int</span><span class="p">]]:</span>
-    <span class="sd">&quot;&quot;&quot;Computes the constants before ``randperm`` is used to compute the</span>
-<span class="sd">    subset.&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Compute the constants before ``randperm`` is used to compute the subset.&quot;&quot;&quot;</span>
     <span class="c1"># in MATLAB, &#39;pct_data&#39; variable is never provided and is always initialized</span>
     <span class="c1"># to 100. &#39;pct_data&#39; is only used in a division by 100.. and thus has no</span>
     <span class="c1"># impact and is omitted here.</span>
@@ -507,8 +505,7 @@
 <span class="k">def</span> <span class="nf">_eeg_rpsd_format</span><span class="p">(</span>
     <span class="n">psd</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
-    <span class="sd">&quot;&quot;&quot;Apply the formatting steps after &#39;eeg_rpsd.m&#39; from the MATLAB feature</span>
-<span class="sd">    extraction.&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Apply the formatting steps after &#39;eeg_rpsd.m&#39; from the MATLAB feature extraction.&quot;&quot;&quot;</span>
     <span class="c1"># extrapolate or prune as needed</span>
     <span class="n">nfreq</span> <span class="o">=</span> <span class="n">psd</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">nfreq</span> <span class="o">&lt;</span> <span class="mi">100</span><span class="p">:</span>
@@ -543,9 +540,10 @@
 
 
 <span class="k">def</span> <span class="nf">_eeg_autocorr_welch</span><span class="p">(</span><span class="n">raw</span><span class="p">:</span> <span class="n">BaseRaw</span><span class="p">,</span> <span class="n">ica</span><span class="p">:</span> <span class="n">ICA</span><span class="p">,</span> <span class="n">icaact</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
-    <span class="sd">&quot;&quot;&quot;Autocorrelation feature applied on raw object with at least 5 * fs</span>
-<span class="sd">    samples (5 seconds).</span>
-<span class="sd">    MATLAB: &#39;eeg_autocorr_welch.m&#39;.&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Autocorrelation feature applied on raw object with at least 5 * fs samples (5 seconds).</span>
+
+<span class="sd">    MATLAB: &#39;eeg_autocorr_welch.m&#39;.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">raw</span><span class="p">,</span> <span class="n">BaseRaw</span><span class="p">)</span>  <span class="c1"># sanity-check</span>
 
     <span class="c1"># in MATLAB, &#39;pct_data&#39; variable is never provided and is always initialized</span>
@@ -619,9 +617,10 @@
 
 
 <span class="k">def</span> <span class="nf">_eeg_autocorr</span><span class="p">(</span><span class="n">raw</span><span class="p">:</span> <span class="n">BaseRaw</span><span class="p">,</span> <span class="n">ica</span><span class="p">:</span> <span class="n">ICA</span><span class="p">,</span> <span class="n">icaact</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
-    <span class="sd">&quot;&quot;&quot;Autocorrelation feature applied on raw object that do not have enough</span>
-<span class="sd">    sampes for eeg_autocorr_welch.</span>
-<span class="sd">    MATLAB: &#39;eeg_autocorr.m&#39;.&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Autocorrelation feature applied on raw object that do not have enough sampes for eeg_autocorr_welch.</span>
+
+<span class="sd">    MATLAB: &#39;eeg_autocorr.m&#39;.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">raw</span><span class="p">,</span> <span class="n">BaseRaw</span><span class="p">)</span>  <span class="c1"># sanity-check</span>
 
     <span class="c1"># in MATLAB, &#39;pct_data&#39; variable is neither provided or used, thus it is</span>
@@ -654,7 +653,9 @@
 
 <span class="k">def</span> <span class="nf">_eeg_autocorr_fftw</span><span class="p">(</span><span class="n">epochs</span><span class="p">:</span> <span class="n">BaseEpochs</span><span class="p">,</span> <span class="n">ica</span><span class="p">:</span> <span class="n">ICA</span><span class="p">,</span> <span class="n">icaact</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">[</span><span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;Autocorrelation feature applied on epoch object.</span>
-<span class="sd">    MATLAB: &#39;eeg_autocorr_fftw.m&#39;.&quot;&quot;&quot;</span>
+
+<span class="sd">    MATLAB: &#39;eeg_autocorr_fftw.m&#39;.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">epochs</span><span class="p">,</span> <span class="n">BaseEpochs</span><span class="p">)</span>  <span class="c1"># sanity-check</span>
 
     <span class="c1"># in MATLAB, &#39;pct_data&#39; variable is neither provided or used, thus it is</span>
@@ -684,8 +685,9 @@
 
 
 <span class="k">def</span> <span class="nf">_resample</span><span class="p">(</span><span class="n">ac</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">fs</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
-    <span class="sd">&quot;&quot;&quot;Resample the autocorrelation feature. The comment in EEGLAB is:</span>
+    <span class="sd">&quot;&quot;&quot;Resample the autocorrelation feature.</span>
 
+<span class="sd">    The comment in EEGLAB is:</span>
 <span class="sd">        resample to 1 second at 100 samples/sec</span>
 
 <span class="sd">    Which translates by: the output array must be of shape (n_comp, 101), thus</span>
@@ -727,7 +729,7 @@
     
     <div class="footer-item">
       <p class="copyright">
-    &copy; Copyright 2021-2022, MNE Developers. Last updated on 2022-05-08.<br>
+    &copy; Copyright 2021-2022, MNE Developers. Last updated on 2022-05-10.<br>
 </p>
     </div>
     

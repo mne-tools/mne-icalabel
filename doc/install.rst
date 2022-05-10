@@ -15,6 +15,10 @@ We require that you use Python 3.7 or higher.
 You may choose to install ``mne-icalabel`` `via conda <#Installation via conda>`_,
 or Pip.
 
+mne-icalabel works best with the latest stable release of MNE-Python. To ensure
+MNE-Python is up-to-date, see their `installation instructions <https://mne.tools/stable/install/index.html>_`.
+
+
 Installation via Conda
 ----------------------
 
@@ -53,5 +57,7 @@ error messages:
 
    python -c 'import mne_icalabel'
 
-mne-icalabel works best with the latest stable release of MNE-Python. To ensure
-MNE-Python is up-to-date, see their `installation instructions <https://mne.tools/stable/install/index.html>_`.
+Installation via MNE-Installer
+------------------------------
+Since MNE v1.0, there is now a standalone MNE installer, which can also optionally install
+MNE-ICALabel! See `MNE page <https://mne.tools/stable/install/installers.html>_` for more information.

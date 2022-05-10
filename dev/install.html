@@ -201,6 +201,11 @@
    Installation via Pip
   </a>
  </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#installation-via-mne-installer">
+   Installation via MNE-Installer
+  </a>
+ </li>
 </ul>
 
 </nav>
@@ -233,8 +238,10 @@
 <li><p><code class="docutils literal notranslate"><span class="pre">torch</span></code> (for running pytorch neural networks)</p></li>
 </ul>
 <p>We require that you use Python 3.7 or higher.
-You may choose to install <code class="docutils literal notranslate"><span class="pre">mne-icalabel</span></code> <a class="reference external" href="#Installationviapip">via pip</a>,
-or conda.</p>
+You may choose to install <code class="docutils literal notranslate"><span class="pre">mne-icalabel</span></code> <a class="reference external" href="#Installationviaconda">via conda</a>,
+or Pip.</p>
+<p>mne-icalabel works best with the latest stable release of MNE-Python. To ensure
+MNE-Python is up-to-date, see their <a class="reference external" href="https://mne.tools/stable/install/index.html">installation instructions</a>.</p>
 </section>
 <section id="installation-via-conda">
 <h2>Installation via Conda<a class="headerlink" href="#installation-via-conda" title="Permalink to this headline">#</a></h2>
@@ -251,12 +258,13 @@ conda install -c conda-forge mne-icalabel
 <h2>Installation via Pip<a class="headerlink" href="#installation-via-pip" title="Permalink to this headline">#</a></h2>
 <p>To install mne-icalabel including all dependencies required to use all features,
 simply run the following at the root of the repository:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python -m venv .venv
-pip install -U mne-icalabel
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># with python&gt;=3.7 at least</span>
+python -m venv .venv
+pip install mne-icalabel
 </pre></div>
 </div>
 <p>If you want to install a snapshot of the current development version, run:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install --user -U https://api.github.com/repos/mne-tools/mne-icalabel/zipball/main
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install https://api.github.com/repos/mne-tools/mne-icalabel/zipball/main
 </pre></div>
 </div>
 <p>To check if everything worked fine, the following command should not give any
@@ -264,11 +272,11 @@ error messages:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python -c <span class="s1">&#39;import mne_icalabel&#39;</span>
 </pre></div>
 </div>
-<p>mne-icalabel works best with the latest stable release of MNE-Python. To ensure
-MNE-Python is up-to-date, run:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install --user -U mne
-</pre></div>
-</div>
+</section>
+<section id="installation-via-mne-installer">
+<h2>Installation via MNE-Installer<a class="headerlink" href="#installation-via-mne-installer" title="Permalink to this headline">#</a></h2>
+<p>Since MNE v1.0, there is now a standalone MNE installer, which can also optionally install
+MNE-ICALabel! See <a class="reference external" href="https://mne.tools/stable/install/installers.html">MNE page</a> for more information.</p>
 </section>
 </section>
 

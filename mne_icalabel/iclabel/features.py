@@ -170,7 +170,7 @@ def _eeg_topoplot(inst: Union[BaseRaw, BaseEpochs], icawinv: NDArray[float]) -> 
 
 
 def _topoplotFast(values: NDArray[float], rd: NDArray[float], th: NDArray[float]) -> NDArray[float]:
-    """Implementation of topoplotFast.m from MATLAB. Each topographic map is a 32x32 images."""
+    """Implement topoplotFast.m from MATLAB. Each topographic map is a 32x32 images."""
     # constants
     GRID_SCALE = 32  # number of pixels
     rmax = 0.5  # actual head radius
@@ -429,8 +429,7 @@ def _eeg_autocorr_welch(raw: BaseRaw, ica: ICA, icaact: NDArray[float]) -> NDArr
 
 
 def _eeg_autocorr(raw: BaseRaw, ica: ICA, icaact: NDArray[float]) -> NDArray[float]:
-    """Autocorrelation feature applied on raw object that do not have enough
-    sampes for eeg_autocorr_welch.
+    """Autocorrelation feature applied on raw object that do not have enough sampes for eeg_autocorr_welch.
 
     MATLAB: 'eeg_autocorr.m'.
     """
@@ -498,8 +497,9 @@ def _eeg_autocorr_fftw(epochs: BaseEpochs, ica: ICA, icaact: NDArray[float]) -> 
 
 
 def _resample(ac: NDArray[float], fs: Union[int, float]) -> NDArray[float]:
-    """Resample the autocorrelation feature. The comment in EEGLAB is:
+    """Resample the autocorrelation feature.
 
+    The comment in EEGLAB is:
         resample to 1 second at 100 samples/sec
 
     Which translates by: the output array must be of shape (n_comp, 101), thus

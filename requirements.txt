@@ -1,5 +1,0 @@
-numpy
-scipy
-mne
-torch
-importlib-resources; python_version<"3.9"

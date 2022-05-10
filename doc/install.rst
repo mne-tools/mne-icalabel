@@ -16,7 +16,7 @@ You may choose to install ``mne-icalabel`` `via conda <#Installation via conda>`
 or Pip.
 
 mne-icalabel works best with the latest stable release of MNE-Python. To ensure
-MNE-Python is up-to-date, see their `installation instructions <https://mne.tools/stable/install/index.html>_`.
+MNE-Python is up-to-date, see their `installation instructions <https://mne.tools/stable/install/index.html>`_.
 
 
 Installation via Conda
@@ -41,6 +41,7 @@ simply run the following at the root of the repository:
 
 .. code-block:: bash
 
+    # with python>=3.7 at least
     python -m venv .venv
     pip install mne-icalabel
 
@@ -60,4 +61,4 @@ error messages:
 Installation via MNE-Installer
 ------------------------------
 Since MNE v1.0, there is now a standalone MNE installer, which can also optionally install
-MNE-ICALabel! See `MNE page <https://mne.tools/stable/install/installers.html>_` for more information.
+MNE-ICALabel! See `MNE page <https://mne.tools/stable/install/installers.html>`_ for more information.

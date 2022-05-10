@@ -195,7 +195,6 @@ def _mergepoints2D(
 
 def _mergesimpts(data: ArrayLike, tols: List[ArrayLike], mode: str = "average") -> ArrayLike:
     """
-
     Args:
         data (np.array): [description]
         tols (list[np.array, np.array, np.array]): [description]

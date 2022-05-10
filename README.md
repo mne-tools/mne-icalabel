@@ -50,10 +50,10 @@ To get the latest code using [git](https://git-scm.com/), open a terminal and ty
 
 or one can install directly using pip
 
-    pip install --user -U https://api.github.com/repos/mne-tools/mne-icalabel/zipball/main
+    pip install https://api.github.com/repos/mne-tools/mne-icalabel/zipball/main
 
 Alternatively, you can also download a
-`zip file of the latest development version <https://github.com/mne-tools/mne-icalabel/archive/main.zip>`_.
+[zip file of the latest development version](https://github.com/mne-tools/mne-icalabel/archive/main.zip).
 
 # Contributing
 

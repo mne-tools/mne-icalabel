@@ -4,7 +4,7 @@ from mne import create_info
 from mne.datasets import sample
 from mne.io import RawArray, read_raw
 from mne.preprocessing import ICA
-from mne.utils._logging import logger
+from mne.utils import logger
 
 from mne_icalabel.iclabel import iclabel_label_components
 

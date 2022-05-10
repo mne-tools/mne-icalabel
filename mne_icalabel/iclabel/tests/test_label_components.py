@@ -4,7 +4,6 @@ from mne import create_info
 from mne.datasets import sample
 from mne.io import RawArray, read_raw
 from mne.preprocessing import ICA
-from mne.utils._logging import logger
 
 from mne_icalabel.iclabel import iclabel_label_components
 
@@ -18,8 +17,6 @@ raw.set_eeg_reference("average")
 # fit ICA
 ica = ICA(n_components=5, method="picard")
 ica.fit(raw)
-
-logger.propagate = True
 
 
 @pytest.mark.filterwarnings("ignore::RuntimeWarning")

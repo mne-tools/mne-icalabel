@@ -23,7 +23,7 @@ simply run the following at the root of the repository:
 
 .. code-block:: bash
 
-   # with python>=3.8 at least
+   # with python>=3.7 at least
    conda create -n mne
    conda activate mne
    conda install -c conda-forge mne-icalabel

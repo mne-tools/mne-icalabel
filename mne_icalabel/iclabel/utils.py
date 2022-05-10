@@ -205,7 +205,9 @@ def _mergepoints2D(
     return x, y, v
 
 
-def _mergesimpts(data: ArrayLike, tols: List[ArrayLike], mode: str = "average") -> ArrayLike:  # noqa
+def _mergesimpts(
+    data: ArrayLike, tols: List[ArrayLike], mode: str = "average"
+) -> ArrayLike:  # noqa
     """
     Parameters
     ----------

@@ -41,6 +41,7 @@ simply run the following at the root of the repository:
 
 .. code-block:: bash
 
+    # with python>=3.7 at least
     python -m venv .venv
     pip install mne-icalabel
 

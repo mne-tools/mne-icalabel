@@ -18,18 +18,18 @@ jobs:
       fail-fast: false
       matrix:
         os: [ ubuntu-latest ]
-        python-version: [ '3.10' ]
+        python-version: [ "3.10" ]
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v1
         with:
           python-version: ${{ matrix.python-version }}
+      # install only the dependencies required for style
       - name: Install pip
         run: |
-          pip install --upgrade pip
-          pip install --upgrade --upgrade-strategy eager -r requirements.txt
-          pip install --upgrade --upgrade-strategy eager -r requirements_testing.txt
+          pip install --upgrade --progress-bar off pip setuptools wheel
+          pip install --upgrade --upgrade-strategy eager --progress-bar off black check-manifest codespell flake8 flake8-array-spacing isort mypy pydocstyle
       - name: Run style & documentation tests
         run: make run-checks
 
@@ -40,7 +40,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ ubuntu-latest, macos-latest ]
-        python-version: [ 3.8, 3.9, '3.10' ]
+        python-version: [ 3.7, 3.8, 3.9, "3.10" ]
     steps:
       - uses: actions/checkout@v2
 
@@ -51,8 +51,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install --upgrade --upgrade-strategy eager -r requirements.txt
-          pip install --upgrade --upgrade-strategy eager -r requirements_testing.txt
+          pip install --upgrade --progress-bar off pip setuptools wheel
 
       # build with sdist directly
       - uses: actions/checkout@v2
@@ -92,20 +91,14 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-        python-version: ["3.7", "3.10"]  # Oldest and newest supported versions
-        mne-version: [mne-stable]
+        python-version: [ 3.7, "3.10" ]  # oldest and newest supported versions
+        mne-version: [mne-stable, mne-main]
 
         include:
           - os: ubuntu-latest
             python-version: 3.8
             mne-version: mne-main
           - os: ubuntu-latest
-            python-version: 3.9
-            mne-version: mne-main
-          - os: ubuntu-latest
-            python-version: '3.10'
-            mne-version: mne-main
-          - os: macos-latest
             python-version: 3.9
             mne-version: mne-main
 
@@ -125,21 +118,25 @@ jobs:
 
       - uses: actions/checkout@v2
 
+      - name: Install mne-icalabel
+        run: |
+          pip install --upgrade --progress-bar off pip setuptools wheel
+          pip install --progress-bar off .
+
       - name: Install dependencies
         run: |
-          pip install --upgrade --upgrade-strategy eager -r requirements.txt
-          pip install --upgrade --upgrade-strategy eager -r requirements_testing.txt
+          pip install --upgrade --upgrade-strategy eager --progress-bar off -r requirements_testing.txt
 
       - name: Install MNE (main)
         if: "matrix.mne-version == 'mne-main'"
         run: |
           git clone --depth 1 https://github.com/mne-tools/mne-python.git -b main
-          pip install -e ./mne-python
+          pip install --force-reinstall --progress-bar off ./mne-python
 
       - name: Install MNE (stable)
         if: "matrix.mne-version == 'mne-stable'"
         run: |
-          pip install --upgrade mne
+          pip install --force-reinstall --progress-bar off mne
 
       - name: Display versions and environment information
         run: |
@@ -148,18 +145,14 @@ jobs:
           python --version
           which python
 
-      - name: Install mne-icalabel
-        run: |
-          pip install --no-deps .
-
-      - shell: bash -el {0}
+      - name: 'Show infos'
+        shell: bash -el {0}
         run: mne sys_info
-        name: 'Show infos'
 
       - name: Run pytest
+        shell: bash
         run: |
           python -m pytest ./mne_icalabel --cov=mne_icalabel --cov-report=xml --cov-config=setup.cfg --verbose --ignore mne-python
-        shell: bash
 
       - name: Upload coverage stats to codecov
         if: "matrix.os == 'ubuntu-latest'"
@@ -178,11 +171,11 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v3
         with:
-          python-version: '3.10'
+          python-version: "3.10"
 
       - name: Install requirements
         run: |
-          pip install --upgrade pip setuptools wheel twine
+          pip install --upgrade --progress-bar off pip setuptools wheel twine
 
       - name: Prepare environment
         run: |

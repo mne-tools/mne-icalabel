@@ -89,7 +89,7 @@ def _retrieve_eeglab_icawinv(
     ica: ICA,
 ) -> Tuple[NDArray[float], NDArray[float]]:
     """
-    Retrieves 'icawinv' from an MNE ICA instance.
+    Retrieve 'icawinv' from an MNE ICA instance.
 
     Parameters
     ----------
@@ -170,8 +170,7 @@ def _eeg_topoplot(inst: Union[BaseRaw, BaseEpochs], icawinv: NDArray[float]) -> 
 
 
 def _topoplotFast(values: NDArray[float], rd: NDArray[float], th: NDArray[float]) -> NDArray[float]:
-    """Implements topoplotFast.m from MATLAB. Each topographic map is a 32x32
-    images."""
+    """Implement topoplotFast.m from MATLAB. Each topographic map is a 32x32 images."""
     # constants
     GRID_SCALE = 32  # number of pixels
     rmax = 0.5  # actual head radius
@@ -239,8 +238,7 @@ def _eeg_rpsd_constants(
     inst: Union[BaseRaw, BaseEpochs],
     ica: ICA,
 ) -> Tuple[int, int, int, int, NDArray[int], NDArray[float], NDArray[int]]:
-    """Computes the constants before ``randperm`` is used to compute the
-    subset."""
+    """Compute the constants before ``randperm`` is used to compute the subset."""
     # in MATLAB, 'pct_data' variable is never provided and is always initialized
     # to 100. 'pct_data' is only used in a division by 100.. and thus has no
     # impact and is omitted here.
@@ -319,8 +317,7 @@ def _eeg_rpsd_compute_psdmed(
 def _eeg_rpsd_format(
     psd: NDArray[float],
 ) -> NDArray[float]:
-    """Apply the formatting steps after 'eeg_rpsd.m' from the MATLAB feature
-    extraction."""
+    """Apply the formatting steps after 'eeg_rpsd.m' from the MATLAB feature extraction."""
     # extrapolate or prune as needed
     nfreq = psd.shape[1]
     if nfreq < 100:
@@ -355,9 +352,10 @@ def _eeg_rpsd_format(
 
 
 def _eeg_autocorr_welch(raw: BaseRaw, ica: ICA, icaact: NDArray[float]) -> NDArray[float]:
-    """Autocorrelation feature applied on raw object with at least 5 * fs
-    samples (5 seconds).
-    MATLAB: 'eeg_autocorr_welch.m'."""
+    """Autocorrelation feature applied on raw object with at least 5 * fs samples (5 seconds).
+
+    MATLAB: 'eeg_autocorr_welch.m'.
+    """
     assert isinstance(raw, BaseRaw)  # sanity-check
 
     # in MATLAB, 'pct_data' variable is never provided and is always initialized
@@ -431,9 +429,10 @@ def _eeg_autocorr_welch(raw: BaseRaw, ica: ICA, icaact: NDArray[float]) -> NDArr
 
 
 def _eeg_autocorr(raw: BaseRaw, ica: ICA, icaact: NDArray[float]) -> NDArray[float]:
-    """Autocorrelation feature applied on raw object that do not have enough
-    sampes for eeg_autocorr_welch.
-    MATLAB: 'eeg_autocorr.m'."""
+    """Autocorrelation feature applied on raw object that do not have enough sampes for eeg_autocorr_welch.
+
+    MATLAB: 'eeg_autocorr.m'.
+    """
     assert isinstance(raw, BaseRaw)  # sanity-check
 
     # in MATLAB, 'pct_data' variable is neither provided or used, thus it is
@@ -466,7 +465,9 @@ def _eeg_autocorr(raw: BaseRaw, ica: ICA, icaact: NDArray[float]) -> NDArray[flo
 
 def _eeg_autocorr_fftw(epochs: BaseEpochs, ica: ICA, icaact: NDArray[float]) -> NDArray[float]:
     """Autocorrelation feature applied on epoch object.
-    MATLAB: 'eeg_autocorr_fftw.m'."""
+
+    MATLAB: 'eeg_autocorr_fftw.m'.
+    """
     assert isinstance(epochs, BaseEpochs)  # sanity-check
 
     # in MATLAB, 'pct_data' variable is neither provided or used, thus it is
@@ -496,8 +497,9 @@ def _eeg_autocorr_fftw(epochs: BaseEpochs, ica: ICA, icaact: NDArray[float]) -> 
 
 
 def _resample(ac: NDArray[float], fs: Union[int, float]) -> NDArray[float]:
-    """Resample the autocorrelation feature. The comment in EEGLAB is:
+    """Resample the autocorrelation feature.
 
+    The comment in EEGLAB is:
         resample to 1 second at 100 samples/sec
 
     Which translates by: the output array must be of shape (n_comp, 101), thus

@@ -72,7 +72,6 @@ jobs:
                 git pull --ff-only upstream "refs/pull/$(cat merge.txt)/merge";
               fi
 
-        # make sure pandoc is on the system
         - run:
             name: Install relevant dependencies
             command: |
@@ -86,14 +85,13 @@ jobs:
         - restore_cache:
             keys:
               - user-install-bin-cachev1
-              
+
         - run:
             name: Get Python running and install dependencies
             command: |
-              pip install --upgrade --progress-bar off -r requirements.txt
+              pip install --progress-bar off .
               pip install --upgrade --progress-bar off -r requirements_testing.txt
               pip install --upgrade --progress-bar off -r requirements_doc.txt
-              pip install -e .
 
         - save_cache:
             key: pip-cache
@@ -132,7 +130,6 @@ jobs:
         - store_artifacts:
             path: doc/_build/test-results
             destination: test-results
-            
 
         # Save the SG RST
         - store_artifacts:
@@ -149,13 +146,6 @@ jobs:
             root: doc/_build
             paths:
               - html
-
-        # Keep these separate, maybe better in terms of size limitations (?)
-        # - save_cache:
-        #     key: data-cache-sample
-        #     paths:
-        #       - ~/.mne
-        #       - ~/mne_data/MNE-sample-data
 
     linkcheck:
       # there are a few files excluded from this for expediency, see Makefile
@@ -265,4 +255,3 @@ workflows:
             branches:
               only:
                 - main
-

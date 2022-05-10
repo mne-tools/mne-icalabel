@@ -28,9 +28,7 @@ def _mne_to_eeglab_locs(raw: BaseRaw) -> Tuple[NDArray[float], NDArray[float]]:
     """
 
     def _sph2topo(_theta, _phi):
-        """
-        Convert spherical coordinates to topo.
-        """
+        """Convert spherical coordinates to topo."""
         az = _phi
         horiz = _theta
         angle = -1 * horiz
@@ -38,9 +36,7 @@ def _mne_to_eeglab_locs(raw: BaseRaw) -> Tuple[NDArray[float], NDArray[float]]:
         return angle, radius
 
     def _cart2sph(_x, _y, _z):
-        """
-        Convert cartesian coordinates to spherical.
-        """
+        """Convert cartesian coordinates to spherical."""
         azimuth = np.arctan2(_y, _x)
         elevation = np.arctan2(_z, np.sqrt(_x**2 + _y**2))
         r = np.sqrt(_x**2 + _y**2 + _z**2)
@@ -78,12 +74,14 @@ def _mne_to_eeglab_locs(raw: BaseRaw) -> Tuple[NDArray[float], NDArray[float]]:
 
 
 def _pol2cart(theta: NDArray[float], rho: NDArray[float]) -> Tuple[NDArray[float], NDArray[float]]:
-    """
-    Converts polar coordinates to cartesian coordinates.
+    """Convert polar coordinates to cartesian coordinates.
 
-    Args:
-        theta (np.array): angle
-        rho (np.array): magnitude
+    Parameters
+    ----------
+    theta : array
+        angle
+    rho : array
+        magnitude
     """
     x = rho * np.cos(theta)
     y = rho * np.sin(theta)
@@ -100,8 +98,26 @@ def _next_power_of_2(x) -> int:
 def _gdatav4(
     x: ArrayLike, y: ArrayLike, v: ArrayLike, xq: ArrayLike, yq: ArrayLike
 ) -> Tuple[ArrayLike, ArrayLike, ArrayLike]:
-    """
-    GDATAV4 MATLAB 4 GRIDDATA interpolation
+    """GDATAV4 MATLAB 4 GRIDDATA interpolation.
+
+    Parameters
+    ----------
+    x : array
+        x-coordinates
+    y : array
+        y-coordinates
+    v : array
+        values
+    xq : array
+        x-grid
+    yq : array
+        y-grid
+
+    Returns
+    -------
+    xq : array
+    yq : array
+    vq : array
 
     Reference
     ---------
@@ -109,16 +125,6 @@ def _gdatav4(
     altimeter data, Geophysical Research Letters, 2, 139-142, 1987.
 
     Describes interpolation using value of gradient of value in any dimension.
-
-    Args:
-        x (np.array): x-coordinates
-        y (np.array): y-coordinates
-        v (np.array): values
-        xq (np.array): x-grid
-        yq (np.array): y-grid
-
-    Returns:
-        tuple[np.array, np.array, np.array]: tuple of Xi, Yi, Zi
     """
     x, y, v = _mergepoints2D(x, y, v)
 
@@ -150,16 +156,22 @@ def _gdatav4(
 def _mergepoints2D(
     x: ArrayLike, y: ArrayLike, v: ArrayLike
 ) -> Tuple[ArrayLike, ArrayLike, ArrayLike]:
-    """
-    Averages values for points that are close to each other.
+    """Averages values for points that are close to each other.
 
-    Args:
-        x (np.array): x-coordinates
-        y (np.array): y-coordinates
-        v (np.array): values
+    Parameters
+    ----------
+    x : array
+        x-coordinates
+    y : array
+        y-coordinates
+    v : array
+        values
 
-    Returns:
-        tuple[np.array, np.array, np.array]: [description]
+    Returns
+    -------
+    x : array
+    y : array
+    v : array
     """
     # Sort x and y so duplicate points can be averaged
     # Need x,y and z to be column vectors
@@ -193,16 +205,19 @@ def _mergepoints2D(
     return x, y, v
 
 
-def _mergesimpts(data: ArrayLike, tols: List[ArrayLike], mode: str = "average") -> ArrayLike:
+def _mergesimpts(
+    data: ArrayLike, tols: List[ArrayLike], mode: str = "average"
+) -> ArrayLike:  # noqa
     """
+    Parameters
+    ----------
+        data : array
+        tols : list of 3 arrays
+        mode : str
 
-    Args:
-        data (np.array): [description]
-        tols (list[np.array, np.array, np.array]): [description]
-        mode (str, optional): [description]. Defaults to 'average'.
-
-    Returns:
-        np.array: [description]
+    Returns
+    -------
+        array
     """
     data_ = data.copy()[np.argsort(data[:, 0])]
     newdata = []

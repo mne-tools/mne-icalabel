@@ -7,11 +7,11 @@ Dependencies
 ------------
 
 * ``mne`` (>=1.0)
-* ``numpy`` (>=1.14)
-* ``scipy`` (>=1.5.0)
+* ``numpy`` (>=1.16)
+* ``scipy`` (>=1.2.0)
 * ``torch`` (for running pytorch neural networks)
 
-We require that you use Python 3.8 or higher.
+We require that you use Python 3.7 or higher.
 You may choose to install ``mne-icalabel`` `via pip <#Installation via pip>`_,
 or conda.
 

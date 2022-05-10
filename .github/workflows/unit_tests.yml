@@ -137,7 +137,7 @@ jobs:
         if: "matrix.mne-version == 'mne-main'"
         run: |
           git clone --depth 1 https://github.com/mne-tools/mne-python.git -b main
-          pip install -e --force-reinstall --progress-bar off ./mne-python
+          pip install --force-reinstall --progress-bar off ./mne-python
 
       - name: Install MNE (stable)
         if: "matrix.mne-version == 'mne-stable'"

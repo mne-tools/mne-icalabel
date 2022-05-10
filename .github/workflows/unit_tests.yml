@@ -18,7 +18,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ ubuntu-latest ]
-        python-version: [ '3.10' ]
+        python-version: [ "3.10" ]
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python ${{ matrix.python-version }}
@@ -40,7 +40,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ ubuntu-latest, macos-latest ]
-        python-version: [ 3.7, 3.8, 3.9, 3.10 ]
+        python-version: [ 3.7, 3.8, 3.9, "3.10" ]
     steps:
       - uses: actions/checkout@v2
 
@@ -91,7 +91,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-        python-version: [ 3.7, 3.10 ]  # oldest and newest supported versions
+        python-version: [ 3.7, "3.10" ]  # oldest and newest supported versions
         mne-version: [mne-stable, mne-main]
 
         include:
@@ -171,7 +171,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v3
         with:
-          python-version: '3.10'
+          python-version: "3.10"
 
       - name: Install requirements
         run: |

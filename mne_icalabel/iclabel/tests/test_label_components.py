@@ -29,33 +29,33 @@ def test_label_components():
 def test_warnings():
     """Test warnings issued when the raw|epochs|ica instance are not using the
     same algorithm/reference/filters as ICLabel."""
-    data = np.random.randint(low=1, high=10, size=(3, 5000))
-    raw = RawArray(data, create_info(["Fpz", "CPz", "Oz"], sfreq=500, ch_types="eeg"))
+    data = np.random.randint(low=1, high=10, size=(6, 10000)) / 1000
+    raw = RawArray(data, create_info(["Fpz", "CPz", "Oz", "Fp1", "Fp2", "Cz"], sfreq=500, ch_types="eeg"))
     raw.set_montage("standard_1020")
     raw.filter(1.0, None)
 
     # wrong raw, correct ica
-    ica = ICA(n_components=3, method="infomax", fit_params=dict(extended=True))
+    ica = ICA(n_components=4, method="infomax", fit_params=dict(extended=True))
     ica.fit(raw)
-    with pytest.warns(RuntimeWarning, match="common average reference"), pytest.warns(
-        RuntimeWarning, match="not filtered between 1 and 100 Hz"
-    ):
+    with pytest.warns(RuntimeWarning, match="common average reference"):
+        iclabel_label_components(raw, ica)
+    with pytest.warns(RuntimeWarning, match="not filtered between 1 and 100 Hz"):
         iclabel_label_components(raw, ica)
 
     raw.filter(1.0, 100.0)
     raw.set_eeg_reference("average")
     # infomax
-    ica = ICA(n_components=3, method="infomax", fit_params=dict(extended=False))
+    ica = ICA(n_components=4, method="infomax", fit_params=dict(extended=False))
     ica.fit(raw)
     with pytest.warns(RuntimeWarning, match="designed with extended infomax ICA"):
         iclabel_label_components(raw, ica)
     # fastica
-    ica = ICA(n_components=3)
+    ica = ICA(n_components=4)
     ica.fit(raw)
     with pytest.warns(RuntimeWarning, match="designed with extended infomax ICA"):
         iclabel_label_components(raw, ica)
     # picard
-    ica = ICA(n_components=3, method="picard")
+    ica = ICA(n_components=4, method="picard")
     ica.fit(raw)
     with pytest.warns(RuntimeWarning, match="designed with extended infomax ICA"):
         iclabel_label_components(raw, ica)

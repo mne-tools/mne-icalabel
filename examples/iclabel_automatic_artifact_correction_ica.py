@@ -164,7 +164,7 @@ ica.plot_sources(raw, show_scrollbars=False)
 # .. _`this EEGLAB tutorial`: https://labeling.ucsd.edu/tutorial/labels
 
 
-# sphinx_gallery_thumbnail_number = 1
+# sphinx_gallery_thumbnail_number = 0
 ica.plot_components()
 
 # blinks

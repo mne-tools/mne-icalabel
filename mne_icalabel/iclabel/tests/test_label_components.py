@@ -52,7 +52,7 @@ def test_warnings():
     with pytest.warns(RuntimeWarning, match="designed with extended infomax ICA"):
         iclabel_label_components(raw, ica)
     # fastica
-    ica = ICA(n_components=4)
+    ica = ICA(n_components=4, tol=1e-2)
     ica.fit(raw)
     with pytest.warns(RuntimeWarning, match="designed with extended infomax ICA"):
         iclabel_label_components(raw, ica)

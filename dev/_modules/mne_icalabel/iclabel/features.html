@@ -246,6 +246,19 @@
             <span class="s2">&quot;bandpass filtered between 1 and 100 Hz (see the &#39;filter()&#39; method for Raw &quot;</span>
             <span class="s2">&quot;and Epochs instances).&quot;</span>
         <span class="p">)</span>
+    <span class="c1"># confirm that the ICA uses an infomax extended</span>
+    <span class="n">method_</span> <span class="o">=</span> <span class="n">ica</span><span class="o">.</span><span class="n">method</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;infomax&quot;</span><span class="p">,</span> <span class="s2">&quot;picard&quot;</span><span class="p">)</span>
+    <span class="n">extended_</span> <span class="o">=</span> <span class="s2">&quot;extended&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ica</span><span class="o">.</span><span class="n">fit_params</span> <span class="ow">or</span> <span class="n">ica</span><span class="o">.</span><span class="n">fit_params</span><span class="p">[</span><span class="s2">&quot;extended&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">False</span>
+    <span class="n">ortho_</span> <span class="o">=</span> <span class="s2">&quot;ortho&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ica</span><span class="o">.</span><span class="n">fit_params</span> <span class="ow">or</span> <span class="n">ica</span><span class="o">.</span><span class="n">fit_params</span><span class="p">[</span><span class="s2">&quot;ortho&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">True</span>
+    <span class="n">ortho_</span> <span class="o">=</span> <span class="n">ortho_</span> <span class="k">if</span> <span class="n">ica</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;picard&quot;</span> <span class="k">else</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="nb">any</span><span class="p">((</span><span class="n">method_</span><span class="p">,</span> <span class="n">extended_</span><span class="p">,</span> <span class="n">ortho_</span><span class="p">)):</span>
+        <span class="n">warn</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;The provided ICA instance was fitted with a &#39;</span><span class="si">{</span><span class="n">ica</span><span class="o">.</span><span class="n">method</span><span class="si">}</span><span class="s2">&#39; algorithm. &quot;</span>
+            <span class="s2">&quot;ICLabel was designed with extended infomax ICA decompositions. To use the &quot;</span>
+            <span class="s2">&quot;extended infomax algorithm, use the &#39;mne.preprocessing.ICA&#39; instance with the &quot;</span>
+            <span class="s2">&quot;arguments &#39;ICA(method=&#39;infomax&#39;, fit_params=dict(extended=True))&#39; (scikit-learn) or &quot;</span>
+            <span class="s2">&quot;&#39;ICA(method=&#39;picard&#39;, fit_params=dict(ortho=False, extended=True))&#39; (python-picard).&quot;</span>
+        <span class="p">)</span>
 
     <span class="n">icawinv</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_retrieve_eeglab_icawinv</span><span class="p">(</span><span class="n">ica</span><span class="p">)</span>
     <span class="n">icaact</span> <span class="o">=</span> <span class="n">_compute_ica_activations</span><span class="p">(</span><span class="n">inst</span><span class="p">,</span> <span class="n">ica</span><span class="p">)</span>
@@ -729,7 +742,7 @@
     
     <div class="footer-item">
       <p class="copyright">
-    &copy; Copyright 2021-2022, MNE Developers. Last updated on 2022-05-10.<br>
+    &copy; Copyright 2021-2022, MNE Developers. Last updated on 2022-05-11.<br>
 </p>
     </div>
     

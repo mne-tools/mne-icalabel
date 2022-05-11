@@ -15,7 +15,7 @@ raw.load_data()
 raw.filter(l_freq=1.0, h_freq=100.0)
 raw.set_eeg_reference("average")
 # fit ICA
-ica = ICA(n_components=5, method="picard")
+ica = ICA(n_components=5, method="picard", random_state=101)
 ica.fit(raw)
 
 
@@ -37,7 +37,7 @@ def test_warnings():
     raw.filter(1.0, None)
 
     # wrong raw, correct ica
-    ica = ICA(n_components=4, method="infomax", fit_params=dict(extended=True))
+    ica = ICA(n_components=4, method="infomax", fit_params=dict(extended=True), random_state=101)
     ica.fit(raw)
     with pytest.warns(RuntimeWarning, match="common average reference"):
         iclabel_label_components(raw, ica)
@@ -47,17 +47,17 @@ def test_warnings():
     raw.filter(1.0, 100.0)
     raw.set_eeg_reference("average")
     # infomax
-    ica = ICA(n_components=4, method="infomax", fit_params=dict(extended=False))
+    ica = ICA(n_components=4, method="infomax", fit_params=dict(extended=False), random_state=101)
     ica.fit(raw)
     with pytest.warns(RuntimeWarning, match="designed with extended infomax ICA"):
         iclabel_label_components(raw, ica)
     # fastica
-    ica = ICA(n_components=4, tol=1e-2)
+    ica = ICA(n_components=4, fit_params=dict(tol=1e-2), random_state=101)
     ica.fit(raw)
     with pytest.warns(RuntimeWarning, match="designed with extended infomax ICA"):
         iclabel_label_components(raw, ica)
     # picard
-    ica = ICA(n_components=4, method="picard")
+    ica = ICA(n_components=4, method="picard", random_state=101)
     ica.fit(raw)
     with pytest.warns(RuntimeWarning, match="designed with extended infomax ICA"):
         iclabel_label_components(raw, ica)

@@ -30,7 +30,9 @@ def test_warnings():
     """Test warnings issued when the raw|epochs|ica instance are not using the
     same algorithm/reference/filters as ICLabel."""
     data = np.random.randint(low=1, high=10, size=(6, 10000)) / 1000
-    raw = RawArray(data, create_info(["Fpz", "CPz", "Oz", "Fp1", "Fp2", "Cz"], sfreq=500, ch_types="eeg"))
+    raw = RawArray(
+        data, create_info(["Fpz", "CPz", "Oz", "Fp1", "Fp2", "Cz"], sfreq=500, ch_types="eeg")
+    )
     raw.set_montage("standard_1020")
     raw.filter(1.0, None)
 

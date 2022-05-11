@@ -29,7 +29,8 @@ Enhancements
 Bug
 ~~~
 
-- Fix shape of ``'y_pred_proba'`` output from `mne_icalabel.label_components`
+- Fix shape of ``'y_pred_proba'`` output from `mne_icalabel.label_components` (:gh:`36`)
+- Add a warning if the ICA decomposition provided does not match the expected decomposition by ``ICLabel`` (:gh:`42`)
 
 API
 ~~~

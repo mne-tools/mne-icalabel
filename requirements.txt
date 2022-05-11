@@ -1,4 +1,0 @@
-numpy
-scipy
-mne
-torch

@@ -16,9 +16,7 @@ has_icalabel_testing_data = partial(has_dataset, name="icalabel-testing")
 
 
 @verbose
-def data_path(
-    path=None, force_update=False, update_path=True, download=True, verbose=None
-):  # noqa: D103
+def data_path(path=None, force_update=False, update_path=True, download=True, verbose=None):
     """ICA label testing data generated in conjunction with EEGLab.
 
     Parameters
@@ -46,7 +44,6 @@ def data_path(
     path : str
         Path to dataset directory.
     """
-
     dataset_params = dict(
         archive_name="MNE-testing-icalabel-data.zip",
         hash="md5:1ed3a8e12140ef513db8822b6b0dee09",

@@ -41,7 +41,7 @@ class _ICLabelNetImg(nn.Module):
             self.conv1, self.relu1, self.conv2, self.relu2, self.conv3, self.relu3
         )
 
-    def forward(self, x):
+    def forward(self, x):  # noqa: D102
         return self.sequential(x)
 
 
@@ -77,7 +77,7 @@ class _ICLabelNetPSDS(nn.Module):
             self.conv1, self.relu1, self.conv2, self.relu2, self.conv3, self.relu3
         )
 
-    def forward(self, x):
+    def forward(self, x):  # noqa: D102
         return self.sequential(x)
 
 
@@ -113,7 +113,7 @@ class _ICLabelNetAutocorr(nn.Module):
             self.conv1, self.relu1, self.conv2, self.relu2, self.conv3, self.relu3
         )
 
-    def forward(self, x):
+    def forward(self, x):  # noqa: D102
         return self.sequential(x)
 
 
@@ -139,12 +139,12 @@ class ICLabelNet(nn.Module):
         self.seq = nn.Sequential(self.conv, self.softmax)
 
     @staticmethod
-    def reshape_fortran(x: torch.Tensor, shape) -> torch.Tensor:
+    def reshape_fortran(x: torch.Tensor, shape) -> torch.Tensor:  # noqa: D102
         if len(x.shape) > 0:
             x = x.permute(*reversed(range(len(x.shape))))
-        return x.reshape(*reversed(shape)).permute(*reversed(range(len(shape))))  # noqa
+        return x.reshape(*reversed(shape)).permute(*reversed(range(len(shape))))
 
-    def reshape_concat(self, tensor: torch.Tensor) -> torch.Tensor:
+    def reshape_concat(self, tensor: torch.Tensor) -> torch.Tensor:  # noqa: D102
         tensor = self.reshape_fortran(tensor, [-1, 1, 1, 100])
         tensor = torch.cat([tensor, tensor, tensor, tensor], 1)
         tensor = torch.cat([tensor, tensor, tensor, tensor], 2)
@@ -153,7 +153,7 @@ class ICLabelNet(nn.Module):
 
     def forward(
         self, images: torch.Tensor, psds: torch.Tensor, autocorr: torch.Tensor
-    ) -> torch.Tensor:
+    ) -> torch.Tensor:  # noqa: D102
         out_img = self.img_conv(images)
         out_psds = self.psds_conv(psds)
         out_autocorr = self.autocorr_conv(autocorr)

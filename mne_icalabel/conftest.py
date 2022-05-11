@@ -3,13 +3,9 @@
 #
 # License: BSD-3-Clause
 
-import os
 import warnings
-from unittest import mock
 
-import mne
 import pytest
-from mne.datasets import testing
 
 # most of this adapted from MNE-Python
 
@@ -70,30 +66,3 @@ def close_all():
 
     yield
     plt.close("all")
-
-
-# We can't use monkeypatch because its scope (function-level) conflicts with
-# the requests fixture (module-level), so we live with a module-scoped version
-# that uses mock
-@pytest.fixture(scope="module")
-def options_3d():
-    """Disable advanced 3d rendering."""
-    with mock.patch.dict(
-        os.environ,
-        {
-            "MNE_3D_OPTION_ANTIALIAS": "false",
-            "MNE_3D_OPTION_DEPTH_PEELING": "false",
-            "MNE_3D_OPTION_SMOOTH_SHADING": "false",
-        },
-    ):
-        yield
-
-
-@pytest.fixture
-@testing.requires_testing_data
-def requires_pyvista(options_3d):
-    pyvista = pytest.importorskip("pyvista")
-    pytest.importorskip("pyvistaqt")
-    mne.viz.set_3d_backend("pyvista")
-    yield
-    pyvista.close_all()

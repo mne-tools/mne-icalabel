@@ -1,4 +1,4 @@
-# requirements for running tests (on top of environment.yml/requirements.txt)
+# requirements for running tests
 pytest!=4.6.0
 pytest-cov
 pytest-timeout
@@ -22,4 +22,3 @@ matplotlib
 python-picard
 joblib
 scikit-learn
-pooch

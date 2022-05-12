@@ -32,14 +32,14 @@ def test_warnings():
     times = np.linspace(0, 5, 2000)
     signals = np.array([np.sin(2 * np.pi * k * times) for k in (7, 22, 37, 7, 22, 37)])
     coeffs = np.random.rand(6, 6)
-    data = np.dot(coeffs, signals) + np.random.normal(0, .1, signals.shape)
+    data = np.dot(coeffs, signals) + np.random.normal(0, 0.1, signals.shape)
 
     raw = RawArray(
         data, create_info(["Fpz", "Cz", "CPz", "Oz", "M1", "M2"], sfreq=400, ch_types="eeg")
     )
     raw.set_montage("standard_1020")
     with raw.info._unlock():
-        raw.info['highpass'] = 1.
+        raw.info["highpass"] = 1.0
 
     # wrong raw, correct ica
     ica = ICA(n_components=3, method="infomax", fit_params=dict(extended=True), random_state=101)
@@ -50,7 +50,7 @@ def test_warnings():
         iclabel_label_components(raw, ica)
 
     with raw.info._unlock():
-        raw.info['lowpass'] = 100.
+        raw.info["lowpass"] = 100.0
     raw.set_eeg_reference("average")
     # infomax
     ica = ICA(n_components=3, method="infomax", fit_params=dict(extended=False), random_state=101)

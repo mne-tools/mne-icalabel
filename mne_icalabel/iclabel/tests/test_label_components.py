@@ -30,9 +30,9 @@ def test_warnings():
     """Test warnings issued when the raw|epochs|ica instance are not using the
     same algorithm/reference/filters as ICLabel."""
     times = np.linspace(0, 5, 2000)
-    signals = np.array([np.sin(2 * np.pi * k * times) for k in (7, 22, 37, 7, 22, 37)])
-    coeffs = np.random.rand(6, 6)
-    data = np.dot(coeffs, signals) + np.random.normal(0, 0.1, signals.shape)
+    signals = np.array([np.sin(2 * np.pi * k * times) for k in (7, 22, 37)])
+    coeffs = np.random.rand(6, 3)
+    data = np.dot(coeffs, signals) + np.random.normal(0, 0.1, (coeffs.shape[0], times.size))
 
     raw = RawArray(
         data, create_info(["Fpz", "Cz", "CPz", "Oz", "M1", "M2"], sfreq=400, ch_types="eeg")

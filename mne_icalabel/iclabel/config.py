@@ -7,3 +7,5 @@ ICLABEL_NUMERICAL_TO_STRING = {
     5: "channel noise",
     6: "other",
 }
+
+ICLABEL_STRING_TO_NUMERICAL = {val: key for key, val in ICLABEL_NUMERICAL_TO_STRING.items()}

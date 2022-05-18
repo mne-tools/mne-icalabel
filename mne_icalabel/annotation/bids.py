@@ -51,7 +51,7 @@ def write_channels_tsv(ica: ICA, fname: Union[str, Path]):
     component_json = {
         "annotate_method": "Method used for annotating components (e.g. manual, iclabel)",
         "annotate_author": "The name of the person who ran the annotation",
-        "ic_type": "The type of annotation Must be one of ['brain', "
+        "ic_type": "The type of annotation must be one of ['brain', "
         "'muscle artifact', 'eye blink', 'heart beat', 'line noise', "
         "'channel noise', 'other']",
     }

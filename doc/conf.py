@@ -94,6 +94,7 @@ numpydoc_xref_aliases = {
     # Python
     'file-like': ':term:`file-like <python:file object>`',
     'ArrayLike': ':term:`array_like`',
+    'Path': 'pathlib.Path',
     # Matplotlib
     'colormap': ':doc:`colormap <matplotlib:tutorials/colors/colormaps>`',
     'color': ':doc:`color <matplotlib:api/colors_api>`',

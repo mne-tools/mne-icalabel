@@ -21,14 +21,14 @@ def write_channels_tsv(ica: ICA, fname: Union[str, Path]):
     fname : str | Path
         The output filename.
     """
-    from mne_bids import get_bids_path_from_fname, update_sidecar_json
+    from mne_bids import BIDSPath, get_bids_path_from_fname, update_sidecar_json
     from mne_bids.write import _write_json
 
     pd = _check_pandas_installed(strict=True)
 
     # ensure the filename is a Path object
-    fname = Path(fname)
-    fname = get_bids_path_from_fname(fname)
+    if not isinstance(fname, BIDSPath):
+        fname = get_bids_path_from_fname(fname)
 
     # Create TSV.
     tsv_data = pd.DataFrame(
@@ -43,7 +43,8 @@ def write_channels_tsv(ica: ICA, fname: Union[str, Path]):
             ic_type=["n/a"] * ica.n_components_,
         )
     )
-
+    # make sure parent directories exist
+    fname.mkdir(exist_ok=True)
     tsv_data.to_csv(fname, sep="\t", index=False)
 
     # create an accompanying JSON file describing the corresponding
@@ -55,8 +56,8 @@ def write_channels_tsv(ica: ICA, fname: Union[str, Path]):
         "'muscle artifact', 'eye blink', 'heart beat', 'line noise', "
         "'channel noise', 'other']",
     }
-    fname = fname.update(extension=".json")
-    if not fname.exists():
+    fname = fname.copy().update(extension=".json")
+    if not fname.fpath.exists():
         _write_json(fname, component_json)
     else:
         update_sidecar_json(fname, component_json)
@@ -85,12 +86,20 @@ def mark_component(component: int, fname: Union[str, Path], method: str, label: 
     ValueError
         _description_
     """
-    from mne_bids import get_bids_path_from_fname, mark_channels
+    from mne_bids import BIDSPath, get_bids_path_from_fname, mark_channels
 
     pd = _check_pandas_installed(strict=True)
 
-    bids_path = get_bids_path_from_fname(fname)
+    if not isinstance(fname, BIDSPath):
+        fname = get_bids_path_from_fname(fname)
 
+    # read the file
+    tsv_data = pd.read_csv(fname, sep="\t")
+
+    if component not in tsv_data["component"]:
+        raise ValueError(f"Component {component} not in tsv data of {fname}.")
+
+    # check label is correct
     if label not in ICLABEL_STRING_TO_NUMERICAL.keys():
         raise ValueError(
             f"IC annotated label {label} is not a valid label. "
@@ -109,12 +118,19 @@ def mark_component(component: int, fname: Union[str, Path], method: str, label: 
         description += f"Auto-detected with {method} "
     description += f"{label}"
 
-    mark_channels(
-        bids_path=bids_path, ch_names=str(component), status=status, descriptions=description
-    )
+    # Read sidecar and create required columns if they do not exist.
+    if "status" not in tsv_data:
+        tsv_data["status"] = ["good"] * len(tsv_data["component"])
+    if "status_description" not in tsv_data:
+        tsv_data["status_description"] = ["n/a"] * len(tsv_data["component"])
+    for col in ["annotate_method", "annotate_author", "ic_type"]:
+        if col not in tsv_data.columns:
+            tsv_data[col] = "n/a"
 
     # load in the tsv file and modify specific columns
-    tsv_data = pd.read_csv(bids_path, sep="\t")
-    tsv_data[tsv_data["component"] == component]["annotate_method"] = method
-    tsv_data[tsv_data["component"] == component]["annotate_author"] = author
-    tsv_data[tsv_data["component"] == component]["ic_type"] = label
+    tsv_data.loc[tsv_data["component"] == component, "status"] = status
+    tsv_data.loc[tsv_data["component"] == component, "status_description"] = description
+    tsv_data.loc[tsv_data["component"] == component, "annotate_method"] = method
+    tsv_data.loc[tsv_data["component"] == component, "annotate_author"] = author
+    tsv_data.loc[tsv_data["component"] == component, "ic_type"] = label
+    tsv_data.to_csv(fname, sep="\t")

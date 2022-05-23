@@ -7,7 +7,7 @@ from mne.utils import _check_pandas_installed
 from ..iclabel.config import ICLABEL_STRING_TO_NUMERICAL
 
 
-def write_channels_tsv(ica: ICA, fname: Union[str, Path]):
+def write_component_tsv(ica: ICA, fname):
     """Write channels tsv file for ICA components.
 
     Will create an accompanying JSON sidecar to explain the
@@ -20,6 +20,17 @@ def write_channels_tsv(ica: ICA, fname: Union[str, Path]):
         An instance of the fitted ICA.
     fname : str | Path
         The output filename.
+
+    Notes
+    -----
+    Components are stored in a ``.tsv`` file essentially in the same manner as
+    ``channels.tsv`` files for BIDS-EEG data. For more information, see the
+    `BIDS specification <https://bids-specification.readthedocs.io/en/stable/04-modality-specific-files/03-electroencephalography.html#channels-description-_channelstsv>`_  # noqa
+    for EEG channels metadata.
+
+    Storage of ICA annotations as a ``.tsv`` file is currently experimental in the
+    context of BIDS-EEG Derivatives. The API and functionality is subject to change
+    as the community converges on the specification of BIDS-Derivatives.
     """
     from mne_bids import BIDSPath, get_bids_path_from_fname, update_sidecar_json
     from mne_bids.write import _write_json
@@ -81,12 +92,13 @@ def mark_component(component: int, fname: Union[str, Path], method: str, label: 
     author : str
         The annotating author.
 
-    Raises
-    ------
-    ValueError
-        _description_
+    Notes
+    -----
+    Storage of ICA annotations as a ``.tsv`` file is currently experimental in the
+    context of BIDS-EEG Derivatives. The API and functionality is subject to change
+    as the community converges on the specification of BIDS-Derivatives.
     """
-    from mne_bids import BIDSPath, get_bids_path_from_fname, mark_channels
+    from mne_bids import BIDSPath, get_bids_path_from_fname
 
     pd = _check_pandas_installed(strict=True)
 

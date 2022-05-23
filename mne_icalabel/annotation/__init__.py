@@ -1,1 +1,1 @@
-from .bids import mark_component, write_channels_tsv
+from .bids import mark_component, write_component_tsv

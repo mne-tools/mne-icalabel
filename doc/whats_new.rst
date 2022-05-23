@@ -24,7 +24,7 @@ Version 0.2 (Unreleased)
 Enhancements
 ~~~~~~~~~~~~
 
-- Add functions for annotating and labeling ICA components in BIDS format :func:`mne_icalabel.annotation.write_channels_tsv`, :func:`mne_icalabel.annotation.mark_component` by `Adam Li`_ (:gh:`60`)
+- Add functions for annotating and labeling ICA components in BIDS format :func:`mne_icalabel.annotation.write_components_tsv`, :func:`mne_icalabel.annotation.mark_component` by `Adam Li`_ (:gh:`60`)
 
 Bug
 ~~~

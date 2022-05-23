@@ -57,4 +57,4 @@ derivative standard of BIDS for EEG data.
    :toctree: generated/
 
    mark_component
-   write_channels_tsv
+   write_components_tsv

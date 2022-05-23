@@ -7,7 +7,7 @@ from mne.utils import _check_pandas_installed
 from ..iclabel.config import ICLABEL_STRING_TO_NUMERICAL
 
 
-def write_component_tsv(ica: ICA, fname):
+def write_components_tsv(ica: ICA, fname):
     """Write channels tsv file for ICA components.
 
     Will create an accompanying JSON sidecar to explain the

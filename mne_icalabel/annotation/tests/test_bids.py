@@ -7,7 +7,7 @@ from mne.io import read_raw_edf
 from mne.preprocessing import ICA
 from mne_bids import BIDSPath, write_raw_bids
 
-from mne_icalabel.annotation import mark_component, write_component_tsv
+from mne_icalabel.annotation import mark_component, write_components_tsv
 
 subject_id = "01"
 session_id = "01"
@@ -52,7 +52,7 @@ def test_write_channels_tsv(_ica, _tmp_bids_path):
         suffix="channels",
         extension=".tsv",
     )
-    write_component_tsv(_ica, deriv_fname)
+    write_components_tsv(_ica, deriv_fname)
 
     assert deriv_fname.fpath.exists()
     expected_json = deriv_fname.copy().update(extension=".json")
@@ -75,7 +75,7 @@ def test_mark_components(_ica, _tmp_bids_path):
         suffix="channels",
         extension=".tsv",
     )
-    write_component_tsv(_ica, deriv_fname)
+    write_components_tsv(_ica, deriv_fname)
 
     # mark components
     with pytest.raises(ValueError, match="not a valid label"):

@@ -55,7 +55,7 @@ The developer team is excited to improve the state of the art in data handling a
 
 # Acknowledgements
 
-``MNE-ICALabel`` development is partly supported by
+`MNE-ICALabel` development is partly supported by
 the National Science Foundation under Grant # 2030859 to the Computing Research Association for the CIFellows Project and by the Human Neuroscience Platform, Fondation Campus Biotech Geneva, Geneva, Switzerland.
 
 We acknowledge the work of [@iclabel2019], which was originally produced in MATLAB in the popular EEGLab package.

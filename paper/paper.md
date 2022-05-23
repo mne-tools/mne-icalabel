@@ -51,7 +51,7 @@ ICLabel was a proposed statistical model that uses neural networks and a crowdso
 
 MNE-Python is a general-purpose electrophysiology analysis package in Python that has a large core group of developers. Integration into MNE makes it likely that MNE-ICALabel will be maintained and continue to be improved. MNE-Python also has stability due to the funding it receives directly for development from institutions such as National Institutes of Health, the Chan Zuckerberg open-source initiative, the European Research Council and Agence Nationale de la Recherche in France.
 
-The developer team is excited to improve the state of the art in data handling and looking forward to welcoming new contributors and users.
+The developer team is excited to improve the state of the art in data handling for ICA preprocessing and looking forward to welcoming new contributors and users from the broader MNE, neuroscience and electrophysiology community.
 
 # Acknowledgements
 

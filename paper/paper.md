@@ -18,6 +18,9 @@ authors:
   - affiliation: 3
     name: Anand Prakash Saini
     orcid: 0000-0003-3595-5969
+  - affiliation: 6
+    name: Richard Höchenberger
+    orcid: 0000-0002-0380-4798
   - affiliation: 3, 4, 5
     name: Mathieu Scheltienne
     orcid: 0000-0001-8316-7436 
@@ -28,11 +31,13 @@ affiliations:
   name: Department of Biomedical Engineering, Johns Hopkins University, Baltimore, United States
 - index: 3
   name: Human Neuroscience Platform, Fondation Campus Biotech Geneva, Geneva, Switzerland
-- index 4
+- index: 4
   name: Institute of Bioengineering, Center for Neuroprosthetics, EPFL, Geneva, Switzerland
-- index 5
+- index: 5
   name: Department of Radiology and Medical Informatics, University of Geneva (UNIGE),
 Geneva, Switzerland
+- index: 10
+  name: Institute of Neuroscience and Medicine (INM-3), Research Center Jülich, Germany
 date: 18 May 2022
 bibliography: paper.bib
 ---

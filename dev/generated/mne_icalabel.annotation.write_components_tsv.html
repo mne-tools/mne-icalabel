@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Computation times &#8212; MNE-ICALabel 0.2dev0 documentation</title>
+    <title>mne_icalabel.annotation.write_components_tsv &#8212; MNE-ICALabel 0.2dev0 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -39,6 +39,8 @@
     <script src="../_static/copybutton.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Examples" href="../auto_examples/index.html" />
+    <link rel="prev" title="mne_icalabel.annotation.mark_component" href="mne_icalabel.annotation.mark_component.html" />
     <link rel="canonical" href="https://mne.tools/mne-icalabel/stable/index.html" />
     <script type="text/javascript" src="../_static/copybutton.js"></script>
     <script type="text/javascript" src="../_static/scrollfix.js"></script>
@@ -90,14 +92,14 @@
  </a>
 </li>
 
-<li class="toctree-l1 nav-item">
+<li class="toctree-l1 current active nav-item">
  <a class="reference internal nav-link" href="../api.html">
   API
  </a>
 </li>
 
 <li class="toctree-l1 nav-item">
- <a class="reference internal nav-link" href="index.html">
+ <a class="reference internal nav-link" href="../auto_examples/index.html">
   Examples
  </a>
 </li>
@@ -162,7 +164,38 @@
   <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
 </form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
   <div class="bd-toc-item active">
-    
+    <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="mne_icalabel.label_components.html">
+   mne_icalabel.label_components
+  </a>
+ </li>
+</ul>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="mne_icalabel.iclabel.get_iclabel_features.html">
+   mne_icalabel.iclabel.get_iclabel_features
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="mne_icalabel.iclabel.run_iclabel.html">
+   mne_icalabel.iclabel.run_iclabel
+  </a>
+ </li>
+</ul>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="mne_icalabel.annotation.mark_component.html">
+   mne_icalabel.annotation.mark_component
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   mne_icalabel.annotation.write_components_tsv
+  </a>
+ </li>
+</ul>
+
   </div>
 </nav>
               </div>
@@ -200,23 +233,38 @@
               
               <div>
                 
-  <section id="computation-times">
-<span id="sphx-glr-auto-examples-sg-execution-times"></span><h1>Computation times<a class="headerlink" href="#computation-times" title="Permalink to this headline">#</a></h1>
-<p><strong>00:51.003</strong> total execution time for <strong>auto_examples</strong> files:</p>
-<table class="table">
-<colgroup>
-<col style="width: 87%" />
-<col style="width: 8%" />
-<col style="width: 5%" />
-</colgroup>
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="iclabel_automatic_artifact_correction_ica.html#sphx-glr-auto-examples-iclabel-automatic-artifact-correction-ica-py"><span class="std std-ref">Repairing artifacts with ICA automatically using ICLabel Model</span></a> (<code class="docutils literal notranslate"><span class="pre">iclabel_automatic_artifact_correction_ica.py</span></code>)</p></td>
-<td><p>00:51.003</p></td>
-<td><p>0.0 MB</p></td>
-</tr>
-</tbody>
-</table>
-</section>
+  <section id="mne-icalabel-annotation-write-components-tsv">
+<h1>mne_icalabel.annotation.write_components_tsv<a class="headerlink" href="#mne-icalabel-annotation-write-components-tsv" title="Permalink to this headline">#</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="mne_icalabel.annotation.write_components_tsv">
+<span class="sig-prename descclassname"><span class="pre">mne_icalabel.annotation.</span></span><span class="sig-name descname"><span class="pre">write_components_tsv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ica</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fname</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mne_icalabel/annotation/bids.html#write_components_tsv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mne_icalabel.annotation.write_components_tsv" title="Permalink to this definition">#</a></dt>
+<dd><p>Write channels tsv file for ICA components.</p>
+<p>Will create an accompanying JSON sidecar to explain the
+additional columns created in the channels tsv file for the
+ICA component labeling.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>ica</strong> : <a class="reference external" href="https://mne.tools/dev/generated/mne.preprocessing.ICA.html#mne.preprocessing.ICA" title="(in MNE v1.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ICA</span></code></a></p>
+<blockquote>
+<div><p>An instance of the fitted ICA.</p>
+</div></blockquote>
+<p><strong>fname</strong> : <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a> | <a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.10)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Path</span></code></a></p>
+<blockquote>
+<div><p>The output filename.</p>
+</div></blockquote>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Components are stored in a <code class="docutils literal notranslate"><span class="pre">.tsv</span></code> file essentially in the same manner as
+<code class="docutils literal notranslate"><span class="pre">channels.tsv</span></code> files for BIDS-EEG data. For more information, see the
+<a class="reference external" href="https://bids-specification.readthedocs.io/en/stable/04-modality-specific-files/03-electroencephalography.html#channels-description-_channelstsv">BIDS specification</a>  # noqa
+for EEG channels metadata.</p>
+<p>Storage of ICA annotations as a <code class="docutils literal notranslate"><span class="pre">.tsv</span></code> file is currently experimental in the
+context of BIDS-EEG Derivatives. The API and functionality is subject to change
+as the community converges on the specification of BIDS-Derivatives.</p>
+</dd></dl>
+
+<div style='clear:both'></div></section>
 
 
               </div>
@@ -224,6 +272,20 @@
               
               <!-- Previous / next buttons -->
 <div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="mne_icalabel.annotation.mark_component.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">mne_icalabel.annotation.mark_component</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="../auto_examples/index.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Examples</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
 </div>
               
           </main>

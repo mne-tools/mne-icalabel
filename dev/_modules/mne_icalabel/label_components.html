@@ -195,13 +195,9 @@
 <span class="kn">from</span> <span class="nn">mne.utils</span> <span class="kn">import</span> <span class="n">_validate_type</span>
 <span class="kn">from</span> <span class="nn">mne.utils.check</span> <span class="kn">import</span> <span class="n">_check_option</span>
 
-<span class="kn">from</span> <span class="nn">.iclabel</span> <span class="kn">import</span> <span class="n">iclabel_label_components</span>
+<span class="kn">from</span> <span class="nn">.config</span> <span class="kn">import</span> <span class="n">ICALABEL_METHODS</span>
 <span class="kn">from</span> <span class="nn">.iclabel.config</span> <span class="kn">import</span> <span class="n">ICLABEL_NUMERICAL_TO_STRING</span>
 <span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">_validate_inst_and_ica</span>
-
-<span class="n">methods</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;iclabel&quot;</span><span class="p">:</span> <span class="n">iclabel_label_components</span><span class="p">,</span>
-<span class="p">}</span>
 
 
 <div class="viewcode-block" id="label_components"><a class="viewcode-back" href="../../generated/mne_icalabel.label_components.html#mne_icalabel.label_components">[docs]</a><span class="k">def</span> <span class="nf">label_components</span><span class="p">(</span><span class="n">inst</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">BaseRaw</span><span class="p">,</span> <span class="n">BaseEpochs</span><span class="p">],</span> <span class="n">ica</span><span class="p">:</span> <span class="n">ICA</span><span class="p">,</span> <span class="n">method</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
@@ -239,9 +235,12 @@
 <span class="sd">    - &#39;other&#39;</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">_validate_type</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="s2">&quot;method&quot;</span><span class="p">)</span>
-    <span class="n">_check_option</span><span class="p">(</span><span class="s2">&quot;method&quot;</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">methods</span><span class="p">)</span>
+    <span class="n">_check_option</span><span class="p">(</span><span class="s2">&quot;method&quot;</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">ICALABEL_METHODS</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">ICALABEL_METHODS</span><span class="p">[</span><span class="n">method</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Cannot pass in &quot;manual&quot; as a method.&#39;</span><span class="p">)</span>
+
     <span class="n">_validate_inst_and_ica</span><span class="p">(</span><span class="n">inst</span><span class="p">,</span> <span class="n">ica</span><span class="p">)</span>
-    <span class="n">labels_pred_proba</span> <span class="o">=</span> <span class="n">methods</span><span class="p">[</span><span class="n">method</span><span class="p">](</span><span class="n">inst</span><span class="p">,</span> <span class="n">ica</span><span class="p">)</span>
+    <span class="n">labels_pred_proba</span> <span class="o">=</span> <span class="n">ICALABEL_METHODS</span><span class="p">[</span><span class="n">method</span><span class="p">](</span><span class="n">inst</span><span class="p">,</span> <span class="n">ica</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
     <span class="n">labels_pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">labels_pred_proba</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="n">ICLABEL_NUMERICAL_TO_STRING</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">labels_pred</span><span class="p">]</span>
     <span class="k">assert</span> <span class="n">ica</span><span class="o">.</span><span class="n">n_components_</span> <span class="o">==</span> <span class="n">labels_pred</span><span class="o">.</span><span class="n">size</span>  <span class="c1"># sanity-check</span>
@@ -275,7 +274,7 @@
     
     <div class="footer-item">
       <p class="copyright">
-    &copy; Copyright 2021-2022, MNE Developers. Last updated on 2022-05-12.<br>
+    &copy; Copyright 2021-2022, MNE Developers. Last updated on 2022-05-23.<br>
 </p>
     </div>
     

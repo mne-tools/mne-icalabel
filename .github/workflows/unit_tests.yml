@@ -32,7 +32,28 @@ jobs:
           pip install --upgrade --upgrade-strategy eager --progress-bar off black check-manifest codespell flake8 flake8-array-spacing isort mypy pydocstyle
       - name: Run style & documentation tests
         run: make run-checks
-
+  
+  paper:
+    runs-on: ubuntu-latest
+    name: Paper Draft
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Build draft PDF
+        uses: openjournals/openjournals-draft-action@master
+        with:
+          journal: joss
+          # This should be the path to the paper within your repo.
+          paper-path: paper/paper.md
+      - name: Upload
+        uses: actions/upload-artifact@v1
+        with:
+          name: paper
+          # This is the output path where Pandoc will write the compiled
+          # PDF. Note, this should be the same directory as the input
+          # paper.md
+          path: paper/paper.pdf
+          
   # Run installation tests
   build:
     runs-on: ${{ matrix.os }}

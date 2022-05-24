@@ -36,7 +36,7 @@ affiliations:
 - index: 5
   name: Department of Radiology and Medical Informatics, University of Geneva (UNIGE),
 Geneva, Switzerland
-- index: 10
+- index: 6
   name: Institute of Neuroscience and Medicine (INM-3), Research Center Jülich, Germany
 date: 18 May 2022
 bibliography: paper.bib

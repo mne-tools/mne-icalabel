@@ -23,7 +23,7 @@ authors:
     orcid: 0000-0002-0380-4798
   - affiliation: "3, 4, 5"
     name: Mathieu Scheltienne
-    orcid: 0000-0001-8316-7436 
+    orcid: 0000-0001-8316-7436
 affiliations:
 - index: 1
   name: Department of Computer Science, Columbia University, New York, United States
@@ -34,8 +34,7 @@ affiliations:
 - index: 4
   name: Institute of Bioengineering, Center for Neuroprosthetics, EPFL, Geneva, Switzerland
 - index: 5
-  name: Department of Radiology and Medical Informatics, University of Geneva (UNIGE),
-Geneva, Switzerland
+  name: Department of Radiology and Medical Informatics, University of Geneva (UNIGE), Geneva, Switzerland
 - index: 6
   name: Institute of Neuroscience and Medicine (INM-3), Research Center Jülich, Germany
 date: 18 May 2022

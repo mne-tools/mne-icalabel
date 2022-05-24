@@ -21,7 +21,7 @@ authors:
   - affiliation: 6
     name: Richard Höchenberger
     orcid: 0000-0002-0380-4798
-  - affiliation: 3, 4, 5
+  - affiliation: "3, 4, 5"
     name: Mathieu Scheltienne
     orcid: 0000-0001-8316-7436 
 affiliations:

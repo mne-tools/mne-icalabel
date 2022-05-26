@@ -1,14 +1,14 @@
-name: 'unit_tests'
+name: "unit_tests"
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.number }}-${{ github.event.type }}
   cancel-in-progress: true
 on:
   push:
     branches:
-      - 'main'
+      - "main"
   pull_request:
     branches:
-      - '*'
+      - "*"
 
 jobs:
   # Run style tests
@@ -17,8 +17,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ ubuntu-latest ]
-        python-version: [ "3.10" ]
+        os: [ubuntu-latest]
+        python-version: ["3.10"]
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python ${{ matrix.python-version }}
@@ -32,15 +32,36 @@ jobs:
           pip install --upgrade --upgrade-strategy eager --progress-bar off black check-manifest codespell flake8 flake8-array-spacing isort mypy pydocstyle
       - name: Run style & documentation tests
         run: make run-checks
-
+  
+  paper:
+    runs-on: ubuntu-latest
+    name: Paper Draft
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Build draft PDF
+        uses: openjournals/openjournals-draft-action@master
+        with:
+          journal: joss
+          # This should be the path to the paper within your repo.
+          paper-path: paper/paper.md
+      - name: Upload
+        uses: actions/upload-artifact@v1
+        with:
+          name: paper
+          # This is the output path where Pandoc will write the compiled
+          # PDF. Note, this should be the same directory as the input
+          # paper.md
+          path: paper/paper.pdf
+          
   # Run installation tests
   build:
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
-        os: [ ubuntu-latest, macos-latest ]
-        python-version: [ 3.7, 3.8, 3.9, "3.10" ]
+        os: [ubuntu-latest, macos-latest]
+        python-version: [3.7, 3.8, 3.9, "3.10"]
     steps:
       - uses: actions/checkout@v2
 
@@ -91,7 +112,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-        python-version: [ 3.7, "3.10" ]  # oldest and newest supported versions
+        python-version: [3.7, "3.10"] # oldest and newest supported versions
         mne-version: [mne-stable, mne-main]
 
         include:
@@ -105,10 +126,10 @@ jobs:
     env:
       TZ: Europe/Berlin
       FORCE_COLOR: true
-      DISPLAY: ':99.0'
-      MNE_LOGGING_LEVEL: 'info'
-      OPENBLAS_NUM_THREADS: '1'
-      PYTHONUNBUFFERED: '1'
+      DISPLAY: ":99.0"
+      MNE_LOGGING_LEVEL: "info"
+      OPENBLAS_NUM_THREADS: "1"
+      PYTHONUNBUFFERED: "1"
 
     steps:
       - name: Set up Python ${{ matrix.python-version }}
@@ -145,7 +166,7 @@ jobs:
           python --version
           which python
 
-      - name: 'Show infos'
+      - name: "Show infos"
         shell: bash -el {0}
         run: mne sys_info
 

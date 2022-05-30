@@ -1,10 +1,10 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>API &#8212; MNE-ICALabel 0.2dev0 documentation</title>
     
@@ -34,6 +34,7 @@
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
     <script src="_static/clipboard.min.js"></script>
     <script src="_static/copybutton.js"></script>
@@ -46,7 +47,7 @@
     <script type="text/javascript" src="_static/scrollfix.js"></script>
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="docsearch:language" content="None">
+    <meta name="docsearch:language" content="en">
     
 
     <!-- Google Analytics -->
@@ -254,19 +255,15 @@
               <div>
                 
   <section id="api">
-<h1>API<a class="headerlink" href="#api" title="Permalink to this headline">#</a></h1>
+<h1>API<a class="headerlink" href="#api" title="Permalink to this heading">#</a></h1>
 <p><a class="reference internal" href="#module-mne_icalabel" title="mne_icalabel"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mne_icalabel</span></code></a>:</p>
 <span class="target" id="module-mne_icalabel"></span><p>Automatic ICA labeling for MEG, EEG and iEEG data.</p>
 <p>This is the application programming interface (API) reference
 for classes (<code class="docutils literal notranslate"><span class="pre">CamelCase</span></code> names) and functions
 (<code class="docutils literal notranslate"><span class="pre">underscore_case</span></code> names) of MNE-ICALabel.</p>
 <section id="most-used-functions">
-<h2>Most-used functions<a class="headerlink" href="#most-used-functions" title="Permalink to this headline">#</a></h2>
+<h2>Most-used functions<a class="headerlink" href="#most-used-functions" title="Permalink to this heading">#</a></h2>
 <table class="autosummary longtable table autosummary">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/mne_icalabel.label_components.html#mne_icalabel.label_components" title="mne_icalabel.label_components"><code class="xref py py-obj docutils literal notranslate"><span class="pre">label_components</span></code></a>(inst, ica, method)</p></td>
 <td><p>Automatically label the ICA components with the selected method.</p></td>
@@ -275,7 +272,7 @@ for classes (<code class="docutils literal notranslate"><span class="pre">CamelC
 </table>
 </section>
 <section id="iclabel">
-<h2>ICLabel<a class="headerlink" href="#iclabel" title="Permalink to this headline">#</a></h2>
+<h2>ICLabel<a class="headerlink" href="#iclabel" title="Permalink to this heading">#</a></h2>
 <p>This is the model originally available for <a class="reference external" href="https://github.com/sccn/ICLabel">EEGLab</a>.
 The model was ported from matconvnet using <a class="reference external" href="https://pytorch.org/">pytorch</a>.</p>
 <p>Architecture:</p>
@@ -284,10 +281,6 @@ The model was ported from matconvnet using <a class="reference external" href="h
 features are rotated and negated, thus quadrupling the feature. The psd and autocorrelation features
 are copied to the new image features. Then, the predicted probabilities are averaged over all four images.</p>
 <table class="autosummary longtable table autosummary">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/mne_icalabel.iclabel.get_iclabel_features.html#mne_icalabel.iclabel.get_iclabel_features" title="mne_icalabel.iclabel.get_iclabel_features"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_iclabel_features</span></code></a>(inst, ica)</p></td>
 <td><p>Generate the features for ICLabel neural network.</p></td>
@@ -299,14 +292,10 @@ are copied to the new image features. Then, the predicted probabilities are aver
 </table>
 </section>
 <section id="annotating-components">
-<h2>Annotating Components<a class="headerlink" href="#annotating-components" title="Permalink to this headline">#</a></h2>
+<h2>Annotating Components<a class="headerlink" href="#annotating-components" title="Permalink to this heading">#</a></h2>
 <p>To facilitate annotation of the ICA components, we provide an API that conforms to the
 derivative standard of BIDS for EEG data.</p>
 <table class="autosummary longtable table autosummary">
-<colgroup>
-<col style="width: 10%" />
-<col style="width: 90%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="generated/mne_icalabel.annotation.mark_component.html#mne_icalabel.annotation.mark_component" title="mne_icalabel.annotation.mark_component"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mark_component</span></code></a>(component, fname, method, ...)</p></td>
 <td><p>Mark a component with a label.</p></td>
@@ -354,13 +343,13 @@ derivative standard of BIDS for EEG data.</p>
     
     <div class="footer-item">
       <p class="copyright">
-    &copy; Copyright 2021-2022, MNE Developers. Last updated on 2022-05-26.<br>
+    &copy; Copyright 2021-2022, MNE Developers. Last updated on 2022-05-30.<br>
 </p>
     </div>
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.0.0.<br>
 </p>
     </div>
     

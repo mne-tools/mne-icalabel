@@ -1,10 +1,10 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>Repairing artifacts with ICA automatically using ICLabel Model &#8212; MNE-ICALabel 0.2dev0 documentation</title>
     
@@ -34,6 +34,7 @@
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
     <script src="../_static/clipboard.min.js"></script>
     <script src="../_static/copybutton.js"></script>
@@ -45,7 +46,7 @@
     <script type="text/javascript" src="../_static/scrollfix.js"></script>
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="docsearch:language" content="None">
+    <meta name="docsearch:language" content="en">
     
 
     <!-- Google Analytics -->
@@ -236,9 +237,9 @@
 to download the full example code</p>
 </div>
 <section class="sphx-glr-example-title" id="repairing-artifacts-with-ica-automatically-using-iclabel-model">
-<span id="tut-auto-artifact-ica"></span><span id="sphx-glr-auto-examples-iclabel-automatic-artifact-correction-ica-py"></span><h1>Repairing artifacts with ICA automatically using ICLabel Model<a class="headerlink" href="#repairing-artifacts-with-ica-automatically-using-iclabel-model" title="Permalink to this headline">#</a></h1>
+<span id="tut-auto-artifact-ica"></span><span id="sphx-glr-auto-examples-iclabel-automatic-artifact-correction-ica-py"></span><h1>Repairing artifacts with ICA automatically using ICLabel Model<a class="headerlink" href="#repairing-artifacts-with-ica-automatically-using-iclabel-model" title="Permalink to this heading">#</a></h1>
 <p>This tutorial covers automatically repairing signals using ICA with
-the ICLabel model <a class="footnote-reference brackets" href="#footcite-iclabel2019" id="id1">1</a>, which originates in EEGLab.
+the ICLabel model <a class="footnote-reference brackets" href="#footcite-iclabel2019" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, which originates in EEGLab.
 For conceptual background on ICA, see <a class="reference external" href="https://scikit-learn.org/stable/auto_examples/decomposition/plot_ica_blind_source_separation.html#sphx-glr-auto-examples-decomposition-plot-ica-blind-source-separation-py" title="(in scikit-learn v1.1)"><span class="xref std std-ref">this scikit-learn tutorial</span></a>.
 For a basic understanding of how to use ICA to remove artifacts, see <a class="reference external" href="https://mne.tools/stable/auto_tutorials/preprocessing/40_artifact_correction_ica.html">the
 tutorial</a> in MNE-Python.</p>
@@ -271,179 +272,173 @@ Creating ~/mne_data
 Downloading file &#39;MNE-sample-data-processed.tar.gz&#39; from &#39;https://osf.io/86qa2/download?version=6&#39; to &#39;/home/circleci/mne_data&#39;.
 
   0%|                                              | 0.00/1.65G [00:00&lt;?, ?B/s]
-  0%|                                     | 5.05M/1.65G [00:00&lt;00:32, 50.5MB/s]
-  1%|▎                                    | 13.8M/1.65G [00:00&lt;00:22, 72.5MB/s]
-  1%|▍                                    | 21.8M/1.65G [00:00&lt;00:21, 75.9MB/s]
-  2%|▋                                    | 30.0M/1.65G [00:00&lt;00:20, 78.3MB/s]
-  2%|▉                                    | 39.2M/1.65G [00:00&lt;00:19, 83.2MB/s]
-  3%|█                                    | 48.0M/1.65G [00:00&lt;00:18, 84.7MB/s]
-  4%|█▎                                   | 57.9M/1.65G [00:00&lt;00:17, 89.4MB/s]
-  4%|█▌                                   | 67.8M/1.65G [00:00&lt;00:17, 92.5MB/s]
-  5%|█▋                                   | 77.6M/1.65G [00:00&lt;00:16, 94.1MB/s]
-  5%|█▉                                   | 87.0M/1.65G [00:01&lt;00:17, 91.5MB/s]
-  6%|██▏                                  | 96.7M/1.65G [00:01&lt;00:16, 93.2MB/s]
-  6%|██▍                                   | 106M/1.65G [00:01&lt;00:16, 94.6MB/s]
-  7%|██▋                                   | 116M/1.65G [00:01&lt;00:15, 96.1MB/s]
-  8%|██▉                                   | 126M/1.65G [00:01&lt;00:15, 96.2MB/s]
-  8%|███▏                                  | 136M/1.65G [00:01&lt;00:15, 97.5MB/s]
-  9%|███▎                                  | 146M/1.65G [00:01&lt;00:15, 97.9MB/s]
-  9%|███▌                                  | 156M/1.65G [00:01&lt;00:15, 99.0MB/s]
- 10%|███▊                                  | 166M/1.65G [00:01&lt;00:16, 92.8MB/s]
- 11%|████                                  | 176M/1.65G [00:01&lt;00:15, 93.9MB/s]
- 11%|████▎                                 | 185M/1.65G [00:02&lt;00:15, 94.5MB/s]
- 12%|████▍                                 | 195M/1.65G [00:02&lt;00:15, 95.4MB/s]
- 12%|████▋                                 | 205M/1.65G [00:02&lt;00:14, 97.0MB/s]
- 13%|████▉                                 | 215M/1.65G [00:02&lt;00:14, 97.7MB/s]
- 14%|█████▏                                | 225M/1.65G [00:02&lt;00:14, 98.4MB/s]
- 14%|█████▍                                | 235M/1.65G [00:02&lt;00:14, 98.5MB/s]
- 15%|█████▋                                | 245M/1.65G [00:02&lt;00:14, 98.6MB/s]
- 15%|█████▊                                | 255M/1.65G [00:02&lt;00:14, 99.1MB/s]
- 16%|██████                                | 265M/1.65G [00:02&lt;00:13, 99.6MB/s]
- 17%|██████▎                               | 275M/1.65G [00:02&lt;00:13, 98.9MB/s]
- 17%|██████▌                               | 285M/1.65G [00:03&lt;00:13, 99.2MB/s]
- 18%|██████▊                               | 295M/1.65G [00:03&lt;00:13, 99.7MB/s]
- 18%|███████                               | 305M/1.65G [00:03&lt;00:13, 99.8MB/s]
- 19%|███████▏                              | 315M/1.65G [00:03&lt;00:13, 99.6MB/s]
- 20%|███████▍                              | 325M/1.65G [00:03&lt;00:13, 96.7MB/s]
- 20%|███████▋                              | 335M/1.65G [00:03&lt;00:13, 97.7MB/s]
- 21%|███████▉                              | 345M/1.65G [00:03&lt;00:13, 98.0MB/s]
- 21%|████████▏                             | 355M/1.65G [00:03&lt;00:13, 99.0MB/s]
- 22%|████████▍                             | 365M/1.65G [00:03&lt;00:12, 99.6MB/s]
- 23%|████████▊                              | 375M/1.65G [00:03&lt;00:12, 100MB/s]
- 23%|█████████                              | 385M/1.65G [00:04&lt;00:12, 100MB/s]
- 24%|█████████                             | 395M/1.65G [00:04&lt;00:12, 99.0MB/s]
- 25%|█████████▎                            | 406M/1.65G [00:04&lt;00:12, 99.7MB/s]
- 25%|█████████▌                            | 416M/1.65G [00:04&lt;00:12, 99.8MB/s]
- 26%|██████████                             | 426M/1.65G [00:04&lt;00:12, 100MB/s]
- 26%|██████████                            | 436M/1.65G [00:04&lt;00:16, 76.0MB/s]
- 27%|██████████▏                           | 444M/1.65G [00:04&lt;00:16, 74.3MB/s]
- 27%|██████████▍                           | 453M/1.65G [00:04&lt;00:15, 76.9MB/s]
- 28%|██████████▌                           | 461M/1.65G [00:04&lt;00:15, 79.4MB/s]
- 28%|██████████▊                           | 470M/1.65G [00:05&lt;00:14, 80.9MB/s]
- 29%|██████████▉                           | 478M/1.65G [00:05&lt;00:14, 82.6MB/s]
- 29%|███████████▏                          | 487M/1.65G [00:05&lt;00:13, 83.4MB/s]
- 30%|███████████▍                          | 495M/1.65G [00:05&lt;00:13, 83.5MB/s]
- 30%|███████████▌                          | 504M/1.65G [00:05&lt;00:14, 81.6MB/s]
- 31%|███████████▊                          | 513M/1.65G [00:05&lt;00:13, 83.3MB/s]
- 32%|███████████▉                          | 521M/1.65G [00:05&lt;00:13, 84.8MB/s]
- 32%|████████████▏                         | 530M/1.65G [00:05&lt;00:13, 83.1MB/s]
- 33%|████████████▍                         | 539M/1.65G [00:05&lt;00:12, 86.3MB/s]
- 33%|████████████▌                         | 548M/1.65G [00:05&lt;00:12, 87.3MB/s]
- 34%|████████████▊                         | 557M/1.65G [00:06&lt;00:13, 80.1MB/s]
- 34%|█████████████                         | 566M/1.65G [00:06&lt;00:13, 83.3MB/s]
- 35%|█████████████▏                        | 575M/1.65G [00:06&lt;00:12, 85.2MB/s]
- 35%|█████████████▍                        | 585M/1.65G [00:06&lt;00:12, 88.5MB/s]
- 36%|█████████████▋                        | 595M/1.65G [00:06&lt;00:11, 91.2MB/s]
- 37%|█████████████▉                        | 604M/1.65G [00:06&lt;00:11, 92.1MB/s]
- 37%|██████████████                        | 614M/1.65G [00:06&lt;00:11, 94.1MB/s]
- 38%|██████████████▎                       | 624M/1.65G [00:06&lt;00:10, 94.5MB/s]
- 38%|██████████████▌                       | 633M/1.65G [00:06&lt;00:10, 95.7MB/s]
- 39%|██████████████▊                       | 644M/1.65G [00:07&lt;00:10, 97.3MB/s]
- 40%|███████████████                       | 654M/1.65G [00:07&lt;00:10, 98.2MB/s]
- 40%|███████████████▎                      | 663M/1.65G [00:07&lt;00:11, 89.6MB/s]
- 41%|███████████████▍                      | 673M/1.65G [00:07&lt;00:11, 87.5MB/s]
- 41%|███████████████▋                      | 682M/1.65G [00:07&lt;00:10, 90.4MB/s]
- 42%|███████████████▉                      | 691M/1.65G [00:07&lt;00:10, 89.0MB/s]
- 42%|████████████████▏                     | 701M/1.65G [00:07&lt;00:10, 92.0MB/s]
- 43%|████████████████▎                     | 711M/1.65G [00:07&lt;00:09, 94.6MB/s]
- 44%|████████████████▌                     | 721M/1.65G [00:07&lt;00:09, 95.7MB/s]
- 44%|████████████████▊                     | 731M/1.65G [00:07&lt;00:09, 94.3MB/s]
- 45%|█████████████████                     | 741M/1.65G [00:08&lt;00:09, 96.2MB/s]
- 45%|█████████████████▎                    | 751M/1.65G [00:08&lt;00:09, 97.2MB/s]
- 46%|█████████████████▍                    | 761M/1.65G [00:08&lt;00:09, 98.1MB/s]
- 47%|█████████████████▋                    | 771M/1.65G [00:08&lt;00:09, 93.0MB/s]
- 47%|█████████████████▉                    | 780M/1.65G [00:08&lt;00:10, 81.4MB/s]
- 48%|██████████████████▏                   | 789M/1.65G [00:08&lt;00:13, 63.6MB/s]
- 48%|██████████████████▎                   | 798M/1.65G [00:08&lt;00:12, 70.4MB/s]
- 49%|██████████████████▌                   | 808M/1.65G [00:08&lt;00:10, 77.6MB/s]
- 49%|██████████████████▊                   | 818M/1.65G [00:09&lt;00:09, 83.6MB/s]
- 50%|███████████████████                   | 828M/1.65G [00:09&lt;00:09, 87.3MB/s]
- 51%|███████████████████▎                  | 838M/1.65G [00:09&lt;00:08, 90.8MB/s]
- 51%|███████████████████▍                  | 848M/1.65G [00:09&lt;00:08, 92.9MB/s]
- 52%|███████████████████▋                  | 858M/1.65G [00:09&lt;00:08, 94.7MB/s]
- 52%|███████████████████▉                  | 867M/1.65G [00:09&lt;00:08, 95.8MB/s]
- 53%|████████████████████▏                 | 877M/1.65G [00:09&lt;00:08, 96.8MB/s]
- 54%|████████████████████▍                 | 887M/1.65G [00:09&lt;00:07, 96.8MB/s]
- 54%|████████████████████▋                 | 897M/1.65G [00:09&lt;00:07, 97.8MB/s]
- 55%|████████████████████▊                 | 907M/1.65G [00:09&lt;00:07, 98.2MB/s]
- 55%|█████████████████████                 | 917M/1.65G [00:10&lt;00:07, 97.7MB/s]
- 56%|█████████████████████▎                | 927M/1.65G [00:10&lt;00:07, 97.3MB/s]
- 57%|█████████████████████▌                | 936M/1.65G [00:10&lt;00:07, 97.7MB/s]
- 57%|█████████████████████▊                | 946M/1.65G [00:10&lt;00:07, 93.3MB/s]
- 58%|█████████████████████▉                | 956M/1.65G [00:10&lt;00:07, 90.1MB/s]
- 58%|██████████████████████▏               | 965M/1.65G [00:10&lt;00:07, 92.3MB/s]
- 59%|██████████████████████▍               | 975M/1.65G [00:10&lt;00:07, 94.6MB/s]
- 60%|██████████████████████▋               | 985M/1.65G [00:10&lt;00:07, 92.6MB/s]
- 60%|██████████████████████▊               | 995M/1.65G [00:10&lt;00:06, 94.0MB/s]
- 61%|██████████████████████▍              | 1.00G/1.65G [00:11&lt;00:07, 92.5MB/s]
- 61%|██████████████████████▋              | 1.01G/1.65G [00:11&lt;00:07, 91.1MB/s]
- 62%|██████████████████████▉              | 1.02G/1.65G [00:11&lt;00:06, 93.1MB/s]
- 62%|███████████████████████              | 1.03G/1.65G [00:11&lt;00:06, 92.3MB/s]
- 63%|███████████████████████▎             | 1.04G/1.65G [00:11&lt;00:06, 94.4MB/s]
- 64%|███████████████████████▌             | 1.05G/1.65G [00:11&lt;00:06, 95.8MB/s]
- 64%|███████████████████████▊             | 1.06G/1.65G [00:11&lt;00:06, 95.8MB/s]
- 65%|███████████████████████▉             | 1.07G/1.65G [00:11&lt;00:06, 96.7MB/s]
- 65%|████████████████████████▏            | 1.08G/1.65G [00:11&lt;00:05, 96.4MB/s]
- 66%|████████████████████████▍            | 1.09G/1.65G [00:11&lt;00:05, 96.9MB/s]
- 67%|████████████████████████▋            | 1.10G/1.65G [00:12&lt;00:05, 94.7MB/s]
- 67%|████████████████████████▊            | 1.11G/1.65G [00:12&lt;00:05, 95.8MB/s]
- 68%|█████████████████████████            | 1.12G/1.65G [00:12&lt;00:05, 96.0MB/s]
- 68%|█████████████████████████▎           | 1.13G/1.65G [00:12&lt;00:05, 96.6MB/s]
- 69%|█████████████████████████▌           | 1.14G/1.65G [00:12&lt;00:05, 97.0MB/s]
- 70%|█████████████████████████▋           | 1.15G/1.65G [00:12&lt;00:05, 96.9MB/s]
- 70%|█████████████████████████▉           | 1.16G/1.65G [00:12&lt;00:05, 97.4MB/s]
- 71%|██████████████████████████▏          | 1.17G/1.65G [00:12&lt;00:04, 97.7MB/s]
- 71%|██████████████████████████▍          | 1.18G/1.65G [00:12&lt;00:04, 98.1MB/s]
- 72%|██████████████████████████▋          | 1.19G/1.65G [00:12&lt;00:04, 98.6MB/s]
- 73%|██████████████████████████▊          | 1.20G/1.65G [00:13&lt;00:04, 98.9MB/s]
- 73%|███████████████████████████          | 1.21G/1.65G [00:13&lt;00:04, 98.9MB/s]
- 74%|███████████████████████████▎         | 1.22G/1.65G [00:13&lt;00:04, 98.9MB/s]
- 74%|███████████████████████████▌         | 1.23G/1.65G [00:13&lt;00:04, 94.2MB/s]
- 75%|███████████████████████████▋         | 1.24G/1.65G [00:13&lt;00:04, 96.0MB/s]
- 76%|███████████████████████████▉         | 1.25G/1.65G [00:13&lt;00:04, 97.4MB/s]
- 76%|████████████████████████████▏        | 1.26G/1.65G [00:13&lt;00:03, 98.4MB/s]
- 77%|████████████████████████████▍        | 1.27G/1.65G [00:13&lt;00:04, 84.9MB/s]
- 77%|████████████████████████████▌        | 1.28G/1.65G [00:13&lt;00:04, 77.4MB/s]
- 78%|████████████████████████████▊        | 1.29G/1.65G [00:14&lt;00:04, 83.1MB/s]
- 78%|█████████████████████████████        | 1.30G/1.65G [00:14&lt;00:04, 86.0MB/s]
- 79%|█████████████████████████████▏       | 1.31G/1.65G [00:14&lt;00:04, 86.3MB/s]
- 80%|█████████████████████████████▍       | 1.32G/1.65G [00:14&lt;00:03, 85.3MB/s]
- 80%|█████████████████████████████▋       | 1.32G/1.65G [00:14&lt;00:03, 84.4MB/s]
- 81%|█████████████████████████████▊       | 1.33G/1.65G [00:14&lt;00:03, 85.7MB/s]
- 81%|██████████████████████████████       | 1.34G/1.65G [00:14&lt;00:03, 89.8MB/s]
- 82%|██████████████████████████████▎      | 1.35G/1.65G [00:14&lt;00:03, 93.2MB/s]
- 82%|██████████████████████████████▌      | 1.36G/1.65G [00:14&lt;00:03, 95.1MB/s]
- 83%|██████████████████████████████▋      | 1.37G/1.65G [00:14&lt;00:02, 96.2MB/s]
- 84%|██████████████████████████████▉      | 1.38G/1.65G [00:15&lt;00:02, 96.9MB/s]
- 84%|███████████████████████████████▏     | 1.39G/1.65G [00:15&lt;00:02, 97.5MB/s]
- 85%|███████████████████████████████▍     | 1.40G/1.65G [00:15&lt;00:02, 98.0MB/s]
- 85%|███████████████████████████████▌     | 1.41G/1.65G [00:15&lt;00:02, 98.1MB/s]
- 86%|███████████████████████████████▊     | 1.42G/1.65G [00:15&lt;00:02, 97.8MB/s]
- 87%|████████████████████████████████     | 1.43G/1.65G [00:15&lt;00:02, 98.2MB/s]
- 87%|████████████████████████████████▎    | 1.44G/1.65G [00:15&lt;00:02, 98.5MB/s]
- 88%|████████████████████████████████▍    | 1.45G/1.65G [00:15&lt;00:02, 98.7MB/s]
- 88%|████████████████████████████████▋    | 1.46G/1.65G [00:15&lt;00:01, 98.0MB/s]
- 89%|████████████████████████████████▉    | 1.47G/1.65G [00:15&lt;00:01, 91.4MB/s]
- 90%|█████████████████████████████████▏   | 1.48G/1.65G [00:16&lt;00:01, 93.0MB/s]
- 90%|█████████████████████████████████▎   | 1.49G/1.65G [00:16&lt;00:01, 87.9MB/s]
- 91%|█████████████████████████████████▌   | 1.50G/1.65G [00:16&lt;00:01, 81.3MB/s]
- 91%|█████████████████████████████████▊   | 1.51G/1.65G [00:16&lt;00:01, 82.4MB/s]
- 92%|█████████████████████████████████▉   | 1.52G/1.65G [00:16&lt;00:01, 86.9MB/s]
- 92%|██████████████████████████████████▏  | 1.53G/1.65G [00:16&lt;00:01, 89.9MB/s]
- 93%|██████████████████████████████████▍  | 1.54G/1.65G [00:16&lt;00:01, 87.5MB/s]
- 94%|██████████████████████████████████▌  | 1.55G/1.65G [00:16&lt;00:01, 90.9MB/s]
- 94%|██████████████████████████████████▊  | 1.56G/1.65G [00:16&lt;00:01, 93.3MB/s]
- 95%|███████████████████████████████████  | 1.57G/1.65G [00:17&lt;00:00, 95.0MB/s]
- 95%|███████████████████████████████████▎ | 1.58G/1.65G [00:17&lt;00:00, 96.6MB/s]
- 96%|███████████████████████████████████▌ | 1.59G/1.65G [00:17&lt;00:00, 97.9MB/s]
- 97%|███████████████████████████████████▋ | 1.60G/1.65G [00:17&lt;00:00, 95.9MB/s]
- 97%|███████████████████████████████████▉ | 1.61G/1.65G [00:17&lt;00:00, 94.0MB/s]
- 98%|████████████████████████████████████▏| 1.62G/1.65G [00:17&lt;00:00, 95.6MB/s]
- 98%|████████████████████████████████████▍| 1.63G/1.65G [00:17&lt;00:00, 97.1MB/s]
- 99%|████████████████████████████████████▌| 1.64G/1.65G [00:17&lt;00:00, 98.1MB/s]
-100%|████████████████████████████████████▊| 1.65G/1.65G [00:17&lt;00:00, 98.8MB/s]
+  0%|▏                                    | 6.73M/1.65G [00:00&lt;00:24, 67.3MB/s]
+  1%|▎                                    | 15.9M/1.65G [00:00&lt;00:20, 81.6MB/s]
+  1%|▌                                    | 24.0M/1.65G [00:00&lt;00:22, 71.0MB/s]
+  2%|▊                                    | 33.8M/1.65G [00:00&lt;00:20, 80.5MB/s]
+  3%|▉                                    | 43.7M/1.65G [00:00&lt;00:18, 86.8MB/s]
+  3%|█▏                                   | 52.5M/1.65G [00:00&lt;00:18, 86.9MB/s]
+  4%|█▍                                   | 62.7M/1.65G [00:00&lt;00:17, 91.6MB/s]
+  4%|█▋                                   | 72.9M/1.65G [00:00&lt;00:16, 94.8MB/s]
+  5%|█▊                                   | 83.0M/1.65G [00:00&lt;00:16, 96.7MB/s]
+  6%|██                                   | 93.2M/1.65G [00:01&lt;00:15, 98.5MB/s]
+  6%|██▎                                   | 103M/1.65G [00:01&lt;00:16, 95.3MB/s]
+  7%|██▌                                   | 113M/1.65G [00:01&lt;00:15, 96.5MB/s]
+  7%|██▊                                   | 123M/1.65G [00:01&lt;00:15, 97.3MB/s]
+  8%|███                                   | 133M/1.65G [00:01&lt;00:15, 97.8MB/s]
+  9%|███▎                                  | 143M/1.65G [00:01&lt;00:15, 97.9MB/s]
+  9%|███▌                                  | 153M/1.65G [00:01&lt;00:15, 98.8MB/s]
+ 10%|███▋                                  | 163M/1.65G [00:01&lt;00:15, 97.8MB/s]
+ 10%|███▉                                  | 173M/1.65G [00:01&lt;00:15, 98.3MB/s]
+ 11%|████▏                                 | 182M/1.65G [00:01&lt;00:15, 96.1MB/s]
+ 12%|████▍                                 | 192M/1.65G [00:02&lt;00:15, 97.2MB/s]
+ 12%|████▋                                 | 203M/1.65G [00:02&lt;00:14, 98.2MB/s]
+ 13%|████▉                                 | 213M/1.65G [00:02&lt;00:14, 99.4MB/s]
+ 13%|█████                                 | 223M/1.65G [00:02&lt;00:14, 99.8MB/s]
+ 14%|█████▎                                | 233M/1.65G [00:02&lt;00:14, 99.8MB/s]
+ 15%|█████▋                                 | 243M/1.65G [00:02&lt;00:14, 100MB/s]
+ 15%|█████▉                                 | 253M/1.65G [00:02&lt;00:13, 100MB/s]
+ 16%|██████▏                                | 263M/1.65G [00:02&lt;00:13, 100MB/s]
+ 17%|██████▍                                | 273M/1.65G [00:02&lt;00:13, 100MB/s]
+ 17%|██████▋                                | 283M/1.65G [00:02&lt;00:13, 101MB/s]
+ 18%|██████▉                                | 293M/1.65G [00:03&lt;00:13, 101MB/s]
+ 18%|███████▏                               | 303M/1.65G [00:03&lt;00:13, 100MB/s]
+ 19%|███████▏                              | 314M/1.65G [00:03&lt;00:13, 96.9MB/s]
+ 20%|███████▍                              | 323M/1.65G [00:03&lt;00:14, 92.6MB/s]
+ 20%|███████▋                              | 333M/1.65G [00:03&lt;00:13, 94.7MB/s]
+ 21%|███████▉                              | 343M/1.65G [00:03&lt;00:13, 96.1MB/s]
+ 21%|████████                              | 353M/1.65G [00:03&lt;00:13, 97.7MB/s]
+ 22%|████████▎                             | 363M/1.65G [00:03&lt;00:13, 98.5MB/s]
+ 23%|████████▌                             | 373M/1.65G [00:03&lt;00:12, 98.9MB/s]
+ 23%|████████▊                             | 383M/1.65G [00:03&lt;00:13, 95.6MB/s]
+ 24%|█████████                             | 393M/1.65G [00:04&lt;00:13, 92.8MB/s]
+ 24%|█████████▏                            | 402M/1.65G [00:04&lt;00:13, 91.4MB/s]
+ 25%|█████████▍                            | 412M/1.65G [00:04&lt;00:13, 94.8MB/s]
+ 26%|█████████▋                            | 423M/1.65G [00:04&lt;00:12, 96.8MB/s]
+ 26%|█████████▉                            | 433M/1.65G [00:04&lt;00:12, 98.3MB/s]
+ 27%|██████████▏                           | 443M/1.65G [00:04&lt;00:12, 99.9MB/s]
+ 27%|██████████▋                            | 453M/1.65G [00:04&lt;00:11, 100MB/s]
+ 28%|██████████▉                            | 464M/1.65G [00:04&lt;00:11, 101MB/s]
+ 29%|███████████▏                           | 474M/1.65G [00:04&lt;00:11, 101MB/s]
+ 29%|███████████▍                           | 484M/1.65G [00:05&lt;00:11, 102MB/s]
+ 30%|███████████▎                          | 494M/1.65G [00:05&lt;00:13, 85.1MB/s]
+ 30%|███████████▌                          | 503M/1.65G [00:05&lt;00:13, 85.8MB/s]
+ 31%|███████████▊                          | 513M/1.65G [00:05&lt;00:12, 89.7MB/s]
+ 32%|████████████                          | 523M/1.65G [00:05&lt;00:12, 92.5MB/s]
+ 32%|████████████▎                         | 533M/1.65G [00:05&lt;00:11, 95.2MB/s]
+ 33%|████████████▍                         | 544M/1.65G [00:05&lt;00:11, 97.3MB/s]
+ 34%|████████████▋                         | 554M/1.65G [00:05&lt;00:11, 98.4MB/s]
+ 34%|████████████▉                         | 564M/1.65G [00:05&lt;00:10, 99.6MB/s]
+ 35%|█████████████▏                        | 574M/1.65G [00:05&lt;00:10, 99.4MB/s]
+ 35%|█████████████▍                        | 584M/1.65G [00:06&lt;00:10, 99.4MB/s]
+ 36%|█████████████▋                        | 594M/1.65G [00:06&lt;00:10, 99.9MB/s]
+ 37%|█████████████▉                        | 604M/1.65G [00:06&lt;00:10, 99.7MB/s]
+ 37%|██████████████▍                        | 614M/1.65G [00:06&lt;00:10, 100MB/s]
+ 38%|██████████████▋                        | 624M/1.65G [00:06&lt;00:10, 100MB/s]
+ 38%|██████████████▉                        | 635M/1.65G [00:06&lt;00:10, 101MB/s]
+ 39%|███████████████▏                       | 645M/1.65G [00:06&lt;00:09, 101MB/s]
+ 40%|███████████████▍                       | 655M/1.65G [00:06&lt;00:09, 102MB/s]
+ 40%|███████████████▋                       | 665M/1.65G [00:06&lt;00:09, 101MB/s]
+ 41%|███████████████▉                       | 675M/1.65G [00:06&lt;00:09, 101MB/s]
+ 41%|████████████████▏                      | 685M/1.65G [00:07&lt;00:09, 100MB/s]
+ 42%|████████████████▍                      | 696M/1.65G [00:07&lt;00:09, 101MB/s]
+ 43%|████████████████▋                      | 706M/1.65G [00:07&lt;00:09, 101MB/s]
+ 43%|████████████████▉                      | 716M/1.65G [00:07&lt;00:09, 102MB/s]
+ 44%|█████████████████▏                     | 726M/1.65G [00:07&lt;00:09, 102MB/s]
+ 45%|█████████████████▍                     | 737M/1.65G [00:07&lt;00:08, 102MB/s]
+ 45%|█████████████████▋                     | 747M/1.65G [00:07&lt;00:08, 103MB/s]
+ 46%|█████████████████▊                     | 757M/1.65G [00:07&lt;00:08, 102MB/s]
+ 46%|██████████████████                     | 768M/1.65G [00:07&lt;00:08, 103MB/s]
+ 47%|██████████████████▎                    | 778M/1.65G [00:07&lt;00:08, 103MB/s]
+ 48%|██████████████████▌                    | 788M/1.65G [00:08&lt;00:08, 103MB/s]
+ 48%|██████████████████▊                    | 799M/1.65G [00:08&lt;00:08, 103MB/s]
+ 49%|███████████████████                    | 809M/1.65G [00:08&lt;00:08, 103MB/s]
+ 50%|███████████████████▎                   | 819M/1.65G [00:08&lt;00:08, 103MB/s]
+ 50%|███████████████████▌                   | 830M/1.65G [00:08&lt;00:08, 103MB/s]
+ 51%|███████████████████▊                   | 840M/1.65G [00:08&lt;00:07, 103MB/s]
+ 51%|████████████████████                   | 850M/1.65G [00:08&lt;00:07, 103MB/s]
+ 52%|████████████████████▎                  | 861M/1.65G [00:08&lt;00:07, 102MB/s]
+ 53%|████████████████████▌                  | 871M/1.65G [00:08&lt;00:07, 102MB/s]
+ 53%|████████████████████▊                  | 881M/1.65G [00:08&lt;00:07, 101MB/s]
+ 54%|████████████████████▍                 | 891M/1.65G [00:09&lt;00:07, 97.6MB/s]
+ 55%|████████████████████▋                 | 901M/1.65G [00:09&lt;00:07, 99.3MB/s]
+ 55%|█████████████████████▌                 | 912M/1.65G [00:09&lt;00:07, 100MB/s]
+ 56%|█████████████████████▊                 | 922M/1.65G [00:09&lt;00:07, 101MB/s]
+ 56%|██████████████████████                 | 932M/1.65G [00:09&lt;00:07, 102MB/s]
+ 57%|██████████████████████▏                | 943M/1.65G [00:09&lt;00:06, 102MB/s]
+ 58%|██████████████████████▍                | 953M/1.65G [00:09&lt;00:06, 102MB/s]
+ 58%|██████████████████████▋                | 963M/1.65G [00:09&lt;00:06, 103MB/s]
+ 59%|██████████████████████▉                | 974M/1.65G [00:09&lt;00:06, 103MB/s]
+ 60%|███████████████████████▏               | 984M/1.65G [00:10&lt;00:06, 103MB/s]
+ 60%|███████████████████████▍               | 994M/1.65G [00:10&lt;00:06, 103MB/s]
+ 61%|███████████████████████               | 1.00G/1.65G [00:10&lt;00:06, 103MB/s]
+ 61%|███████████████████████▎              | 1.01G/1.65G [00:10&lt;00:06, 103MB/s]
+ 62%|███████████████████████▌              | 1.03G/1.65G [00:10&lt;00:06, 103MB/s]
+ 63%|███████████████████████▊              | 1.04G/1.65G [00:10&lt;00:06, 103MB/s]
+ 63%|████████████████████████              | 1.05G/1.65G [00:10&lt;00:05, 103MB/s]
+ 64%|████████████████████████▎             | 1.06G/1.65G [00:10&lt;00:05, 103MB/s]
+ 65%|████████████████████████▌             | 1.07G/1.65G [00:10&lt;00:05, 103MB/s]
+ 65%|████████████████████████▊             | 1.08G/1.65G [00:10&lt;00:05, 103MB/s]
+ 66%|████████████████████████▎            | 1.09G/1.65G [00:11&lt;00:06, 93.8MB/s]
+ 66%|████████████████████████▌            | 1.10G/1.65G [00:11&lt;00:06, 83.2MB/s]
+ 67%|████████████████████████▋            | 1.11G/1.65G [00:11&lt;00:06, 83.2MB/s]
+ 67%|████████████████████████▉            | 1.11G/1.65G [00:11&lt;00:06, 83.2MB/s]
+ 68%|█████████████████████████▏           | 1.12G/1.65G [00:11&lt;00:06, 83.8MB/s]
+ 68%|█████████████████████████▎           | 1.13G/1.65G [00:11&lt;00:06, 85.3MB/s]
+ 69%|█████████████████████████▌           | 1.14G/1.65G [00:11&lt;00:05, 86.2MB/s]
+ 70%|█████████████████████████▋           | 1.15G/1.65G [00:11&lt;00:05, 84.8MB/s]
+ 70%|█████████████████████████▉           | 1.16G/1.65G [00:11&lt;00:06, 82.3MB/s]
+ 71%|██████████████████████████           | 1.17G/1.65G [00:12&lt;00:05, 82.0MB/s]
+ 71%|██████████████████████████▎          | 1.17G/1.65G [00:12&lt;00:05, 83.4MB/s]
+ 72%|██████████████████████████▍          | 1.18G/1.65G [00:12&lt;00:05, 83.2MB/s]
+ 72%|██████████████████████████▋          | 1.19G/1.65G [00:12&lt;00:05, 86.9MB/s]
+ 73%|██████████████████████████▉          | 1.20G/1.65G [00:12&lt;00:05, 90.1MB/s]
+ 73%|███████████████████████████▏         | 1.21G/1.65G [00:12&lt;00:04, 92.6MB/s]
+ 74%|███████████████████████████▎         | 1.22G/1.65G [00:12&lt;00:04, 95.1MB/s]
+ 75%|███████████████████████████▌         | 1.23G/1.65G [00:12&lt;00:04, 97.1MB/s]
+ 75%|███████████████████████████▊         | 1.24G/1.65G [00:12&lt;00:04, 98.6MB/s]
+ 76%|████████████████████████████         | 1.25G/1.65G [00:12&lt;00:04, 99.6MB/s]
+ 76%|█████████████████████████████         | 1.26G/1.65G [00:13&lt;00:03, 100MB/s]
+ 77%|█████████████████████████████▎        | 1.27G/1.65G [00:13&lt;00:03, 100MB/s]
+ 78%|█████████████████████████████▍        | 1.28G/1.65G [00:13&lt;00:03, 100MB/s]
+ 78%|█████████████████████████████▋        | 1.29G/1.65G [00:13&lt;00:03, 100MB/s]
+ 79%|█████████████████████████████▏       | 1.30G/1.65G [00:13&lt;00:03, 99.5MB/s]
+ 79%|█████████████████████████████▍       | 1.31G/1.65G [00:13&lt;00:03, 99.8MB/s]
+ 80%|█████████████████████████████▌       | 1.32G/1.65G [00:13&lt;00:03, 99.6MB/s]
+ 81%|█████████████████████████████▊       | 1.33G/1.65G [00:13&lt;00:03, 99.1MB/s]
+ 81%|██████████████████████████████       | 1.34G/1.65G [00:13&lt;00:03, 99.2MB/s]
+ 82%|██████████████████████████████▎      | 1.35G/1.65G [00:13&lt;00:03, 99.4MB/s]
+ 82%|██████████████████████████████▌      | 1.36G/1.65G [00:14&lt;00:02, 99.4MB/s]
+ 83%|██████████████████████████████▋      | 1.37G/1.65G [00:14&lt;00:02, 99.5MB/s]
+ 84%|██████████████████████████████▉      | 1.38G/1.65G [00:14&lt;00:02, 99.7MB/s]
+ 84%|████████████████████████████████      | 1.39G/1.65G [00:14&lt;00:02, 100MB/s]
+ 85%|███████████████████████████████▍     | 1.40G/1.65G [00:14&lt;00:02, 99.8MB/s]
+ 85%|████████████████████████████████▍     | 1.41G/1.65G [00:14&lt;00:02, 100MB/s]
+ 86%|████████████████████████████████▋     | 1.42G/1.65G [00:14&lt;00:02, 100MB/s]
+ 87%|████████████████████████████████▉     | 1.43G/1.65G [00:14&lt;00:02, 101MB/s]
+ 87%|████████████████████████████████▎    | 1.44G/1.65G [00:14&lt;00:02, 98.3MB/s]
+ 88%|████████████████████████████████▌    | 1.45G/1.65G [00:14&lt;00:02, 97.7MB/s]
+ 89%|████████████████████████████████▊    | 1.46G/1.65G [00:15&lt;00:01, 98.6MB/s]
+ 89%|████████████████████████████████▉    | 1.47G/1.65G [00:15&lt;00:01, 99.9MB/s]
+ 90%|██████████████████████████████████    | 1.48G/1.65G [00:15&lt;00:01, 101MB/s]
+ 90%|██████████████████████████████████▎   | 1.49G/1.65G [00:15&lt;00:01, 101MB/s]
+ 91%|██████████████████████████████████▌   | 1.50G/1.65G [00:15&lt;00:01, 101MB/s]
+ 92%|██████████████████████████████████▊   | 1.51G/1.65G [00:15&lt;00:01, 101MB/s]
+ 92%|██████████████████████████████████▏  | 1.52G/1.65G [00:15&lt;00:01, 99.1MB/s]
+ 93%|██████████████████████████████████▎  | 1.53G/1.65G [00:15&lt;00:01, 96.9MB/s]
+ 93%|██████████████████████████████████▌  | 1.54G/1.65G [00:15&lt;00:01, 97.4MB/s]
+ 94%|██████████████████████████████████▊  | 1.55G/1.65G [00:15&lt;00:01, 97.1MB/s]
+ 95%|███████████████████████████████████  | 1.56G/1.65G [00:16&lt;00:00, 96.5MB/s]
+ 95%|███████████████████████████████████▏ | 1.57G/1.65G [00:16&lt;00:00, 96.5MB/s]
+ 96%|███████████████████████████████████▍ | 1.58G/1.65G [00:16&lt;00:00, 97.0MB/s]
+ 96%|███████████████████████████████████▋ | 1.59G/1.65G [00:16&lt;00:00, 98.0MB/s]
+ 97%|███████████████████████████████████▉ | 1.60G/1.65G [00:16&lt;00:00, 98.8MB/s]
+ 98%|████████████████████████████████████ | 1.61G/1.65G [00:16&lt;00:00, 98.9MB/s]
+ 98%|████████████████████████████████████▎| 1.62G/1.65G [00:16&lt;00:00, 99.8MB/s]
+ 99%|█████████████████████████████████████▌| 1.63G/1.65G [00:16&lt;00:00, 100MB/s]
+ 99%|█████████████████████████████████████▊| 1.64G/1.65G [00:16&lt;00:00, 100MB/s]
   0%|                                              | 0.00/1.65G [00:00&lt;?, ?B/s]
-100%|█████████████████████████████████████| 1.65G/1.65G [00:00&lt;00:00, 3.39TB/s]
+100%|█████████████████████████████████████| 1.65G/1.65G [00:00&lt;00:00, 3.21TB/s]
 Untarring contents of &#39;/home/circleci/mne_data/MNE-sample-data-processed.tar.gz&#39; to &#39;/home/circleci/mne_data&#39;
 Opening raw data file /home/circleci/mne_data/MNE-sample-data/MEG/sample/sample_audvis_filt-0-40_raw.fif...
     Read a total of 4 projection items:
@@ -572,7 +567,7 @@ Opening raw-browser...
 </pre></div>
 </div>
 <section id="filtering-to-remove-slow-drifts">
-<h2>Filtering to remove slow drifts<a class="headerlink" href="#filtering-to-remove-slow-drifts" title="Permalink to this headline">#</a></h2>
+<h2>Filtering to remove slow drifts<a class="headerlink" href="#filtering-to-remove-slow-drifts" title="Permalink to this heading">#</a></h2>
 <p>Before we run the ICA, an important step is filtering the data to remove
 low-frequency drifts, which can negatively affect the quality of the ICA fit.
 The slow drifts are problematic because they reduce the independence of the
@@ -582,7 +577,7 @@ higher values), making it harder for the algorithm to find an accurate
 solution. A high-pass filter with 1 Hz cutoff frequency is recommended.
 However, because filtering is a linear operation, the ICA solution found from
 the filtered signal can be applied to the unfiltered signal (see
-<a class="footnote-reference brackets" href="#footcite-winkleretal2015" id="id2">2</a> for
+<a class="footnote-reference brackets" href="#footcite-winkleretal2015" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a> for
 more information), so we’ll keep a copy of the unfiltered
 <a class="reference external" href="https://mne.tools/dev/generated/mne.io.Raw.html#mne.io.Raw" title="(in MNE v1.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Raw</span></code></a> object around so we can apply the ICA solution to it
 later.</p>
@@ -605,7 +600,7 @@ Designing a one-pass, zero-phase, non-causal highpass filter:
 </div>
 </section>
 <section id="fitting-and-plotting-the-ica-solution">
-<h2>Fitting and plotting the ICA solution<a class="headerlink" href="#fitting-and-plotting-the-ica-solution" title="Permalink to this headline">#</a></h2>
+<h2>Fitting and plotting the ICA solution<a class="headerlink" href="#fitting-and-plotting-the-ica-solution" title="Permalink to this heading">#</a></h2>
 <aside class="sidebar">
 <p class="sidebar-title">Ignoring the time domain</p>
 <p>The ICA algorithms implemented in MNE-Python find patterns across
@@ -646,7 +641,7 @@ time this tutorial is built by our web servers.</p>
 <p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Fitting ICA to data using 59 channels (please be patient, this may take a while)
 Selecting by number: 15 components
-Fitting ICA took 0.2s.
+Fitting ICA took 0.3s.
 </pre></div>
 </div>
 <div class="output_subarea output_html rendered_html output_result">
@@ -836,18 +831,18 @@ Opening raw-browser...
 </pre></div>
 </div>
 <section id="references">
-<h3>References<a class="headerlink" href="#references" title="Permalink to this headline">#</a></h3>
+<h3>References<a class="headerlink" href="#references" title="Permalink to this heading">#</a></h3>
 <div class="docutils container" id="id3">
-<dl class="footnote brackets">
-<dt class="label" id="footcite-iclabel2019"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
-<dd><p>Luca Pion-Tonachini, Ken Kreutz-Delgado, and Scott Makeig. Iclabel: an automated electroencephalographic independent component classifier, dataset, and website. <em>NeuroImage</em>, 198:181–197, 2019. URL: <a class="reference external" href="https://www.sciencedirect.com/science/article/pii/S1053811919304185">https://www.sciencedirect.com/science/article/pii/S1053811919304185</a>, <a class="reference external" href="https://doi.org/https://doi.org/10.1016/j.neuroimage.2019.05.026">doi:https://doi.org/10.1016/j.neuroimage.2019.05.026</a>.</p>
-</dd>
-<dt class="label" id="footcite-winkleretal2015"><span class="brackets"><a class="fn-backref" href="#id2">2</a></span></dt>
-<dd><p>Irene Winkler, Stefan Debener, Klaus-Robert Müller, and Michael Tangermann. On the influence of high-pass filtering on ICA-based artifact reduction in EEG-ERP. In <em>Proceedings of EMBC-2015</em>, 4101–4105. Milan, 2015. IEEE. <a class="reference external" href="https://doi.org/10.1109/EMBC.2015.7319296">doi:10.1109/EMBC.2015.7319296</a>.</p>
-</dd>
-</dl>
+<aside class="footnote brackets" id="footcite-iclabel2019" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<p>Luca Pion-Tonachini, Ken Kreutz-Delgado, and Scott Makeig. Iclabel: an automated electroencephalographic independent component classifier, dataset, and website. <em>NeuroImage</em>, 198:181–197, 2019. URL: <a class="reference external" href="https://www.sciencedirect.com/science/article/pii/S1053811919304185">https://www.sciencedirect.com/science/article/pii/S1053811919304185</a>, <a class="reference external" href="https://doi.org/https://doi.org/10.1016/j.neuroimage.2019.05.026">doi:https://doi.org/10.1016/j.neuroimage.2019.05.026</a>.</p>
+</aside>
+<aside class="footnote brackets" id="footcite-winkleretal2015" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">2</a><span class="fn-bracket">]</span></span>
+<p>Irene Winkler, Stefan Debener, Klaus-Robert Müller, and Michael Tangermann. On the influence of high-pass filtering on ICA-based artifact reduction in EEG-ERP. In <em>Proceedings of EMBC-2015</em>, 4101–4105. Milan, 2015. IEEE. <a class="reference external" href="https://doi.org/10.1109/EMBC.2015.7319296">doi:10.1109/EMBC.2015.7319296</a>.</p>
+</aside>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  52.144 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  51.772 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-iclabel-automatic-artifact-correction-ica-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/59f8c8f9ff57a99049f45e3817855764/iclabel_automatic_artifact_correction_ica.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">iclabel_automatic_artifact_correction_ica.py</span></code></a></p>
@@ -889,13 +884,13 @@ Opening raw-browser...
     
     <div class="footer-item">
       <p class="copyright">
-    &copy; Copyright 2021-2022, MNE Developers. Last updated on 2022-05-26.<br>
+    &copy; Copyright 2021-2022, MNE Developers. Last updated on 2022-05-30.<br>
 </p>
     </div>
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.0.0.<br>
 </p>
     </div>
     

@@ -240,7 +240,7 @@ def test_eeg_rpsd_constants(fname, constants_fname, type_):
 
 
 @pytest.mark.parametrize(
-    "fname, step_by_step_fname, psd_fname, type_",
+    "fname, constants_fname, step_by_step_fname, psd_fname, type_",
     (
         (raw_eeglab_path, psd_constants_raw_path, psd_steps_raw_path, psd_raw_path, "raw"),
         (epo_eeglab_path, psd_constants_epo_path, psd_steps_epo_path, psd_epo_path, "epo"),

@@ -209,7 +209,8 @@ def test_eeg_topoplot(file, eeglab_result_file):
 def test_eeg_rpsd_constants(fname, constants_fname, type_):
     """Test _eeg_rpsd_constants function."""
     reader = read_raw if type_ == "raw" else read_epochs_eeglab
-    inst = reader(fname)
+    kwargs = dict(preload=True) if type_ == "raw" else dict()
+    inst = reader(fname, **kwargs)
     ica = read_ica_eeglab(fname)
     ncomp, nfreqs, n_points, nyquist, index, window, subset = _eeg_rpsd_constants(inst, ica)
 
@@ -238,13 +239,24 @@ def test_eeg_rpsd_constants(fname, constants_fname, type_):
     assert len(set(list(subset_eeglab[0, :] - 1)).difference(set(list(subset)))) == 0
 
 
-def test_eeg_rpsd():
+@pytest.mark.parametrize(
+    "fname, step_by_step_fname, psd_fname, type_",
+    (
+        (raw_eeglab_path, psd_constants_raw_path, psd_steps_raw_path, psd_raw_path, "raw"),
+        (epo_eeglab_path, psd_constants_epo_path, psd_steps_epo_path, psd_epo_path, "epo"),
+        (
+            epo_long_eeglab_path,
+            psd_constants_long_epo_path,
+            psd_steps_long_epo_path,
+            psd_long_epo_path,
+            "epo",
+        ),
+    ),
+)
+def test_eeg_rpsd(fname, constants_fname, step_by_step_fname, psd_fname, type_):
     """Test eeg_rpsd function that extract the PSD feature from the IC."""
-    # Raw --------------------------------------------------------------------
-    # Compare that both MATLAB files are identical (since rng('default') was
-    # called both time, resetting the seed).
-    psd1 = loadmat(psd_steps_raw_path)["psd"]
-    psd2 = loadmat(psd_raw_path)["psd"]
+    psd1 = loadmat(step_by_step_fname)["psd"]
+    psd2 = loadmat(psd_fname)["psd"]
     assert np.allclose(psd1, psd2, atol=1e-4)
 
     # clean-up
@@ -253,55 +265,23 @@ def test_eeg_rpsd():
     del psd2
 
     # compute psd in Python
-    raw = read_raw(raw_eeglab_path, preload=True)
-    ica = read_ica_eeglab(raw_eeglab_path)
-    icaact = _compute_ica_activations(raw, ica)
+    reader = read_raw if type_ == "raw" else read_epochs_eeglab
+    kwargs = dict(preload=True) if type_ == "raw" else dict()
+    inst = reader(fname, **kwargs)
+    ica = read_ica_eeglab(fname)
+    icaact = _compute_ica_activations(inst, ica)
 
     # retrieve subset from eeglab
-    constants_eeglab = loadmat(psd_constants_raw_path)["constants"][0, 0]
+    constants_eeglab = loadmat(constants_fname)["constants"][0, 0]
     assert constants_eeglab["subset"].shape[0] == 1
     subset_eeglab = constants_eeglab["subset"][0, :] - 1
 
     # retrieve the rest from python
-    ncomp, nfreqs, n_points, nyquist, index, window, _ = _eeg_rpsd_constants(raw, ica)
+    ncomp, nfreqs, n_points, nyquist, index, window, _ = _eeg_rpsd_constants(inst, ica)
 
     # compute psdmed
     psdmed = _eeg_rpsd_compute_psdmed(
-        raw, icaact, ncomp, nfreqs, n_points, nyquist, index, window, subset_eeglab
-    )
-
-    # format and compare
-    psd = _eeg_rpsd_format(psdmed)
-    assert np.allclose(psd, psd_eeglab, atol=1e-5)
-
-    # Epochs -----------------------------------------------------------------
-    # Compare that both MATLAB files are identical (since rng('default') was
-    # called both time, resetting the seed).
-    psd1 = loadmat(psd_steps_epo_path)["psd"]
-    psd2 = loadmat(psd_epo_path)["psd"]
-    assert np.allclose(psd1, psd2, atol=1e-4)
-
-    # clean-up
-    psd_eeglab = psd2.copy()
-    del psd1
-    del psd2
-
-    # compute psd in Python
-    epochs = read_epochs_eeglab(epo_eeglab_path)
-    ica = read_ica_eeglab(epo_eeglab_path)
-    icaact = _compute_ica_activations(epochs, ica)
-
-    # retrieve subset from eeglab
-    constants_eeglab = loadmat(psd_constants_epo_path)["constants"][0, 0]
-    assert constants_eeglab["subset"].shape[0] == 1
-    subset_eeglab = constants_eeglab["subset"][0, :] - 1
-
-    # retrieve the rest from python
-    ncomp, nfreqs, n_points, nyquist, index, window, _ = _eeg_rpsd_constants(epochs, ica)
-
-    # compute psdmed
-    psdmed = _eeg_rpsd_compute_psdmed(
-        epochs, icaact, ncomp, nfreqs, n_points, nyquist, index, window, subset_eeglab
+        inst, icaact, ncomp, nfreqs, n_points, nyquist, index, window, subset_eeglab
     )
 
     # format and compare

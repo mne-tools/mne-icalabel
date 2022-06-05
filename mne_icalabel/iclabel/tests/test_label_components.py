@@ -1,6 +1,6 @@
 import numpy as np
 import pytest
-from mne import create_info
+from mne import create_info, make_fixed_length_epochs
 from mne.datasets import sample
 from mne.io import RawArray, read_raw
 from mne.preprocessing import ICA
@@ -9,20 +9,31 @@ from mne_icalabel.iclabel import iclabel_label_components
 
 directory = sample.data_path() / "MEG" / "sample"
 raw = read_raw(directory / "sample_audvis_raw.fif", preload=False)
-raw.crop(0, 10).pick_types(eeg=True, exclude="bads")
+raw.crop(0, 100).pick_types(eeg=True, exclude="bads")
 raw.load_data()
 # preprocess
 raw.filter(l_freq=1.0, h_freq=100.0)
 raw.set_eeg_reference("average")
-# fit ICA
-ica = ICA(n_components=5, method="picard", random_state=101)
-ica.fit(raw)
 
 
 @pytest.mark.filterwarnings("ignore::RuntimeWarning")
-def test_label_components():
-    """Simple test to check that label_components runs without raising."""
-    labels = iclabel_label_components(raw, ica)
+@pytest.mark.parametrize(
+    "inst",
+    (
+        raw,
+        raw.copy().crop(0, 10),
+        raw.copy().crop(0, 1),
+        make_fixed_length_epochs(raw, duration=0.5),
+        make_fixed_length_epochs(raw, duration=1),
+        make_fixed_length_epochs(raw, duration=5),
+        make_fixed_length_epochs(raw, duration=10),
+    ),
+)
+def test_label_components(inst):
+    """Check that label_components does not raise on various data shapes."""
+    ica = ICA(n_components=5, method="picard", fit_params=dict(ortho=False, extended=True))
+    ica.fit(inst)
+    labels = iclabel_label_components(inst, ica)
     assert labels.shape == (ica.n_components_, 7)
 
 

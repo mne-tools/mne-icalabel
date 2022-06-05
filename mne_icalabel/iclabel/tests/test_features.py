@@ -208,9 +208,7 @@ def test_eeg_topoplot(file, eeglab_result_file):
 )
 def test_eeg_rpsd_constants(fname, constants_fname, type_):
     """Test _eeg_rpsd_constants function."""
-    reader = read_raw if type_ == "raw" else read_epochs_eeglab
-    kwargs = dict(preload=True) if type_ == "raw" else dict()
-    inst = reader(fname, **kwargs)
+    inst = reader[type_](fname, **kwargs[type_])
     ica = read_ica_eeglab(fname)
     ncomp, nfreqs, n_points, nyquist, index, window, subset = _eeg_rpsd_constants(inst, ica)
 
@@ -265,9 +263,7 @@ def test_eeg_rpsd(fname, constants_fname, step_by_step_fname, psd_fname, type_):
     del psd2
 
     # compute psd in Python
-    reader = read_raw if type_ == "raw" else read_epochs_eeglab
-    kwargs = dict(preload=True) if type_ == "raw" else dict()
-    inst = reader(fname, **kwargs)
+    inst = reader[type_](fname, **kwargs[type_])
     ica = read_ica_eeglab(fname)
     icaact = _compute_ica_activations(inst, ica)
 

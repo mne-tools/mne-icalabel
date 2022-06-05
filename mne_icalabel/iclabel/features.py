@@ -311,6 +311,8 @@ def _eeg_rpsd_compute_psdmed(
         if isinstance(inst, BaseRaw):
             temp = np.hstack([icaact[it, index[:, k]] for k in range(index.shape[-1])])
             temp = temp.reshape(*index.shape, order="F")
+            # equivalent to:
+            # np.vstack([icaact[it, index[:, k]] for k in range(index.shape[-1])]).T
         elif isinstance(inst, BaseEpochs):
             temp = np.vstack([icaact[it, index[:, k], :] for k in range(index.shape[-1])])
             temp = temp.reshape(index.shape[0], index.shape[1] * len(inst), order="F")

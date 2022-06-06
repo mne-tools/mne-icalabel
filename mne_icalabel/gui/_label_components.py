@@ -8,6 +8,12 @@
 
 import platform
 
+from mne.viz.backends.renderer import _get_renderer
+
+from matplotlib.figure import Figure
+from matplotlib.backends.backend_qt5agg import FigureCanvas
+
+
 from qtpy import QtCore, QtGui
 from qtpy.QtCore import Slot, Signal
 from qtpy.QtWidgets import (QMainWindow, QGridLayout,
@@ -26,8 +32,49 @@ from qtpy.QtWidgets import (QMainWindow, QGridLayout,
 _CH_MENU_WIDTH = 30 if platform.system() == 'Windows' else 10
 
 
+def _make_topo_plot(width=4, height=4, dpi=300):
+    """Make subplot for the topomap."""
+    fig = Figure(figsize=(width, height), dpi=dpi)
+    canvas = FigureCanvas(fig)
+    ax = fig.subplots()
+    fig.subplots_adjust(bottom=0, left=0, right=1, top=1, wspace=0, hspace=0)
+    ax.set_facecolor('k')
+    # clean up excess plot text, invert
+    ax.invert_yaxis()
+    ax.set_xticks([])
+    ax.set_yticks([])
+    return canvas, fig
+
+
+def _make_ts_plot(width=4, height=4, dpi=300):
+    """Make subplot for the component time-series."""
+    fig = Figure(figsize=(width, height), dpi=dpi)
+    canvas = FigureCanvas(fig)
+    ax = fig.subplots()
+    fig.subplots_adjust(bottom=0, left=0, right=1, top=1, wspace=0, hspace=0)
+    ax.set_facecolor('k')
+    # clean up excess plot text, invert
+    ax.invert_yaxis()
+    ax.set_xticks([])
+    ax.set_yticks([])
+    return canvas, fig
+
+def _make_spectrum_plot(width=4, height=4, dpi=300):
+    """Make subplot for the spectrum."""
+    fig = Figure(figsize=(width, height), dpi=dpi)
+    canvas = FigureCanvas(fig)
+    ax = fig.subplots()
+    fig.subplots_adjust(bottom=0, left=0, right=1, top=1, wspace=0, hspace=0)
+    ax.set_facecolor('k')
+    # clean up excess plot text, invert
+    ax.invert_yaxis()
+    ax.set_xticks([])
+    ax.set_yticks([])
+    return canvas, fig
+
+
 # TODO:
-#? - plot_properties plot
+#? - plot_properties plot - topoplot, ICA time-series
 #? - update ICA components
 #? - menu with save, load
 class ICAComponentLabeler(QMainWindow):
@@ -40,15 +87,16 @@ class ICAComponentLabeler(QMainWindow):
 
         # GUI design
 
-        # Main plots: make one plot for each view; sagittal, coronal, axial
+        # Main plots: make one plot for each view:
+        # topographic, time-series, power-spectrum
         plt_grid = QGridLayout()
-        plts = [_make_slice_plot(), _make_slice_plot(), _make_slice_plot()]
+        plts = [_make_topo_plot(), _make_ts_plot(), _make_spectrum_plot()]
         self._figs = [plts[0][1], plts[1][1], plts[2][1]]
         plt_grid.addWidget(plts[0][0], 0, 0)
         plt_grid.addWidget(plts[1][0], 0, 1)
         plt_grid.addWidget(plts[2][0], 1, 0)
         self._renderer = _get_renderer(
-            name='IEEG Locator', size=(400, 400), bgcolor='w')
+            name='ICA Component Labeler', size=(400, 400), bgcolor='w')
         plt_grid.addWidget(self._renderer.plotter)
 
         # Channel selector
@@ -93,6 +141,7 @@ class ICAComponentLabeler(QMainWindow):
         self._ch_list.setFocus()  # always focus on list
 
     def _plot_images(self):
+        # TODO: embed the matplotlib figure in each FigureCanvas
         pass
 
     def _save_component_labels(self):

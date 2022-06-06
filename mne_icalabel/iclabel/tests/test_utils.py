@@ -9,7 +9,7 @@ from scipy.io import loadmat
 from mne_icalabel.datasets import icalabel
 from mne_icalabel.iclabel.utils import _gdatav4, _mne_to_eeglab_locs, _next_power_of_2
 
-dataset_path = Path(icalabel.data_path()) / "iclabel"
+dataset_path = icalabel.data_path() / "iclabel"
 
 # Raw/Epochs files with ICA decomposition
 raw_eeglab_path = dataset_path / "datasets/sample-raw.set"

@@ -311,11 +311,11 @@ def _eeg_rpsd_compute_psdmed(
         if isinstance(inst, BaseRaw):
             temp = np.hstack([icaact[it, index[:, k]] for k in range(index.shape[-1])])
             temp = temp.reshape(*index.shape, order="F")
+            # equivalent to:
+            # np.vstack([icaact[it, index[:, k]] for k in range(index.shape[-1])]).T
         elif isinstance(inst, BaseEpochs):
-            temp = np.hstack([icaact[it, index[:, k], :] for k in range(index.shape[-1])])
-            temp = temp.reshape(index.shape[0], len(inst), order="F")
-        else:
-            raise RuntimeError  # should never happen
+            temp = np.vstack([icaact[it, index[:, k], :] for k in range(index.shape[-1])])
+            temp = temp.reshape(index.shape[0], index.shape[1] * len(inst), order="F")
         temp = (temp[:, subset].T * window).T
         temp = np.fft.fft(temp, n_points, axis=0)
         temp = temp * np.conjugate(temp)

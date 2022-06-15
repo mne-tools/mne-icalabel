@@ -10,8 +10,9 @@ import platform
 
 from matplotlib.backends.backend_qt5agg import FigureCanvas
 from matplotlib.figure import Figure
+from mne.preprocessing import ICA
 from mne.viz.backends.renderer import _get_renderer
-from qtpy import QtCore, QtGui
+from qtpy import QtGui
 from qtpy.QtCore import Signal, Slot
 from qtpy.QtWidgets import (
     QAbstractItemView,
@@ -85,41 +86,48 @@ def _make_spectrum_plot(width=4, height=4, dpi=300):
 # ? - update ICA components
 # ? - menu with save, load
 class ICAComponentLabeler(QMainWindow):
-    def __init__(self, ica, raw) -> None:
+    def __init__(self, inst, ica: ICA) -> None:
         # initialize QMainWindow class
         super().__init__()
 
+        # keep an internal pointer to the ICA and Raw
         self._ica = ica
-        self._raw = raw
+        self._inst = inst
 
-        # GUI design
-
-        # Main plots: make one plot for each view:
-        # topographic, time-series, power-spectrum
+        # GUI design to add widgets into a Layout
+        # Main plots: make one plot for each view: topographic, time-series, power-spectrum
         plt_grid = QGridLayout()
         plts = [_make_topo_plot(), _make_ts_plot(), _make_spectrum_plot()]
         self._figs = [plts[0][1], plts[1][1], plts[2][1]]
         plt_grid.addWidget(plts[0][0], 0, 0)
         plt_grid.addWidget(plts[1][0], 0, 1)
         plt_grid.addWidget(plts[2][0], 1, 0)
+
+        # TODO: is this the correct function to use to render? or nah... since we don't have 3D?
         self._renderer = _get_renderer(name="ICA Component Labeler", size=(400, 400), bgcolor="w")
         plt_grid.addWidget(self._renderer.plotter)
 
-        # Channel selector
-        self._ch_list = QListView()
-        self._ch_list.setSelectionMode(QAbstractItemView.SingleSelection)
-        max_ch_name_len = max([len(name) for name in self._chs])
-        self._ch_list.setMinimumWidth(max_ch_name_len * _CH_MENU_WIDTH)
-        self._ch_list.setMaximumWidth(max_ch_name_len * _CH_MENU_WIDTH)
-        self._set_ch_names()
+        # initialize channel data
+        self._component_index = 0
+
+        # component names are just a list of numbers from 0 to n_components
+        self._component_names = list(range(ica.n_components_))
+
+        # Component selector in a clickable selection list
+        self._component_list = QListView()
+        self._component_list.setSelectionMode(QAbstractItemView.SingleSelection)
+        max_comp_name_len = max([len(name) for name in self._component_list])
+        self._component_list.setMinimumWidth(max_comp_name_len * _CH_MENU_WIDTH)
+        self._component_list.setMaximumWidth(max_comp_name_len * _CH_MENU_WIDTH)
+        self._set_component_names()
 
         # Plots
         self._plot_images()
 
-        # Menus
-        button_hbox = self._get_button_bar()
-        slider_hbox = self._get_slider_bar()
-        bottom_hbox = self._get_bottom_bar()
+        # TODO: Menus for user interface
+        # button_hbox = self._get_button_bar()
+        # slider_hbox = self._get_slider_bar()
+        # bottom_hbox = self._get_bottom_bar()
 
         # Add lines
         self._lines = dict()
@@ -128,32 +136,61 @@ class ICAComponentLabeler(QMainWindow):
             self._update_lines(group)
 
         # Put everything together
-        # plot_ch_hbox = QHBoxLayout()
-        # plot_ch_hbox.addLayout(plt_grid)
-        # plot_ch_hbox.addWidget(self._ch_list)
+        plot_component_hbox = QHBoxLayout()
+        plot_component_hbox.addLayout(plt_grid)
+        plot_component_hbox.addWidget(self._component_list)
 
-        # main_vbox = QVBoxLayout()
+        # TODO: add the rest of the button and other widgets/menus
+        main_vbox = QVBoxLayout()
+        main_vbox.addLayout(plot_component_hbox)
         # main_vbox.addLayout(button_hbox)
         # main_vbox.addLayout(slider_hbox)
-        # main_vbox.addLayout(plot_ch_hbox)
         # main_vbox.addLayout(bottom_hbox)
 
-        # central_widget = QWidget()
-        # central_widget.setLayout(main_vbox)
-        # self.setCentralWidget(central_widget)
+        central_widget = QWidget()
+        central_widget.setLayout(main_vbox)
+        self.setCentralWidget(central_widget)
 
         # ready for user
-        # self._move_cursors_to_pos()
-        # self._ch_list.setFocus()  # always focus on list
+        self._component_list.setFocus()  # always focus on list
+
+    def _set_component_names(self):
+        """Add the component names to the selector."""
+        self._component_list_model = QtGui.QStandardItemModel(self._component_list)
+        for name in self._component_names:
+            self._component_list_model.appendRow(QtGui.QStandardItem(name))
+            # TODO: can add a method to color code the list of items
+            # self._color_list_item(name=name)
+        self._component_list.setModel(self._component_list_model)
+        self._component_list.clicked.connect(self._go_to_component)
+        self._component_list.setCurrentIndex(
+            self._component_list_model.index(self._component_index, 0)
+        )
+        self._component_list.keyPressEvent = self._key_press_event
+
+    def _go_to_component(self, index):
+        """Change current channel to the item selected."""
+        self._component_index = index.row()
+        self._update_component_selection()
+
+    def _update_component_selection(self):
+        """Update which channel is selected."""
+        name = self._component_names[self._component_index]
+        self._component_list.setCurrentIndex(
+            self._component_list_model.index(self._component_index, 0)
+        )
+        # self._group_selector.setCurrentIndex(self._groups[name])
+        # self._update_group()
+        # if not np.isnan(self._chs[name]).any():
+        #     self._set_ras(self._chs[name])
+        #     self._update_camera(render=True)
+        #     self._draw()
 
     def _plot_images(self):
         # TODO: embed the matplotlib figure in each FigureCanvas
         pass
 
     def _save_component_labels(self):
-        pass
-
-    def _update_grouop(self):
         pass
 
     @Slot()
@@ -174,10 +211,6 @@ class ICAComponentLabeler(QMainWindow):
         QMessageBox.information(
             self,
             "Help",
-            "Help:\n'm': mark channel location\n"
-            "'r': remove channel location\n"
-            "'b': toggle viewing of brain in T1\n"
-            "'+'/'-': zoom\nleft/right arrow: left/right\n"
-            "up/down arrow: superior/inferior\n"
-            "left angle bracket/right angle bracket: anterior/posterior",
+            "Help:\n'g': mark component as good (brain)\n"
+            "up/down arrow: move up/down the list of components\n",
         )

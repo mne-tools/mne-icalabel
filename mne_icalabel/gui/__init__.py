@@ -26,6 +26,6 @@ def label_ica_components(inst, ica, verbose=None):
     app = QApplication.instance()
     if app is None:
         app = QApplication(["ICA Component Labeler"])
-    gui = ICAComponentLabeler(inst, ica, verbose=verbose)
+    gui = ICAComponentLabeler(inst=inst, ica=ica, verbose=verbose)
     gui.show()
     return gui

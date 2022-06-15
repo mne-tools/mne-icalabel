@@ -8,20 +8,26 @@
 
 import platform
 
-from mne.viz.backends.renderer import _get_renderer
-
-from matplotlib.figure import Figure
 from matplotlib.backends.backend_qt5agg import FigureCanvas
-
-
+from matplotlib.figure import Figure
+from mne.viz.backends.renderer import _get_renderer
 from qtpy import QtCore, QtGui
-from qtpy.QtCore import Slot, Signal
-from qtpy.QtWidgets import (QMainWindow, QGridLayout,
-                            QVBoxLayout, QHBoxLayout, QLabel,
-                            QMessageBox, QWidget, QAbstractItemView,
-                            QListView, QSlider, QPushButton,
-                            QComboBox, QPlainTextEdit)
-
+from qtpy.QtCore import Signal, Slot
+from qtpy.QtWidgets import (
+    QAbstractItemView,
+    QComboBox,
+    QGridLayout,
+    QHBoxLayout,
+    QLabel,
+    QListView,
+    QMainWindow,
+    QMessageBox,
+    QPlainTextEdit,
+    QPushButton,
+    QSlider,
+    QVBoxLayout,
+    QWidget,
+)
 
 # _IMG_LABELS = [['I', 'P'], ['I', 'L'], ['P', 'L']]
 # _CH_PLOT_SIZE = 1024
@@ -29,7 +35,7 @@ from qtpy.QtWidgets import (QMainWindow, QGridLayout,
 # _RADIUS_SCALAR = 0.4
 # _TUBE_SCALAR = 0.1
 # _BOLT_SCALAR = 30  # mm
-_CH_MENU_WIDTH = 30 if platform.system() == 'Windows' else 10
+_CH_MENU_WIDTH = 30 if platform.system() == "Windows" else 10
 
 
 def _make_topo_plot(width=4, height=4, dpi=300):
@@ -38,7 +44,7 @@ def _make_topo_plot(width=4, height=4, dpi=300):
     canvas = FigureCanvas(fig)
     ax = fig.subplots()
     fig.subplots_adjust(bottom=0, left=0, right=1, top=1, wspace=0, hspace=0)
-    ax.set_facecolor('k')
+    ax.set_facecolor("k")
     # clean up excess plot text, invert
     ax.invert_yaxis()
     ax.set_xticks([])
@@ -52,12 +58,13 @@ def _make_ts_plot(width=4, height=4, dpi=300):
     canvas = FigureCanvas(fig)
     ax = fig.subplots()
     fig.subplots_adjust(bottom=0, left=0, right=1, top=1, wspace=0, hspace=0)
-    ax.set_facecolor('k')
+    ax.set_facecolor("k")
     # clean up excess plot text, invert
     ax.invert_yaxis()
     ax.set_xticks([])
     ax.set_yticks([])
     return canvas, fig
+
 
 def _make_spectrum_plot(width=4, height=4, dpi=300):
     """Make subplot for the spectrum."""
@@ -65,7 +72,7 @@ def _make_spectrum_plot(width=4, height=4, dpi=300):
     canvas = FigureCanvas(fig)
     ax = fig.subplots()
     fig.subplots_adjust(bottom=0, left=0, right=1, top=1, wspace=0, hspace=0)
-    ax.set_facecolor('k')
+    ax.set_facecolor("k")
     # clean up excess plot text, invert
     ax.invert_yaxis()
     ax.set_xticks([])
@@ -74,11 +81,11 @@ def _make_spectrum_plot(width=4, height=4, dpi=300):
 
 
 # TODO:
-#? - plot_properties plot - topoplot, ICA time-series
-#? - update ICA components
-#? - menu with save, load
+# ? - plot_properties plot - topoplot, ICA time-series
+# ? - update ICA components
+# ? - menu with save, load
 class ICAComponentLabeler(QMainWindow):
-    def __init__(self, ica, raw, ) -> None:
+    def __init__(self, ica, raw) -> None:
         # initialize QMainWindow class
         super().__init__()
 
@@ -95,8 +102,7 @@ class ICAComponentLabeler(QMainWindow):
         plt_grid.addWidget(plts[0][0], 0, 0)
         plt_grid.addWidget(plts[1][0], 0, 1)
         plt_grid.addWidget(plts[2][0], 1, 0)
-        self._renderer = _get_renderer(
-            name='ICA Component Labeler', size=(400, 400), bgcolor='w')
+        self._renderer = _get_renderer(name="ICA Component Labeler", size=(400, 400), bgcolor="w")
         plt_grid.addWidget(self._renderer.plotter)
 
         # Channel selector
@@ -166,10 +172,12 @@ class ICAComponentLabeler(QMainWindow):
     def _show_help(self):
         """Show the help menu."""
         QMessageBox.information(
-            self, 'Help',
+            self,
+            "Help",
             "Help:\n'm': mark channel location\n"
             "'r': remove channel location\n"
             "'b': toggle viewing of brain in T1\n"
             "'+'/'-': zoom\nleft/right arrow: left/right\n"
             "up/down arrow: superior/inferior\n"
-            "left angle bracket/right angle bracket: anterior/posterior")
+            "left angle bracket/right angle bracket: anterior/posterior",
+        )

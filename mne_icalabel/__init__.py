@@ -7,4 +7,5 @@
 
 __version__ = "0.2dev0"
 
+from . import gui
 from .label_components import label_components  # noqa: F401

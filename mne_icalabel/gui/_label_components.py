@@ -122,23 +122,23 @@ class ICAComponentLabeler(QMainWindow):
             self._update_lines(group)
 
         # Put everything together
-        plot_ch_hbox = QHBoxLayout()
-        plot_ch_hbox.addLayout(plt_grid)
-        plot_ch_hbox.addWidget(self._ch_list)
+        # plot_ch_hbox = QHBoxLayout()
+        # plot_ch_hbox.addLayout(plt_grid)
+        # plot_ch_hbox.addWidget(self._ch_list)
 
-        main_vbox = QVBoxLayout()
-        main_vbox.addLayout(button_hbox)
-        main_vbox.addLayout(slider_hbox)
-        main_vbox.addLayout(plot_ch_hbox)
-        main_vbox.addLayout(bottom_hbox)
+        # main_vbox = QVBoxLayout()
+        # main_vbox.addLayout(button_hbox)
+        # main_vbox.addLayout(slider_hbox)
+        # main_vbox.addLayout(plot_ch_hbox)
+        # main_vbox.addLayout(bottom_hbox)
 
-        central_widget = QWidget()
-        central_widget.setLayout(main_vbox)
-        self.setCentralWidget(central_widget)
+        # central_widget = QWidget()
+        # central_widget.setLayout(main_vbox)
+        # self.setCentralWidget(central_widget)
 
         # ready for user
-        self._move_cursors_to_pos()
-        self._ch_list.setFocus()  # always focus on list
+        # self._move_cursors_to_pos()
+        # self._ch_list.setFocus()  # always focus on list
 
     def _plot_images(self):
         # TODO: embed the matplotlib figure in each FigureCanvas

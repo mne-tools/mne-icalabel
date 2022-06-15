@@ -2,6 +2,7 @@ import platform
 
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
 from matplotlib.figure import Figure
+from mne.utils import logger
 from qtpy.QtCore import Qt, Slot
 from qtpy.QtWidgets import (
     QAbstractItemView,
@@ -94,8 +95,6 @@ class Labels(QWidget):
             self.buttonGroup.addButton(pushButton, k)
             layout.addWidget(pushButton)
         self.setLayout(layout)
-        # connect signal to slots
-        self.buttonGroup.buttonClicked.connect(self.pushButton_clicked)
 
     @staticmethod
     def create_pushButton(label):
@@ -107,13 +106,16 @@ class Labels(QWidget):
         pushButton.setEnabled(False)
         return pushButton
 
-    @Slot()
-    def pushButton_clicked(self):
-        # retrieve label from object name
-        pass
-
 
 class ICAComponentLabeler(QMainWindow):
+    """Qt GUI to annotate components.
+
+    Parameters
+    ----------
+    inst : Raw
+    ica : ICA
+    """
+
     def __init__(self, inst, ica) -> None:
         super().__init__()
         self.setWindowTitle("ICA Component Labeler")
@@ -164,18 +166,18 @@ class ICAComponentLabeler(QMainWindow):
     @Slot()
     def list_component_clicked(self):
         """Jump to the selected component and draw the plots."""
-        checked_idx = self.buttonGroup_labels.buttonGroup.checkedId()
-        # checked_idx: the value range from 0 to n_buttons-1
-        # -1 is returned if no button is checked
+        # reset all buttons
+        self.buttonGroup_labels.buttonGroup.setExclusive(False)
         for button in self.buttonGroup_labels.buttonGroup.buttons():
-            button.setChecked(False)
             button.setEnabled(True)
+            button.setChecked(False)
+        self.buttonGroup_labels.buttonGroup.setExclusive(True)
 
-        idx = self.list_components.currentRow()
-        # idx: the value range from 0 to n_components-1
-        self.widget_topo.change_ic(self._ica, idx)
-        self.widget_psd.change_ic(self._ica, idx)
-        self.widget_timeSeries.change_ic(self._ica, self._inst, idx)
+        # update selectedf IC
+        self._current_ic = self.list_components.currentRow()
+        self.widget_topo.change_ic(self._ica, self._current_ic)
+        self.widget_psd.change_ic(self._ica, self._current_ic)
+        self.widget_timeSeries.change_ic(self._ica, self._inst, self._current_ic)
 
     def closeEvent(self, event):
         """Clean up upon closing the window.

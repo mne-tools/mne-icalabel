@@ -2,7 +2,6 @@ import platform
 
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
 from matplotlib.figure import Figure
-from mne.utils import logger
 from qtpy.QtCore import Qt, Slot
 from qtpy.QtWidgets import (
     QAbstractItemView,
@@ -22,16 +21,16 @@ class TopomapFig(FigureCanvasQTAgg):
     """Topographic map figure widget."""
 
     def __init__(self, width=4, height=4, dpi=300):
-        fig = Figure(figsize=(width, height), dpi=dpi)
-        ax = fig.subplots()
-        fig.subplots_adjust(bottom=0, left=0, right=1, top=1, wspace=0, hspace=0)
-        # clean up excess plot text, invert
-        ax.invert_yaxis()
-        ax.set_xticks([])
-        ax.set_yticks([])
-        super().__init__(fig)
+        self.fig = Figure(figsize=(width, height), dpi=dpi)
+        self.axes = self.fig.subplots()
+        self.fig.subplots_adjust(bottom=0, left=0, right=1, top=1, wspace=0, hspace=0)
+        super().__init__(self.fig)
 
     def change_ic(self, ica, idx):
+        # self.axes.clear()
+        # ica.plot_components(picks=idx, topomap_args=dict(axes=self.axes))
+        # self.fig.canvas.draw()
+        # self.fig.canvas.flush_events()
         pass
 
 
@@ -173,7 +172,7 @@ class ICAComponentLabeler(QMainWindow):
             button.setChecked(False)
         self.buttonGroup_labels.buttonGroup.setExclusive(True)
 
-        # update selectedf IC
+        # update selected IC
         self._current_ic = self.list_components.currentRow()
         self.widget_topo.change_ic(self._ica, self._current_ic)
         self.widget_psd.change_ic(self._ica, self._current_ic)

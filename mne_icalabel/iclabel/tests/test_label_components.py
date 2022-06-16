@@ -1,6 +1,6 @@
 import numpy as np
 import pytest
-from mne import create_info, make_fixed_length_epochs
+from mne import create_info, pick_types, make_fixed_length_epochs
 from mne.datasets import sample
 from mne.io import RawArray, read_raw
 from mne.preprocessing import ICA
@@ -18,21 +18,29 @@ raw.set_eeg_reference("average")
 
 @pytest.mark.filterwarnings("ignore::RuntimeWarning")
 @pytest.mark.parametrize(
-    "inst",
+    "inst, exclude",
     (
-        raw,
-        raw.copy().crop(0, 10),
-        raw.copy().crop(0, 1),
-        make_fixed_length_epochs(raw, duration=0.5, preload=True),
-        make_fixed_length_epochs(raw, duration=1, preload=True),
-        make_fixed_length_epochs(raw, duration=5, preload=True),
-        make_fixed_length_epochs(raw, duration=10, preload=True),
+        (raw, "bads"),
+        (raw.copy().crop(0, 10), "bads"),
+        (raw.copy().crop(0, 1), "bads"),
+        (make_fixed_length_epochs(raw, duration=0.5, preload=True), "bads"),
+        (make_fixed_length_epochs(raw, duration=1, preload=True), "bads"),
+        (make_fixed_length_epochs(raw, duration=5, preload=True), "bads"),
+        (make_fixed_length_epochs(raw, duration=10, preload=True), "bads"),
+        (raw, []),
+        (raw.copy().crop(0, 10), []),
+        (raw.copy().crop(0, 1), []),
+        (make_fixed_length_epochs(raw, duration=0.5, preload=True), []),
+        (make_fixed_length_epochs(raw, duration=1, preload=True), []),
+        (make_fixed_length_epochs(raw, duration=5, preload=True), []),
+        (make_fixed_length_epochs(raw, duration=10, preload=True), []),
     ),
 )
-def test_label_components(inst):
+def test_label_components(inst, exclude):
     """Check that label_components does not raise on various data shapes."""
+    picks = pick_types(raw.info, eeg=True, exclude=exclude)
     ica = ICA(n_components=5, method="picard", fit_params=dict(ortho=False, extended=True))
-    ica.fit(inst)
+    ica.fit(inst, picks=picks)
     labels = iclabel_label_components(inst, ica)
     assert labels.shape == (ica.n_components_, 7)
 

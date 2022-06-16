@@ -160,7 +160,7 @@ def test_topoplotFast(file, eeglab_result_file):
     # load ICA
     ica = read_ica_eeglab(file)
     # convert coordinates
-    rd, th = _mne_to_eeglab_locs(inst)
+    rd, th = _mne_to_eeglab_locs(inst, ica.ch_names)
     th = np.pi / 180 * th
     # get icawinv
     icawinv, _ = _retrieve_eeglab_icawinv(ica)
@@ -190,7 +190,7 @@ def test_eeg_topoplot(file, eeglab_result_file):
     # get icawinv
     icawinv, _ = _retrieve_eeglab_icawinv(ica)
     # compute feature
-    topo = _eeg_topoplot(inst, icawinv)
+    topo = _eeg_topoplot(inst, icawinv, ica.ch_names)
     # load from eeglab
     topo_eeglab = loadmat(eeglab_result_file)["topo"]
     # compare

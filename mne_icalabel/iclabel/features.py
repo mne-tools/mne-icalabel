@@ -1,4 +1,4 @@
-from typing import Tuple, Union
+from typing import List, Tuple, Union
 
 import numpy as np
 from mne import BaseEpochs
@@ -76,7 +76,7 @@ def get_iclabel_features(inst: Union[BaseRaw, BaseEpochs], ica: ICA):
     icaact = _compute_ica_activations(inst, ica)
 
     # compute topographic feature (float32)
-    topo = _eeg_topoplot(inst, icawinv)
+    topo = _eeg_topoplot(inst, icawinv, ica.ch_names)
 
     # compute psd feature (float32)
     psd = _eeg_rpsd(inst, ica, icaact)
@@ -168,12 +168,13 @@ def _compute_ica_activations(inst: Union[BaseRaw, BaseEpochs], ica: ICA) -> NDAr
 
 
 # ----------------------------------------------------------------------------
-def _eeg_topoplot(inst: Union[BaseRaw, BaseEpochs], icawinv: NDArray[float]) -> NDArray[float]:
+def _eeg_topoplot(
+    inst: Union[BaseRaw, BaseEpochs], icawinv: NDArray[float], picks: List[str]
+) -> NDArray[float]:
     """Topoplot feature."""
-    # TODO: Selection of channels is missing.
     ncomp = icawinv.shape[-1]
     topo = np.zeros((32, 32, 1, ncomp))
-    rd, th = _mne_to_eeglab_locs(inst)
+    rd, th = _mne_to_eeglab_locs(inst, picks)
     th = np.pi / 180 * th  # convert degrees to radians
     for it in range(ncomp):
         temp_topo = _topoplotFast(icawinv[:, it], rd, th)

@@ -23,10 +23,10 @@ raw.set_eeg_reference("average")
         raw,
         raw.copy().crop(0, 10),
         raw.copy().crop(0, 1),
-        make_fixed_length_epochs(raw, duration=0.5),
-        make_fixed_length_epochs(raw, duration=1),
-        make_fixed_length_epochs(raw, duration=5),
-        make_fixed_length_epochs(raw, duration=10),
+        make_fixed_length_epochs(raw, duration=0.5, preload=True),
+        make_fixed_length_epochs(raw, duration=1, preload=True),
+        make_fixed_length_epochs(raw, duration=5, preload=True),
+        make_fixed_length_epochs(raw, duration=10, preload=True),
     ),
 )
 def test_label_components(inst):

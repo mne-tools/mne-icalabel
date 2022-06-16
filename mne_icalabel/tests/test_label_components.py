@@ -1,13 +1,13 @@
 import pytest
-from mne.datasets import sample
+from mne.datasets import testing
 from mne.io import read_raw
 from mne.preprocessing import ICA
 
 from mne_icalabel import label_components
 
-directory = sample.data_path() / "MEG" / "sample"
-raw = read_raw(directory / "sample_audvis_raw.fif", preload=False)
-raw.crop(0, 10).pick_types(eeg=True, exclude="bads")
+directory = testing.data_path() / "MEG" / "sample"
+raw = read_raw(directory / "sample_audvis_trunc_raw.fif", preload=False)
+raw.pick_types(eeg=True, exclude="bads")
 raw.load_data()
 # preprocess
 raw.filter(l_freq=1.0, h_freq=100.0)

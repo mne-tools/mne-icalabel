@@ -1,6 +1,6 @@
 import numpy as np
 import pytest
-from mne import create_info, pick_types, make_fixed_length_epochs
+from mne import create_info, make_fixed_length_epochs, pick_types
 from mne.datasets import testing
 from mne.io import RawArray, read_raw
 from mne.preprocessing import ICA

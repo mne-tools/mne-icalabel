@@ -33,6 +33,7 @@ ica = ICA(n_components=15, max_iter="auto", random_state=97)
 ica.fit(filt_raw)
 
 # now label
+mne.set_log_level("DEBUG")
 gui = mne_icalabel.gui.label_ica_components(raw, ica)
 
 # The `ica` object is modified to contain the component labels

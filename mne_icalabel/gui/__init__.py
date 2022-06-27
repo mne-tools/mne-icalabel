@@ -2,15 +2,15 @@ from mne.utils import verbose
 
 
 @verbose
-def label_ica_components(inst, ica, verbose=None):
+def label_ica_components(ica, inst=None, verbose=None):
     """Label ICA components.
 
     Parameters
     ----------
-    inst : Raw | Epochs
-        The raw data instance that was used for ICA.
     ica : ICA
         The fitted ICA instance.
+    inst : Raw | Epochs
+        The raw data instance that was used for ICA.
     %(verbose)s
 
     Returns
@@ -20,14 +20,15 @@ def label_ica_components(inst, ica, verbose=None):
     """
     from qtpy.QtWidgets import QApplication
 
-    from mne_icalabel.gui._label_components import ICAComponentLabeler
+    from mne_icalabel.gui._label_components_2 import ICAComponentLabeler
+    # from ._label_components import ICAComponentLabeler
 
     # from ._label_components import ICAComponentLabeler
     # get application
     app = QApplication.instance()
     if app is None:
         app = QApplication(["ICA Component Labeler"])
-    gui = ICAComponentLabeler(inst=inst, ica=ica, verbose=verbose)
+    gui = ICAComponentLabeler(inst=inst, ica=ica)
     gui.show()
     return gui
 
@@ -50,4 +51,4 @@ if __name__ == "__main__":
     ica.fit(raw)
 
     # annotate ICA components
-    gui = label_ica_components(raw, ica)
+    gui = label_ica_components(ica, raw)

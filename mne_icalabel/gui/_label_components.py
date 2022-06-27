@@ -11,21 +11,16 @@ import platform
 from matplotlib.backends.backend_qt5agg import FigureCanvas
 from matplotlib.figure import Figure
 from mne.preprocessing import ICA
-from mne.viz.backends.renderer import _get_renderer
+from mne.viz.utils import safe_event
 from qtpy import QtGui
-from qtpy.QtCore import Signal, Slot
+from qtpy.QtCore import Slot
 from qtpy.QtWidgets import (
     QAbstractItemView,
-    QComboBox,
     QGridLayout,
     QHBoxLayout,
-    QLabel,
     QListView,
     QMainWindow,
     QMessageBox,
-    QPlainTextEdit,
-    QPushButton,
-    QSlider,
     QVBoxLayout,
     QWidget,
 )
@@ -39,6 +34,7 @@ from qtpy.QtWidgets import (
 _CH_MENU_WIDTH = 30 if platform.system() == "Windows" else 10
 
 
+# TODO: remove
 def _make_topo_plot(width=4, height=4, dpi=300):
     """Make subplot for the topomap."""
     fig = Figure(figsize=(width, height), dpi=dpi)
@@ -53,6 +49,7 @@ def _make_topo_plot(width=4, height=4, dpi=300):
     return canvas, fig
 
 
+# TODO: remove
 def _make_ts_plot(width=4, height=4, dpi=300):
     """Make subplot for the component time-series."""
     fig = Figure(figsize=(width, height), dpi=dpi)
@@ -60,13 +57,13 @@ def _make_ts_plot(width=4, height=4, dpi=300):
     ax = fig.subplots()
     fig.subplots_adjust(bottom=0, left=0, right=1, top=1, wspace=0, hspace=0)
     ax.set_facecolor("k")
-    # clean up excess plot text, invert
-    ax.invert_yaxis()
+    # clean up excess plot text
     ax.set_xticks([])
     ax.set_yticks([])
     return canvas, fig
 
 
+# TODO: remove
 def _make_spectrum_plot(width=4, height=4, dpi=300):
     """Make subplot for the spectrum."""
     fig = Figure(figsize=(width, height), dpi=dpi)
@@ -74,11 +71,56 @@ def _make_spectrum_plot(width=4, height=4, dpi=300):
     ax = fig.subplots()
     fig.subplots_adjust(bottom=0, left=0, right=1, top=1, wspace=0, hspace=0)
     ax.set_facecolor("k")
-    # clean up excess plot text, invert
-    ax.invert_yaxis()
+    # clean up excess plot text
     ax.set_xticks([])
     ax.set_yticks([])
     return canvas, fig
+
+
+class TimeSeriesFig(FigureCanvas):
+    """Spectrum map widget."""
+
+    def __init__(self, width=4, height=4, dpi=300):
+        """Make subplot for the spectrum."""
+        fig = Figure(figsize=(width, height), dpi=dpi)
+        canvas = FigureCanvas(fig)
+        ax = fig.subplots()
+        fig.subplots_adjust(bottom=0, left=0, right=1, top=1, wspace=0, hspace=0)
+        ax.set_facecolor("k")
+        # clean up excess plot text
+        ax.set_xticks([])
+        ax.set_yticks([])
+        super().__init__(fig)
+
+
+class SpectrumFig(FigureCanvas):
+    """Spectrum map widget."""
+
+    def __init__(self, width=4, height=4, dpi=300):
+        """Make subplot for the spectrum."""
+        fig = Figure(figsize=(width, height), dpi=dpi)
+        canvas = FigureCanvas(fig)
+        ax = fig.subplots()
+        fig.subplots_adjust(bottom=0, left=0, right=1, top=1, wspace=0, hspace=0)
+        ax.set_facecolor("k")
+        # clean up excess plot text
+        ax.set_xticks([])
+        ax.set_yticks([])
+        super().__init__(fig)
+
+
+class TopomapFig(FigureCanvas):
+    """Topographic map widget."""
+
+    def __init__(self, width=4, height=4, dpi=300):
+        fig = Figure(figsize=(width, height), dpi=dpi)
+        ax = fig.subplots()
+        fig.subplots_adjust(bottom=0, left=0, right=1, top=1, wspace=0, hspace=0)
+        ax.set_facecolor("k")
+        # clean up excess plot text
+        ax.set_xticks([])
+        ax.set_yticks([])
+        super().__init__(fig)
 
 
 # TODO:
@@ -86,9 +128,11 @@ def _make_spectrum_plot(width=4, height=4, dpi=300):
 # ? - update ICA components
 # ? - menu with save, load
 class ICAComponentLabeler(QMainWindow):
-    def __init__(self, inst, ica: ICA) -> None:
+    def __init__(self, inst, ica: ICA, verbose: bool = False) -> None:
         # initialize QMainWindow class
         super().__init__()
+
+        self.verbose = verbose
 
         # keep an internal pointer to the ICA and Raw
         self._ica = ica
@@ -104,19 +148,19 @@ class ICAComponentLabeler(QMainWindow):
         plt_grid.addWidget(plts[2][0], 1, 0)
 
         # TODO: is this the correct function to use to render? or nah... since we don't have 3D?
-        self._renderer = _get_renderer(name="ICA Component Labeler", size=(400, 400), bgcolor="w")
-        plt_grid.addWidget(self._renderer.plotter)
+        # self._renderer = _get_renderer(name="ICA Component Labeler", size=(400, 400), bgcolor="w")
+        # plt_grid.addWidget(self._renderer.plotter)
 
         # initialize channel data
         self._component_index = 0
 
         # component names are just a list of numbers from 0 to n_components
-        self._component_names = list(range(ica.n_components_))
+        self._component_names = [f"ICA-{idx}" for idx in range(ica.n_components_)]
 
         # Component selector in a clickable selection list
         self._component_list = QListView()
         self._component_list.setSelectionMode(QAbstractItemView.SingleSelection)
-        max_comp_name_len = max([len(name) for name in self._component_list])
+        max_comp_name_len = max([len(name) for name in self._component_names])
         self._component_list.setMinimumWidth(max_comp_name_len * _CH_MENU_WIDTH)
         self._component_list.setMaximumWidth(max_comp_name_len * _CH_MENU_WIDTH)
         self._set_component_names()
@@ -128,12 +172,6 @@ class ICAComponentLabeler(QMainWindow):
         # button_hbox = self._get_button_bar()
         # slider_hbox = self._get_slider_bar()
         # bottom_hbox = self._get_bottom_bar()
-
-        # Add lines
-        self._lines = dict()
-        self._lines_2D = dict()
-        for group in set(self._groups.values()):
-            self._update_lines(group)
 
         # Put everything together
         plot_component_hbox = QHBoxLayout()
@@ -179,12 +217,6 @@ class ICAComponentLabeler(QMainWindow):
         self._component_list.setCurrentIndex(
             self._component_list_model.index(self._component_index, 0)
         )
-        # self._group_selector.setCurrentIndex(self._groups[name])
-        # self._update_group()
-        # if not np.isnan(self._chs[name]).any():
-        #     self._set_ras(self._chs[name])
-        #     self._update_camera(render=True)
-        #     self._draw()
 
     def _plot_images(self):
         # TODO: embed the matplotlib figure in each FigureCanvas

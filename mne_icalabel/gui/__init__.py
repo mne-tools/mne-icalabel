@@ -20,8 +20,9 @@ def label_ica_components(inst, ica, verbose=None):
     """
     from qtpy.QtWidgets import QApplication
 
-    from ._label_components import ICAComponentLabeler
+    from mne_icalabel.gui._label_components import ICAComponentLabeler
 
+    # from ._label_components import ICAComponentLabeler
     # get application
     app = QApplication.instance()
     if app is None:
@@ -29,3 +30,24 @@ def label_ica_components(inst, ica, verbose=None):
     gui = ICAComponentLabeler(inst=inst, ica=ica, verbose=verbose)
     gui.show()
     return gui
+
+
+if __name__ == "__main__":
+    from mne.datasets import sample
+    from mne.io import read_raw
+    from mne.preprocessing import ICA
+
+    directory = sample.data_path() / "MEG" / "sample"
+    raw = read_raw(directory / "sample_audvis_raw.fif", preload=False)
+    raw.crop(0, 10).pick_types(eeg=True, exclude="bads")
+    raw.load_data()
+    # preprocess
+    raw.filter(l_freq=1.0, h_freq=100.0)
+    raw.set_eeg_reference("average")
+
+    n_components = 15
+    ica = ICA(n_components=n_components, method="picard")
+    ica.fit(raw)
+
+    # annotate ICA components
+    gui = label_ica_components(raw, ica)

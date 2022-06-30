@@ -184,39 +184,12 @@
 <nav id="bd-toc-nav">
     <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#version-0-2">
-   Version 0.2
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#enhancements">
-     Enhancements
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#bug">
-     Bug
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#api">
-     API
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#authors">
-     Authors
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#version-0-1-2022-05-03">
    Version 0.1 (2022-05-03)
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#id1">
+    <a class="reference internal nav-link" href="#authors">
      Authors
     </a>
    </li>
@@ -245,39 +218,6 @@
                 
   <div class="section" id="what-was-new-in-previous-releases">
 <span id="whats-new-in-previous-releases"></span><h1>What was new in previous releases?<a class="headerlink" href="#what-was-new-in-previous-releases" title="Permalink to this headline">#</a></h1>
-<div class="section" id="version-0-2">
-<h2>Version 0.2<a class="headerlink" href="#version-0-2" title="Permalink to this headline">#</a></h2>
-<p>This includes series of bug fixes to the ICLabel ported model. In addition, we have
-added an experimental feature for helping add ICA component annotations to BIDS-derivative for EEG format.</p>
-<div class="section" id="enhancements">
-<h3>Enhancements<a class="headerlink" href="#enhancements" title="Permalink to this headline">#</a></h3>
-<ul class="simple">
-<li><p>Add functions for annotating and labeling ICA components in BIDS format <a class="reference internal" href="generated/mne_icalabel.annotation.write_components_tsv.html#mne_icalabel.annotation.write_components_tsv" title="mne_icalabel.annotation.write_components_tsv"><code class="xref py py-func docutils literal notranslate"><span class="pre">mne_icalabel.annotation.write_components_tsv()</span></code></a>, <a class="reference internal" href="generated/mne_icalabel.annotation.mark_component.html#mne_icalabel.annotation.mark_component" title="mne_icalabel.annotation.mark_component"><code class="xref py py-func docutils literal notranslate"><span class="pre">mne_icalabel.annotation.mark_component()</span></code></a> by <a class="reference external" href="https://github.com/adam2392">Adam Li</a> (<a class="reference external" href="https://github.com/mne-tools/mne-icalabel/issues/60">#60</a>)</p></li>
-</ul>
-</div>
-<div class="section" id="bug">
-<h3>Bug<a class="headerlink" href="#bug" title="Permalink to this headline">#</a></h3>
-<ul class="simple">
-<li><p>Fix shape of <code class="docutils literal notranslate"><span class="pre">'y_pred_proba'</span></code> output from <a class="reference internal" href="generated/mne_icalabel.label_components.html#mne_icalabel.label_components" title="mne_icalabel.label_components"><code class="xref py py-func docutils literal notranslate"><span class="pre">mne_icalabel.label_components()</span></code></a> by <a class="reference external" href="https://github.com/mscheltienne">Mathieu Scheltienne</a> (<a class="reference external" href="https://github.com/mne-tools/mne-icalabel/issues/36">#36</a>)</p></li>
-<li><p>Add a warning if the ICA decomposition provided does not match the expected decomposition by <code class="docutils literal notranslate"><span class="pre">ICLabel</span></code>  by <a class="reference external" href="https://github.com/mscheltienne">Mathieu Scheltienne</a> (<a class="reference external" href="https://github.com/mne-tools/mne-icalabel/issues/42">#42</a>)</p></li>
-<li><p>Fix extraction of PSD feature from <code class="docutils literal notranslate"><span class="pre">ICLabel</span></code> model on epochs by <a class="reference external" href="https://github.com/mscheltienne">Mathieu Scheltienne</a> (<a class="reference external" href="https://github.com/mne-tools/mne-icalabel/issues/64">#64</a>)</p></li>
-<li><p>Fix ICLabel topographic features on ICA fitted with a channel selection performed by <code class="docutils literal notranslate"><span class="pre">picks</span></code> by <a class="reference external" href="https://github.com/mscheltienne">Mathieu Scheltienne</a> (<a class="reference external" href="https://github.com/mne-tools/mne-icalabel/issues/68">#68</a>)</p></li>
-</ul>
-</div>
-<div class="section" id="api">
-<h3>API<a class="headerlink" href="#api" title="Permalink to this headline">#</a></h3>
-<ul class="simple">
-<li></li>
-</ul>
-</div>
-<div class="section" id="authors">
-<h3>Authors<a class="headerlink" href="#authors" title="Permalink to this headline">#</a></h3>
-<ul class="simple">
-<li><p><a class="reference external" href="https://github.com/mscheltienne">Mathieu Scheltienne</a></p></li>
-<li><p><a class="reference external" href="https://github.com/adam2392">Adam Li</a></p></li>
-</ul>
-</div>
-</div>
 <div class="section" id="version-0-1-2022-05-03">
 <h2>Version 0.1 (2022-05-03)<a class="headerlink" href="#version-0-1-2022-05-03" title="Permalink to this headline">#</a></h2>
 <p>This is the first version of mne-icalabel that is released. This package
@@ -286,8 +226,8 @@ for automatically predicting the label of an ICA component and whether it
 is brain signal, or noise.</p>
 <p>We integrated our API on top of MNE-Python and provide a lightweight example
 demonstrating how to use the ICLabel network.</p>
-<div class="section" id="id1">
-<h3>Authors<a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h3>
+<div class="section" id="authors">
+<h3>Authors<a class="headerlink" href="#authors" title="Permalink to this headline">#</a></h3>
 <p>People who contributed to this release (in alphabetical order):</p>
 <ul class="simple">
 <li><p><a class="reference external" href="https://github.com/adam2392">Adam Li</a></p></li>

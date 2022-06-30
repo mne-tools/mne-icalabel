@@ -1,0 +1,372 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>mne_icalabel.annotation.bids &#8212; MNE-ICALabel 0.2 documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/style.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/clipboard.min.js"></script>
+    <script src="../../../_static/copybutton.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="canonical" href="https://mne.tools/mne-icalabel/stable/index.html" />
+    <script type="text/javascript" src="../../../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../../../_static/scrollfix.js"></script>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main"><div class="container-xl">
+
+  <div id="navbar-start">
+    
+    
+<a class="navbar-brand" href="../../../index.html">
+<p class="title">MNE-ICALabel</p>
+</a>
+
+    
+  </div>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapsible" aria-controls="navbar-collapsible" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  
+  <div id="navbar-collapsible" class="col-lg-9 collapse navbar-collapse">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <ul id="navbar-main-elements" class="navbar-nav">
+    <li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../../whats_new.html">
+  What’s new?
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../../install.html">
+  Installation
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../../api.html">
+  API
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../../auto_examples/index.html">
+  Examples
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference external nav-link" href="https://raw.githubusercontent.com/mne-tools/mne-icalabel/blob/main/LICENSE">
+  License
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference external nav-link" href="https://github.com/mne-tools/mne-icalabel/blob/main/CONTRIBUTING.md">
+  Contributing
+ </a>
+</li>
+
+    
+</ul>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+      <div class="navbar-end-item">
+        <div class="dropdown">
+    <button type="button" class="btn btn-primary btn-sm navbar-btn dropdown-toggle" id="dLabelMore" data-toggle="dropdown">
+        v0.2
+        <span class="caret"></span>
+    </button>
+    <div class="dropdown-menu list-group-flush py-0" aria-labelledby="dLabelMore">
+        <a class="list-group-item list-group-item-action py-1" href="https://mne.tools/mne-icalabel/dev/index.html">v0.2 (devel)</a>
+        <a class="list-group-item list-group-item-action py-1" href="https://mne.tools/mne-icalabel/stable/index.html">v0.1</a>
+        <a class="list-group-item list-group-item-action py-1" href="https://mne.tools/mne-icalabel/v0.1/index.html">v0.1</a>
+    </div>
+</div>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          <a class="nav-link" href="https://github.com/mne-tools/MNE-ICALabel" rel="noopener" target="_blank" title="GitHub"><span><i class="fab fa-github-square"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+            
+            <!-- Only show if we have sidebars configured, else just a small margin  -->
+            <div class="col-12 col-md-3 bd-sidebar">
+              <div class="sidebar-start-items"><form class="bd-search d-flex align-items-center" action="../../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <div class="bd-toc-item active">
+    
+  </div>
+</nav>
+              </div>
+              <div class="sidebar-end-items">
+              </div>
+            </div>
+            
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+            
+          </div>
+          
+
+          
+          
+            
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  <h1>Source code for mne_icalabel.annotation.bids</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
+
+<span class="kn">from</span> <span class="nn">mne.preprocessing</span> <span class="kn">import</span> <span class="n">ICA</span>
+<span class="kn">from</span> <span class="nn">mne.utils</span> <span class="kn">import</span> <span class="n">_check_pandas_installed</span>
+
+<span class="kn">from</span> <span class="nn">..iclabel.config</span> <span class="kn">import</span> <span class="n">ICLABEL_STRING_TO_NUMERICAL</span>
+
+
+<div class="viewcode-block" id="write_components_tsv"><a class="viewcode-back" href="../../../generated/mne_icalabel.annotation.write_components_tsv.html#mne_icalabel.annotation.write_components_tsv">[docs]</a><span class="k">def</span> <span class="nf">write_components_tsv</span><span class="p">(</span><span class="n">ica</span><span class="p">:</span> <span class="n">ICA</span><span class="p">,</span> <span class="n">fname</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Write channels tsv file for ICA components.</span>
+
+<span class="sd">    Will create an accompanying JSON sidecar to explain the</span>
+<span class="sd">    additional columns created in the channels tsv file for the</span>
+<span class="sd">    ICA component labeling.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ica : ICA</span>
+<span class="sd">        An instance of the fitted ICA.</span>
+<span class="sd">    fname : str | Path</span>
+<span class="sd">        The output filename.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Components are stored in a ``.tsv`` file essentially in the same manner as</span>
+<span class="sd">    ``channels.tsv`` files for BIDS-EEG data. For more information, see the</span>
+<span class="sd">    `BIDS specification &lt;https://bids-specification.readthedocs.io/en/stable/04-modality-specific-files/03-electroencephalography.html#channels-description-_channelstsv&gt;`_  # noqa</span>
+<span class="sd">    for EEG channels metadata.</span>
+
+<span class="sd">    Storage of ICA annotations as a ``.tsv`` file is currently experimental in the</span>
+<span class="sd">    context of BIDS-EEG Derivatives. The API and functionality is subject to change</span>
+<span class="sd">    as the community converges on the specification of BIDS-Derivatives.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span> <span class="nn">mne_bids</span> <span class="kn">import</span> <span class="n">BIDSPath</span><span class="p">,</span> <span class="n">get_bids_path_from_fname</span><span class="p">,</span> <span class="n">update_sidecar_json</span>
+    <span class="kn">from</span> <span class="nn">mne_bids.write</span> <span class="kn">import</span> <span class="n">_write_json</span>
+
+    <span class="n">pd</span> <span class="o">=</span> <span class="n">_check_pandas_installed</span><span class="p">(</span><span class="n">strict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># ensure the filename is a Path object</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">BIDSPath</span><span class="p">):</span>
+        <span class="n">fname</span> <span class="o">=</span> <span class="n">get_bids_path_from_fname</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+
+    <span class="c1"># Create TSV.</span>
+    <span class="n">tsv_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+        <span class="nb">dict</span><span class="p">(</span>
+            <span class="n">component</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">ica</span><span class="o">.</span><span class="n">n_components_</span><span class="p">)),</span>
+            <span class="nb">type</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;ica&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">ica</span><span class="o">.</span><span class="n">n_components_</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Independent Component&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">ica</span><span class="o">.</span><span class="n">n_components_</span><span class="p">,</span>
+            <span class="n">status</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;good&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">ica</span><span class="o">.</span><span class="n">n_components_</span><span class="p">,</span>
+            <span class="n">status_description</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;n/a&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">ica</span><span class="o">.</span><span class="n">n_components_</span><span class="p">,</span>
+            <span class="n">annotate_method</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;n/a&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">ica</span><span class="o">.</span><span class="n">n_components_</span><span class="p">,</span>
+            <span class="n">annotate_author</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;n/a&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">ica</span><span class="o">.</span><span class="n">n_components_</span><span class="p">,</span>
+            <span class="n">ic_type</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;n/a&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">ica</span><span class="o">.</span><span class="n">n_components_</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+    <span class="c1"># make sure parent directories exist</span>
+    <span class="n">fname</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">tsv_data</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1"># create an accompanying JSON file describing the corresponding</span>
+    <span class="c1"># extra columns for ICA labeling</span>
+    <span class="n">component_json</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;annotate_method&quot;</span><span class="p">:</span> <span class="s2">&quot;Method used for annotating components (e.g. manual, iclabel)&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;annotate_author&quot;</span><span class="p">:</span> <span class="s2">&quot;The name of the person who ran the annotation&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ic_type&quot;</span><span class="p">:</span> <span class="s2">&quot;The type of annotation must be one of [&#39;brain&#39;, &quot;</span>
+        <span class="s2">&quot;&#39;muscle artifact&#39;, &#39;eye blink&#39;, &#39;heart beat&#39;, &#39;line noise&#39;, &quot;</span>
+        <span class="s2">&quot;&#39;channel noise&#39;, &#39;other&#39;]&quot;</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">fname</span> <span class="o">=</span> <span class="n">fname</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">extension</span><span class="o">=</span><span class="s2">&quot;.json&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">fname</span><span class="o">.</span><span class="n">fpath</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="n">_write_json</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">component_json</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">update_sidecar_json</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">component_json</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="mark_component"><a class="viewcode-back" href="../../../generated/mne_icalabel.annotation.mark_component.html#mne_icalabel.annotation.mark_component">[docs]</a><span class="k">def</span> <span class="nf">mark_component</span><span class="p">(</span><span class="n">component</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">fname</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">],</span> <span class="n">method</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">label</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">author</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Mark a component with a label.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    component : int</span>
+<span class="sd">        The component to mark.</span>
+<span class="sd">    fname : Union[str, Path]</span>
+<span class="sd">        The filename for the BIDS filepath.</span>
+<span class="sd">    method : str</span>
+<span class="sd">        The method to use. Must be &#39;manual&#39;, or one of [&#39;iclabel&#39;].</span>
+<span class="sd">    label : str</span>
+<span class="sd">        The label of the ICA component. Must be one of [&#39;brain&#39;,</span>
+<span class="sd">        &#39;muscle artifact&#39;, &#39;eye blink&#39;, &#39;heart beat&#39;, &#39;line noise&#39;,</span>
+<span class="sd">        &#39;channel noise&#39;, &#39;other&#39;].</span>
+<span class="sd">    author : str</span>
+<span class="sd">        The annotating author.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Storage of ICA annotations as a ``.tsv`` file is currently experimental in the</span>
+<span class="sd">    context of BIDS-EEG Derivatives. The API and functionality is subject to change</span>
+<span class="sd">    as the community converges on the specification of BIDS-Derivatives.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span> <span class="nn">mne_bids</span> <span class="kn">import</span> <span class="n">BIDSPath</span><span class="p">,</span> <span class="n">get_bids_path_from_fname</span>
+
+    <span class="n">pd</span> <span class="o">=</span> <span class="n">_check_pandas_installed</span><span class="p">(</span><span class="n">strict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">BIDSPath</span><span class="p">):</span>
+        <span class="n">fname</span> <span class="o">=</span> <span class="n">get_bids_path_from_fname</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+
+    <span class="c1"># read the file</span>
+    <span class="n">tsv_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">component</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">tsv_data</span><span class="p">[</span><span class="s2">&quot;component&quot;</span><span class="p">]:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Component </span><span class="si">{</span><span class="n">component</span><span class="si">}</span><span class="s2"> not in tsv data of </span><span class="si">{</span><span class="n">fname</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+
+    <span class="c1"># check label is correct</span>
+    <span class="k">if</span> <span class="n">label</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ICLABEL_STRING_TO_NUMERICAL</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;IC annotated label </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2"> is not a valid label. &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Please use one of </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">ICLABEL_STRING_TO_NUMERICAL</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2">.&quot;</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="n">label</span> <span class="o">==</span> <span class="s2">&quot;brain&quot;</span><span class="p">:</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;good&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;bad&quot;</span>
+
+    <span class="c1"># check that method is one of the allowed values</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;manual&quot;</span><span class="p">:</span>
+        <span class="n">description</span> <span class="o">+=</span> <span class="s2">&quot;Manually-annotated &quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">description</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;Auto-detected with </span><span class="si">{</span><span class="n">method</span><span class="si">}</span><span class="s2"> &quot;</span>
+    <span class="n">description</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">&quot;</span>
+
+    <span class="c1"># Read sidecar and create required columns if they do not exist.</span>
+    <span class="k">if</span> <span class="s2">&quot;status&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">tsv_data</span><span class="p">:</span>
+        <span class="n">tsv_data</span><span class="p">[</span><span class="s2">&quot;status&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;good&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">tsv_data</span><span class="p">[</span><span class="s2">&quot;component&quot;</span><span class="p">])</span>
+    <span class="k">if</span> <span class="s2">&quot;status_description&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">tsv_data</span><span class="p">:</span>
+        <span class="n">tsv_data</span><span class="p">[</span><span class="s2">&quot;status_description&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;n/a&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">tsv_data</span><span class="p">[</span><span class="s2">&quot;component&quot;</span><span class="p">])</span>
+    <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;annotate_method&quot;</span><span class="p">,</span> <span class="s2">&quot;annotate_author&quot;</span><span class="p">,</span> <span class="s2">&quot;ic_type&quot;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">col</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">tsv_data</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">tsv_data</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;n/a&quot;</span>
+
+    <span class="c1"># load in the tsv file and modify specific columns</span>
+    <span class="n">tsv_data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">tsv_data</span><span class="p">[</span><span class="s2">&quot;component&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">component</span><span class="p">,</span> <span class="s2">&quot;status&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">status</span>
+    <span class="n">tsv_data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">tsv_data</span><span class="p">[</span><span class="s2">&quot;component&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">component</span><span class="p">,</span> <span class="s2">&quot;status_description&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">description</span>
+    <span class="n">tsv_data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">tsv_data</span><span class="p">[</span><span class="s2">&quot;component&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">component</span><span class="p">,</span> <span class="s2">&quot;annotate_method&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">method</span>
+    <span class="n">tsv_data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">tsv_data</span><span class="p">[</span><span class="s2">&quot;component&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">component</span><span class="p">,</span> <span class="s2">&quot;annotate_author&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">author</span>
+    <span class="n">tsv_data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">tsv_data</span><span class="p">[</span><span class="s2">&quot;component&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">component</span><span class="p">,</span> <span class="s2">&quot;ic_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">label</span>
+    <span class="n">tsv_data</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">)</span></div>
+</pre></div>
+
+              </div>
+              
+              
+              <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+              
+          </main>
+          
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+<footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    
+    <div class="footer-item">
+      <p class="copyright">
+    &copy; Copyright 2021-2022, MNE Developers. Last updated on 2022-06-30.<br>
+</p>
+    </div>
+    
+    <div class="footer-item">
+      <p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0.<br>
+</p>
+    </div>
+    
+  </div>
+</footer>
+  </body>
+</html>

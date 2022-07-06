@@ -41,14 +41,15 @@ class PowerSpectralDensityFig(FigureCanvasQTAgg):
     def __init__(self, width=4, height=4, dpi=100):
         self.fig = Figure(figsize=(width, height), dpi=dpi)
         self.axes = self.fig.subplots()
-        self.axes.set_xticks([])
-        self.axes.set_yticks([])
+        self.axes.axis("off")
         super().__init__(self.fig)
 
     def reset(self) -> None:
         self.axes.clear()
 
     def redraw(self) -> None:
+        self.axes.set_title("")
+        self.fig.tight_layout()
         self.fig.canvas.draw()
         self.fig.canvas.flush_events()
 
@@ -147,7 +148,7 @@ class ICAComponentLabeler(QMainWindow):
         layout.addWidget(self.widget_timeSeries, 1, 2, 1, 2)
         self.central_widget.setLayout(layout)
         self.setCentralWidget(self.central_widget)
-        self.resize(800, 350)
+        self.resize(1500, 600)
 
         # connect signal and slots
         self.connect_signals_to_slots()

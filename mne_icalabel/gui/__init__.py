@@ -20,10 +20,8 @@ def label_ica_components(ica, inst=None, verbose=None):
     """
     from qtpy.QtWidgets import QApplication
 
-    from mne_icalabel.gui._label_components_2 import ICAComponentLabeler
-    # from ._label_components import ICAComponentLabeler
+    from mne_icalabel.gui._label_components import ICAComponentLabeler
 
-    # from ._label_components import ICAComponentLabeler
     # get application
     app = QApplication.instance()
     if app is None:

@@ -1,248 +1,187 @@
-# -*- coding: utf-8 -*-
-"""ICA GUI for labeling components."""
-
-# Authors: Adam Li <adam2392@gmail.com>
-#
-# License: BSD (3-clause)
-
-
 import platform
 
-from matplotlib.backends.backend_qt5agg import FigureCanvas
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
 from matplotlib.figure import Figure
-from mne.preprocessing import ICA
-from mne.viz.utils import safe_event
-from qtpy import QtGui
-from qtpy.QtCore import Slot
+from qtpy.QtCore import Qt, Slot
 from qtpy.QtWidgets import (
     QAbstractItemView,
+    QButtonGroup,
     QGridLayout,
-    QHBoxLayout,
-    QListView,
+    QListWidget,
     QMainWindow,
-    QMessageBox,
+    QPushButton,
     QVBoxLayout,
     QWidget,
 )
 
-# _IMG_LABELS = [['I', 'P'], ['I', 'L'], ['P', 'L']]
-# _CH_PLOT_SIZE = 1024
-# _ZOOM_STEP_SIZE = 5
-# _RADIUS_SCALAR = 0.4
-# _TUBE_SCALAR = 0.1
-# _BOLT_SCALAR = 30  # mm
 _CH_MENU_WIDTH = 30 if platform.system() == "Windows" else 10
 
 
-# TODO: remove
-def _make_topo_plot(width=4, height=4, dpi=300):
-    """Make subplot for the topomap."""
-    fig = Figure(figsize=(width, height), dpi=dpi)
-    canvas = FigureCanvas(fig)
-    ax = fig.subplots()
-    fig.subplots_adjust(bottom=0, left=0, right=1, top=1, wspace=0, hspace=0)
-    ax.set_facecolor("k")
-    # clean up excess plot text, invert
-    ax.invert_yaxis()
-    ax.set_xticks([])
-    ax.set_yticks([])
-    return canvas, fig
-
-
-# TODO: remove
-def _make_ts_plot(width=4, height=4, dpi=300):
-    """Make subplot for the component time-series."""
-    fig = Figure(figsize=(width, height), dpi=dpi)
-    canvas = FigureCanvas(fig)
-    ax = fig.subplots()
-    fig.subplots_adjust(bottom=0, left=0, right=1, top=1, wspace=0, hspace=0)
-    ax.set_facecolor("k")
-    # clean up excess plot text
-    ax.set_xticks([])
-    ax.set_yticks([])
-    return canvas, fig
-
-
-# TODO: remove
-def _make_spectrum_plot(width=4, height=4, dpi=300):
-    """Make subplot for the spectrum."""
-    fig = Figure(figsize=(width, height), dpi=dpi)
-    canvas = FigureCanvas(fig)
-    ax = fig.subplots()
-    fig.subplots_adjust(bottom=0, left=0, right=1, top=1, wspace=0, hspace=0)
-    ax.set_facecolor("k")
-    # clean up excess plot text
-    ax.set_xticks([])
-    ax.set_yticks([])
-    return canvas, fig
-
-
-class TimeSeriesFig(FigureCanvas):
-    """Spectrum map widget."""
+class TopomapFig(FigureCanvasQTAgg):
+    """Topographic map figure widget."""
 
     def __init__(self, width=4, height=4, dpi=300):
-        """Make subplot for the spectrum."""
-        fig = Figure(figsize=(width, height), dpi=dpi)
-        canvas = FigureCanvas(fig)
-        ax = fig.subplots()
-        fig.subplots_adjust(bottom=0, left=0, right=1, top=1, wspace=0, hspace=0)
-        ax.set_facecolor("k")
-        # clean up excess plot text
-        ax.set_xticks([])
-        ax.set_yticks([])
-        super().__init__(fig)
+        self.fig = Figure(figsize=(width, height), dpi=dpi)
+        self.axes = self.fig.subplots()
+        self.fig.subplots_adjust(bottom=0, left=0, right=1, top=1, wspace=0, hspace=0)
+        super().__init__(self.fig)
+
+    def change_ic(self, ica, idx):
+        # self.axes.clear()
+        # ica.plot_components(picks=idx, topomap_args=dict(axes=self.axes))
+        # self.fig.canvas.draw()
+        # self.fig.canvas.flush_events()
+        pass
 
 
-class SpectrumFig(FigureCanvas):
-    """Spectrum map widget."""
-
-    def __init__(self, width=4, height=4, dpi=300):
-        """Make subplot for the spectrum."""
-        fig = Figure(figsize=(width, height), dpi=dpi)
-        canvas = FigureCanvas(fig)
-        ax = fig.subplots()
-        fig.subplots_adjust(bottom=0, left=0, right=1, top=1, wspace=0, hspace=0)
-        ax.set_facecolor("k")
-        # clean up excess plot text
-        ax.set_xticks([])
-        ax.set_yticks([])
-        super().__init__(fig)
-
-
-class TopomapFig(FigureCanvas):
-    """Topographic map widget."""
+class PowerSpectralDensityFig(FigureCanvasQTAgg):
+    """PSD figure widget."""
 
     def __init__(self, width=4, height=4, dpi=300):
         fig = Figure(figsize=(width, height), dpi=dpi)
         ax = fig.subplots()
         fig.subplots_adjust(bottom=0, left=0, right=1, top=1, wspace=0, hspace=0)
-        ax.set_facecolor("k")
-        # clean up excess plot text
+        # clean up excess plot text, invert
         ax.set_xticks([])
         ax.set_yticks([])
         super().__init__(fig)
 
+    def change_ic(self, ica, idx):
+        pass
 
-# TODO:
-# ? - plot_properties plot - topoplot, ICA time-series
-# ? - update ICA components
-# ? - menu with save, load
+
+class TimeSeriesFig(FigureCanvasQTAgg):
+    """Time-series figure widget."""
+
+    def __init__(self, width=4, height=4, dpi=300):
+        fig = Figure(figsize=(width, height), dpi=dpi)
+        ax = fig.subplots()
+        fig.subplots_adjust(bottom=0, left=0, right=1, top=1, wspace=0, hspace=0)
+        # clean up excess plot text, invert
+        ax.set_xticks([])
+        ax.set_yticks([])
+        super().__init__(fig)
+
+    def change_ic(self, ica, inst, idx):
+        pass
+
+
+# TODO: Maybe that should inherit from a QGroupBox?
+class Labels(QWidget):
+    """Widget with labels as push buttons.
+
+    Only one of the labels can be selected at once.
+    """
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        labels = [
+            "Brain",
+            "Eye",
+            "Heart",
+            "Muscle",
+            "Channel Noise",
+            "Line Noise",
+            "Other",
+        ]
+
+        self.buttonGroup = QButtonGroup()
+        self.buttonGroup.setExclusive(True)
+        layout = QVBoxLayout()
+        for k, label in enumerate(labels):
+            pushButton = Labels.create_pushButton(label)
+            self.buttonGroup.addButton(pushButton, k)
+            layout.addWidget(pushButton)
+        self.setLayout(layout)
+
+    @staticmethod
+    def create_pushButton(label):
+        pushButton = QPushButton()
+        pushButton.setObjectName(f"pushButton_{label.lower().replace(' ', '_')}")
+        pushButton.setText(label)
+        pushButton.setCheckable(True)
+        pushButton.setChecked(False)
+        pushButton.setEnabled(False)
+        return pushButton
+
+
 class ICAComponentLabeler(QMainWindow):
-    def __init__(self, inst, ica: ICA, verbose: bool = False) -> None:
-        # initialize QMainWindow class
-        super().__init__()
+    """Qt GUI to annotate components.
 
-        self.verbose = verbose
+    Parameters
+    ----------
+    inst : Raw
+    ica : ICA
+    """
+
+    def __init__(self, inst, ica) -> None:
+        super().__init__()
+        self.setWindowTitle("ICA Component Labeler")
+        self.setContextMenuPolicy(Qt.NoContextMenu)
 
         # keep an internal pointer to the ICA and Raw
         self._ica = ica
         self._inst = inst
 
-        # GUI design to add widgets into a Layout
-        # Main plots: make one plot for each view: topographic, time-series, power-spectrum
-        plt_grid = QGridLayout()
-        plts = [_make_topo_plot(), _make_ts_plot(), _make_spectrum_plot()]
-        self._figs = [plts[0][1], plts[1][1], plts[2][1]]
-        plt_grid.addWidget(plts[0][0], 0, 0)
-        plt_grid.addWidget(plts[1][0], 0, 1)
-        plt_grid.addWidget(plts[2][0], 1, 0)
+        # create viewbox to select components
+        self.list_components = ICAComponentLabeler.list_components(self._ica)
+        # create buttons to select label
+        self.buttonGroup_labels = Labels()
+        # create figure widgets
+        self.widget_topo = TopomapFig()
+        self.widget_psd = PowerSpectralDensityFig()
+        self.widget_timeSeries = TimeSeriesFig()
 
-        # TODO: is this the correct function to use to render? or nah... since we don't have 3D?
-        # self._renderer = _get_renderer(name="ICA Component Labeler", size=(400, 400), bgcolor="w")
-        # plt_grid.addWidget(self._renderer.plotter)
+        # add central widget and layout
+        self.central_widget = QWidget(self)
+        self.central_widget.setObjectName("central_widget")
+        layout = QGridLayout()
+        layout.addWidget(self.list_components, 0, 0, 2, 1)
+        layout.addWidget(self.buttonGroup_labels, 0, 1, 2, 1)
+        layout.addWidget(self.widget_topo, 0, 2)
+        layout.addWidget(self.widget_psd, 0, 3)
+        layout.addWidget(self.widget_timeSeries, 1, 2, 1, 2)
+        self.central_widget.setLayout(layout)
+        self.setCentralWidget(self.central_widget)
+        self.resize(800, 350)
 
-        # initialize channel data
-        self._component_index = 0
+        # connect signal and slots
+        self.connect_signals_to_slots()
 
-        # component names are just a list of numbers from 0 to n_components
-        self._component_names = [f"ICA-{idx}" for idx in range(ica.n_components_)]
+    @staticmethod
+    def list_components(ica):
+        """List the components in a QListView."""
+        list_components = QListWidget()
+        list_components.setSelectionMode(QAbstractItemView.SingleSelection)
+        list_components.setMinimumWidth(6 * _CH_MENU_WIDTH)
+        list_components.setMaximumWidth(6 * _CH_MENU_WIDTH)
+        list_components.addItems([f"ICA{str(k).zfill(3)}" for k in range(ica.n_components_)])
+        return list_components
 
-        # Component selector in a clickable selection list
-        self._component_list = QListView()
-        self._component_list.setSelectionMode(QAbstractItemView.SingleSelection)
-        max_comp_name_len = max([len(name) for name in self._component_names])
-        self._component_list.setMinimumWidth(max_comp_name_len * _CH_MENU_WIDTH)
-        self._component_list.setMaximumWidth(max_comp_name_len * _CH_MENU_WIDTH)
-        self._set_component_names()
-
-        # Plots
-        self._plot_images()
-
-        # TODO: Menus for user interface
-        # button_hbox = self._get_button_bar()
-        # slider_hbox = self._get_slider_bar()
-        # bottom_hbox = self._get_bottom_bar()
-
-        # Put everything together
-        plot_component_hbox = QHBoxLayout()
-        plot_component_hbox.addLayout(plt_grid)
-        plot_component_hbox.addWidget(self._component_list)
-
-        # TODO: add the rest of the button and other widgets/menus
-        main_vbox = QVBoxLayout()
-        main_vbox.addLayout(plot_component_hbox)
-        # main_vbox.addLayout(button_hbox)
-        # main_vbox.addLayout(slider_hbox)
-        # main_vbox.addLayout(bottom_hbox)
-
-        central_widget = QWidget()
-        central_widget.setLayout(main_vbox)
-        self.setCentralWidget(central_widget)
-
-        # ready for user
-        self._component_list.setFocus()  # always focus on list
-
-    def _set_component_names(self):
-        """Add the component names to the selector."""
-        self._component_list_model = QtGui.QStandardItemModel(self._component_list)
-        for name in self._component_names:
-            self._component_list_model.appendRow(QtGui.QStandardItem(name))
-            # TODO: can add a method to color code the list of items
-            # self._color_list_item(name=name)
-        self._component_list.setModel(self._component_list_model)
-        self._component_list.clicked.connect(self._go_to_component)
-        self._component_list.setCurrentIndex(
-            self._component_list_model.index(self._component_index, 0)
-        )
-        self._component_list.keyPressEvent = self._key_press_event
-
-    def _go_to_component(self, index):
-        """Change current channel to the item selected."""
-        self._component_index = index.row()
-        self._update_component_selection()
-
-    def _update_component_selection(self):
-        """Update which channel is selected."""
-        name = self._component_names[self._component_index]
-        self._component_list.setCurrentIndex(
-            self._component_list_model.index(self._component_index, 0)
-        )
-
-    def _plot_images(self):
-        # TODO: embed the matplotlib figure in each FigureCanvas
-        pass
-
-    def _save_component_labels(self):
-        pass
+    def connect_signals_to_slots(self):  # noqa: D102
+        self.list_components.clicked.connect(self.list_component_clicked)
 
     @Slot()
-    def _mark_component(self):
-        pass
+    def list_component_clicked(self):
+        """Jump to the selected component and draw the plots."""
+        # reset all buttons
+        self.buttonGroup_labels.buttonGroup.setExclusive(False)
+        for button in self.buttonGroup_labels.buttonGroup.buttons():
+            button.setEnabled(True)
+            button.setChecked(False)
+        self.buttonGroup_labels.buttonGroup.setExclusive(True)
 
-    @safe_event
+        # update selected IC
+        self._current_ic = self.list_components.currentRow()
+        self.widget_topo.change_ic(self._ica, self._current_ic)
+        self.widget_psd.change_ic(self._ica, self._current_ic)
+        self.widget_timeSeries.change_ic(self._ica, self._inst, self._current_ic)
+
     def closeEvent(self, event):
-        """Clean up upon closing the window."""
-        self._renderer.plotter.close()
-        self.close()
+        """Clean up upon closing the window.
 
-    def _key_press_event(self, event):
-        pass
-
-    def _show_help(self):
-        """Show the help menu."""
-        QMessageBox.information(
-            self,
-            "Help",
-            "Help:\n'g': mark component as good (brain)\n"
-            "up/down arrow: move up/down the list of components\n",
-        )
+        Check if any IC is not labelled and ask the user to confirm if this is
+        the case. Save all labels in BIDS format.
+        """
+        event.accept()

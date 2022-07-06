@@ -1,5 +1,6 @@
 import platform
 
+from matplotlib import pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
 from matplotlib.figure import Figure
 from qtpy.QtCore import Qt, Slot
@@ -26,28 +27,28 @@ class TopomapFig(FigureCanvasQTAgg):
         self.fig.subplots_adjust(bottom=0, left=0, right=1, top=1, wspace=0, hspace=0)
         super().__init__(self.fig)
 
-    def change_ic(self, ica, idx):
-        # self.axes.clear()
-        # ica.plot_components(picks=idx, topomap_args=dict(axes=self.axes))
-        # self.fig.canvas.draw()
-        # self.fig.canvas.flush_events()
-        pass
+    def reset(self) -> None:
+        self.axes.clear()
+
+    def redraw(self) -> None:
+        self.fig.canvas.draw()
+        self.fig.canvas.flush_events()
 
 
 class PowerSpectralDensityFig(FigureCanvasQTAgg):
     """PSD figure widget."""
 
     def __init__(self, width=4, height=4, dpi=300):
-        fig = Figure(figsize=(width, height), dpi=dpi)
-        ax = fig.subplots()
-        fig.subplots_adjust(bottom=0, left=0, right=1, top=1, wspace=0, hspace=0)
-        # clean up excess plot text, invert
-        ax.set_xticks([])
-        ax.set_yticks([])
-        super().__init__(fig)
+        self.fig = Figure(figsize=(width, height), dpi=dpi)
+        self.axes = self.fig.subplots()
+        super().__init__(self.fig)
 
-    def change_ic(self, ica, idx):
-        pass
+    def reset(self) -> None:
+        self.axes.clear()
+
+    def redraw(self) -> None:
+        self.fig.canvas.draw()
+        self.fig.canvas.flush_events()
 
 
 class TimeSeriesFig(FigureCanvasQTAgg):
@@ -172,11 +173,22 @@ class ICAComponentLabeler(QMainWindow):
             button.setChecked(False)
         self.buttonGroup_labels.buttonGroup.setExclusive(True)
 
+        # reset figures
+        self.widget_topo.reset()
+        self.widget_psd.reset()
+
         # update selected IC
         self._current_ic = self.list_components.currentRow()
-        self.widget_topo.change_ic(self._ica, self._current_ic)
-        self.widget_psd.change_ic(self._ica, self._current_ic)
-        self.widget_timeSeries.change_ic(self._ica, self._inst, self._current_ic)
+
+        # create dummy axes
+        dummy_fig, dummy_axes = plt.subplots(3)
+        axes = [self.widget_topo.axes, dummy_axes[0], dummy_axes[1], self.widget_psd.axes, dummy_axes[2]]
+        self._ica.plot_properties(self._inst, axes=axes, picks=self._current_ic, show=False)
+        del dummy_fig
+
+        # update figures
+        self.widget_topo.redraw()
+        self.widget_psd.redraw()
 
     def closeEvent(self, event):
         """Clean up upon closing the window.

@@ -185,7 +185,13 @@ class ICAComponentLabeler(QMainWindow):
 
         # create dummy axes
         dummy_fig, dummy_axes = plt.subplots(3)
-        axes = [self.widget_topo.axes, dummy_axes[0], dummy_axes[1], self.widget_psd.axes, dummy_axes[2]]
+        axes = [
+            self.widget_topo.axes,
+            dummy_axes[0],
+            dummy_axes[1],
+            self.widget_psd.axes,
+            dummy_axes[2],
+        ]
         self._ica.plot_properties(self._inst, axes=axes, picks=self._current_ic, show=False)
         del dummy_fig
 

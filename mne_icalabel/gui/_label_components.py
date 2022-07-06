@@ -21,7 +21,7 @@ _CH_MENU_WIDTH = 30 if platform.system() == "Windows" else 10
 class TopomapFig(FigureCanvasQTAgg):
     """Topographic map figure widget."""
 
-    def __init__(self, width=4, height=4, dpi=300):
+    def __init__(self, width=4, height=4, dpi=100):
         self.fig = Figure(figsize=(width, height), dpi=dpi)
         self.axes = self.fig.subplots()
         self.fig.subplots_adjust(bottom=0, left=0, right=1, top=1, wspace=0, hspace=0)
@@ -38,9 +38,11 @@ class TopomapFig(FigureCanvasQTAgg):
 class PowerSpectralDensityFig(FigureCanvasQTAgg):
     """PSD figure widget."""
 
-    def __init__(self, width=4, height=4, dpi=300):
+    def __init__(self, width=4, height=4, dpi=100):
         self.fig = Figure(figsize=(width, height), dpi=dpi)
         self.axes = self.fig.subplots()
+        self.axes.set_xticks([])
+        self.axes.set_yticks([])
         super().__init__(self.fig)
 
     def reset(self) -> None:
@@ -54,7 +56,7 @@ class PowerSpectralDensityFig(FigureCanvasQTAgg):
 class TimeSeriesFig(FigureCanvasQTAgg):
     """Time-series figure widget."""
 
-    def __init__(self, width=4, height=4, dpi=300):
+    def __init__(self, width=4, height=4, dpi=100):
         fig = Figure(figsize=(width, height), dpi=dpi)
         ax = fig.subplots()
         fig.subplots_adjust(bottom=0, left=0, right=1, top=1, wspace=0, hspace=0)

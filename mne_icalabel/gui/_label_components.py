@@ -77,23 +77,12 @@ class Labels(QWidget):
     Only one of the labels can be selected at once.
     """
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, labels, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
-        labels = [
-            "Brain",
-            "Eye",
-            "Heart",
-            "Muscle",
-            "Channel Noise",
-            "Line Noise",
-            "Other",
-        ]
-
         self.buttonGroup = QButtonGroup()
         self.buttonGroup.setExclusive(True)
         layout = QVBoxLayout()
-        for k, label in enumerate(labels):
+        for k, label in enumerate(labels + ["Reset"]):
             pushButton = Labels.create_pushButton(label)
             self.buttonGroup.addButton(pushButton, k)
             layout.addWidget(pushButton)
@@ -128,10 +117,20 @@ class ICAComponentLabeler(QMainWindow):
         self._ica = ica
         self._inst = inst
 
+        # define valid labels
+        self.labels = [
+            "Brain",
+            "Eye",
+            "Heart",
+            "Muscle",
+            "Channel Noise",
+            "Line Noise",
+            "Other",
+        ]
         # create viewbox to select components
         self.list_components = ICAComponentLabeler.list_components(self._ica)
         # create buttons to select label
-        self.buttonGroup_labels = Labels()
+        self.buttonGroup_labels = Labels(self.labels)
         # create figure widgets
         self.widget_topo = TopomapFig()
         self.widget_psd = PowerSpectralDensityFig()
@@ -150,6 +149,9 @@ class ICAComponentLabeler(QMainWindow):
         self.setCentralWidget(self.central_widget)
         self.resize(1500, 600)
 
+        # dictionary to remember selected labels
+        self.saved_labels = dict()
+
         # connect signal and slots
         self.connect_signals_to_slots()
 
@@ -165,16 +167,13 @@ class ICAComponentLabeler(QMainWindow):
 
     def connect_signals_to_slots(self):  # noqa: D102
         self.list_components.clicked.connect(self.list_component_clicked)
+        self.buttonGroup_labels.buttonGroup.buttons()[-1].clicked.connect(self.reset)
 
     @Slot()
     def list_component_clicked(self):
         """Jump to the selected component and draw the plots."""
-        # reset all buttons
-        self.buttonGroup_labels.buttonGroup.setExclusive(False)
-        for button in self.buttonGroup_labels.buttonGroup.buttons():
-            button.setEnabled(True)
-            button.setChecked(False)
-        self.buttonGroup_labels.buttonGroup.setExclusive(True)
+        self.update_saved_labels()
+        self._reset_all_buttons()
 
         # reset figures
         self.widget_topo.reset()
@@ -199,10 +198,39 @@ class ICAComponentLabeler(QMainWindow):
         self.widget_topo.redraw()
         self.widget_psd.redraw()
 
+        # update selected label if one was saved
+        if self._current_ic in self.saved_labels:
+            label = self.saved_labels[self._current_ic]
+            idx = self.labels.index(label)
+            self.buttonGroup_labels.buttonGroup.button(idx).setChecked(True)
+
+    def update_saved_labels(self):
+        """Update the labels saved."""
+        selected = self.buttonGroup_labels.buttonGroup.checkedButton()
+        if selected is not None:
+            self.saved_labels[self._current_ic] = selected.text()
+
+    @Slot()
+    def reset(self):
+        """Action for the reset button."""
+        self._reset_all_buttons()
+        if self._current_ic in self.saved_labels:
+            del self.saved_labels[self._current_ic]
+
+    def _reset_all_buttons(self):
+        """Reset all buttons."""
+        self.buttonGroup_labels.buttonGroup.setExclusive(False)
+        for button in self.buttonGroup_labels.buttonGroup.buttons():
+            button.setEnabled(True)
+            button.setChecked(False)
+        self.buttonGroup_labels.buttonGroup.setExclusive(True)
+
     def closeEvent(self, event):
         """Clean up upon closing the window.
 
         Check if any IC is not labelled and ask the user to confirm if this is
         the case. Save all labels in BIDS format.
         """
+        self.update_saved_labels()
+        print (self.saved_labels)
         event.accept()

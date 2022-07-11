@@ -16,7 +16,6 @@ raw.filter(l_freq=1.0, h_freq=100.0)
 raw.set_eeg_reference("average")
 
 
-@pytest.mark.filterwarnings("ignore::RuntimeWarning")
 @pytest.mark.parametrize(
     "inst, exclude",
     (

@@ -24,12 +24,12 @@ Version 0.3 (Unreleased)
 Enhancements
 ~~~~~~~~~~~~
 
-- 
+-
 
 Bug
 ~~~
 
-- 
+- Ignore the ``RuntimeWarning`` issued by the grid inteprolation for ICLabel topographic feature by `Mathieu Scheltienne`_ (:gh:`69`)
 
 API
 ~~~
@@ -39,7 +39,7 @@ API
 Authors
 ~~~~~~~
 
-* 
+*
 
 :doc:`Find out what was new in previous releases <whats_new_previous_releases>`
 

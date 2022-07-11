@@ -13,8 +13,8 @@ raw.pick_types(eeg=True, exclude=[])
 raw.load_data()
 # preprocess
 with raw.info._unlock():  # fake filtering, testing dataset is filtered between [0.1, 80] Hz
-    raw.info["highpass"] = 1.
-    raw.info["lowpass"] = 100.
+    raw.info["highpass"] = 1.0
+    raw.info["lowpass"] = 100.0
 raw.set_eeg_reference("average")
 
 

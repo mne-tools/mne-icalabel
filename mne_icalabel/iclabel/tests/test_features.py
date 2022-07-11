@@ -1,3 +1,4 @@
+import warnings
 from pathlib import Path
 
 import numpy as np
@@ -86,7 +87,9 @@ def test_get_features_from_precomputed_ica(file, psd_constant_file, eeglab_featu
     ica = read_ica_eeglab(file)
 
     # Retrieve topo and autocorr
-    topo, _, autocorr = get_iclabel_features(inst, ica)
+    with warnings.catch_warnings():
+        warnings.filterwarnings("ignore", category=RuntimeWarning)
+        topo, _, autocorr = get_iclabel_features(inst, ica)
 
     # Build PSD feature manually to match the subset
     # retrieve activation

@@ -12,11 +12,12 @@ raw = read_raw(directory / "sample_audvis_trunc_raw.fif", preload=False)
 raw.pick_types(eeg=True, exclude=[])
 raw.load_data()
 # preprocess
-raw.filter(l_freq=1.0, h_freq=100.0)
+with raw.info._unlock():  # fake filtering, testing dataset is filtered between [0.1, 80] Hz
+    raw.info["highpass"] = 1.0
+    raw.info["lowpass"] = 100.0
 raw.set_eeg_reference("average")
 
 
-@pytest.mark.filterwarnings("ignore::RuntimeWarning")
 @pytest.mark.parametrize(
     "inst, exclude",
     (

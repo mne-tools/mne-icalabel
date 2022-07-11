@@ -1,3 +1,4 @@
+import warnings
 from typing import List, Tuple
 
 import numpy as np
@@ -135,8 +136,15 @@ def _gdatav4(
 
     # Determine distances between points
     d = np.abs(np.subtract.outer(xy, xy))
-    # % Determine weights for interpolation
-    g = np.square(d) * (np.log(d) - 1)  # % Green's function.
+    # Determine weights for interpolation
+    with warnings.catch_warnings():
+        warnings.filterwarnings(
+            "ignore", message="divide by zero encountered in log", category=RuntimeWarning
+        )
+        warnings.filterwarnings(
+            "ignore", message="invalid value encountered in multiply", category=RuntimeWarning
+        )
+        g = np.square(d) * (np.log(d) - 1)  # Green's function.
     # Fixup value of Green's function along diagonal
     np.fill_diagonal(g, 0)
     weights = np.linalg.lstsq(g, v, rcond=-1)[0]

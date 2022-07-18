@@ -29,10 +29,9 @@ def get_topo_array(ica, picks="eeg"):
 
     Returns:
     --------
-    topo_array: np.ndarray of shape (n_components, 64,64)
+    topo_array: np.ndarray of shape (n_components, n_pixels, n_pixels)
 
     """
-
     n_components = ica.mixing_matrix_.shape[1]
 
     data = np.dot(
@@ -58,7 +57,6 @@ def get_topo_array(ica, picks="eeg"):
 
     return topo_array  # topographic map array for all the components (n_components, 64, 64)
 
-
 def topographic_map(
     data,
     pos: Info,
@@ -74,36 +72,26 @@ def topographic_map(
 
     Parameters:
     -----------
-
     data: array of shape (n_channels,)
         The data values to plot.
-
     pos: instance of mne.info
-
     vmin: float | callable | None
         The value specifying the lower bound of the color range.
-
     vmax: float | callable | None
         The value specifying the upper bound of the color range.
-
     res: int
         The resolution of the topomap image (n pixels in eaxh side, for example 64*64 in this case)
-
     %(outlines_topomap)s
-
     image_interp: str
         The image interpolation to be used. All matplotlib options are
         accepted.
-
     %(border_topomap)s
-
     %(extrapolate_topomap)s
-
 
     Returns:
     --------
     Zi: Array of size (64*64)
-        # Topographic map array
+        Topographic map array
 
     """
     picks = _pick_data_channels(pos, exclude=())  # pick only data channels

@@ -20,7 +20,6 @@ def get_topo_array(ica, picks="eeg"):
 
     ica: ICA
         Instance of MNE ICA Decomposition mne.preprocesssing.ICA
-
     picks: str | list | slice | None
     In lists, channel type strings (e.g., ['meg', 'eeg']) will pick channels
     of those types, channel name strings (e.g., ['MEG0111', 'MEG2623'] will

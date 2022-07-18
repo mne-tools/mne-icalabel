@@ -17,7 +17,6 @@ def get_topo_array(ica, picks="eeg"):
 
     Parameters:
     ----------
-
     ica: ICA
         Instance of MNE ICA Decomposition mne.preprocesssing.ICA
     picks: str | list | slice | None

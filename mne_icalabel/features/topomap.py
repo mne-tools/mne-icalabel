@@ -31,7 +31,6 @@ def get_topo_array(ica, picks="eeg"):
 
     Returns:
     --------
-
     topo_array: np.ndarray of shape (n_components, 64,64)
 
     """

@@ -57,6 +57,7 @@ def get_topo_array(ica, picks="eeg"):
 
     return topo_array  # topographic map array for all the components (n_components, 64, 64)
 
+
 def topographic_map(
     data,
     pos: Info,

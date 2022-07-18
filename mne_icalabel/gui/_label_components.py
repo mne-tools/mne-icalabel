@@ -15,8 +15,21 @@ from qtpy.QtWidgets import (
     QWidget,
 )
 
+from mne.preprocessing import ICA
+from mne_icalabel.annotation import write_components_tsv
+
 _CH_MENU_WIDTH = 30 if platform.system() == "Windows" else 10
 
+# map ICLabel labels to MNE str format
+ICLABEL_LABELS_TO_MNE = {
+    'Brain': 'brain',
+    'Eye': 'eog',
+    'Heart': 'ecg',
+    'Muscle': 'muscle',
+    'Channel Noise': 'ch_noise',
+    'Line Noise': 'line_noise',
+    'Other': 'other'
+}
 
 class TopomapFig(FigureCanvasQTAgg):
     """Topographic map figure widget."""
@@ -108,7 +121,7 @@ class ICAComponentLabeler(QMainWindow):
     ica : ICA
     """
 
-    def __init__(self, inst, ica) -> None:
+    def __init__(self, inst, ica: ICA) -> None:
         super().__init__()
         self.setWindowTitle("ICA Component Labeler")
         self.setContextMenuPolicy(Qt.NoContextMenu)
@@ -149,7 +162,8 @@ class ICAComponentLabeler(QMainWindow):
         self.setCentralWidget(self.central_widget)
         self.resize(1500, 600)
 
-        # dictionary to remember selected labels
+        # dictionary to remember selected labels, with the key
+        # as the 'label' and the values as list of ICA components
         self.saved_labels = dict()
 
         # connect signal and slots
@@ -209,6 +223,7 @@ class ICAComponentLabeler(QMainWindow):
         selected = self.buttonGroup_labels.buttonGroup.checkedButton()
         if selected is not None:
             self.saved_labels[self._current_ic] = selected.text()
+        self._save_component_labels()
 
     @Slot()
     def reset(self):
@@ -224,6 +239,18 @@ class ICAComponentLabeler(QMainWindow):
             button.setEnabled(True)
             button.setChecked(False)
         self.buttonGroup_labels.buttonGroup.setExclusive(True)
+
+    def _save_component_labels(self):
+        """Save component labels to the ICA instance."""
+        for label, comp_list in self.saved_labels.items():
+            mne_label = ICLABEL_LABELS_TO_MNE[label]
+            if mne_label not in self._ica.labels_:
+                self._ica.labels_[mne_label] = []
+
+            # add component labels to the ICA instance
+            for comp in comp_list:
+                if comp not in self._ica.labels_[mne_label]:
+                    self._ica.labels_[mne_label].append(comp)
 
     def closeEvent(self, event):
         """Clean up upon closing the window.

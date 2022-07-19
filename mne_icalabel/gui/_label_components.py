@@ -5,6 +5,7 @@ from matplotlib import pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
 from matplotlib.figure import Figure
 from mne.preprocessing import ICA
+from mne.viz import set_browser_backend
 from qtpy.QtCore import Qt, Slot
 from qtpy.QtWidgets import (
     QAbstractItemView,
@@ -63,7 +64,7 @@ class PowerSpectralDensityFig(FigureCanvasQTAgg):
 
 
 class TimeSeriesFig(FigureCanvasQTAgg):
-    """Time-series figure widget."""
+    """Dummy time-series figure widget."""
 
     def __init__(self, width=4, height=4, dpi=100):
         self.fig = Figure(figsize=(width, height), dpi=dpi)
@@ -73,22 +74,6 @@ class TimeSeriesFig(FigureCanvasQTAgg):
         self.axes.set_xticks([])
         self.axes.set_yticks([])
         super().__init__(self.fig)
-
-    def reset(self) -> None:
-        """Reset the time-series plot."""
-        self.axes.clear()
-
-    def change_ic(self, inst, ica, idx):
-        """Change the component time-series source to plot."""
-        # TODO: change to use ica
-        # TODO: make this work and actually embed in the plot
-        fig = inst.plot(block=False, order=[idx])
-
-        self.axes.set_title("")
-        self.fig = fig
-        self.fig.tight_layout()
-        self.fig.canvas.draw()
-        self.fig.canvas.flush_events()
 
 
 # TODO: Maybe that should inherit from a QGroupBox?
@@ -135,6 +120,7 @@ class ICAComponentLabeler(QMainWindow):
 
     def __init__(self, inst, ica: ICA) -> None:
         super().__init__()
+        set_browser_backend("qt")
 
         # error check to see if ICA was fitted already
         if ica.current_fit == "unfitted":
@@ -235,7 +221,11 @@ class ICAComponentLabeler(QMainWindow):
         # update figures
         self.widget_topo.redraw()
         self.widget_psd.redraw()
-        self.widget_timeSeries.change_ic(self._inst, self._ica, self._current_ic)
+        # retrieve layout and swaap timeSeries widget
+        self.central_widget.layout().replaceWidget(
+            self.widget_timeSeries,
+            self._ica.plot_sources(self._inst, picks=[self._current_ic]),
+        )
 
         # update selected label if one was saved
         if self._current_ic in self.saved_labels:

@@ -46,7 +46,7 @@ def data_path(path=None, force_update=False, update_path=True, download=True, ve
     """
     dataset_params = dict(
         archive_name="MNE-testing-icalabel-data.zip",
-        hash="md5:1ed3a8e12140ef513db8822b6b0dee09",
+        hash="md5:ea1b188e671fe35a65c2c3cb6c42ccb3",
         url="https://github.com/adam2392/mne-testing-icalabel-data/archive/main.zip",
         folder_name="MNE-testing-icalabel-data",
         dataset_name="icalabel-testing",

@@ -16,7 +16,7 @@ Here we list a changelog of MNE-ICALabel.
 
 .. _current:
 
-Version 0.2 (Unreleased)
+Version 0.3 (Unreleased)
 ------------------------
 
 ...
@@ -24,13 +24,12 @@ Version 0.2 (Unreleased)
 Enhancements
 ~~~~~~~~~~~~
 
-- Add functions for annotating and labeling ICA components in BIDS format :func:`mne_icalabel.annotation.write_components_tsv`, :func:`mne_icalabel.annotation.mark_component` by `Adam Li`_ (:gh:`60`)
+- 
 
 Bug
 ~~~
 
-- Fix shape of ``'y_pred_proba'`` output from :func:`mne_icalabel.label_components` by `Mathieu Scheltienne`_ (:gh:`36`)
-- Add a warning if the ICA decomposition provided does not match the expected decomposition by ``ICLabel``  by `Mathieu Scheltienne`_ (:gh:`42`)
+- 
 
 API
 ~~~
@@ -40,8 +39,7 @@ API
 Authors
 ~~~~~~~
 
-* `Mathieu Scheltienne`_
-* `Adam Li`_
+* 
 
 :doc:`Find out what was new in previous releases <whats_new_previous_releases>`
 

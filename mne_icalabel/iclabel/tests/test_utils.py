@@ -9,7 +9,7 @@ from scipy.io import loadmat
 from mne_icalabel.datasets import icalabel
 from mne_icalabel.iclabel.utils import _gdatav4, _mne_to_eeglab_locs, _next_power_of_2
 
-dataset_path = Path(icalabel.data_path()) / "iclabel"
+dataset_path = icalabel.data_path() / "iclabel"
 
 # Raw/Epochs files with ICA decomposition
 raw_eeglab_path = dataset_path / "datasets/sample-raw.set"
@@ -40,7 +40,7 @@ def test_loc(file, eeglab_result_file):
     when loading the datasets."""
     type_ = str(Path(file).stem)[-3:]
     inst = reader[type_](file, **kwargs[type_])
-    rd, th = _mne_to_eeglab_locs(inst)
+    rd, th = _mne_to_eeglab_locs(inst, picks=inst.ch_names)
     eeglab_loc = loadmat(eeglab_result_file)["loc"][0, 0]
     eeglab_rd = eeglab_loc["rd"]
     eeglab_th = eeglab_loc["th"]

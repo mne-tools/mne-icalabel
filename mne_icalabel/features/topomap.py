@@ -1,10 +1,10 @@
 import numpy as np
-from mne.io import Info
-from mne.io.pick import pick_info, _pick_data_channels, _get_channel_types
 from mne.channels.layout import _find_topomap_coords
+from mne.defaults import _BORDER_DEFAULT, _EXTRAPOLATE_DEFAULT, _INTERPOLATION_DEFAULT
+from mne.io import Info
+from mne.io.pick import _get_channel_types, _pick_data_channels, pick_info
 from mne.viz.topomap import _check_extrapolate, _make_head_outlines, _setup_interp
 from mne.viz.utils import _setup_vmin_vmax
-from mne.defaults import _INTERPOLATION_DEFAULT, _EXTRAPOLATE_DEFAULT, _BORDER_DEFAULT
 
 
 def get_topo_array(ica, picks="eeg"):

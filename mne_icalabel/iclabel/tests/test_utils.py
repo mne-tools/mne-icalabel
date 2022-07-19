@@ -48,8 +48,6 @@ def test_loc(file, eeglab_result_file):
     assert np.allclose(th, eeglab_th, atol=1e-8)
 
 
-# TODO: Warnings should be fixed at some point.
-@pytest.mark.filterwarnings("ignore::RuntimeWarning")
 @pytest.mark.parametrize("file", (gdatav4_raw_path, gdatav4_epo_path))
 def test_gdatav4(file):
     """Test grid data interpolation."""

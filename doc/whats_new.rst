@@ -24,7 +24,7 @@ Version 0.3 (Unreleased)
 Enhancements
 ~~~~~~~~~~~~
 
--
+- Adding a GUI to facilitate the labeling of ICA components, by `Adam Li`_ and `Mathieu Scheltienne`_ (:gh:`66`)
 
 Bug
 ~~~
@@ -39,7 +39,8 @@ API
 Authors
 ~~~~~~~
 
-*
+* `Adam Li`_
+* `Mathieu Scheltienne`_
 
 :doc:`Find out what was new in previous releases <whats_new_previous_releases>`
 

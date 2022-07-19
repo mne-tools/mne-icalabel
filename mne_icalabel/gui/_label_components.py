@@ -1,8 +1,10 @@
 import platform
+from typing import Dict, List
 
 from matplotlib import pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
 from matplotlib.figure import Figure
+from mne.preprocessing import ICA
 from qtpy.QtCore import Qt, Slot
 from qtpy.QtWidgets import (
     QAbstractItemView,
@@ -15,21 +17,10 @@ from qtpy.QtWidgets import (
     QWidget,
 )
 
-from mne.preprocessing import ICA
-from mne_icalabel.annotation import write_components_tsv
+from mne_icalabel.config import ICLABEL_LABELS_TO_MNE
 
 _CH_MENU_WIDTH = 30 if platform.system() == "Windows" else 10
 
-# map ICLabel labels to MNE str format
-ICLABEL_LABELS_TO_MNE = {
-    'Brain': 'brain',
-    'Eye': 'eog',
-    'Heart': 'ecg',
-    'Muscle': 'muscle',
-    'Channel Noise': 'ch_noise',
-    'Line Noise': 'line_noise',
-    'Other': 'other'
-}
 
 class TopomapFig(FigureCanvasQTAgg):
     """Topographic map figure widget."""
@@ -41,9 +32,11 @@ class TopomapFig(FigureCanvasQTAgg):
         super().__init__(self.fig)
 
     def reset(self) -> None:
+        """Reset the topographic plot."""
         self.axes.clear()
 
     def redraw(self) -> None:
+        """Redraw the data."""
         self.fig.canvas.draw()
         self.fig.canvas.flush_events()
 
@@ -58,9 +51,11 @@ class PowerSpectralDensityFig(FigureCanvasQTAgg):
         super().__init__(self.fig)
 
     def reset(self) -> None:
+        """Reset the PSD plot."""
         self.axes.clear()
 
     def redraw(self) -> None:
+        """Redraw the data."""
         self.axes.set_title("")
         self.fig.tight_layout()
         self.fig.canvas.draw()
@@ -71,16 +66,29 @@ class TimeSeriesFig(FigureCanvasQTAgg):
     """Time-series figure widget."""
 
     def __init__(self, width=4, height=4, dpi=100):
-        fig = Figure(figsize=(width, height), dpi=dpi)
-        ax = fig.subplots()
-        fig.subplots_adjust(bottom=0, left=0, right=1, top=1, wspace=0, hspace=0)
+        self.fig = Figure(figsize=(width, height), dpi=dpi)
+        self.axes = self.fig.subplots()
+        self.fig.subplots_adjust(bottom=0, left=0, right=1, top=1, wspace=0, hspace=0)
         # clean up excess plot text, invert
-        ax.set_xticks([])
-        ax.set_yticks([])
-        super().__init__(fig)
+        self.axes.set_xticks([])
+        self.axes.set_yticks([])
+        super().__init__(self.fig)
 
-    def change_ic(self, ica, inst, idx):
-        pass
+    def reset(self) -> None:
+        """Reset the time-series plot."""
+        self.axes.clear()
+
+    def change_ic(self, inst, ica, idx):
+        """Change the component time-series source to plot."""
+        # TODO: change to use ica
+        # TODO: make this work and actually embed in the plot
+        fig = inst.plot(block=False, order=[idx])
+
+        self.axes.set_title("")
+        self.fig = fig
+        self.fig.tight_layout()
+        self.fig.canvas.draw()
+        self.fig.canvas.flush_events()
 
 
 # TODO: Maybe that should inherit from a QGroupBox?
@@ -103,6 +111,10 @@ class Labels(QWidget):
 
     @staticmethod
     def create_pushButton(label):
+        """Create a push button widget.
+
+        Sets the properties of the push button widget.
+        """
         pushButton = QPushButton()
         pushButton.setObjectName(f"pushButton_{label.lower().replace(' ', '_')}")
         pushButton.setText(label)
@@ -123,6 +135,14 @@ class ICAComponentLabeler(QMainWindow):
 
     def __init__(self, inst, ica: ICA) -> None:
         super().__init__()
+
+        # error check to see if ICA was fitted already
+        if ica.current_fit == "unfitted":
+            raise ValueError(
+                "ICA instance should be fit on the raw data before "
+                "running the ICA labeling GUI. Run `ica.fit(inst)`."
+            )
+
         self.setWindowTitle("ICA Component Labeler")
         self.setContextMenuPolicy(Qt.NoContextMenu)
 
@@ -141,7 +161,7 @@ class ICAComponentLabeler(QMainWindow):
             "Other",
         ]
         # create viewbox to select components
-        self.list_components = ICAComponentLabeler.list_components(self._ica)
+        self.list_components = ICAComponentLabeler.list_components(self._ica)  # type: ignore
         # create buttons to select label
         self.buttonGroup_labels = Labels(self.labels)
         # create figure widgets
@@ -164,7 +184,7 @@ class ICAComponentLabeler(QMainWindow):
 
         # dictionary to remember selected labels, with the key
         # as the 'label' and the values as list of ICA components
-        self.saved_labels = dict()
+        self.saved_labels: Dict[str, List] = dict()
 
         # connect signal and slots
         self.connect_signals_to_slots()
@@ -180,7 +200,11 @@ class ICAComponentLabeler(QMainWindow):
         return list_components
 
     def connect_signals_to_slots(self):  # noqa: D102
+        # connect click to function
         self.list_components.clicked.connect(self.list_component_clicked)
+
+        # TODO: connect selection (i.e. with up/down arrow) to function
+        # self.list_components.currentIndexChanged.connect(self.list_component_clicked)
         self.buttonGroup_labels.buttonGroup.buttons()[-1].clicked.connect(self.reset)
 
     @Slot()
@@ -211,6 +235,7 @@ class ICAComponentLabeler(QMainWindow):
         # update figures
         self.widget_topo.redraw()
         self.widget_psd.redraw()
+        self.widget_timeSeries.change_ic(self._inst, self._ica, self._current_ic)
 
         # update selected label if one was saved
         if self._current_ic in self.saved_labels:
@@ -227,7 +252,7 @@ class ICAComponentLabeler(QMainWindow):
 
     @Slot()
     def reset(self):
-        """Action for the reset button."""
+        """Slot action for the reset button."""
         self._reset_all_buttons()
         if self._current_ic in self.saved_labels:
             del self.saved_labels[self._current_ic]
@@ -259,5 +284,5 @@ class ICAComponentLabeler(QMainWindow):
         the case. Save all labels in BIDS format.
         """
         self.update_saved_labels()
-        print (self.saved_labels)
+        print(self.saved_labels)
         event.accept()

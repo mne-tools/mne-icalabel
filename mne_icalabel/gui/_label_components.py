@@ -1,112 +1,26 @@
-import platform
-from typing import Dict, List
+from typing import Dict, List, Tuple, Union
 
 from matplotlib import pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
-from matplotlib.figure import Figure
+from mne import BaseEpochs
+from mne.io import BaseRaw
 from mne.preprocessing import ICA
+from mne.utils import _validate_type
 from mne.viz import set_browser_backend
 from qtpy.QtCore import Qt, Slot
 from qtpy.QtWidgets import (
     QAbstractItemView,
     QButtonGroup,
-    QGridLayout,
+    QLayout,
     QListWidget,
+    QGridLayout,
     QMainWindow,
     QPushButton,
     QVBoxLayout,
     QWidget,
-)
+    )
 
 from mne_icalabel.config import ICLABEL_LABELS_TO_MNE
-
-_CH_MENU_WIDTH = 30 if platform.system() == "Windows" else 10
-
-
-class TopomapFig(FigureCanvasQTAgg):
-    """Topographic map figure widget."""
-
-    def __init__(self, width=4, height=4, dpi=100):
-        self.fig = Figure(figsize=(width, height), dpi=dpi)
-        self.axes = self.fig.subplots()
-        self.fig.subplots_adjust(bottom=0, left=0, right=1, top=1, wspace=0, hspace=0)
-        super().__init__(self.fig)
-
-    def reset(self) -> None:
-        """Reset the topographic plot."""
-        self.axes.clear()
-
-    def redraw(self) -> None:
-        """Redraw the data."""
-        self.fig.canvas.draw()
-        self.fig.canvas.flush_events()
-
-
-class PowerSpectralDensityFig(FigureCanvasQTAgg):
-    """PSD figure widget."""
-
-    def __init__(self, width=4, height=4, dpi=100):
-        self.fig = Figure(figsize=(width, height), dpi=dpi)
-        self.axes = self.fig.subplots()
-        self.axes.axis("off")
-        super().__init__(self.fig)
-
-    def reset(self) -> None:
-        """Reset the PSD plot."""
-        self.axes.clear()
-
-    def redraw(self) -> None:
-        """Redraw the data."""
-        self.axes.set_title("")
-        self.fig.tight_layout()
-        self.fig.canvas.draw()
-        self.fig.canvas.flush_events()
-
-
-class TimeSeriesFig(FigureCanvasQTAgg):
-    """Dummy time-series figure widget."""
-
-    def __init__(self, width=4, height=4, dpi=100):
-        self.fig = Figure(figsize=(width, height), dpi=dpi)
-        self.axes = self.fig.subplots()
-        self.fig.subplots_adjust(bottom=0, left=0, right=1, top=1, wspace=0, hspace=0)
-        # clean up excess plot text, invert
-        self.axes.set_xticks([])
-        self.axes.set_yticks([])
-        super().__init__(self.fig)
-
-
-# TODO: Maybe that should inherit from a QGroupBox?
-class Labels(QWidget):
-    """Widget with labels as push buttons.
-
-    Only one of the labels can be selected at once.
-    """
-
-    def __init__(self, labels, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.buttonGroup = QButtonGroup()
-        self.buttonGroup.setExclusive(True)
-        layout = QVBoxLayout()
-        for k, label in enumerate(labels + ["Reset"]):
-            pushButton = Labels.create_pushButton(label)
-            self.buttonGroup.addButton(pushButton, k)
-            layout.addWidget(pushButton)
-        self.setLayout(layout)
-
-    @staticmethod
-    def create_pushButton(label):
-        """Create a push button widget.
-
-        Sets the properties of the push button widget.
-        """
-        pushButton = QPushButton()
-        pushButton.setObjectName(f"pushButton_{label.lower().replace(' ', '_')}")
-        pushButton.setText(label)
-        pushButton.setCheckable(True)
-        pushButton.setChecked(False)
-        pushButton.setEnabled(False)
-        return pushButton
 
 
 class ICAComponentLabeler(QMainWindow):
@@ -114,164 +28,258 @@ class ICAComponentLabeler(QMainWindow):
 
     Parameters
     ----------
-    inst : Raw
+    inst : Raw | Epochs
     ica : ICA
     """
 
-    def __init__(self, inst, ica: ICA) -> None:
-        super().__init__()
-        set_browser_backend("qt")
+    def __init__(self, inst: Union[BaseRaw, BaseEpochs], ica: ICA) -> None:
+        ICAComponentLabeler._check_inst_ica(inst, ica)
+        super().__init__()  # initialize the QMainwindow
+        set_browser_backend("qt")  # force MNE to use the QT Browser
 
-        # error check to see if ICA was fitted already
+        # keep an internal pointer to the instance and to the ICA
+        self._inst = inst
+        self._ica = ica
+        # define valid labels
+        self._labels = list(ICLABEL_LABELS_TO_MNE.keys())
+        # prepare the GUI
+        self._load_ui()
+
+        # dictionary to remember selected labels, with the key as the 'indice'
+        # of the component and the value as the 'label'.
+        self.selected_labels: Dict[int, str] = dict()
+
+        # connect signal to slots
+        self._connect_signals_to_slots()
+
+        # select first IC
+        self._selected_component = 0
+        self._components_listWidget.setCurrentRow(0)  # emit signal
+
+    def _save_labels(self):
+        """Save the selected labels to the ICA instance."""
+        # convert the dict[int, str] to dict[str, List[int]] with the key as
+        # 'label' and value as a list of component indices.
+        labels2save = {key: [] for key in self.labels}
+        for component, label in self.selected_labels.items():
+            labels2save[label].append(component)
+        # sanity-check: uniqueness
+        assert all(len(elt) == len(set(elt)) for elt in labels2save.values())
+
+        for label, comp_list in labels2save.items():
+            mne_label = ICLABEL_LABELS_TO_MNE[label]
+            if mne_label not in self._ica.labels_:
+                self._ica.labels_[mne_label] = comp_list
+                continue
+            for comp in comp_list:
+                if comp not in self._ica.labels_[mne_label]:
+                    self._ica.labels_[mne_label].append(comp)
+
+    # - UI --------------------------------------------------------------------
+    def _load_ui(self):
+        """Prepare the GUI.
+
+        Widgets
+        -------
+        self._components_listWidget
+        self._labels_buttonGroup
+        self._mpl_widgets (dict)
+            - topomap
+            - psd
+        self._timeSeries_widget
+
+        Matplotlib figures
+        ------------------
+        self._mpl_figures (dict)
+            - topomap
+            - psd
+        """
+        self.setWindowTitle("ICA Component Labeler")
+        self.setContextMenuPolicy(Qt.NoContextMenu)
+
+        # QListWidget with the components' names.
+        self._components_listWidget = QListWidget()
+        self._components_listWidget.setSelectionMode(QAbstractItemView.SingleSelection)
+        self._components_listWidget.addItems(
+            [f"ICA{str(k).zfill(3)}" for k in range(self.n_components_)]
+        )
+
+        # buttons to select labels
+        self._labels_buttonGroup, buttonGroup_layout = ICAComponentLabeler._labels_buttonGroup(
+            self.labels
+        )
+
+        # matplotlib figures
+        self._mpl_figures = dict()
+        self._mpl_widgets = dict()
+
+        # topographic map
+        fig, _ = plt.subplots(1, 1, figsize=(4, 4), dpi=100)
+        fig.subplots_adjust(bottom=0, left=0, right=1, top=1, wspace=0, hspace=0)
+        self._mpl_figures["topomap"] = fig
+        self._mpl_widgets["topomap"] = FigureCanvasQTAgg(fig)
+
+        # PSD
+        fig, _ = plt.subplots(1, 1, figsize=(4, 4), dpi=100)
+        fig.subplots_adjust(bottom=0, left=0, right=1, top=1, wspace=0, hspace=0)
+        self._mpl_figures["psd"] = fig
+        self._mpl_widgets["psd"] = FigureCanvasQTAgg(fig)
+
+        # Time-series, initialized with the first IC since it's easier than
+        # creating an empty browser and providing all the arguments for
+        # _get_browser().
+        self._timeSeries_widget = self.ica.plot_sources(self.inst, picks=[0])
+
+        # load the layouts
+        self._load_layout(buttonGroup_layout)
+
+    @staticmethod
+    def _labels_buttonGroup(labels: List[str]) -> Tuple[QButtonGroup, QLayout]:
+        """Create the ButtonGroup that holds the labels and the reset."""
+        buttonGroup = QButtonGroup()
+        buttonGroup_layout = QVBoxLayout()
+        buttonGroup.setExclusive(True)
+        for k, label in enumerate(labels):
+            pushButton = QPushButton()
+            pushButton.setObjectName(f"pushButton_{label.lower().replace(' ', '_')}")
+            pushButton.setText(label)
+            pushButton.setCheckable(True)
+            pushButton.setChecked(False)
+            pushButton.setEnabled(False)
+            # buttons are ordered in the same order as labels
+            buttonGroup.addButton(pushButton, k)
+            buttonGroup_layout.addWidget(pushButton)
+        return buttonGroup, buttonGroup_layout
+
+    def _load_layout(self, buttonGroup_layout):
+        """Load and set the layout of the GUI."""
+        self._central_widget = QWidget(self)
+        self._central_widget.setObjectName("central_widget")
+        layout = QGridLayout()
+        layout.addWidget(self._components_listWidget, 0, 0, 2, 1)
+        layout.addLayout(buttonGroup_layout, 0, 1, 2, 1)
+        layout.addWidget(self._mpl_widgets["topomap"], 0, 2)
+        layout.addWidget(self._mpl_widgets["psd"], 0, 3)
+        layout.addWidget(self._timeSeries_widget, 1, 2, 1, 2)
+        self._central_widget.setLayout(layout)
+        self.setCentralWidget(self._central_widget)
+
+    # - Checkers --------------------------------------------------------------
+    @staticmethod
+    def _check_inst_ica(inst: Union[BaseRaw, BaseEpochs], ica: ICA) -> None:
+        """Check if the ICA was fitted."""
+        _validate_type(inst, (BaseRaw, BaseEpochs), "inst", "raw or epochs")
+        _validate_type(ica, ICA, "ica", "ICA")
         if ica.current_fit == "unfitted":
             raise ValueError(
                 "ICA instance should be fit on the raw data before "
                 "running the ICA labeling GUI. Run `ica.fit(inst)`."
             )
 
-        self.setWindowTitle("ICA Component Labeler")
-        self.setContextMenuPolicy(Qt.NoContextMenu)
+    # - Properties ------------------------------------------------------------
+    @property
+    def inst(self) -> Union[BaseRaw, BaseEpochs]:
+        """Instance on which the ICA has been fitted."""
+        return self._inst
 
-        # keep an internal pointer to the ICA and Raw
-        self._ica = ica
-        self._inst = inst
+    @property
+    def ica(self) -> ICA:
+        """Fitted ICA decomposition."""
+        return self._ica
 
-        # define valid labels
-        self.labels = [
-            "Brain",
-            "Eye",
-            "Heart",
-            "Muscle",
-            "Channel Noise",
-            "Line Noise",
-            "Other",
-        ]
-        # create viewbox to select components
-        self.list_components = ICAComponentLabeler.list_components(self._ica)  # type: ignore
-        # create buttons to select label
-        self.buttonGroup_labels = Labels(self.labels)
-        # create figure widgets
-        self.widget_topo = TopomapFig()
-        self.widget_psd = PowerSpectralDensityFig()
-        self.widget_timeSeries = TimeSeriesFig()
+    @property
+    def n_components_(self) -> int:
+        """The number of fitted components."""
+        return self._ica.n_components_
 
-        # add central widget and layout
-        self.central_widget = QWidget(self)
-        self.central_widget.setObjectName("central_widget")
-        layout = QGridLayout()
-        layout.addWidget(self.list_components, 0, 0, 2, 1)
-        layout.addWidget(self.buttonGroup_labels, 0, 1, 2, 1)
-        layout.addWidget(self.widget_topo, 0, 2)
-        layout.addWidget(self.widget_psd, 0, 3)
-        layout.addWidget(self.widget_timeSeries, 1, 2, 1, 2)
-        self.central_widget.setLayout(layout)
-        self.setCentralWidget(self.central_widget)
-        self.resize(1500, 600)
+    @property
+    def labels(self) -> List[str]:
+        """List of valid labels."""
+        return self._labels
 
-        # dictionary to remember selected labels, with the key
-        # as the 'label' and the values as list of ICA components
-        self.saved_labels: Dict[str, List] = dict()
+    @property
+    def selected_component(self) -> int:
+        """IC selected and displayed."""
+        return self._selected_component
 
-        # connect signal and slots
-        self.connect_signals_to_slots()
-
-    @staticmethod
-    def list_components(ica):
-        """List the components in a QListView."""
-        list_components = QListWidget()
-        list_components.setSelectionMode(QAbstractItemView.SingleSelection)
-        list_components.setMinimumWidth(6 * _CH_MENU_WIDTH)
-        list_components.setMaximumWidth(6 * _CH_MENU_WIDTH)
-        list_components.addItems([f"ICA{str(k).zfill(3)}" for k in range(ica.n_components_)])
-        return list_components
-
-    def connect_signals_to_slots(self):  # noqa: D102
-        # connect click to function
-        self.list_components.clicked.connect(self.list_component_clicked)
-
-        # TODO: connect selection (i.e. with up/down arrow) to function
-        # self.list_components.currentIndexChanged.connect(self.list_component_clicked)
-        self.buttonGroup_labels.buttonGroup.buttons()[-1].clicked.connect(self.reset)
+    # - Slots -----------------------------------------------------------------
+    def _connect_signals_to_slots(self) -> None:
+        """Connects all the signals and slots of the GUI."""
+        self._components_listWidget.currentRowChanged.connect(
+            self._components_listWidget_clicked
+        )
+        self._labels_buttonGroup.buttons()[-1].clicked.connect(self._reset)
 
     @Slot()
-    def list_component_clicked(self):
-        """Jump to the selected component and draw the plots."""
-        self.update_saved_labels()
-        self._reset_all_buttons()
-
-        # reset figures
-        self.widget_topo.reset()
-        self.widget_psd.reset()
+    def _components_listWidget_clicked(self) -> None:
+        """Update the plots and the saved labels accordingly."""
+        self._update_selected_labels()
+        self._reset_buttons()
 
         # update selected IC
-        self._current_ic = self.list_components.currentRow()
+        self._selected_component = self._components_listWidget.currentRow()
 
-        # create dummy axes
+        # reset matplotlib figures
+        for fig in self._mpl_figures.values():
+            fig.axes[0].clear()
+        # create dummy figure and axes to hold the unused plots from plot_properties
         dummy_fig, dummy_axes = plt.subplots(3)
+        # create axes argument provided to plot_properties
         axes = [
-            self.widget_topo.axes,
+            self._mpl_figures["topomap"].axes[0],
             dummy_axes[0],
             dummy_axes[1],
-            self.widget_psd.axes,
+            self._mpl_figures["psd"].axes[0],
             dummy_axes[2],
-        ]
-        self._ica.plot_properties(self._inst, axes=axes, picks=self._current_ic, show=False)
+            ]
+        # upate matplotlib plots with plot_properties
+        self.ica.plot_properties(self.inst, axes=axes, picks=self.selected_component, show=False)
         del dummy_fig
+        # remove title from topomap axes
+        self._mpl_figures["topomap"].axes[0].set_title("")
+        # update the matplotlib canvas
+        for fig in self._mpl_figures.values():
+            fig.tight_layout()
+            fig.canvas.draw()
+            fig.canvas.flush_events()
 
-        # update figures
-        self.widget_topo.redraw()
-        self.widget_psd.redraw()
-        # retrieve layout and swaap timeSeries widget
-        widget_timeSeries = self._ica.plot_sources(self._inst, picks=[self._current_ic])
-        self.central_widget.layout().replaceWidget(self.widget_timeSeries, widget_timeSeries)
-        self.widget_timeSeries = widget_timeSeries
+        # swap timeSeries widget
+        timeSeries_widget = self.ica.plot_sources(self.inst, picks=[self.selected_component])
+        self._central_widget.layout().replaceWidget(self._timeSeries_widget, timeSeries_widget)
+        self._timeSeries_widget = timeSeries_widget
 
-        # update selected label if one was saved
-        if self._current_ic in self.saved_labels:
-            label = self.saved_labels[self._current_ic]
-            idx = self.labels.index(label)
-            self.buttonGroup_labels.buttonGroup.button(idx).setChecked(True)
+        # select buttons that were previously selected for this IC
+        if self.selected_component in self.selected_labels:
+            idx = self.labels.index(self.selected_labels[self.selected_component])
+            self._labels_buttonGroup.button(idx).setChecked(True)
 
-    def update_saved_labels(self):
+    def _update_selected_labels(self) -> None:
         """Update the labels saved."""
-        selected = self.buttonGroup_labels.buttonGroup.checkedButton()
+        selected = self._labels_buttonGroup.checkedButton()
         if selected is not None:
-            self.saved_labels[self._current_ic] = selected.text()
-        self._save_component_labels()
+            self.selected_labels[self.selected_component] = selected.text()
+        self._save_labels()  # updates the ICA instance every time
 
     @Slot()
-    def reset(self):
-        """Slot action for the reset button."""
+    def _reset(self) -> None:
+        """Action of the reset button."""
         self._reset_all_buttons()
-        if self._current_ic in self.saved_labels:
-            del self.saved_labels[self._current_ic]
+        if self.selected_component in self.selected_labels:
+            del self.selected_labels[self.selected_component]
 
-    def _reset_all_buttons(self):
+    def _reset_buttons(self) -> None:
         """Reset all buttons."""
-        self.buttonGroup_labels.buttonGroup.setExclusive(False)
-        for button in self.buttonGroup_labels.buttonGroup.buttons():
+        self._labels_buttonGroup.setExclusive(False)
+        for button in self._labels_buttonGroup.buttons():
             button.setEnabled(True)
             button.setChecked(False)
-        self.buttonGroup_labels.buttonGroup.setExclusive(True)
-
-    def _save_component_labels(self):
-        """Save component labels to the ICA instance."""
-        for label, comp_list in self.saved_labels.items():
-            mne_label = ICLABEL_LABELS_TO_MNE[label]
-            if mne_label not in self._ica.labels_:
-                self._ica.labels_[mne_label] = []
-
-            # add component labels to the ICA instance
-            for comp in comp_list:
-                if comp not in self._ica.labels_[mne_label]:
-                    self._ica.labels_[mne_label].append(comp)
+        self._labels_buttonGroup.setExclusive(True)
 
     def closeEvent(self, event):
         """Clean up upon closing the window.
 
-        Check if any IC is not labelled and ask the user to confirm if this is
-        the case. Save all labels in BIDS format.
+        Update the labels since the user might have selected one for the
+        currently being displayed IC.
         """
-        self.update_saved_labels()
-        print(self.saved_labels)
+        self._update_selected_labels()
         event.accept()

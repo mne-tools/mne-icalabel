@@ -2,10 +2,16 @@ import numpy as np
 from mne.channels.layout import _find_topomap_coords
 from mne.defaults import _BORDER_DEFAULT, _EXTRAPOLATE_DEFAULT, _INTERPOLATION_DEFAULT
 from mne.io import Info
-from mne.io.pick import _get_channel_types, _pick_data_channels, pick_info
+from mne.io.pick import (
+    _get_channel_types,
+    _pick_data_channels,
+    _picks_to_idx,
+    pick_info,
+)
 from mne.preprocessing import ICA
 from mne.viz.topomap import _check_extrapolate, _make_head_outlines, _setup_interp
 from mne.viz.utils import _setup_vmin_vmax
+from numpy.typing import NDArray
 
 
 def get_topomaps(ica: ICA, picks=None):
@@ -21,17 +27,19 @@ def get_topomaps(ica: ICA, picks=None):
     -------
     topomaps : array of shape (n_components, n_pixels, n_pixels)
     """
-    n_components = ica.mixing_matrix_.shape[1]
+    if picks is None:  # plot all components
+        picks = range(0, ica.n_components_)
+    else:
+        picks = _picks_to_idx(ica.info, picks)
     data = np.dot(
         ica.mixing_matrix_[:, : ica.n_components_].T,
         ica.pca_components_[: ica.n_components_],
     )
     # Create an empty array of size (n_components, 64, 64) to fit topo values
-    topo_array = np.zeros((n_components, 64, 64))
+    topo_array = np.zeros((len(picks), 64, 64))
 
-    # f, ax = plt.subplots(1, ica.n_components_) #For Visualization
-    for j in range(n_components):
-        topo_ = np.flipud(topographic_map(data[j, :], ica.info))
+    for j in range(len(picks)):
+        topo_ = np.flipud(get_topomap(data[j, :], ica.info))
         # Set NaN values to 0
         np.nan_to_num(topo_, nan=0.0, copy=False)
         # Standardize the values
@@ -84,7 +92,9 @@ def get_topomap(
     if len(ch_type) > 1:
         raise ValueError("Multiple channel types in Info structure.")
     elif len(pos["chs"]) != data.shape[0]:
-        raise ValueError("The number of channels in the Info object and in the data array do not match.")
+        raise ValueError(
+            "The number of channels in the Info object and in the data array do not match."
+        )
     else:
         ch_type = ch_type.pop()
 
@@ -94,13 +104,6 @@ def get_topomap(
     # inferring (x, y) coordinates form mne.Info instance
     pos = _find_topomap_coords(pos, picks=picks, sphere=sphere)
     extrapolate = _check_extrapolate(extrapolate, ch_type)
-
-    if len(data) != len(pos):
-        raise ValueError(
-            "Data and pos need to be of same length. Got data of "
-            "length %s, pos of length %s" % (len(data), len(pos))
-        )
-
     norm = min(data) >= 0
     vmin, vmax = _setup_vmin_vmax(data, vmin, vmax, norm)
 

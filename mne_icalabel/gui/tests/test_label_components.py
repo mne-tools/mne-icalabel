@@ -33,6 +33,9 @@ def load_raw_and_fit_ica():
     raw_fname = op.join(data_path, "test_reduced.edf")
     raw = read_raw_edf(raw_fname)
 
+    # high-pass filter
+    raw.filter(l_freq=1, h_freq=100)
+
     # compute ICA
     ica = ICA(n_components=15)
     ica.fit(raw)

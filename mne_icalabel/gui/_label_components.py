@@ -11,14 +11,14 @@ from qtpy.QtCore import Qt, Slot
 from qtpy.QtWidgets import (
     QAbstractItemView,
     QButtonGroup,
+    QGridLayout,
     QLayout,
     QListWidget,
-    QGridLayout,
     QMainWindow,
     QPushButton,
     QVBoxLayout,
     QWidget,
-    )
+)
 
 from mne_icalabel.config import ICLABEL_LABELS_TO_MNE
 
@@ -205,9 +205,7 @@ class ICAComponentLabeler(QMainWindow):
     # - Slots -----------------------------------------------------------------
     def _connect_signals_to_slots(self) -> None:
         """Connects all the signals and slots of the GUI."""
-        self._components_listWidget.currentRowChanged.connect(
-            self._components_listWidget_clicked
-        )
+        self._components_listWidget.currentRowChanged.connect(self._components_listWidget_clicked)
         self._labels_buttonGroup.buttons()[-1].clicked.connect(self._reset)
 
     @Slot()
@@ -231,7 +229,7 @@ class ICAComponentLabeler(QMainWindow):
             dummy_axes[1],
             self._mpl_figures["psd"].axes[0],
             dummy_axes[2],
-            ]
+        ]
         # upate matplotlib plots with plot_properties
         self.ica.plot_properties(self.inst, axes=axes, picks=self.selected_component, show=False)
         del dummy_fig

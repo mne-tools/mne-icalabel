@@ -8,24 +8,18 @@ from mne.viz.topomap import _check_extrapolate, _make_head_outlines, _setup_inte
 from mne.viz.utils import _setup_vmin_vmax
 
 
-def get_topo_array(ica: ICA, picks="eeg"):
-    """Generate an array of scalp topographies plot of size (n_pixels, n_pixels).
+def get_topomaps(ica: ICA, picks=None):
+    """Generate an array of scalp topographies (n_pixels, n_pixels) for the picked components.
 
     Parameters
     ----------
     ica : ICA
-        Instance of MNE ICA Decomposition mne.preprocesssing.ICA.
-    picks : str | list | slice | None
-        In lists, channel type strings (e.g., ['meg', 'eeg']) will pick channels
-        of those types, channel name strings (e.g., ['MEG0111', 'MEG2623'] will
-        pick the given channels. Can also be the string values “all” to pick all
-        channels, or “data” to pick data channels. None (default) will pick all
-        channels. Note that channels in info['bads'] will be included if their
-        names or indices are explicitly provided.
+        Instance of MNE `~mne.preprocesssing.ICA` decomposition.
+    %(picks_ica)s ``None`` (default) will pick all sources in the order fitted.
 
     Returns
     -------
-    topo_array : np.ndarray of shape (n_components, n_pixels, n_pixels)
+    topomaps : array of shape (n_components, n_pixels, n_pixels)
     """
     n_components = ica.mixing_matrix_.shape[1]
     data = np.dot(
@@ -38,42 +32,39 @@ def get_topo_array(ica: ICA, picks="eeg"):
     # f, ax = plt.subplots(1, ica.n_components_) #For Visualization
     for j in range(n_components):
         topo_ = np.flipud(topographic_map(data[j, :], ica.info))
-
-        # ax[j].imshow(topo_) # For visualization
-
         # Set NaN values to 0
-        np.nan_to_num(topo_, copy=False)
-
+        np.nan_to_num(topo_, nan=0.0, copy=False)
         # Standardize the values
         topo_array[j, :, :] = topo_ / np.max(np.abs(topo_))
 
     return topo_array  # topographic map array for all the components (n_components, 64, 64)
 
 
-def topographic_map(
-    data,
+def get_topomap(
+    data: NDArray[float],
     pos: Info,
     vmin=None,
     vmax=None,
     res: int = 64,
     outlines="head",
-    image_interp=_INTERPOLATION_DEFAULT,  #'cubic
-    border=_BORDER_DEFAULT,  #'mean'
-    extrapolate=_EXTRAPOLATE_DEFAULT,  #'head'
+    image_interp=_INTERPOLATION_DEFAULT,  # 'cubic'
+    border=_BORDER_DEFAULT,  # 'mean'
+    extrapolate=_EXTRAPOLATE_DEFAULT,  # 'head'
 ):
-    """Generate a topographic map as image.
+    """Generate a scalp topographic map (n_pixels, n_pixels).
 
     Parameters
     ----------
     data : array of shape (n_channels,)
-        The data values to plot.
-    pos : instance of `mne.Info`
+        The data points used to generate the topographic map.
+    pos : `mne.Info`
+        Instance of `mne.Info` with the montage associated with the (n_channels,) points.
     vmin : float | callable | None
         The value specifying the lower bound of the color range.
     vmax : float | callable | None
         The value specifying the upper bound of the color range.
     res : int = 64
-        The resolution of the square topomap image (in pixels).
+        The resolution of the square topographic map (in pixels).
     %(outlines_topomap)s
     image_interp : str
         The image interpolation to be used. All matplotlib options are
@@ -83,7 +74,7 @@ def topographic_map(
 
     Returns
     -------
-    Zi : Array of size (n_pixels, n_pixels)
+    topomap : array of size (n_pixels, n_pixels)
         Topographic map array
     """
     picks = _pick_data_channels(pos, exclude=())  # pick only data channels
@@ -93,14 +84,14 @@ def topographic_map(
     if len(ch_type) > 1:
         raise ValueError("Multiple channel types in Info structure.")
     elif len(pos["chs"]) != data.shape[0]:
-        raise ValueError("Number of channels in the Info object the data array do not match.")
+        raise ValueError("The number of channels in the Info object and in the data array do not match.")
     else:
         ch_type = ch_type.pop()
 
     picks = list(range(data.shape[0]))
     sphere = np.array([0.0, 0.0, 0.0, 0.095])
 
-    # inferring x,y coordinates form mne.info instance
+    # inferring (x, y) coordinates form mne.Info instance
     pos = _find_topomap_coords(pos, picks=picks, sphere=sphere)
     extrapolate = _check_extrapolate(extrapolate, ch_type)
 
@@ -117,5 +108,4 @@ def topographic_map(
     outlines = _make_head_outlines(sphere, pos, outlines, (0.0, 0.0))
     extent, Xi, Yi, interp = _setup_interp(pos, res, image_interp, extrapolate, outlines, border)
     interp.set_values(data)
-    Zi = interp.set_locations(Xi, Yi)()
-    return Zi  # Topographic map array of size (64*64)
+    return interp.set_locations(Xi, Yi)()  # Zi, topomap of shape (n_pixels, n_pixels)

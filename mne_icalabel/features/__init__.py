@@ -1,2 +1,2 @@
 """Features for the ICLabel"""
-from features import topomap
+from .topomap import topographic_map

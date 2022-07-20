@@ -222,10 +222,9 @@ class ICAComponentLabeler(QMainWindow):
         self.widget_topo.redraw()
         self.widget_psd.redraw()
         # retrieve layout and swaap timeSeries widget
-        self.central_widget.layout().replaceWidget(
-            self.widget_timeSeries,
-            self._ica.plot_sources(self._inst, picks=[self._current_ic]),
-        )
+        widget_timeSeries = self._ica.plot_sources(self._inst, picks=[self._current_ic])
+        self.central_widget.layout().replaceWidget(self.widget_timeSeries, widget_timeSeries)
+        self.widget_timeSeries = widget_timeSeries
 
         # update selected label if one was saved
         if self._current_ic in self.saved_labels:

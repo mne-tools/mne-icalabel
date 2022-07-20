@@ -1,4 +1,4 @@
-from typing import Dict, List, Tuple, Union
+from typing import Dict, List, Union
 
 from matplotlib import pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
@@ -12,7 +12,6 @@ from qtpy.QtWidgets import (
     QAbstractItemView,
     QButtonGroup,
     QGridLayout,
-    QLayout,
     QListWidget,
     QMainWindow,
     QPushButton,
@@ -56,7 +55,7 @@ class ICAComponentLabeler(QMainWindow):
         self._selected_component = 0
         self._components_listWidget.setCurrentRow(0)  # emit signal
 
-    def _save_labels(self):
+    def _save_labels(self) -> None:
         """Save the selected labels to the ICA instance."""
         # convert the dict[int, str] to dict[str, List[int]] with the key as
         # 'label' and value as a list of component indices.
@@ -76,7 +75,7 @@ class ICAComponentLabeler(QMainWindow):
                     self._ica.labels_[mne_label].append(comp)
 
     # - UI --------------------------------------------------------------------
-    def _load_ui(self):
+    def _load_ui(self) -> None:
         """Prepare the GUI.
 
         Widgets
@@ -97,17 +96,36 @@ class ICAComponentLabeler(QMainWindow):
         self.setWindowTitle("ICA Component Labeler")
         self.setContextMenuPolicy(Qt.NoContextMenu)
 
+        # create central widget and main layout
+        self._central_widget = QWidget(self)
+        self._central_widget.setObjectName("central_widget")
+        grid_layout = QGridLayout(self)
+        self._central_widget.setLayout(grid_layout)
+        self.setCentralWidget(self._central_widget)
+
         # QListWidget with the components' names.
-        self._components_listWidget = QListWidget()
+        self._components_listWidget = QListWidget(self)
         self._components_listWidget.setSelectionMode(QAbstractItemView.SingleSelection)
         self._components_listWidget.addItems(
             [f"ICA{str(k).zfill(3)}" for k in range(self.n_components_)]
         )
+        grid_layout.addWidget(self._components_listWidget, 0, 0, 2, 1)
 
         # buttons to select labels
-        self._labels_buttonGroup, buttonGroup_layout = ICAComponentLabeler._labels_buttonGroup(
-            self.labels
-        )
+        self._labels_buttonGroup = QButtonGroup(self)
+        buttonGroup_layout = QVBoxLayout(self)
+        self._labels_buttonGroup.setExclusive(True)
+        for k, label in enumerate(self.labels):
+            pushButton = QPushButton(self)
+            pushButton.setObjectName(f"pushButton_{label.lower().replace(' ', '_')}")
+            pushButton.setText(label)
+            pushButton.setCheckable(True)
+            pushButton.setChecked(False)
+            pushButton.setEnabled(False)
+            # buttons are ordered in the same order as labels
+            self._labels_buttonGroup.addButton(pushButton, k)
+            buttonGroup_layout.addWidget(pushButton)
+        grid_layout.addLayout(buttonGroup_layout, 0, 1, 2, 1)
 
         # matplotlib figures
         self._mpl_figures = dict()
@@ -118,51 +136,20 @@ class ICAComponentLabeler(QMainWindow):
         fig.subplots_adjust(bottom=0, left=0, right=1, top=1, wspace=0, hspace=0)
         self._mpl_figures["topomap"] = fig
         self._mpl_widgets["topomap"] = FigureCanvasQTAgg(fig)
+        grid_layout.addWidget(self._mpl_widgets["topomap"], 0, 2)
 
         # PSD
         fig, _ = plt.subplots(1, 1, figsize=(4, 4), dpi=100)
         fig.subplots_adjust(bottom=0, left=0, right=1, top=1, wspace=0, hspace=0)
         self._mpl_figures["psd"] = fig
         self._mpl_widgets["psd"] = FigureCanvasQTAgg(fig)
+        grid_layout.addWidget(self._mpl_widgets["psd"], 0, 3)
 
-        # Time-series, initialized with the first IC since it's easier than
+        # time-series, initialized with the first IC since it's easier than
         # creating an empty browser and providing all the arguments for
         # _get_browser().
         self._timeSeries_widget = self.ica.plot_sources(self.inst, picks=[0])
-
-        # load the layouts
-        self._load_layout(buttonGroup_layout)
-
-    @staticmethod
-    def _labels_buttonGroup(labels: List[str]) -> Tuple[QButtonGroup, QLayout]:
-        """Create the ButtonGroup that holds the labels and the reset."""
-        buttonGroup = QButtonGroup()
-        buttonGroup_layout = QVBoxLayout()
-        buttonGroup.setExclusive(True)
-        for k, label in enumerate(labels):
-            pushButton = QPushButton()
-            pushButton.setObjectName(f"pushButton_{label.lower().replace(' ', '_')}")
-            pushButton.setText(label)
-            pushButton.setCheckable(True)
-            pushButton.setChecked(False)
-            pushButton.setEnabled(False)
-            # buttons are ordered in the same order as labels
-            buttonGroup.addButton(pushButton, k)
-            buttonGroup_layout.addWidget(pushButton)
-        return buttonGroup, buttonGroup_layout
-
-    def _load_layout(self, buttonGroup_layout):
-        """Load and set the layout of the GUI."""
-        self._central_widget = QWidget(self)
-        self._central_widget.setObjectName("central_widget")
-        layout = QGridLayout()
-        layout.addWidget(self._components_listWidget, 0, 0, 2, 1)
-        layout.addLayout(buttonGroup_layout, 0, 1, 2, 1)
-        layout.addWidget(self._mpl_widgets["topomap"], 0, 2)
-        layout.addWidget(self._mpl_widgets["psd"], 0, 3)
-        layout.addWidget(self._timeSeries_widget, 1, 2, 1, 2)
-        self._central_widget.setLayout(layout)
-        self.setCentralWidget(self._central_widget)
+        grid_layout.addWidget(self._timeSeries_widget, 1, 2, 1, 2)
 
     # - Checkers --------------------------------------------------------------
     @staticmethod
@@ -230,7 +217,7 @@ class ICAComponentLabeler(QMainWindow):
             self._mpl_figures["psd"].axes[0],
             dummy_axes[2],
         ]
-        # upate matplotlib plots with plot_properties
+        # update matplotlib plots with plot_properties
         self.ica.plot_properties(self.inst, axes=axes, picks=self.selected_component, show=False)
         del dummy_fig
         # remove title from topomap axes
@@ -273,7 +260,7 @@ class ICAComponentLabeler(QMainWindow):
             button.setChecked(False)
         self._labels_buttonGroup.setExclusive(True)
 
-    def closeEvent(self, event):
+    def closeEvent(self, event) -> None:
         """Clean up upon closing the window.
 
         Update the labels since the user might have selected one for the

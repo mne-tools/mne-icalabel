@@ -59,7 +59,7 @@ class ICAComponentLabeler(QMainWindow):
         """Save the selected labels to the ICA instance."""
         # convert the dict[int, str] to dict[str, List[int]] with the key as
         # 'label' and value as a list of component indices.
-        labels2save = {key: [] for key in self.labels}
+        labels2save: Dict[str, List[int]] = {key: [] for key in self.labels}
         for component, label in self.selected_labels.items():
             labels2save[label].append(component)
         # sanity-check: uniqueness

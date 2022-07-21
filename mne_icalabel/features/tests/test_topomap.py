@@ -31,11 +31,13 @@ def test_topomap_defaults():
     assert topomap.shape == (64, 64)
 
 
+@requires_version("mne", "1.1")
 @pytest.mark.parametrize(
     "picks, res", [(0, 32), ([0, 1, 2], 50), (slice(1, 3), 128), (np.array([1, 2]), 10)]
 )
 def test_topomap_arguments(picks, res):
-    topomaps = topomaps = get_topomaps(ica, picks=picks, res=res)
+    """Test arguments that influence the output shape."""
+    topomaps = get_topomaps(ica, picks=picks, res=res)
     assert isinstance(topomaps, np.ndarray)
     if isinstance(picks, int):
         n_components = 1
@@ -44,3 +46,10 @@ def test_topomap_arguments(picks, res):
     else:
         n_components = len(picks)
     assert topomaps.shape == (n_components, res, res)
+
+
+@requires_version("mne", "1.1")
+def test_invalid_arguments():
+    """Test invalid arguments."""
+    with pytest.raises(IndexError):
+        get_topomaps(ica, picks="eeg")

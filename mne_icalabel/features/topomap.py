@@ -20,7 +20,7 @@ def get_topomaps(ica: ICA, picks=None):
     Parameters
     ----------
     ica : ICA
-        Instance of MNE `~mne.preprocesssing.ICA` decomposition.
+        Instance of MNE `~mne.preprocessing.ICA` decomposition.
     %(picks_ica)s ``None`` (default) will pick all sources in the order fitted.
 
     Returns

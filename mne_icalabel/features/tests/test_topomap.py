@@ -2,6 +2,7 @@ import numpy as np
 from mne.datasets import testing
 from mne.io import read_raw
 from mne.preprocessing import ICA
+from mne.utils import requires_version
 
 from mne_icalabel.features import get_topomap, get_topomaps
 
@@ -13,6 +14,7 @@ ica = ICA(n_components=5, method="picard")
 ica.fit(raw)
 
 
+@requires_version("mne", "1.1")
 def test_topomap_defaults():
     """Test scalp topography array generation"""
     topomaps = get_topomaps(ica, picks=None)

@@ -198,6 +198,18 @@
 </ul>
 <ul class="nav bd-sidenav">
  <li class="toctree-l1">
+  <a class="reference internal" href="generated/mne_icalabel.features.get_topomap_array.html">
+   mne_icalabel.features.get_topomap_array
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="generated/mne_icalabel.features.get_topomaps.html">
+   mne_icalabel.features.get_topomaps
+  </a>
+ </li>
+</ul>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
   <a class="reference internal" href="generated/mne_icalabel.annotation.mark_component.html">
    mne_icalabel.annotation.mark_component
   </a>
@@ -242,6 +254,11 @@
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#features">
+   Features
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#annotating-components">
    Annotating Components
   </a>
@@ -265,10 +282,9 @@
               
               <article class="bd-article" role="main">
                 
-  <section id="api">
-<h1>API<a class="headerlink" href="#api" title="Permalink to this heading">#</a></h1>
-<p><a class="reference internal" href="#module-mne_icalabel" title="mne_icalabel"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mne_icalabel</span></code></a>:</p>
-<span class="target" id="module-mne_icalabel"></span><p>Automatic ICA labeling for MEG, EEG and iEEG data.</p>
+  <section id="module-mne_icalabel">
+<span id="api"></span><h1>API<a class="headerlink" href="#module-mne_icalabel" title="Permalink to this heading">#</a></h1>
+<p>Automatic ICA labeling for MEG, EEG and iEEG data.</p>
 <p>This is the application programming interface (API) reference
 for classes (<code class="docutils literal notranslate"><span class="pre">CamelCase</span></code> names) and functions
 (<code class="docutils literal notranslate"><span class="pre">underscore_case</span></code> names) of MNE-ICALabel.</p>
@@ -298,6 +314,21 @@ are copied to the new image features. Then, the predicted probabilities are aver
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="generated/mne_icalabel.iclabel.run_iclabel.html#mne_icalabel.iclabel.run_iclabel" title="mne_icalabel.iclabel.run_iclabel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">run_iclabel</span></code></a>(images, psds, autocorr)</p></td>
 <td><p>Run the ICLabel network on the provided set of features.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="features">
+<h2>Features<a class="headerlink" href="#features" title="Permalink to this heading">#</a></h2>
+<p>Contains functions to extract features from <a class="reference external" href="https://mne.tools/dev/generated/mne.preprocessing.ICA.html#mne.preprocessing.ICA" title="(in MNE v1.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ICA</span></code></a> instance and <a class="reference external" href="https://mne.tools/dev/generated/mne.io.Raw.html#mne.io.Raw" title="(in MNE v1.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Raw</span></code></a> or
+<a class="reference external" href="https://mne.tools/dev/generated/mne.Epochs.html#mne.Epochs" title="(in MNE v1.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Epochs</span></code></a> instances using MNE-Python.</p>
+<table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/mne_icalabel.features.get_topomap_array.html#mne_icalabel.features.get_topomap_array" title="mne_icalabel.features.get_topomap_array"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_topomap_array</span></code></a>(data, pos[, res, ...])</p></td>
+<td><p>Generate a scalp topographic map (n_pixels, n_pixels).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/mne_icalabel.features.get_topomaps.html#mne_icalabel.features.get_topomaps" title="mne_icalabel.features.get_topomaps"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_topomaps</span></code></a>(ica[, picks, res, outlines, ...])</p></td>
+<td><p>Generate an array of scalp topographies (n_pixels, n_pixels) for the picked components.</p></td>
 </tr>
 </tbody>
 </table>

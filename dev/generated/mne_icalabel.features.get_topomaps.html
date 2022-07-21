@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>mne_icalabel.annotation.write_components_tsv &#8212; MNE-ICALabel 0.3.dev0 documentation</title>
+    <title>mne_icalabel.features.get_topomaps &#8212; MNE-ICALabel 0.3.dev0 documentation</title>
 <script>
   document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
   document.documentElement.dataset.theme = localStorage.getItem("theme") || "light"
@@ -44,8 +44,8 @@
     <script src="../_static/copybutton.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Examples" href="../auto_examples/index.html" />
-    <link rel="prev" title="mne_icalabel.annotation.mark_component" href="mne_icalabel.annotation.mark_component.html" />
+    <link rel="next" title="mne_icalabel.annotation.mark_component" href="mne_icalabel.annotation.mark_component.html" />
+    <link rel="prev" title="mne_icalabel.features.get_topomap_array" href="mne_icalabel.features.get_topomap_array.html" />
     <link rel="canonical" href="https://mne.tools/mne-icalabel/stable/index.html" />
     <script type="text/javascript" src="../_static/copybutton.js"></script>
     <script type="text/javascript" src="../_static/scrollfix.js"></script>
@@ -196,26 +196,26 @@
   </a>
  </li>
 </ul>
-<ul class="nav bd-sidenav">
+<ul class="current nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="mne_icalabel.features.get_topomap_array.html">
    mne_icalabel.features.get_topomap_array
   </a>
  </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="mne_icalabel.features.get_topomaps.html">
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
    mne_icalabel.features.get_topomaps
   </a>
  </li>
 </ul>
-<ul class="current nav bd-sidenav">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="mne_icalabel.annotation.mark_component.html">
    mne_icalabel.annotation.mark_component
   </a>
  </li>
- <li class="toctree-l1 current active">
-  <a class="current reference internal" href="#">
+ <li class="toctree-l1">
+  <a class="reference internal" href="mne_icalabel.annotation.write_components_tsv.html">
    mne_icalabel.annotation.write_components_tsv
   </a>
  </li>
@@ -257,35 +257,89 @@
               
               <article class="bd-article" role="main">
                 
-  <section id="mne-icalabel-annotation-write-components-tsv">
-<h1>mne_icalabel.annotation.write_components_tsv<a class="headerlink" href="#mne-icalabel-annotation-write-components-tsv" title="Permalink to this heading">#</a></h1>
+  <section id="mne-icalabel-features-get-topomaps">
+<h1>mne_icalabel.features.get_topomaps<a class="headerlink" href="#mne-icalabel-features-get-topomaps" title="Permalink to this heading">#</a></h1>
 <dl class="py function">
-<dt class="sig sig-object py" id="mne_icalabel.annotation.write_components_tsv">
-<span class="sig-prename descclassname"><span class="pre">mne_icalabel.annotation.</span></span><span class="sig-name descname"><span class="pre">write_components_tsv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ica</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fname</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mne_icalabel/annotation/bids.html#write_components_tsv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mne_icalabel.annotation.write_components_tsv" title="Permalink to this definition">#</a></dt>
-<dd><p>Write channels tsv file for ICA components.</p>
-<p>Will create an accompanying JSON sidecar to explain the
-additional columns created in the channels tsv file for the
-ICA component labeling.</p>
+<dt class="sig sig-object py" id="mne_icalabel.features.get_topomaps">
+<span class="sig-prename descclassname"><span class="pre">mne_icalabel.features.</span></span><span class="sig-name descname"><span class="pre">get_topomaps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ica</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">picks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">res</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">64</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outlines</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'head'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image_interp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cubic'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">border</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extrapolate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mne_icalabel/features/topomap.html#get_topomaps"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mne_icalabel.features.get_topomaps" title="Permalink to this definition">#</a></dt>
+<dd><p>Generate an array of scalp topographies (n_pixels, n_pixels) for the picked components.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>ica</strong> : <a class="reference external" href="https://mne.tools/dev/generated/mne.preprocessing.ICA.html#mne.preprocessing.ICA" title="(in MNE v1.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ICA</span></code></a></p>
 <blockquote>
-<div><p>An instance of the fitted ICA.</p>
+<div><p>MNE <a class="reference external" href="https://mne.tools/dev/generated/mne.preprocessing.ICA.html#mne.preprocessing.ICA" title="(in MNE v1.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ICA</span></code></a> decomposition.</p>
 </div></blockquote>
-<p><strong>fname</strong> : <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a> | <a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.10)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Path</span></code></a></p>
+<p><strong>picks</strong> : <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="docutils literal notranslate"><span class="pre">int</span></code></a> | <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><code class="docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="docutils literal notranslate"><span class="pre">int</span></code></a> | <a class="reference external" href="https://docs.python.org/3/library/functions.html#slice" title="(in Python v3.10)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">slice</span></code></a> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><code class="docutils literal notranslate"><span class="pre">None</span></code></a></p>
 <blockquote>
-<div><p>The output filename.</p>
+<div><p>Indices of the ICA components to visualize. <code class="docutils literal notranslate"><span class="pre">None</span></code> (default) will pick all independent components in the order fitted.</p>
+</div></blockquote>
+<p><strong>res</strong> : <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><code class="docutils literal notranslate"><span class="pre">int</span></code></a></p>
+<blockquote>
+<div><p>The resolution of the square topographic map (in pixels).</p>
+</div></blockquote>
+<p><strong>outlines</strong> : ‘head’ | ‘skirt’ | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><code class="docutils literal notranslate"><span class="pre">None</span></code></a></p>
+<blockquote>
+<div><p>The outlines of the head. If <code class="docutils literal notranslate"><span class="pre">'head'</span></code>, the default MNE head scheme. If
+<code class="docutils literal notranslate"><span class="pre">'skirt'</span></code>, the default MNE head scheme but sensors are allowed to be positioned
+outside of the head circle. If None, the outline is disabled.</p>
+</div></blockquote>
+<p><strong>image_interp</strong> : <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a></p>
+<blockquote>
+<div><p>The image interpolation to be used. All matplotlib options are
+accepted.</p>
+</div></blockquote>
+<p><strong>border</strong> : <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><code class="docutils literal notranslate"><span class="pre">float</span></code></a> | ‘mean’</p>
+<blockquote>
+<div><p>Value to extrapolate to on the topomap borders. If <code class="docutils literal notranslate"><span class="pre">'mean'</span></code> (default),
+then each extrapolated point has the average value of its neighbours.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version MNE: </span>0.20</p>
+</div>
+</div></blockquote>
+<p><strong>extrapolate</strong> : <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><code class="docutils literal notranslate"><span class="pre">str</span></code></a></p>
+<blockquote>
+<div><p>Options:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">'box'</span></code></dt><dd><p>Extrapolate to four points placed to form a square encompassing all
+data points, where each side of the square is three times the range
+of the data in the respective dimension.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">'local'</span></code> (default for MEG sensors)</dt><dd><p>Extrapolate only to nearby points (approximately to points closer than
+median inter-electrode distance). This will also set the
+mask to be polygonal based on the convex hull of the sensors.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">'head'</span></code> (default for non-MEG sensors)</dt><dd><p>Extrapolate out to the edges of the clipping circle. This will be on
+the head circle when the sensors are contained within the head circle,
+but it can extend beyond the head when sensors are plotted outside
+the head circle.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<div class="versionchanged">
+<p><span class="versionmodified changed">Changed in version MNE: </span>0.21</p>
+<ul class="simple">
+<li><p>The default was changed to <code class="docutils literal notranslate"><span class="pre">'local'</span></code> for MEG sensors.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'local'</span></code> was changed to use a convex hull mask</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'head'</span></code> was changed to extrapolate out to the clipping circle.</p></li>
+</ul>
+</div>
+</div></blockquote>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>topomaps</strong> : <a class="reference external" href="https://numpy.org/devdocs/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.24.dev0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">array</span></code></a> of shape (n_components, n_pixels, n_pixels)</p>
+<blockquote>
+<div><p>Topographic maps of each picked independent component.</p>
 </div></blockquote>
 </dd>
 </dl>
-<p class="rubric">Notes</p>
-<p>Components are stored in a <code class="docutils literal notranslate"><span class="pre">.tsv</span></code> file essentially in the same manner as
-<code class="docutils literal notranslate"><span class="pre">channels.tsv</span></code> files for BIDS-EEG data. For more information, see the
-<a class="reference external" href="https://bids-specification.readthedocs.io/en/stable/04-modality-specific-files/03-electroencephalography.html#channels-description-_channelstsv">BIDS specification</a>  # noqa
-for EEG channels metadata.</p>
-<p>Storage of ICA annotations as a <code class="docutils literal notranslate"><span class="pre">.tsv</span></code> file is currently experimental in the
-context of BIDS-EEG Derivatives. The API and functionality is subject to change
-as the community converges on the specification of BIDS-Derivatives.</p>
 </dd></dl>
 
 <div style='clear:both'></div></section>
@@ -298,17 +352,17 @@ as the community converges on the specification of BIDS-Derivatives.</p>
               <footer class="bd-footer-article">
                   <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-  <a class='left-prev' id="prev-link" href="mne_icalabel.annotation.mark_component.html" title="previous page">
+  <a class='left-prev' id="prev-link" href="mne_icalabel.features.get_topomap_array.html" title="previous page">
       <i class="fas fa-angle-left"></i>
       <div class="prev-next-info">
           <p class="prev-next-subtitle">previous</p>
-          <p class="prev-next-title">mne_icalabel.annotation.mark_component</p>
+          <p class="prev-next-title">mne_icalabel.features.get_topomap_array</p>
       </div>
   </a>
-  <a class='right-next' id="next-link" href="../auto_examples/index.html" title="next page">
+  <a class='right-next' id="next-link" href="mne_icalabel.annotation.mark_component.html" title="next page">
   <div class="prev-next-info">
       <p class="prev-next-subtitle">next</p>
-      <p class="prev-next-title">Examples</p>
+      <p class="prev-next-title">mne_icalabel.annotation.mark_component</p>
   </div>
   <i class="fas fa-angle-right"></i>
   </a>

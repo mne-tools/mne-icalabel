@@ -1,4 +1,4 @@
-from typing import Callable, Optional, Union
+from typing import Optional, Union
 
 import numpy as np
 from mne.channels.layout import _find_topomap_coords
@@ -12,7 +12,6 @@ from mne.io.pick import (
 )
 from mne.preprocessing import ICA
 from mne.viz.topomap import _check_extrapolate, _make_head_outlines, _setup_interp
-from mne.viz.utils import _setup_vmin_vmax
 from numpy.typing import NDArray
 
 

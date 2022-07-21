@@ -9,7 +9,7 @@ from mne.utils.check import _check_option
 
 from .config import ICALABEL_METHODS
 from .iclabel.config import ICLABEL_NUMERICAL_TO_STRING
-from .utils import _validate_inst_and_ica
+from .utils._checks import _validate_inst_and_ica
 
 
 def label_components(inst: Union[BaseRaw, BaseEpochs], ica: ICA, method: str):

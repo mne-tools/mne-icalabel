@@ -53,11 +53,7 @@ def get_topomaps(
         Topographic maps of each picked independent component.
     """
     _check_mne_version()
-
-    if picks is None:  # plot all components
-        picks = range(0, ica.n_components_)
-    else:
-        picks = _picks_to_idx(ica.n_components_, picks)
+    picks = _picks_to_idx(ica.n_components_, picks)
     data = np.dot(
         ica.mixing_matrix_[:, : ica.n_components_].T,
         ica.pca_components_[: ica.n_components_],

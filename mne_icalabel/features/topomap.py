@@ -94,7 +94,7 @@ def get_topomap(
     data : array of shape (n_channels,)
         The data points used to generate the topographic map.
     pos : Info
-        Instance of `mne.Info` with the montage associated with the (n_channels,) points.
+        Instance of `mne.Info` with the montage associated with the ``(n_channels,)`` points.
     %(res_topomap)s
     %(outlines_topomap)s
     %(image_interp_topomap)s

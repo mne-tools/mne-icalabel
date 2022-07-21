@@ -34,7 +34,7 @@ Bug
 API
 ~~~
 
-- Add topographic feature using MNE with `~mne_icalabel.features.get_topomap` and `~mne_icalabel.features.get_topomaps` by `Anand Saini`_ and `Mathieu Scheltienne`_ (:gh:`71)
+- Add topographic feature using MNE with `~mne_icalabel.features.get_topomap` and `~mne_icalabel.features.get_topomaps` by `Anand Saini`_ and `Mathieu Scheltienne`_ (:gh:`71`)
 
 Authors
 ~~~~~~~

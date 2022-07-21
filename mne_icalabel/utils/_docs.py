@@ -14,10 +14,41 @@ from mne.utils.docs import docdict as docdict_mne
 docdict: Dict[str, str] = {}
 
 # ---- Documentation to inc. from MNE ----
-keys: Tuple[str, ...] = ("verbose",)
+keys: Tuple[str, ...] = (
+    "border_topomap",
+    "extrapolate_topomap",
+    "picks_ica",
+    "verbose",
+)
 
 for key in keys:
-    docdict[key] = docdict_mne[key]
+    entry = docdict_mne[key]
+    if ".. versionchanged::" in entry:
+        entry = entry.replace(".. versionchanged::", ".. versionchanged:: MNE ")
+    if ".. versionadded::" in entry:
+        entry = entry.replace(".. versionadded::", ".. versionadded:: MNE ")
+    docdict[key] = entry
+
+# ---- Features ----
+docdict[
+    "image_interp_topomap"
+] = """
+image_interp : str
+    The image interpolation to be used. All matplotlib options are
+    accepted."""
+docdict[
+    "outlines_topomap"
+] = """
+outlines : 'head' | 'skirt' | None
+    The outlines of the head. If ``'head'``, the default MNE head scheme. If
+    ``'skirt'``, the default MNE head scheme but sensors are allowed to be positioned
+    outside of the head circle. If None, the outline is disabled."""
+docdict[
+    "res_topomap"
+] = """
+res : int
+    The resolution of the square topographic map (in pixels)."""
+
 
 # ------------------------- Documentation functions --------------------------
 docdict_indented: Dict[int, Dict[str, str]] = {}

@@ -2,8 +2,6 @@
 API
 ###
 
-:py:mod:`mne_icalabel`:
-
 .. automodule:: mne_icalabel
    :no-members:
    :no-inherited-members:
@@ -46,7 +44,21 @@ are copied to the new image features. Then, the predicted probabilities are aver
    get_iclabel_features
    run_iclabel
 
-Annotating Components 
+Features
+========
+
+Contains functions to extract features from `~mne.preprocessing.ICA` instance and `~mne.io.Raw` or
+`~mne.Epochs` instances using MNE-Python.
+
+.. currentmodule:: mne_icalabel.features
+
+.. autosummary::
+   :toctree: generated/
+
+   get_topomap_array
+   get_topomaps
+
+Annotating Components
 =====================
 To facilitate annotation of the ICA components, we provide an API that conforms to the
 derivative standard of BIDS for EEG data.

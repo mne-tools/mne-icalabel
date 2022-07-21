@@ -15,10 +15,10 @@ ica.fit(raw)
 
 def test_topomap_defaults():
     """Test scalp topography array generation"""
-    topomaps = get_topomaps(ica, picks="eeg")
+    topomaps = get_topomaps(ica, picks=None)
     assert isinstance(topomaps, np.ndarray)
     assert topomaps.shape == (ica.n_components_, 64, 64)
-    
+
     # test single topo with fake data
     data = np.random.randint(1, 10, len(raw.ch_names))
     topomap = get_topomap(data, raw.info)

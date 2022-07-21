@@ -6,7 +6,7 @@ Inspired from mne.utils.docs.py by Eric Larson <larson.eric.d@gmail.com>
 """
 
 import sys
-from typing import Callable, Dict, List
+from typing import Callable, Dict, List, Tuple
 
 from mne.utils.docs import docdict as docdict_mne
 
@@ -14,13 +14,13 @@ from mne.utils.docs import docdict as docdict_mne
 docdict: Dict[str, str] = {}
 
 # ---- Documentation to inc. from MNE ----
-keys = ("verbose",)
+keys: Tuple[str, ...] = ("verbose",)
 
 for key in keys:
     docdict[key] = docdict_mne[key]
 
 # ------------------------- Documentation functions --------------------------
-docdict_indented: Dict[str, str] = {}
+docdict_indented: Dict[int, str] = {}
 
 
 def fill_doc(f: Callable) -> Callable:

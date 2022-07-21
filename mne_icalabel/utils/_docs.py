@@ -5,13 +5,15 @@ Inspired from mne: https://mne.tools/stable/index.html
 Inspired from mne.utils.docs.py by Eric Larson <larson.eric.d@gmail.com>
 """
 
+from typing import Dict
+
 import sys
 from typing import Callable, List
 
 from mne.utils.docs import docdict as docdict_mne
 
 # ------------------------- Documentation dictionary -------------------------
-docdict = {}
+docdict: Dict[str, str] = {}
 
 # ---- Documentation to inc. from MNE ----
 keys = ("verbose",)
@@ -20,7 +22,7 @@ for key in keys:
     docdict[key] = docdict_mne[key]
 
 # ------------------------- Documentation functions --------------------------
-docdict_indented = {}
+docdict_indented: Dict[str, str] = {}
 
 
 def fill_doc(f: Callable) -> Callable:

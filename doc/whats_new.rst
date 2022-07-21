@@ -22,7 +22,7 @@ Version 0.2 (Unreleased)
 ...
 
 Enhancements
-~~~~~~~~~~~~
+~~~~~~~~~~~~`
 
 -
 
@@ -35,12 +35,13 @@ Bug
 API
 ~~~
 
--
+- Add topographic feature using MNE with `~mne_icalabel.features.get_topomap` and `~mne_icalabel.features.get_topomaps` by `Anand Saini`_ (:gh:`71)
 
 Authors
 ~~~~~~~
 
 * `Mathieu Scheltienne`_
+* `Anand Saini`_
 
 :doc:`Find out what was new in previous releases <whats_new_previous_releases>`
 

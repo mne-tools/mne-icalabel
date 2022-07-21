@@ -19,6 +19,8 @@ exclude .coveragerc
 recursive-exclude doc *
 recursive-exclude scripts *
 
+recursive-exclude paper *
+
 # exclude all data files
 recursive-exclude mne_icalabel *.txt
 recursive-exclude mne_icalabel *.fif

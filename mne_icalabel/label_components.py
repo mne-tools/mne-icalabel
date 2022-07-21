@@ -7,13 +7,9 @@ from mne.preprocessing import ICA
 from mne.utils import _validate_type
 from mne.utils.check import _check_option
 
-from .iclabel import iclabel_label_components
+from .config import ICALABEL_METHODS
 from .iclabel.config import ICLABEL_NUMERICAL_TO_STRING
 from .utils import _validate_inst_and_ica
-
-methods = {
-    "iclabel": iclabel_label_components,
-}
 
 
 def label_components(inst: Union[BaseRaw, BaseEpochs], ica: ICA, method: str):
@@ -51,9 +47,12 @@ def label_components(inst: Union[BaseRaw, BaseEpochs], ica: ICA, method: str):
     - 'other'
     """
     _validate_type(method, str, "method")
-    _check_option("method", method, methods)
+    _check_option("method", method, ICALABEL_METHODS)
+    if ICALABEL_METHODS[method] is None:
+        raise RuntimeError('Cannot pass in "manual" as a method.')
+
     _validate_inst_and_ica(inst, ica)
-    labels_pred_proba = methods[method](inst, ica)
+    labels_pred_proba = ICALABEL_METHODS[method](inst, ica)  # type: ignore
     labels_pred = np.argmax(labels_pred_proba, axis=1)
     labels = [ICLABEL_NUMERICAL_TO_STRING[label] for label in labels_pred]
     assert ica.n_components_ == labels_pred.size  # sanity-check

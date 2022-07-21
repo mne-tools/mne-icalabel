@@ -1,3 +1,4 @@
+import warnings
 from typing import List, Tuple
 
 import numpy as np
@@ -5,7 +6,7 @@ from mne.io import BaseRaw
 from numpy.typing import ArrayLike, NDArray
 
 
-def _mne_to_eeglab_locs(raw: BaseRaw) -> Tuple[NDArray[float], NDArray[float]]:
+def _mne_to_eeglab_locs(raw: BaseRaw, picks: List[str]) -> Tuple[NDArray[float], NDArray[float]]:
     """Obtain EEGLab-like spherical coordinate from EEG channel positions.
 
     TODO: @JACOB:
@@ -18,6 +19,8 @@ def _mne_to_eeglab_locs(raw: BaseRaw) -> Tuple[NDArray[float], NDArray[float]]:
     raw : mne.io.BaseRaw
         Instance of raw object with a `mne.montage.DigMontage` set with
         ``n_channels`` channel positions.
+    picks : list of str
+        List of channel names to include.
 
     Returns
     -------
@@ -44,7 +47,7 @@ def _mne_to_eeglab_locs(raw: BaseRaw) -> Tuple[NDArray[float], NDArray[float]]:
         return azimuth, elevation, r
 
     # get the channel position dictionary
-    montage = raw.get_montage()
+    montage = raw.copy().pick_channels(picks, ordered=True).get_montage()
     positions = montage.get_positions()
     ch_pos = positions["ch_pos"]
 
@@ -133,8 +136,15 @@ def _gdatav4(
 
     # Determine distances between points
     d = np.abs(np.subtract.outer(xy, xy))
-    # % Determine weights for interpolation
-    g = np.square(d) * (np.log(d) - 1)  # % Green's function.
+    # Determine weights for interpolation
+    with warnings.catch_warnings():
+        warnings.filterwarnings(
+            "ignore", message="divide by zero encountered in log", category=RuntimeWarning
+        )
+        warnings.filterwarnings(
+            "ignore", message="invalid value encountered in multiply", category=RuntimeWarning
+        )
+        g = np.square(d) * (np.log(d) - 1)  # Green's function.
     # Fixup value of Green's function along diagonal
     np.fill_diagonal(g, 0)
     weights = np.linalg.lstsq(g, v, rcond=-1)[0]

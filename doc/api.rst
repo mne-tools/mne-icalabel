@@ -57,3 +57,16 @@ Contains functions to extract features from `~mne.preprocessing.ICA` instance an
 
    get_topomap
    get_topomaps
+
+Annotating Components
+=====================
+To facilitate annotation of the ICA components, we provide an API that conforms to the
+derivative standard of BIDS for EEG data.
+
+.. currentmodule:: mne_icalabel.annotation
+
+.. autosummary::
+   :toctree: generated/
+
+   mark_component
+   write_components_tsv

@@ -49,6 +49,8 @@ When you're ready to contribute code to address an open issue, please follow the
 
     At this point the local clone of your fork only knows that it came from *your* repo, github.com/USERNAME/mne-icalabel.git, but doesn't know anything the *main* repo, [https://github.com/mne-tools/mne-icalabel.git](https://github.com/mne-tools/mne-icalabel). You can see this by running
 
+        # Note you should be in the "mne-icalabel" directory. If you're not
+        # run "cd ./mne-icalabel" to change directory into the repo
         git remote -v
 
     which will output something like this:

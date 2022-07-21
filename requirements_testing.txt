@@ -22,3 +22,4 @@ matplotlib
 python-picard
 joblib
 scikit-learn
+pandas

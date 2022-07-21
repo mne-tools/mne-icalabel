@@ -16,7 +16,7 @@ Here we list a changelog of MNE-ICALabel.
 
 .. _current:
 
-Version 0.2 (Unreleased)
+Version 0.3 (Unreleased)
 ------------------------
 
 ...
@@ -29,8 +29,7 @@ Enhancements
 Bug
 ~~~
 
-- Fix shape of ``'y_pred_proba'`` output from `mne_icalabel.label_components` by `Mathieu Scheltienne`_ (:gh:`36`)
-- Add a warning if the ICA decomposition provided does not match the expected decomposition by ``ICLabel``  by `Mathieu Scheltienne`_ (:gh:`42`)
+- Ignore the ``RuntimeWarning`` issued by the grid inteprolation for ICLabel topographic feature by `Mathieu Scheltienne`_ (:gh:`69`)
 
 API
 ~~~

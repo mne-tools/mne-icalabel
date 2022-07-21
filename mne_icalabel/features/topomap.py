@@ -103,7 +103,7 @@ def get_topomap(
 
     Returns
     -------
-    topomap : array of size (n_pixels, n_pixels)
+    topomap : array of shape (n_pixels, n_pixels)
         Topographic map array.
     """
     _check_mne_version()

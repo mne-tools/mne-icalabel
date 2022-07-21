@@ -5,10 +5,8 @@ Inspired from mne: https://mne.tools/stable/index.html
 Inspired from mne.utils.docs.py by Eric Larson <larson.eric.d@gmail.com>
 """
 
-from typing import Dict
-
 import sys
-from typing import Callable, List
+from typing import Callable, Dict, List
 
 from mne.utils.docs import docdict as docdict_mne
 

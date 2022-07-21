@@ -3,9 +3,9 @@ import pytest
 from mne.datasets import testing
 from mne.io import read_raw
 from mne.preprocessing import ICA
-from mne.utils import requires_version
 
 from mne_icalabel.features import get_topomap, get_topomaps
+from mne_icalabel.utils._testing import requires_version
 
 directory = testing.data_path() / "MEG" / "sample"
 raw = read_raw(directory / "sample_audvis_trunc_raw.fif", preload=False)
@@ -51,3 +51,5 @@ def test_invalid_arguments():
     """Test invalid arguments."""
     with pytest.raises(IndexError):
         get_topomaps(ica, picks="eeg")
+    with pytest.raises(IndexError):
+        get_topomaps(ica, picks=10)

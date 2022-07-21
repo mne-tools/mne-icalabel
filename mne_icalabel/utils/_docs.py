@@ -41,7 +41,7 @@ docdict[
 ] = """
 outlines : 'head' | 'skirt' | None
     The outlines of the head. If ``'head'``, the default MNE head scheme. If
-    ``'skirt'``, the default MNE head scheme but sensors are allowed to be positionned
+    ``'skirt'``, the default MNE head scheme but sensors are allowed to be positioned
     outside of the head circle. If None, the outline is disabled."""
 docdict[
     "res_topomap"

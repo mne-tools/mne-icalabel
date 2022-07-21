@@ -83,7 +83,7 @@ def get_topomap(
     Returns
     -------
     topomap : array of size (n_pixels, n_pixels)
-        Topographic map array
+        Topographic map array.
     """
     picks = _pick_data_channels(pos, exclude=())  # pick only data channels
     pos = pick_info(pos, picks)

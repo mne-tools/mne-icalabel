@@ -21,8 +21,6 @@ def test_topomap_defaults():
     topomaps = get_topomaps(ica, picks=None)
     assert isinstance(topomaps, np.ndarray)
     assert topomaps.shape == (ica.n_components_, 64, 64)
-    # Need to think of an advanced test because this will fail when 'picks' != None
-    # then the shape of topomap will be ( len(picks), 64,64)
 
     # test single topo with fake data
     data = np.random.randint(1, 10, len(raw.ch_names))

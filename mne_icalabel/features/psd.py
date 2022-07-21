@@ -1,27 +1,32 @@
+from typing import Dict, List, Optional, Tuple, Union
+
 import numpy as np
+from mne import BaseEpochs
+from mne.io import BaseRaw
 from mne.io.pick import _picks_to_idx
+from mne.preprocessing import ICA
 from mne.time_frequency.psd import psd_multitaper
 from mne.utils import _check_option
 from mne.viz.ica import _prepare_data_ica_properties
 
 
-def get_psd(
-    ica,
-    inst,
-    picks=None,
+def get_psds(
+    ica: ICA,
+    inst: Union[BaseRaw, BaseEpochs],
+    picks: Optional[List] = None,
     reject="auto",
     reject_by_annotation=False,
-    fmin=0,
-    fmax=np.inf,
-    tmin=None,
-    tmax=None,
-    bandwidth=None,
+    fmin: Optional[float] = 0,
+    fmax: Optional[float] = np.inf,
+    tmin: Optional[float] = None,
+    tmax: Optional[float] = None,
+    bandwidth: Optional[float] = None,
     adaptive=False,
     low_bias=True,
     proj=False,
     n_jobs=1,
     normalization="length",
-    output="power",
+    output: str = "power",
     dB=True,
 ):
     """Compute the power spectral density of the ICA components.
@@ -31,13 +36,8 @@ def get_psd(
     ica : instance of mne.preprocessing.ICA
         The ICA solution.
     inst : instance of Epochs or Raw
-    picks : str | list | slice | None
-        In lists, channel type strings (e.g., ['meg', 'eeg']) will pick channels
-        of those types, channel name strings (e.g., ['MEG0111', 'MEG2623'] will
-        pick the given channels. Can also be the string values “all” to pick all
-        channels, or “data” to pick data channels. None (default) will pick all
-        channels. Note that channels in info['bads'] will be included if their
-        names or indices are explicitly provided.
+    %(picks_ica)s Components to include. ``None`` (default) will use all the
+        components.
     reject :'auto' | dict | None
         Allows to specify rejection parameters used to drop epochs
         (or segments if continuous signal is passed as inst).
@@ -79,7 +79,10 @@ def get_psd(
     psds_mean : ndarray, shape(n_channels, n_freqs)
          Mean of power spectral densities on channel.
     """
-    picks = _picks_to_idx(ica.info, picks, "all")[: ica.n_components_]
+    if picks is None:  # plot all components
+        picks = range(0, ica.n_components_)
+    else:
+        picks = _picks_to_idx(ica.n_components_, picks)
     kind, dropped_indices, epochs_src, data = _prepare_data_ica_properties(
         inst, ica, reject_by_annotation=True, reject="auto"
     )

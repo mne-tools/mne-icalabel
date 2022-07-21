@@ -48,16 +48,16 @@ def get_topomaps(
     )
     # Create an empty array of size (len(picks), 64, 64) for the topomap
     topomaps = np.zeros((len(picks), res, res))
-
-    for j in range(len(picks)):
+    for i, component in enumerate(picks):
         topo = np.flipud(
-            get_topomap(data[j, :], ica.info, res, outlines, image_interp, border, extrapolate)
+            get_topomap(
+                data[component, :], ica.info, res, outlines, image_interp, border, extrapolate
+            )
         )
         # Set NaN values to 0
         np.nan_to_num(topo, nan=0.0, copy=False)
         # Standardize the values
-        topomaps[j, :, :] = topo / np.max(np.abs(topo))
-
+        topomaps[i, :, :] = topo / np.max(np.abs(topo))
     return topomaps  # topographic map array for all the picked components (len(picks), 64, 64)
 
 

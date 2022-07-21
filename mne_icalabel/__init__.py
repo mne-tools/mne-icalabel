@@ -5,6 +5,6 @@
 #
 # License: BSD (3-clause)
 
-__version__ = "0.3dev0"
+__version__ = "0.3.dev0"
 
 from .label_components import label_components  # noqa: F401

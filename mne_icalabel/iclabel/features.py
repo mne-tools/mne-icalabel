@@ -8,7 +8,7 @@ from mne.utils import warn
 from numpy.typing import NDArray
 from scipy.signal import resample_poly
 
-from ..utils import _validate_inst_and_ica
+from ..utils._checks import _validate_inst_and_ica
 from .utils import _gdatav4, _mne_to_eeglab_locs, _next_power_of_2, _pol2cart
 
 

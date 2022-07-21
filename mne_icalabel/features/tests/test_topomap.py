@@ -49,7 +49,7 @@ def test_topomap_arguments(picks, res):
 @requires_version("mne", "1.1")
 def test_invalid_arguments():
     """Test invalid arguments."""
-    with pytest.raises(IndexError):
+    with pytest.raises(ValueError):
         get_topomaps(ica, picks="eeg")
-    with pytest.raises(IndexError):
+    with pytest.raises(ValueError, match="All picks must be < n_channels"):
         get_topomaps(ica, picks=10)

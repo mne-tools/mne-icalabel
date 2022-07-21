@@ -99,12 +99,12 @@ class ICAComponentLabeler(QMainWindow):
         # create central widget and main layout
         self._central_widget = QWidget(self)
         self._central_widget.setObjectName("central_widget")
-        grid_layout = QGridLayout(self)
+        grid_layout = QGridLayout()
         self._central_widget.setLayout(grid_layout)
         self.setCentralWidget(self._central_widget)
 
         # QListWidget with the components' names.
-        self._components_listWidget = QListWidget(self)
+        self._components_listWidget = QListWidget(self._central_widget)
         self._components_listWidget.setSelectionMode(QAbstractItemView.SingleSelection)
         self._components_listWidget.addItems(
             [f"ICA{str(k).zfill(3)}" for k in range(self.n_components_)]
@@ -112,11 +112,11 @@ class ICAComponentLabeler(QMainWindow):
         grid_layout.addWidget(self._components_listWidget, 0, 0, 2, 1)
 
         # buttons to select labels
-        self._labels_buttonGroup = QButtonGroup(self)
-        buttonGroup_layout = QVBoxLayout(self)
+        self._labels_buttonGroup = QButtonGroup(self._central_widget)
+        buttonGroup_layout = QVBoxLayout()
         self._labels_buttonGroup.setExclusive(True)
         for k, label in enumerate(self.labels):
-            pushButton = QPushButton(self)
+            pushButton = QPushButton(self._central_widget)
             pushButton.setObjectName(f"pushButton_{label.lower().replace(' ', '_')}")
             pushButton.setText(label)
             pushButton.setCheckable(True)

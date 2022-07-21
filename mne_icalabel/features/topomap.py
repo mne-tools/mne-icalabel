@@ -135,6 +135,7 @@ def get_topomap_array(
     return interp.set_locations(Xi, Yi)()  # Zi, topomap of shape (n_pixels, n_pixels)
 
 
+# TODO: remove this and the corresponding import when mne v1.1 is released
 def _check_mne_version():
     """Check that MNE version is above 1.1."""
     if not check_version("mne", "1.1"):

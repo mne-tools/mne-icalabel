@@ -4,7 +4,7 @@ from mne.datasets import testing
 from mne.io import read_raw
 from mne.preprocessing import ICA
 
-from mne_icalabel.features import get_topomap, get_topomaps
+from mne_icalabel.features import get_topomap_array, get_topomaps
 from mne_icalabel.utils._testing import requires_version
 
 directory = testing.data_path() / "MEG" / "sample"
@@ -24,7 +24,7 @@ def test_topomap_defaults():
 
     # test single topo with fake data
     data = np.random.randint(1, 10, len(raw.ch_names))
-    topomap = get_topomap(data, raw.info)
+    topomap = get_topomap_array(data, raw.info)
     assert isinstance(topomap, np.ndarray)
     assert topomap.shape == (64, 64)
 
@@ -44,6 +44,11 @@ def test_topomap_arguments(picks, res):
     else:
         n_components = len(picks)
     assert topomaps.shape == (n_components, res, res)
+
+    data = np.random.randint(1, 10, len(raw.ch_names))
+    topomap = get_topomap_array(data, raw.info, res=res)
+    assert isinstance(topomap, np.ndarray)
+    assert topomap.shape == (res, res)
 
 
 @requires_version("mne", "1.1")

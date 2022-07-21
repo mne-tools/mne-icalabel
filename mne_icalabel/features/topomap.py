@@ -66,7 +66,7 @@ def get_topomaps(
     topomaps = np.zeros((len(picks), res, res))
     for i, component in enumerate(picks):
         topo = np.flipud(
-            get_topomap(
+            get_topomap_array(
                 data[component, :], ica.info, res, outlines, image_interp, border, extrapolate
             )
         )
@@ -78,7 +78,7 @@ def get_topomaps(
 
 
 @fill_doc
-def get_topomap(
+def get_topomap_array(
     data: NDArray[float],
     pos: Info,
     res: int = 64,

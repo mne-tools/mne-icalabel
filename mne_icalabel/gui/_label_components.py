@@ -191,7 +191,7 @@ class ICAComponentLabeler(QMainWindow):
 
     # - Slots -----------------------------------------------------------------
     def _connect_signals_to_slots(self) -> None:
-        """Connects all the signals and slots of the GUI."""
+        """Connect all the signals and slots of the GUI."""
         self._components_listWidget.currentRowChanged.connect(self._components_listWidget_clicked)
         self._labels_buttonGroup.buttons()[-1].clicked.connect(self._reset)
 
@@ -246,7 +246,7 @@ class ICAComponentLabeler(QMainWindow):
         self._save_labels()  # updates the ICA instance every time
 
     @Slot()
-    def _reset(self) -> None:
+    def _reset(self) -> None:  # noqa: D401
         """Action of the reset button."""
         self._reset_all_buttons()
         if self.selected_component in self.selected_labels:

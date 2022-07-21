@@ -26,11 +26,15 @@ for key in keys:
     docdict[key] = docdict_mne[key]
 
 # ---- Features ----
-docdict["image_interp_topomap"] = """
+docdict[
+    "image_interp_topomap"
+] = """
 image_interp : str
     The image interpolation to be used. All matplotlib options are
     accepted."""
-docdict["res_topomap"] = """
+docdict[
+    "res_topomap"
+] = """
 res : int
     The resolution of the square topographic map (in pixels)."""
 

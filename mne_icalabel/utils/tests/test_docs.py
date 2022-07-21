@@ -20,6 +20,13 @@ def test_fill_doc():
 
     assert "verbose : bool | str | int | None" in foo.__doc__
 
+    # test filling docstring without docstring
+    @fill_doc
+    def foo():
+        pass
+
+    assert foo.__doc__ is None
+
     # test filling docstring with invalid key
     with pytest.raises(RuntimeError, match="Error documenting"):
 

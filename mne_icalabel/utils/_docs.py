@@ -20,7 +20,7 @@ for key in keys:
     docdict[key] = docdict_mne[key]
 
 # ------------------------- Documentation functions --------------------------
-docdict_indented: Dict[int, str] = {}
+docdict_indented: Dict[int, Dict[str, str]] = {}
 
 
 def fill_doc(f: Callable) -> Callable:

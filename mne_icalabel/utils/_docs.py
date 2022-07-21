@@ -14,10 +14,26 @@ from mne.utils.docs import docdict as docdict_mne
 docdict: Dict[str, str] = {}
 
 # ---- Documentation to inc. from MNE ----
-keys: Tuple[str, ...] = ("verbose",)
+keys: Tuple[str, ...] = (
+    "border_topomap",
+    "extrapolate_topomap",
+    "outlines_topomap",
+    "picks_ica",
+    "verbose",
+)
 
 for key in keys:
     docdict[key] = docdict_mne[key]
+
+# ---- Features ----
+docdict["image_interp_topomap"] = """
+image_interp : str
+    The image interpolation to be used. All matplotlib options are
+    accepted."""
+docdict["res_topomap"] = """
+res : int
+    The resolution of the square topographic map (in pixels)."""
+
 
 # ------------------------- Documentation functions --------------------------
 docdict_indented: Dict[int, Dict[str, str]] = {}

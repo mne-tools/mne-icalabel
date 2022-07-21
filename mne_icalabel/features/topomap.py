@@ -21,7 +21,10 @@ from mne.utils import check_version
 from mne.viz.topomap import _check_extrapolate, _make_head_outlines, _setup_interp
 from numpy.typing import NDArray
 
+from ..utils._docs import fill_doc
 
+
+@fill_doc
 def get_topomaps(
     ica: ICA,
     picks=None,
@@ -36,14 +39,18 @@ def get_topomaps(
     Parameters
     ----------
     ica : ICA
-        Instance of MNE `~mne.preprocessing.ICA` decomposition.
+        MNE `~mne.preprocessing.ICA` decomposition.
     %(picks_ica)s ``None`` (default) will pick all independent components in the order fitted.
-    res : int = 64
-        The resolution of the square topographic map (in pixels).
+    %(res_topomap)s
+    %(outlines_topomap)s
+    %(image_interp_topomap)s
+    %(border_topomap)s
+    %(extrapolate_topomap)s
 
     Returns
     -------
     topomaps : array of shape (n_components, n_pixels, n_pixels)
+        Topographic maps of each picked independent component.
     """
     _check_mne_version()
 
@@ -70,6 +77,7 @@ def get_topomaps(
     return topomaps  # topographic map array for all the picked components (len(picks), 64, 64)
 
 
+@fill_doc
 def get_topomap(
     data: NDArray[float],
     pos: Info,
@@ -85,14 +93,11 @@ def get_topomap(
     ----------
     data : array of shape (n_channels,)
         The data points used to generate the topographic map.
-    pos : `mne.Info`
+    pos : Info
         Instance of `mne.Info` with the montage associated with the (n_channels,) points.
-    res : int = 64
-        The resolution of the square topographic map (in pixels).
+    %(res_topomap)s
     %(outlines_topomap)s
-    image_interp : str
-        The image interpolation to be used. All matplotlib options are
-        accepted.
+    %(image_interp_topomap)s
     %(border_topomap)s
     %(extrapolate_topomap)s
 

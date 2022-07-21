@@ -115,7 +115,7 @@ class ICAComponentLabeler(QMainWindow):
         self._labels_buttonGroup = QButtonGroup(self._central_widget)
         buttonGroup_layout = QVBoxLayout()
         self._labels_buttonGroup.setExclusive(True)
-        for k, label in enumerate(self.labels):
+        for k, label in enumerate(self.labels + ["Reset"]):
             pushButton = QPushButton(self._central_widget)
             pushButton.setObjectName(f"pushButton_{label.lower().replace(' ', '_')}")
             pushButton.setText(label)
@@ -248,7 +248,7 @@ class ICAComponentLabeler(QMainWindow):
     @Slot()
     def _reset(self) -> None:  # noqa: D401
         """Action of the reset button."""
-        self._reset_all_buttons()
+        self._reset_buttons()
         if self.selected_component in self.selected_labels:
             del self.selected_labels[self.selected_component]
 

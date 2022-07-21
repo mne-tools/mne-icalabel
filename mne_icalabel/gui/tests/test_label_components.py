@@ -31,7 +31,7 @@ def _label_ica_components(renderer_interactive_pyvistaqt):
 def load_raw_and_fit_ica():
     data_path = op.join(testing.data_path(), "EDF")
     raw_fname = op.join(data_path, "test_reduced.edf")
-    raw = read_raw_edf(raw_fname)
+    raw = read_raw_edf(raw_fname, preload=True)
 
     # high-pass filter
     raw.filter(l_freq=1, h_freq=100)

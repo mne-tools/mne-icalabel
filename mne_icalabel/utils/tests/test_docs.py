@@ -2,7 +2,7 @@
 
 import pytest
 
-from .._docs import copy_doc, fill_doc
+from mne_icalabel.utils._docs import copy_doc, fill_doc
 
 
 def test_fill_doc():
@@ -18,7 +18,7 @@ def test_fill_doc():
         """
         pass
 
-    assert "verbose : int | str | bool | None" in foo.__doc__
+    assert "verbose : bool | str | int | None" in foo.__doc__
 
     # test filling docstring with invalid key
     with pytest.raises(RuntimeError, match="Error documenting"):

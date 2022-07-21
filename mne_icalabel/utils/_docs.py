@@ -95,6 +95,7 @@ def _indentcount_lines(lines: List[str]) -> int:
 
 def copy_doc(source: Callable) -> Callable:
     """Copy the docstring from another function (decorator).
+
     The docstring of the source function is prepepended to the docstring of the
     function wrapped by this decorator.
     This is useful when inheriting from a class and overloading a method. This

@@ -1,4 +1,5 @@
 import numpy as np
+import pytest
 from mne.datasets import testing
 from mne.io import read_raw
 from mne.preprocessing import ICA
@@ -28,3 +29,18 @@ def test_topomap_defaults():
     topomap = get_topomap(data, raw.info)
     assert isinstance(topomap, np.ndarray)
     assert topomap.shape == (64, 64)
+
+
+@pytest.mark.parametrize(
+    "picks, res", [(0, 32), ([0, 1, 2], 50), (slice(1, 3), 128), (np.array([1, 2]), 10)]
+)
+def test_topomap_arguments(picks, res):
+    topomaps = topomaps = get_topomaps(ica, picks=picks, res=res)
+    assert isinstance(topomaps, np.ndarray)
+    if isinstance(picks, int):
+        n_components = 1
+    elif isinstance(picks, slice):
+        n_components = len(range(*picks.indices(ica.n_components_)))
+    else:
+        n_components = len(picks)
+    assert topomaps.shape == (n_components, res, res)

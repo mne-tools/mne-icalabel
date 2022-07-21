@@ -1,3 +1,5 @@
+from typing import Callable, Optional, Union
+
 import numpy as np
 from mne.channels.layout import _find_topomap_coords
 from mne.defaults import _BORDER_DEFAULT, _EXTRAPOLATE_DEFAULT, _INTERPOLATION_DEFAULT
@@ -14,14 +16,24 @@ from mne.viz.utils import _setup_vmin_vmax
 from numpy.typing import NDArray
 
 
-def get_topomaps(ica: ICA, picks=None):
+def get_topomaps(
+    ica: ICA,
+    picks=None,
+    res: int = 64,
+    outlines: Optional[str] = "head",
+    image_interp: str = _INTERPOLATION_DEFAULT,  # 'cubic'
+    border: Union[float, str] = _BORDER_DEFAULT,  # 'mean'
+    extrapolate: str = _EXTRAPOLATE_DEFAULT,  # 'head'
+):
     """Generate an array of scalp topographies (n_pixels, n_pixels) for the picked components.
 
     Parameters
     ----------
     ica : ICA
         Instance of MNE `~mne.preprocessing.ICA` decomposition.
-    %(picks_ica)s ``None`` (default) will pick all sources in the order fitted.
+    %(picks_ica)s ``None`` (default) will pick all independent components in the order fitted.
+    res : int = 64
+        The resolution of the square topographic map (in pixels).
 
     Returns
     -------
@@ -35,29 +47,29 @@ def get_topomaps(ica: ICA, picks=None):
         ica.mixing_matrix_[:, : ica.n_components_].T,
         ica.pca_components_[: ica.n_components_],
     )
-    # Create an empty array of size (n_components, 64, 64) to fit topo values
-    topo_array = np.zeros((len(picks), 64, 64))
+    # Create an empty array of size (len(picks), 64, 64) for the topomap
+    topomaps = np.zeros((len(picks), res, res))
 
     for j in range(len(picks)):
-        topo_ = np.flipud(get_topomap(data[j, :], ica.info))
+        topo = np.flipud(
+            get_topomap(data[j, :], ica.info, res, outlines, image_interp, border, extrapolate)
+        )
         # Set NaN values to 0
-        np.nan_to_num(topo_, nan=0.0, copy=False)
+        np.nan_to_num(topo, nan=0.0, copy=False)
         # Standardize the values
-        topo_array[j, :, :] = topo_ / np.max(np.abs(topo_))
+        topomaps[j, :, :] = topo / np.max(np.abs(topo))
 
-    return topo_array  # topographic map array for all the components (n_components, 64, 64)
+    return topomaps  # topographic map array for all the picked components (len(picks), 64, 64)
 
 
 def get_topomap(
     data: NDArray[float],
     pos: Info,
-    vmin=None,
-    vmax=None,
     res: int = 64,
-    outlines="head",
-    image_interp=_INTERPOLATION_DEFAULT,  # 'cubic'
-    border=_BORDER_DEFAULT,  # 'mean'
-    extrapolate=_EXTRAPOLATE_DEFAULT,  # 'head'
+    outlines: Optional[str] = "head",
+    image_interp: str = _INTERPOLATION_DEFAULT,  # 'cubic'
+    border: Union[float, str] = _BORDER_DEFAULT,  # 'mean'
+    extrapolate: str = _EXTRAPOLATE_DEFAULT,  # 'head'
 ):
     """Generate a scalp topographic map (n_pixels, n_pixels).
 
@@ -67,10 +79,6 @@ def get_topomap(
         The data points used to generate the topographic map.
     pos : `mne.Info`
         Instance of `mne.Info` with the montage associated with the (n_channels,) points.
-    vmin : float | callable | None
-        The value specifying the lower bound of the color range.
-    vmax : float | callable | None
-        The value specifying the upper bound of the color range.
     res : int = 64
         The resolution of the square topographic map (in pixels).
     %(outlines_topomap)s
@@ -104,8 +112,6 @@ def get_topomap(
     # inferring (x, y) coordinates form mne.Info instance
     pos = _find_topomap_coords(pos, picks=picks, sphere=sphere)
     extrapolate = _check_extrapolate(extrapolate, ch_type)
-    norm = min(data) >= 0
-    vmin, vmax = _setup_vmin_vmax(data, vmin, vmax, norm)
 
     # interpolation
     outlines = _make_head_outlines(sphere, pos, outlines, (0.0, 0.0))

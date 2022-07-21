@@ -2,8 +2,6 @@
 API
 ###
 
-:py:mod:`mne_icalabel`:
-
 .. automodule:: mne_icalabel
    :no-members:
    :no-inherited-members:
@@ -45,3 +43,17 @@ are copied to the new image features. Then, the predicted probabilities are aver
 
    get_iclabel_features
    run_iclabel
+
+Features
+========
+
+Contains functions to extract features from `~mne.preprocessing.ICA` instance and `~mne.io.Raw` or
+`~mne.Epochs` instances using MNE-Python.
+
+.. currentmodule:: mne_icalabel.features
+
+.. autosummary::
+   :toctree: generated/
+
+   get_topomap
+   get_topomaps

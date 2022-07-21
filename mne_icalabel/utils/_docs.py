@@ -17,7 +17,6 @@ docdict: Dict[str, str] = {}
 keys: Tuple[str, ...] = (
     "border_topomap",
     "extrapolate_topomap",
-    "outlines_topomap",
     "picks_ica",
     "verbose",
 )
@@ -37,6 +36,13 @@ docdict[
 image_interp : str
     The image interpolation to be used. All matplotlib options are
     accepted."""
+docdict[
+    "outlines_topomap"
+] = """
+outlines : 'head' | 'skirt' | None
+    The outlines of the head. If ``'head'``, the default MNE head scheme. If
+    ``'skirt'``, the default MNE head scheme but sensors are allowed to be positionned
+    outside of the head circle. If None, the outline is disabled."""
 docdict[
     "res_topomap"
 ] = """

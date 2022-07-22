@@ -1,4 +1,4 @@
-from typing import Dict, List, Optional, Tuple, Union
+from typing import Dict, Optional, Tuple, Union
 
 import numpy as np
 from mne import BaseEpochs
@@ -13,21 +13,21 @@ from mne.viz.ica import _prepare_data_ica_properties
 def get_psds(
     ica: ICA,
     inst: Union[BaseRaw, BaseEpochs],
-    picks: Optional[List] = None,
-    reject="auto",
-    reject_by_annotation=False,
+    picks = None,
+    rejectv = "auto",
+    reject_by_annotation: bool = False,
     fmin: Optional[float] = 0,
     fmax: Optional[float] = np.inf,
     tmin: Optional[float] = None,
     tmax: Optional[float] = None,
     bandwidth: Optional[float] = None,
-    adaptive=False,
-    low_bias=True,
-    proj=False,
-    n_jobs=1,
-    normalization="length",
+    adaptive: bool = False,
+    low_bias: bool = True,
+    proj: bool = False,
+    n_jobs: Optional[int] = 1,
+    normalization: str = "length",
     output: str = "power",
-    dB=True,
+    dB: bool = True,
 ):
     """Compute the power spectral density of the ICA components.
 

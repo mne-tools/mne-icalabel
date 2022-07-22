@@ -39,6 +39,7 @@ def get_psds(
     ica : instance of mne.preprocessing.ICA
         The ICA solution.
     inst : instance of Epochs or Raw
+        The data to use in calculating PSDs.
     %(picks_ica)s Components to include. ``None`` (default) will use all the
         components.
     reject :'auto' | dict | None

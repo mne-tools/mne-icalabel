@@ -9,7 +9,10 @@ from mne.time_frequency.psd import psd_multitaper
 from mne.utils import _check_option
 from mne.viz.ica import _prepare_data_ica_properties
 
+from ..utils._docs import fill_doc
 
+
+@fill_doc
 def get_psds(
     ica: ICA,
     inst: Union[BaseRaw, BaseEpochs],

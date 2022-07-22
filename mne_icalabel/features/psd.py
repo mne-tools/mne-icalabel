@@ -5,7 +5,7 @@ from mne import BaseEpochs
 from mne.io import BaseRaw
 from mne.io.pick import _picks_to_idx
 from mne.preprocessing import ICA
-from mne.time_frequency.psd import psd_multitaper
+from mne.time_frequency import psd_multitaper
 from mne.utils import _check_option
 from mne.viz.ica import _prepare_data_ica_properties
 
@@ -39,7 +39,8 @@ def get_psds(
     ica : instance of mne.preprocessing.ICA
         The ICA solution.
     inst : instance of Epochs or Raw
-        The data to use in calculating PSDs.
+        `~mne.io.Raw` or `~mne.Epochs` instance used to fit the `~mne.preprocessing.ICA`
+         decomposition.
     %(picks_ica)s Components to include. ``None`` (default) will use all the
         components.
     reject :'auto' | dict | None
@@ -83,15 +84,12 @@ def get_psds(
     psds_mean : ndarray, shape(n_channels, n_freqs)
          Mean of power spectral densities on channel.
     """
-    if picks is None:  # plot all components
-        picks = range(0, ica.n_components_)
-    else:
-        picks = _picks_to_idx(ica.n_components_, picks)
+    picks = _picks_to_idx(ica.n_components_, picks)
     kind, dropped_indices, epochs_src, data = _prepare_data_ica_properties(
         inst, ica, reject_by_annotation=True, reject="auto"
     )
-    Nyquist = inst.info["sfreq"] / 2.0
-    fmax = min(inst.info["lowpass"] * 1.25, Nyquist)
+    nyquist = inst.info["sfreq"] / 2.0
+    fmax = min(inst.info["lowpass"] * 1.25, nyquist)
     _check_option("normalization", normalization, ["length", "full"])
     psds, freq = psd_multitaper(
         epochs_src,
@@ -112,7 +110,4 @@ def get_psds(
     if dB:
         np.log10(np.maximum(psds, np.finfo(float).tiny), out=psds)
         psds *= 10
-        psds_mean = psds.mean(axis=0)
-    else:
-        psds_mean = psds.mean(axis=0)
-    return psds_mean  # psds_mean = (n_components, n_freqs)
+    return psds.mean(axis=0)  # (n_components, n_freqs)

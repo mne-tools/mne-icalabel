@@ -9,7 +9,7 @@ directory = testing.data_path() / "MEG" / "sample"
 raw = read_raw(directory / "sample_audvis_trunc_raw.fif", preload=False)
 raw.pick_types(eeg=True)
 raw.load_data()
-ica = ICA(n_components=7, method="picard")
+ica = ICA(n_components=5, method="picard")
 ica.fit(raw)
 
 

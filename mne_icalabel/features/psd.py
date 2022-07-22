@@ -1,4 +1,4 @@
-from typing import Dict, Optional, Tuple, Union
+from typing import Optional, Union
 
 import numpy as np
 from mne import BaseEpochs
@@ -13,8 +13,8 @@ from mne.viz.ica import _prepare_data_ica_properties
 def get_psds(
     ica: ICA,
     inst: Union[BaseRaw, BaseEpochs],
-    picks = None,
-    rejectv = "auto",
+    picks=None,
+    reject="auto",
     reject_by_annotation: bool = False,
     fmin: Optional[float] = 0,
     fmax: Optional[float] = np.inf,

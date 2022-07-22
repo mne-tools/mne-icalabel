@@ -36,7 +36,7 @@ API
 
 - Add topographic feature using MNE with `~mne_icalabel.features.get_topomap_array` and `~mne_icalabel.features.get_topomaps` by `Anand Saini`_ and `Mathieu Scheltienne`_ (:gh:`71`)
 
-- Add PSD feature using `mne.time_frequency.psd_multitaper` with `~mne_icalabel.features.get_psds` by `Anand Saini`_ (:gh:`73`)
+- Add PSD feature using `mne.time_frequency.psd_multitaper` with `~mne_icalabel.features.get_psds` by `Anand Saini`_ and `Mathieu Scheltienne`_ (:gh:`73`)
 
 Authors
 ~~~~~~~

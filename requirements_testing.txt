@@ -24,3 +24,5 @@ joblib
 scikit-learn
 pandas
 qtpy
+pyvista>=0.32
+pyvistaqt>=0.4

@@ -11,3 +11,6 @@ sphinxcontrib-bibtex
 mne-bids
 pooch
 matplotlib
+qtpy
+pyvista>=0.32
+pyvistaqt>=0.4

@@ -60,7 +60,11 @@ print(ica.labels_)
 # Save the labeled components
 # ---------------------------
 # After the GUI labels, save the components using the `write_components_tsv`
-# function.
+# function. This will save the ICA annotations to disc in BIDS-Derivative for
+# EEG data format.
+#
+# Note: BIDS-EEG-Derivatives is not fully specified, so this functionality
+# may change in the future without notice.
 
 # fname = '<some path to save the components>'
 # write_components_tsv(ica, fname)

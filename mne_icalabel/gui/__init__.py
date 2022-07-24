@@ -2,12 +2,12 @@ from mne.preprocessing import ICA
 
 
 def label_ica_components(inst, ica: ICA, show: bool = True, block: bool = False):
-    """Locate intracranial electrode contacts.
+    """Launch the IC labelling GUI.
 
     Parameters
     ----------
     inst : : Raw | Epochs
-        The epochs or raw object.
+        `~mne.io.Raw` or `~mne.Epochs` instance used to fit the `~mne.preprocessing.ICA` decomposition.
     ica : ICA
         The ICA object fitted on `inst`.
     show : bool

@@ -63,7 +63,7 @@ def _use_backend(backend_name, interactive):
 
 
 @pytest.fixture(scope="module", params=["pyvistaqt"])
-def renderer_interactive_pyvistaqt(request, options_3d):
+def renderer_interactive_pyvistaqt(request):
     """Yield the interactive PyVista backend."""
     with _use_backend(request.param, interactive=True) as renderer:
         yield renderer

@@ -35,7 +35,7 @@ raw.load_data()
 # ----------------------------------
 # Before labeling components with the GUI, one needs to filter the data
 # and then fit the ICA instance. Afterwards, one can run the GUI using the
-# `Raw` data object and the fitted `ICA` instance. The GUI will modify
+# ``Raw`` data object and the fitted ``ICA`` instance. The GUI will modify
 # the ICA instance in place, and add the labels of each component to
 # the ``labels_`` attribute.
 
@@ -59,7 +59,7 @@ print(ica.labels_)
 # %%
 # Save the labeled components
 # ---------------------------
-# After the GUI labels, save the components using the `write_components_tsv`
+# After the GUI labels, save the components using the ``write_components_tsv```
 # function. This will save the ICA annotations to disc in BIDS-Derivative for
 # EEG data format.
 #

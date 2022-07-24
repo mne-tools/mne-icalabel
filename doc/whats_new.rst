@@ -34,13 +34,14 @@ Bug
 API
 ~~~
 
--
+- Add topographic feature using MNE with `~mne_icalabel.features.get_topomap_array` and `~mne_icalabel.features.get_topomaps` by `Anand Saini`_ and `Mathieu Scheltienne`_ (:gh:`71`)
 
 Authors
 ~~~~~~~
 
-* `Adam Li`_
 * `Mathieu Scheltienne`_
+* `Anand Saini`_
+* `Adam Li`_
 
 :doc:`Find out what was new in previous releases <whats_new_previous_releases>`
 

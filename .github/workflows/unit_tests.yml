@@ -20,9 +20,9 @@ jobs:
         os: [ubuntu-latest]
         python-version: ["3.10"]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v1
+        uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
       # install only the dependencies required for style
@@ -42,10 +42,10 @@ jobs:
         os: [ubuntu-latest, macos-latest]
         python-version: [3.7, 3.8, 3.9, "3.10"]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v1
+        uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
 
@@ -54,7 +54,7 @@ jobs:
           pip install --upgrade --progress-bar off pip setuptools wheel
 
       # build with sdist directly
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Build sdist
         run: python setup.py sdist
       - name: Install sdist
@@ -66,7 +66,7 @@ jobs:
       - name: Remove sdist install
         run: pip uninstall -y mne-icalabel
       # build with build wheet
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Build wheel
         run: python setup.py bdist_wheel
       - name: Install wheel
@@ -78,7 +78,7 @@ jobs:
       - name: Remove wheel install
         run: pip uninstall -y mne-icalabel
 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Test extras install
         run: |
           pip install .[full]
@@ -112,11 +112,11 @@ jobs:
 
     steps:
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v1
+        uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Install mne-icalabel
         run: |
@@ -156,7 +156,7 @@ jobs:
 
       - name: Upload coverage stats to codecov
         if: "matrix.os == 'ubuntu-latest'"
-        uses: codecov/codecov-action@v1
+        uses: codecov/codecov-action@v3
         with:
           file: ./coverage.xml
 
@@ -166,10 +166,10 @@ jobs:
     needs: [style, build, test]
     if: startsWith(github.ref, 'refs/tags/')
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v3
 
       - name: Setup Python
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v4
         with:
           python-version: "3.10"
 

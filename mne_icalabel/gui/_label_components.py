@@ -31,7 +31,7 @@ class ICAComponentLabeler(QMainWindow):
     ica : ICA
     """
 
-    def __init__(self, inst: Union[BaseRaw, BaseEpochs], ica: ICA) -> None:
+    def __init__(self, inst: Union[BaseRaw, BaseEpochs], ica: ICA, show: bool = True) -> None:
         ICAComponentLabeler._check_inst_ica(inst, ica)
         super().__init__()  # initialize the QMainwindow
         set_browser_backend("qt")  # force MNE to use the QT Browser
@@ -54,6 +54,9 @@ class ICAComponentLabeler(QMainWindow):
         # select first IC
         self._selected_component = 0
         self._components_listWidget.setCurrentRow(0)  # emit signal
+
+        if show:
+            self.show()
 
     def _save_labels(self) -> None:
         """Save the selected labels to the ICA instance."""

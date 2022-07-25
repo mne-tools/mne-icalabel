@@ -66,6 +66,11 @@ def test_label_components_gui_display(_fitted_ica, _label_ica_components):
 
     # test functions
     gui = _label_ica_components(raw, ica)
-    assert gui.reset()
 
     # test setting the label
+    assert gui.inst == raw
+    assert gui.ica == ica
+    assert gui.n_components_ == ica.n_components_
+
+    # the initial component should be 0
+    assert gui.selected_component == 0

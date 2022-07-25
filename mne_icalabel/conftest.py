@@ -3,7 +3,6 @@
 #
 # License: BSD-3-Clause
 import warnings
-from contextlib import contextmanager
 
 import pytest
 

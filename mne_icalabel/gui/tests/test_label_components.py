@@ -9,7 +9,7 @@ import mne_icalabel
 
 
 @pytest.fixture
-def _label_ica_components(renderer_interactive_pyvistaqt):
+def _label_ica_components():
     # Use a fixture to create these classes so we can ensure that they
     # are closed at the end of the test
     guis = list()

@@ -6,7 +6,6 @@ import warnings
 from contextlib import contextmanager
 
 import pytest
-from mne.utils import _check_qt_version
 
 # most of this adapted from MNE-Python
 
@@ -28,45 +27,6 @@ def pytest_configure(config):
         warning_line = warning_line.strip()
         if warning_line and not warning_line.startswith("#"):
             config.addinivalue_line("filterwarnings", warning_line)
-
-
-def _check_skip_backend(name):
-    from mne.viz.backends.tests._utils import (
-        has_imageio_ffmpeg,
-        has_pyvista,
-        has_pyvistaqt,
-    )
-
-    if name in ("pyvistaqt", "notebook"):
-        if not has_pyvista():
-            pytest.skip("Test skipped, requires pyvista.")
-        if not has_imageio_ffmpeg():
-            pytest.skip("Test skipped, requires imageio-ffmpeg")
-    if name == "pyvistaqt" and not _check_qt_version():
-        pytest.skip("Test skipped, requires Qt.")
-    if name == "pyvistaqt" and not has_pyvistaqt():
-        pytest.skip("Test skipped, requires pyvistaqt")
-
-
-@contextmanager
-def _use_backend(backend_name, interactive):
-    from mne.viz.backends.renderer import _use_test_3d_backend
-
-    _check_skip_backend(backend_name)
-    with _use_test_3d_backend(backend_name, interactive=interactive):
-        from mne.viz.backends import renderer
-
-        try:
-            yield renderer
-        finally:
-            renderer.backend._close_all()
-
-
-@pytest.fixture(scope="module", params=["pyvistaqt"])
-def renderer_interactive_pyvistaqt(request):
-    """Yield the interactive PyVista backend."""
-    with _use_backend(request.param, interactive=True) as renderer:
-        yield renderer
 
 
 @pytest.fixture(scope="session")

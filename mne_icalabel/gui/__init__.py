@@ -25,7 +25,10 @@ def label_ica_components(inst, ica: ICA, show: bool = True, block: bool = False)
 
     from ._label_components import ICAComponentLabeler
 
-    app = QApplication([])
+    # get application
+    app = QApplication.instance()
+    if app is None:
+        app = QApplication(["ICA Component Annotator"])
     gui = ICAComponentLabeler(inst=inst, ica=ica, show=show)
     if block:
         _qt_app_exec(app)

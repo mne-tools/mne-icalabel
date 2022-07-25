@@ -81,8 +81,8 @@ def get_psds(
 
     Returns
     -------
-    psds_mean : ndarray, shape(n_channels, n_freqs)
-         Mean of power spectral densities on channel.
+    psds : array of shape (n_channels, n_freqs)
+         The independent component power spectral density.
     """
     picks = _picks_to_idx(ica.n_components_, picks)
     kind, dropped_indices, epochs_src, data = _prepare_data_ica_properties(

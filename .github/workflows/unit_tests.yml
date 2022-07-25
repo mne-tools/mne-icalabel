@@ -53,7 +53,7 @@ jobs:
         run: |
           pip install --upgrade --progress-bar off pip setuptools wheel
           pip install $STD_ARGS --only-binary ":all:" PyQt6 PyQt6-sip PyQt6-Qt6
-          
+
       # build with sdist directly
       - uses: actions/checkout@v3
       - name: Build sdist
@@ -118,6 +118,10 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - uses: actions/checkout@v3
+
+      - name: Install QT dependencies
+        run: |
+          sudo apt install -qq graphviz optipng libxft2 ffmpeg libsm6 libxext6
 
       - name: Install mne-icalabel
         run: |

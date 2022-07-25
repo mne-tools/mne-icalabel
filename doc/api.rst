@@ -57,6 +57,7 @@ Contains functions to extract features from `~mne.preprocessing.ICA` instance an
 
    get_topomap_array
    get_topomaps
+   get_psds
 
 Annotating Components
 =====================

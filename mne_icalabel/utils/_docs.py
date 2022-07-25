@@ -17,7 +17,10 @@ docdict: Dict[str, str] = {}
 keys: Tuple[str, ...] = (
     "border_topomap",
     "extrapolate_topomap",
+    "n_jobs",
+    "normalization",
     "picks_ica",
+    "reject_by_annotation_raw",
     "verbose",
 )
 

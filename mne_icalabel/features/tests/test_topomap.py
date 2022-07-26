@@ -4,7 +4,8 @@ from mne.datasets import testing
 from mne.io import read_raw
 from mne.preprocessing import ICA
 
-from mne_icalabel.features import _get_topomap_array, get_topomaps
+from mne_icalabel.features import get_topomaps
+from mne_icalabel.features.topomap import _get_topomap_array
 from mne_icalabel.utils._testing import requires_version
 
 directory = testing.data_path() / "MEG" / "sample"

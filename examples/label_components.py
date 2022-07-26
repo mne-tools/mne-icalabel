@@ -46,7 +46,7 @@ ica.fit(filt_raw)
 
 # now label the components using a GUI
 mne.set_log_level("DEBUG")
-gui = label_ica_components(raw, ica, block=True)
+gui = label_ica_components(raw, ica)
 
 # The `ica` object is modified to contain the component labels
 # after closing the GUI and can now be saved

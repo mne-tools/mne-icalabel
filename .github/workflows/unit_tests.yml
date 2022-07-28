@@ -154,10 +154,15 @@ jobs:
         shell: bash -el {0}
         run: mne sys_info
 
+      - shell: bash -el {0}
+        run: |
+          QT_QPA_PLATFORM=xcb LIBGL_DEBUG=verbose LD_DEBUG=libs
+        name: 'Check Qt GL'
+
       - name: Run pytest
         shell: bash
         run: |
-          python -m pytest ./mne_icalabel --cov=mne_icalabel --cov-report=xml --cov-config=setup.cfg --verbose --ignore mne-python
+          python -m pytest ./mne_icalabel --cov=mne_icalabel --cov-report=xml --cov-config=setup.cfg --verbose --ignore mne-python -vv mne_icalabel/gui
 
       - name: Upload coverage stats to codecov
         if: "matrix.os == 'ubuntu-latest'"

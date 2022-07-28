@@ -148,10 +148,10 @@ class ICAComponentLabeler(QMainWindow):
         self._mpl_widgets["psd"] = FigureCanvasQTAgg(fig)
         grid_layout.addWidget(self._mpl_widgets["psd"], 0, 3)
 
-        # time-series, initialized with the first IC since it's easier than
-        # creating an empty browser and providing all the arguments for
-        # _get_browser().
-        self._timeSeries_widget = self.ica.plot_sources(self.inst, picks=[0])
+        # time-series, initialized with an empty widget.
+        # TODO: When the browser supports changing the instance displayed, this
+        # should be initialized to a browser with the first IC.
+        self._timeSeries_widget = QWidget()
         grid_layout.addWidget(self._timeSeries_widget, 1, 2, 1, 2)
 
     # - Checkers --------------------------------------------------------------
@@ -234,6 +234,7 @@ class ICAComponentLabeler(QMainWindow):
         # swap timeSeries widget
         timeSeries_widget = self.ica.plot_sources(self.inst, picks=[self.selected_component])
         self._central_widget.layout().replaceWidget(self._timeSeries_widget, timeSeries_widget)
+        self._timeSeries_widget.setParent(None)
         self._timeSeries_widget = timeSeries_widget
 
         # select buttons that were previously selected for this IC

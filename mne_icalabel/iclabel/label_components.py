@@ -57,7 +57,7 @@ def iclabel_label_components(inst: Union[BaseRaw, BaseEpochs], ica: ICA, inplace
 
         # add labels to the ICA instance
         for idx, (_, mne_label) in enumerate(ICLABEL_LABELS_TO_MNE.items()):
-            auto_labels = argmax_labels.index[idx]
+            auto_labels = np.argwhere(argmax_labels == idx)
             if mne_label not in ica.labels_:
                 ica.labels_[mne_label] = auto_labels
                 continue

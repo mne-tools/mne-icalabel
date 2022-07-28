@@ -21,14 +21,10 @@ def label_ica_components(inst, ica: ICA, show: bool = True, block: bool = False)
         The graphical user interface (GUI) window.
     """
     from mne.viz.backends._utils import _init_mne_qtapp, _qt_app_exec
-    from qtpy.QtWidgets import QApplication
-
     from ._label_components import ICAComponentLabeler
 
     # get application
     app = _init_mne_qtapp()
-    if app is None:
-        app = QApplication(["ICA Component Annotator"])
     gui = ICAComponentLabeler(inst=inst, ica=ica, show=show)
     if block:
         _qt_app_exec(app)

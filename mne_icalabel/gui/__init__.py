@@ -21,6 +21,7 @@ def label_ica_components(inst, ica: ICA, show: bool = True, block: bool = False)
         The graphical user interface (GUI) window.
     """
     from mne.viz.backends._utils import _init_mne_qtapp, _qt_app_exec
+
     from ._label_components import ICAComponentLabeler
 
     # get application

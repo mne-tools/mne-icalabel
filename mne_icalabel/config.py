@@ -8,10 +8,10 @@ ICALABEL_METHODS = {
 # map ICLabel labels to MNE str format
 ICLABEL_LABELS_TO_MNE = {
     "Brain": "brain",
+    "Muscle": "muscle",
     "Eye": "eog",
     "Heart": "ecg",
-    "Muscle": "muscle",
-    "Channel Noise": "ch_noise",
     "Line Noise": "line_noise",
+    "Channel Noise": "ch_noise",
     "Other": "other",
 }

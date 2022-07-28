@@ -1,5 +1,6 @@
 import os.path as op
 
+import matplotlib.pyplot as plt
 import pytest
 from mne.datasets import testing
 from mne.io import read_raw_edf
@@ -77,3 +78,7 @@ def test_label_components_gui_display(_fitted_ica, _label_ica_components):
 
     # the initial component should be 0
     assert gui.selected_component == 0
+
+    # there should be three figures inside the QT window
+    figs = list(map(plt.figure, plt.get_fignums()))
+    assert len(figs) == 3

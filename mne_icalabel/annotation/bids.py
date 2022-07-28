@@ -51,7 +51,7 @@ def write_components_tsv(ica: ICA, fname):
     if ica.labels_:
         for label, comps in ica.labels_.items():
             this_status = "good" if label == "brain" else "bad"
-            if label in ICLABEL_LABELS_TO_MNE:
+            if label in ICLABEL_LABELS_TO_MNE.values():
                 for comp in comps:
                     status[comp] = this_status
                     ic_type[comp] = label

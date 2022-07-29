@@ -52,6 +52,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install --upgrade --progress-bar off pip setuptools wheel
+          pip install $STD_ARGS --only-binary ":all:" PyQt6 PyQt6-sip PyQt6-Qt6
 
       # build with sdist directly
       - uses: actions/checkout@v3
@@ -118,6 +119,10 @@ jobs:
 
       - uses: actions/checkout@v3
 
+      - name: 'Setup xvfb'
+        if: "matrix.os == 'ubuntu-latest'"
+        run: ./scripts/setup_xvfb.sh
+
       - name: Install mne-icalabel
         run: |
           pip install --upgrade --progress-bar off pip setuptools wheel
@@ -149,10 +154,15 @@ jobs:
         shell: bash -el {0}
         run: mne sys_info
 
+      - shell: bash -el {0}
+        run: |
+          QT_QPA_PLATFORM=xcb LIBGL_DEBUG=verbose LD_DEBUG=libs
+        name: 'Check Qt GL'
+
       - name: Run pytest
         shell: bash
         run: |
-          python -m pytest ./mne_icalabel --cov=mne_icalabel --cov-report=xml --cov-config=setup.cfg --verbose --ignore mne-python
+          python -m pytest ./mne_icalabel --cov=mne_icalabel --cov-report=xml --cov-config=setup.cfg --verbose --ignore mne-python -vv mne_icalabel/gui
 
       - name: Upload coverage stats to codecov
         if: "matrix.os == 'ubuntu-latest'"

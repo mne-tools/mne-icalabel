@@ -23,3 +23,6 @@ python-picard
 joblib
 scikit-learn
 pandas
+qtpy
+PyQt5
+mne-qt-browser

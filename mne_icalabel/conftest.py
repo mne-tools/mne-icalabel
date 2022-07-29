@@ -2,7 +2,6 @@
 # Author: Eric Larson <larson.eric.d@gmail.com>
 #
 # License: BSD-3-Clause
-
 import warnings
 
 import pytest

@@ -43,7 +43,7 @@ jobs:
             name: Set BASH_ENV
             command: |
               set -e
-              ./scripts/setup_circleci.sh
+              ./scripts/setup_xvfb.sh
               sudo apt install -qq graphviz optipng python3.8-venv python3-venv libxft2 ffmpeg
               python3.8 -m venv ~/python_env
               echo "set -e" >> $BASH_ENV
@@ -92,7 +92,11 @@ jobs:
               pip install --progress-bar off .
               pip install --upgrade --progress-bar off -r requirements_testing.txt
               pip install --upgrade --progress-bar off -r requirements_doc.txt
-
+              pip install --upgrade --progress-bar off PyQt5
+              python -m pip uninstall -yq sphinx-gallery mne-qt-browser
+              # TODO: Revert to upstream/main once https://github.com/mne-tools/mne-qt-browser/pull/105 is merged
+              python -m pip install --upgrade --progress-bar off https://github.com/mne-tools/mne-qt-browser/zipball/main https://github.com/sphinx-gallery/sphinx-gallery/zipball/master
+        
         - save_cache:
             key: pip-cache
             paths:
@@ -103,6 +107,10 @@ jobs:
             paths:
               - ~/.local/lib/python3.8/site-packages
               - ~/.local/bin
+
+        # - run:
+        #     name: Check Qt
+        #     command: LD_DEBUG=libs python -c "from PySide6.QtWidgets import QApplication, QWidget; app = QApplication([])"
 
         # Look at what we have and fail early if there is some library conflict
         - run:

@@ -39,7 +39,7 @@ def load_raw_and_fit_ica():
     raw.filter(l_freq=1, h_freq=100)
 
     # compute ICA
-    ica = ICA(n_components=15)
+    ica = ICA(n_components=15, random_state=12345)
     ica.fit(raw)
     return raw, ica
 

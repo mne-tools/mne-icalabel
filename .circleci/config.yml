@@ -108,9 +108,9 @@ jobs:
               - ~/.local/lib/python3.8/site-packages
               - ~/.local/bin
 
-        - run:
-            name: Check Qt
-            command: LD_DEBUG=libs python -c "from PySide6.QtWidgets import QApplication, QWidget; app = QApplication([])"
+        # - run:
+        #     name: Check Qt
+        #     command: LD_DEBUG=libs python -c "from PySide6.QtWidgets import QApplication, QWidget; app = QApplication([])"
 
         # Look at what we have and fail early if there is some library conflict
         - run:

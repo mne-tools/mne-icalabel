@@ -24,5 +24,5 @@ joblib
 scikit-learn
 pandas
 qtpy
-PySide6!=6.3.0
+PyQt5
 mne-qt-browser

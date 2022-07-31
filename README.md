@@ -16,7 +16,7 @@ In addition, `mne-icalabel` provides extensions and improvements in the form of 
 
 # Why?
 
-EEG and MEG recordings include artifacts, including heartbeat, eyeblink, muscle, and movement activity.
+EEG and MEG recordings include artifacts, such as heartbeat, eyeblink, muscle, and movement activity.
 Independent component analysis (ICA) is a common method to remove artifacts, but typically relies on manual
 annotations labelling which independent components (IC) reflect noise and which reflect brain activity.
 

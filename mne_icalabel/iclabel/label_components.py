@@ -25,22 +25,22 @@ def iclabel_label_components(inst: Union[BaseRaw, BaseEpochs], ica: ICA, inplace
     Parameters
     ----------
     inst : Raw | Epochs
-      Instance used to fit the ICA decomposition. The instance should be
-      referenced to a common average and bandpass filtered between 1 and
-      100 Hz.
+        Instance used to fit the ICA decomposition. The instance should be
+        referenced to a common average and bandpass filtered between 1 and
+        100 Hz.
     ica : ICA
-      ICA decomposition of the provided instance.
+        ICA decomposition of the provided instance.
     inplace : bool
-      Whether to modify the ``ica`` instance in place by adding the automatic
-      annotations to the ``labels_`` property. By default True.
+        Whether to modify the ``ica`` instance in place by adding the automatic
+        annotations to the ``labels_`` property. By default True.
 
     Returns
     -------
     labels_pred_proba : numpy.ndarray of shape (n_components, n_classes)
-      The estimated corresponding predicted probabilities of output classes
-      for each independent component. Columns are ordered with 'brain',
-      'muscle artifact', 'eye blink', 'heart beat', 'line noise',
-      'channel noise', 'other'.
+        The estimated corresponding predicted probabilities of output classes
+        for each independent component. Columns are ordered with 'brain',
+        'muscle artifact', 'eye blink', 'heart beat', 'line noise',
+        'channel noise', 'other'.
 
     References
     ----------

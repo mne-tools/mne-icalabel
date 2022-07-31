@@ -10,20 +10,21 @@
 [![Checked with mypy](http://www.mypy-lang.org/static/mypy_badge.svg)](http://mypy-lang.org/)
 [![status](https://joss.theoj.org/papers/d91770e35a985ecda4f2e1f124977207/status.svg)](https://joss.theoj.org/papers/d91770e35a985ecda4f2e1f124977207)
 
-This repository is a conversion of the popular ICLabel classifier for Python. In addition, we provide
-improvements in the form of other models.
+This repository is a conversion of the popular Matlab-based
+[ICLabel](https://github.com/sccn/ICLabel) classifier for Python. 
+In addition, `mne-icalabel` provides extensions and improvements in the form of other models.
 
 # Why?
 
-Scalp EEG is inherently noisy comprised commonly with heartbeat, eyeblink, muscle and movement artifacts.
-Independent component analysis (ICA) is a common method to remove artifacts, but rely on a human manually
-annotating with independent components (IC) are noisy and which are brain signal.
+EEG and MEG recordings include artifacts, including heartbeat, eyeblink, muscle, and movement activity.
+Independent component analysis (ICA) is a common method to remove artifacts, but typically relies on manual
+annotations labelling which independent components (IC) reflect noise and which reflect brain activity.
 
-This package aims at automating that process conforming to the popular MNE-Python API for EEG, MEG and iEEG data.
+This package aims at automating this process, using the popular MNE-Python API for EEG, MEG and iEEG data.
 
 # Basic Usage
 
-MNE-ICALabel will estimate the labels of the ICA components given
+MNE-ICALabel estimates the labels of ICA components given
 a MNE-Python [Raw](https://mne.tools/stable/generated/mne.io.Raw.html) or
 [Epochs](https://mne.tools/stable/generated/mne.Epochs.html) object and an ICA instance using the
 [ICA decomposition](https://mne.tools/stable/generated/mne.preprocessing.ICA.html)
@@ -39,18 +40,26 @@ label_components(raw, ica, method='iclabel')
 The only current available method is `'iclabel'`.
 
 # Documentation
+
 [Stable version](https://mne.tools/mne-icalabel/stable/index.html) documentation.
 [Dev version](https://mne.tools/mne-icalabel/dev/index.html) documentation.
 
 # Installation
 
-To get the latest code using [git](https://git-scm.com/), open a terminal and type:
+The current stable release of `mne-icalabel` can be installed with pip, for example, by running:
+
+    pip install mne-icalabel
+    
+For further details about installation, see the 
+[install](https://mne.tools/mne-icalabel/stable/install.html) page.
+
+To get the latest (development) version, using [git](https://git-scm.com/), open a terminal and type:
 
     git clone git://github.com/mne-tools/mne-icalabel.git
     cd mne-icalabel
     pip install -e .
 
-or one can install directly using pip
+The development version can also be installed directly using pip:
 
     pip install https://api.github.com/repos/mne-tools/mne-icalabel/zipball/main
 
@@ -59,8 +68,8 @@ Alternatively, you can also download a
 
 # Contributing
 
-If you are interested in contributing, please read the [contributing guidelines](https://github.com/mne-tools/mne-icalabel/main/CONTRIBUTING.md).
-
+If you are interested in contributing, please read the
+[contributing guidelines](https://github.com/mne-tools/mne-icalabel/blob/main/CONTRIBUTING.md).
 
 # Forum
 

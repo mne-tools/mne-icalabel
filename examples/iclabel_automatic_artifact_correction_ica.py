@@ -87,7 +87,8 @@ raw.plot(order=artifact_picks, n_channels=len(artifact_picks), show_scrollbars=F
 # `~mne.io.Raw` object around so we can apply the ICA solution to it
 # later.
 
-filt_raw = raw.copy().filter(l_freq=1.0, h_freq=100)
+# the Nyquist frequency is 75 Hz
+filt_raw = raw.copy().filter(l_freq=1.0, h_freq=75)
 
 # %%
 # Fitting and plotting the ICA solution
@@ -185,6 +186,7 @@ ica.plot_overlay(raw, exclude=[0], picks="eeg")
 
 ica.plot_properties(raw, picks=[0, 1])
 
+# %%
 # Selecting ICA components automatically
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
@@ -202,12 +204,6 @@ ica.plot_properties(raw, picks=[0, 1])
 #
 # The output of the ICLabel ``label_components`` function produces
 # predicted probability values for each of these classes in that order.
-#
-# To start this process, we will compute features of each ICA
-# component to be fed into our classification model. This is
-# done automatically underneath the hood. An autocorrelation,
-# power spectral density and topographic map feature is fed
-# into a 3-head neural network that has been pretrained.
 # See :footcite:`iclabel2019` for full details.
 
 ic_labels = label_components(raw, ica, method="iclabel")
@@ -215,6 +211,7 @@ for ind, label in enumerate(ic_labels):
     print(label)
     ica.plot_properties(raw, picks=[ind])
 
+# %%
 # We can extract the labels of each component and exclude
 # non-brain classified components, keeping 'brain' and 'other'.
 # "Other" is a catch-all that for non-classifiable components.

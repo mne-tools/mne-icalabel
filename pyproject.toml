@@ -129,6 +129,9 @@ include-package-data = false
 include = ['mne_icalabel*']
 exclude = ['mne_icalabel*tests']
 
+[tool.setuptools.package-data]
+"mne_icalabel.iclabel" = ["asserts/*.pt"]
+
 [tool.black]
 line-length = 100
 target-version = ['py38']

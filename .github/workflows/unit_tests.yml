@@ -60,7 +60,7 @@ jobs:
       matrix:
         os: [ubuntu, macos, windows]
         python-version: [3.7, 3.8, 3.9, "3.10"]
-    name: ${{ matrix.os }} - ${{ matrix.python-version }}
+    name: build ${{ matrix.os }} - py${{ matrix.python-version }}
     runs-on: ${{ matrix.os }}-latest
     steps:
       - name: Checkout repository

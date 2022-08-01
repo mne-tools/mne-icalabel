@@ -49,7 +49,7 @@ jobs:
           check_filenames: true
           check_hidden: true
           skip: './.git,./build'
-          ignore_words_file: .codespellignore
+          ignore_words_list: Raison
       - name: Run pydocstyle
         run: pydocstyle .
       - name: Run mypy

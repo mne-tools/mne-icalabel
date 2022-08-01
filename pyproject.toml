@@ -75,6 +75,7 @@ style = [
     'codespell',
     'isort',
     'flake8',
+    'mypy',
     'pydocstyle[toml]',
 ]
 test = [
@@ -88,7 +89,6 @@ test = [
     'matplotlib',
     'mne-bids',
     'mne-qt-browser',
-    'mypy',
     'numpydoc',
     'pandas',
     'pooch',

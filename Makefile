@@ -1,6 +1,5 @@
 # simple makefile to simplify repetetive build env management tasks under posix
-
-# caution: testing won't work on windows, see README
+# caution: testing won't work on windows
 
 PYTHON ?= python
 PYTESTS ?= py.test

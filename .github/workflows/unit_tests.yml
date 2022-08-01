@@ -126,7 +126,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
           architecture: 'x64'
       - name: Setup xvfb
-        if: "matrix.os == 'ubuntu-latest'"
+        if: "matrix.os == 'ubuntu'"
         run: ./scripts/setup_xvfb.sh
       - name: Install package
         run: |

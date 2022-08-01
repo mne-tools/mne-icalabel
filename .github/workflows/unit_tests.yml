@@ -74,7 +74,6 @@ jobs:
         run: |
           python -m pip install --progress-bar off --upgrade pip setuptools wheel
           python -m pip install --progress-bar off .[build]
-          pip install $STD_ARGS --only-binary ":all:" PyQt6 PyQt6-sip PyQt6-Qt6
       - name: Test and remove package install
         run: |
           python -c "import mne_icalabel; print(mne_icalabel.__version__)"

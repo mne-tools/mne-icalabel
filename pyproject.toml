@@ -161,5 +161,5 @@ extend_skip_glob = [
 convention = 'numpy'
 ignore-decorators = '(copy_doc|property|.*setter|.*getter|pyqtSlot|Slot)'
 match = '^(?!setup|__init__|test_).*\.py'
-match-dir = '^(?!build|dist|\.).*'
+match-dir = '^mne_icalabel.*'
 add_ignore = 'D100,D104,D107'

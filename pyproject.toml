@@ -41,8 +41,8 @@ dependencies = [
     'scipy >= 1.2.0',
     'mne >= 1.0',
     'torch',
-    'importlib-metadata; python_version<"3.8"'
-    'importlib-resources; python_version<"3.9"'
+    'importlib-metadata; python_version<"3.8"',
+    'importlib-resources; python_version<"3.9"',
 ]
 
 [project.optional-dependencies]

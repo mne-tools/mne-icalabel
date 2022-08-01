@@ -56,6 +56,7 @@ jobs:
           mypy_flags: '--config-file pyproject.toml'
 
   build:
+    timeout-minutes: 10
     strategy:
       fail-fast: false
       matrix:
@@ -97,83 +98,59 @@ jobs:
           python -c "import mne_icalabel; print(mne_icalabel.__version__)"
 
   test:
-    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
-        python-version: [3.7, "3.10"] # oldest and newest supported versions
-        mne-version: [mne-stable, mne-main]
-
+        os: [ubuntu, macos, windows]
+        python-version: [3.7, "3.10"]  # oldest and newest supported versions
+        mne: [stable, main]
         include:
           - os: ubuntu-latest
             python-version: 3.8
-            mne-version: mne-main
+            mne: main
           - os: ubuntu-latest
             python-version: 3.9
-            mne-version: mne-main
-
-    env:
-      TZ: Europe/Berlin
-      FORCE_COLOR: true
-      DISPLAY: ":99.0"
-      MNE_LOGGING_LEVEL: "info"
-      OPENBLAS_NUM_THREADS: "1"
-      PYTHONUNBUFFERED: "1"
-
+            mne: main
+    name: pytest ${{ matrix.os }} - py${{ matrix.python-version }} - MNE ${{ matrix.mne }}
+    runs-on: ${{ matrix.os }}-latest
+    defaults:
+      run:
+        shell: bash
     steps:
-      - name: Set up Python ${{ matrix.python-version }}
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Setup Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
-
-      - uses: actions/checkout@v3
-
-      - name: 'Setup xvfb'
+          architecture: 'x64'
+      - name: Setup xvfb
         if: "matrix.os == 'ubuntu-latest'"
         run: ./scripts/setup_xvfb.sh
-
-      - name: Install mne-icalabel
+      - name: Install package
         run: |
-          pip install --upgrade --progress-bar off pip setuptools wheel
-          pip install --progress-bar off .
-
-      - name: Install dependencies
-        run: |
-          pip install --upgrade --upgrade-strategy eager --progress-bar off -r requirements_testing.txt
-
+          python -m pip install --progress-bar off --upgrade pip setuptools wheel
+          python -m pip install --progress-bar off .[test]
       - name: Install MNE (main)
-        if: "matrix.mne-version == 'mne-main'"
+        if: "matrix.mne == 'main'"
         run: |
-          git clone --depth 1 https://github.com/mne-tools/mne-python.git -b main
-          pip install --force-reinstall --progress-bar off ./mne-python
-
-      - name: Install MNE (stable)
-        if: "matrix.mne-version == 'mne-stable'"
+          python -m pip uninstall -y mne
+          python -m pip install git+https://github.com/mne-tools/mne-python
+      - name: Display versions and environments infos
         run: |
-          pip install --force-reinstall --progress-bar off mne
-
-      - name: Display versions and environment information
-        run: |
-          echo $TZ
-          date
-          python --version
           which python
-
-      - name: "Show infos"
-        shell: bash -el {0}
+          python --version
+      - name: Display MNE infos
         run: mne sys_info
-
       - shell: bash -el {0}
         run: |
           QT_QPA_PLATFORM=xcb LIBGL_DEBUG=verbose LD_DEBUG=libs
         name: 'Check Qt GL'
-
       - name: Run pytest
         shell: bash
         run: |
           python -m pytest ./mne_icalabel --cov=mne_icalabel --cov-report=xml --cov-config=setup.cfg --verbose --ignore mne-python -vv mne_icalabel/gui
-
       - name: Upload coverage stats to codecov
         if: "matrix.os == 'ubuntu-latest'"
         uses: codecov/codecov-action@v3

@@ -10,12 +10,7 @@ except ImportError:  # import is valid only for MNE ≥ 1.1
     _INTERPOLATION_DEFAULT = "cubic"
 
 from mne.io import Info
-from mne.io.pick import (
-    _get_channel_types,
-    _pick_data_channels,
-    _picks_to_idx,
-    pick_info,
-)
+from mne.io.pick import _get_channel_types, _pick_data_channels, _picks_to_idx, pick_info
 from mne.preprocessing import ICA
 from mne.utils import check_version
 from mne.viz.topomap import _check_extrapolate, _make_head_outlines, _setup_interp

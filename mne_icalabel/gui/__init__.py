@@ -7,7 +7,8 @@ def label_ica_components(inst, ica: ICA, show: bool = True, block: bool = False)
     Parameters
     ----------
     inst : : Raw | Epochs
-        `~mne.io.Raw` or `~mne.Epochs` instance used to fit the `~mne.preprocessing.ICA` decomposition.
+        `~mne.io.Raw` or `~mne.Epochs` instance used to fit the `~mne.preprocessing.ICA`
+        decomposition.
     ica : ICA
         The ICA object fitted on `inst`.
     show : bool

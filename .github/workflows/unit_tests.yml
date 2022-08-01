@@ -50,9 +50,10 @@ jobs:
       - name: Run pydocstyle
         run: pydocstyle .
       - name: Run mypy
-        # TODO: Should use the GitHub action when supports for pyproject.toml
-        # is added. https://github.com/jpetrucciani/mypy-check
-        run: mypy ./mne_icalabel
+        uses: jpetrucciani/mypy-check@master
+        with:
+          path: './mne_icalabel'
+          mypy_flags: '--config-file pyproject.toml'
 
   build:
     strategy:

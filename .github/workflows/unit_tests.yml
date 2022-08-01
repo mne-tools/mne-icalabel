@@ -3,89 +3,58 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event.number }}-${{ github.event.type }}
   cancel-in-progress: true
 on:
-  push:
-    branches:
-      - "main"
   pull_request:
-    branches:
-      - "*"
+    paths:
+      - '**.py'
+  push:
+    branches: [main]
+    paths:
+      - '**.py'
+  workflow_dispatch:
 
 jobs:
-  # Run style tests
-  style:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest]
-        python-version: ["3.10"]
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
-        with:
-          python-version: ${{ matrix.python-version }}
-      # install only the dependencies required for style
-      - name: Install pip
-        run: |
-          pip install --upgrade --progress-bar off pip setuptools wheel
-          pip install --upgrade --upgrade-strategy eager --progress-bar off black check-manifest codespell flake8 flake8-array-spacing isort mypy pydocstyle
-      - name: Run style & documentation tests
-        run: make run-checks
-
-  # Run installation tests
   build:
-    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        os: [ubuntu, macos, windows]
         python-version: [3.7, 3.8, 3.9, "3.10"]
+    name: ${{ matrix.os }} - ${{ matrix.python-version }}
+    runs-on: ${{ matrix.os }}-latest
     steps:
-      - uses: actions/checkout@v3
-
-      - name: Set up Python ${{ matrix.python-version }}
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Setup Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
-
+          architecture: 'x64'
       - name: Install dependencies
         run: |
-          pip install --upgrade --progress-bar off pip setuptools wheel
+          python -m pip install --progress-bar off --upgrade pip setuptools wheel
+          python -m pip install --progress-bar off .[build]
           pip install $STD_ARGS --only-binary ":all:" PyQt6 PyQt6-sip PyQt6-Qt6
-
-      # build with sdist directly
-      - uses: actions/checkout@v3
-      - name: Build sdist
-        run: python setup.py sdist
-      - name: Install sdist
-        run: pip install ./dist/mne-icalabel-*
-      - name: Clean up working directory
-        run: rm -rf ./*
-      - name: Try importing mne_icalabel
-        run: python -c 'import mne_icalabel; print(mne_icalabel.__version__)'
-      - name: Remove sdist install
-        run: pip uninstall -y mne-icalabel
-      # build with build wheet
-      - uses: actions/checkout@v3
-      - name: Build wheel
-        run: python setup.py bdist_wheel
-      - name: Install wheel
-        run: pip install ./dist/mne_icalabel-*.whl
-      - name: Clean up working directory
-        run: rm -rf ./*
-      - name: Try importing mne_icalabel
-        run: python -c 'import mne_icalabel; print(mne_icalabel.__version__)'
-      - name: Remove wheel install
-        run: pip uninstall -y mne-icalabel
-
-      - uses: actions/checkout@v3
+      - name: Test and remove package install
+        run: |
+          python -c "import mne_icalabel; print(mne_icalabel.__version__)"
+          python -m pip uninstall -y mne_icalabel
+      - name: Build package
+        run: python -m build
+      - name: Install, test and remove sdist
+        run: |
+          python -m pip install ./dist/*.tar.gz
+          python -c "import mne_icalabel; print(mne_icalabel.__version__)"
+          python -m pip uninstall -y mne_icalabel
+      - name: Install, test and remove wheel
+        run: |
+          python -m pip install ./dist/*.whl
+          python -c "import mne_icalabel; print(mne_icalabel.__version__)"
+          python -m pip uninstall -y mne_icalabel
       - name: Test extras install
         run: |
-          pip install .[full]
-          python -c 'import mne_icalabel; print(mne_icalabel.__version__)'
+          python -m pip install .[full]
+          python -c "import mne_icalabel; print(mne_icalabel.__version__)"
 
-  # Run unit tests
   test:
     runs-on: ${{ matrix.os }}
     strategy:

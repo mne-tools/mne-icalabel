@@ -113,6 +113,9 @@ all = [
     'mne-icalabel[style]',
     'mne-icalabel[test]',
 ]
+full = [
+    'mne-icalabel[all]',
+]
 
 [project.urls]
 documentation = 'https://mne.tools/mne-icalabel'

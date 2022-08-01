@@ -17,6 +17,9 @@ We begin as always by importing the necessary Python modules and loading some
 intense, we'll also crop the data to 60 seconds; and to save ourselves from
 repeatedly typing ``mne.preprocessing`` we'll directly import a few functions
 and classes from that submodule.
+
+Note: this example involves running the ICA algorithm, which requires `scikit-learn`_
+to be installed. Please install this optional dependency before running the example.
 """
 
 # %%
@@ -47,7 +50,7 @@ raw.load_data()
 #     See :ref:`tut-artifact-overview` for guidance on detecting and
 #     visualizing various types of artifact.
 #
-
+#
 # Example: EOG and ECG artifact repair
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #
@@ -84,7 +87,7 @@ raw.plot(order=artifact_picks, n_channels=len(artifact_picks), show_scrollbars=F
 # `~mne.io.Raw` object around so we can apply the ICA solution to it
 # later.
 
-filt_raw = raw.copy().filter(l_freq=1.0, h_freq=None)
+filt_raw = raw.copy().filter(l_freq=1.0, h_freq=100)
 
 # %%
 # Fitting and plotting the ICA solution
@@ -122,7 +125,13 @@ filt_raw = raw.copy().filter(l_freq=1.0, h_freq=None)
 # we'll also specify a `random seed`_ so that we get identical results each
 # time this tutorial is built by our web servers.
 
-ica = ICA(n_components=15, max_iter="auto", random_state=97)
+# Before fitting ICA, we will apply a common average referencing.
+filt_raw = filt_raw.set_eeg_reference("average")
+
+# Note: we will use the 'infomax' method for fitting the ICA because
+# that is what is supported in the ICLabel model. In practice, one can
+# use any method they choose.
+ica = ICA(n_components=15, max_iter="auto", method="infomax", random_state=97)
 ica.fit(filt_raw)
 ica
 
@@ -140,7 +149,7 @@ ica
 # can use the original, unfiltered `~mne.io.Raw` object:
 
 raw.load_data()
-ica.plot_sources(raw, show_scrollbars=False)
+ica.plot_sources(raw, show_scrollbars=False, show=True)
 
 # %%
 # Here we can pretty clearly see that the first component (``ICA000``) captures
@@ -202,7 +211,9 @@ ica.plot_properties(raw, picks=[0, 1])
 # See :footcite:`iclabel2019` for full details.
 
 ic_labels = label_components(raw, ica, method="iclabel")
-print(ic_labels)
+for ind, label in enumerate(ic_labels):
+    print(label)
+    ica.plot_properties(raw, picks=[ind])
 
 # We can extract the labels of each component and exclude
 # non-brain classified components, keeping 'brain' and 'other'.

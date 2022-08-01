@@ -132,7 +132,13 @@ filt_raw = filt_raw.set_eeg_reference("average")
 # Note: we will use the 'infomax' method for fitting the ICA because
 # that is what is supported in the ICLabel model. In practice, one can
 # use any method they choose.
-ica = ICA(n_components=15, max_iter="auto", method="infomax", random_state=97)
+ica = ICA(
+    n_components=15,
+    max_iter="auto",
+    method="infomax",
+    random_state=97,
+    fit_params=dict(extended=True),
+)
 ica.fit(filt_raw)
 ica
 
@@ -154,8 +160,7 @@ ica.plot_sources(raw, show_scrollbars=False, show=True)
 
 # %%
 # Here we can pretty clearly see that the first component (``ICA000``) captures
-# the EOG signal quite well, and the second component (``ICA001``) looks a lot
-# like `a heartbeat <qrs_>`_ (for more info on visually identifying Independent
+# the EOG signal quite well (for more info on visually identifying Independent
 # Components, `this EEGLAB tutorial`_ is a good resource). We can also
 # visualize the scalp field distribution of each component using
 # `~mne.preprocessing.ICA.plot_components`. These are interpolated based
@@ -173,18 +178,17 @@ ica.plot_sources(raw, show_scrollbars=False, show=True)
 # .. _`qrs`: https://en.wikipedia.org/wiki/QRS_complex
 # .. _`this EEGLAB tutorial`: https://labeling.ucsd.edu/tutorial/labels
 
-
-# sphinx_gallery_thumbnail_number = 0
+# sphinx_gallery_thumbnail_number = 1
 ica.plot_components()
 
 # blinks
 ica.plot_overlay(raw, exclude=[0], picks="eeg")
 
 # %%
-# We can also plot some diagnostics of each IC using
+# We can also plot some diagnostics of IC using
 # `~mne.preprocessing.ICA.plot_properties`:
 
-ica.plot_properties(raw, picks=[0, 1])
+ica.plot_properties(raw, picks=[0])
 
 # %%
 # Selecting ICA components automatically
@@ -206,12 +210,19 @@ ica.plot_properties(raw, picks=[0, 1])
 # predicted probability values for each of these classes in that order.
 # See :footcite:`iclabel2019` for full details.
 
+# Note: there is a warning since the frequency of the data we consider
+# here has a Nyquist rate of 75 Hz, which is lower than the dataset
+# used to train the ICLabel model.
 ic_labels = label_components(raw, ica, method="iclabel")
-for ind, label in enumerate(ic_labels):
-    print(label)
-    ica.plot_properties(raw, picks=[ind])
+
+# ICA0 was correctly identified as an eye blink, whereas ICA12 was
+# also classified as a muscle artifact
+print(ic_labels["labels"])
+ica.plot_properties(raw, picks=[0, 12], verbose=False)
 
 # %%
+# Extract Labels and Reconstruct Raw Data
+# ---------------------------------------
 # We can extract the labels of each component and exclude
 # non-brain classified components, keeping 'brain' and 'other'.
 # "Other" is a catch-all that for non-classifiable components.

@@ -5,8 +5,8 @@ import warnings
 from datetime import date
 
 import mne
-from mne.fixes import _compare_version
 import sphinx_gallery  # noqa: F401
+from mne.fixes import _compare_version
 from sphinx_gallery.sorting import ExampleTitleSortKey
 
 sys.path.insert(0, os.path.abspath(".."))

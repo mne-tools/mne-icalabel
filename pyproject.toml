@@ -1,24 +1,161 @@
+[build-system]
+requires = ['setuptools >= 61.0.0']
+build-backend = 'setuptools.build_meta'
+
+[project]
+name = 'mne-icalabel'
+version = '0.3.dev0'
+description = 'MNE-ICALabel: Automatic labeling of ICA components from MEG, EEG and iEEG data with MNE.'
+readme = 'README.md'
+license = {file = 'LICENSE'}
+requires-python = '~=3.7'
+maintainers = [
+    {name = 'Adam Li', email = 'ali39@jhu.edu'},
+    {name = 'Mathieu Scheltienne', email = 'mathieu.scheltienne@fcbg.ch'},
+]
+keywords = [
+    'meg',
+    'eeg',
+    'ieeg',
+    'neuroscience',
+    'ica',
+]
+classifiers = [
+    'Operating System :: Microsoft :: Windows',
+    'Operating System :: Unix',
+    'Operating System :: MacOS',
+    'Programming Language :: Python :: 3 :: Only',
+    'Programming Language :: Python :: 3.7',
+    'Programming Language :: Python :: 3.8',
+    'Programming Language :: Python :: 3.9',
+    'Programming Language :: Python :: 3.10',
+    'Natural Language :: English',
+    'License :: OSI Approved :: BSD License',
+    'Intended Audience :: Science/Research',
+    'Intended Audience :: Developers',
+    'Topic :: Software Development',
+    'Topic :: Scientific/Engineering',
+]
+dependencies = [
+    'numpy >= 1.16.0',
+    'scipy >= 1.2.0',
+    'mne >= 1.0',
+    'torch',
+    'importlib-resources; python_version<"3.9"'
+]
+
+[project.optional-dependencies]
+build = [
+    'build',
+    'twine',
+]
+doc = [
+    'matplotlib',
+    'memory_profiler',
+    'mne-bids',
+    'numpydoc',
+    'pooch',
+    'pydata-sphinx-theme',
+    'sphinx',
+    'sphinxcontrib-bibtex',
+    'sphinx-autodoc-typehints',
+    'sphinx-copybutton',
+    'sphinx-gallery',
+    'sphinx_rtd_theme',
+    'typing-extensions',
+]
+ica = [
+    'joblib',
+    'python-picard',
+    'scikit-learn',
+]
+style = [
+    'black',
+    'codespell',
+    'isort',
+    'flake8',
+    'pydocstyle[toml]',
+]
+test = [
+    'black',
+    'check-manifest',
+    'codespell',
+    'isort',
+    'flake8',
+    'flake8-array-spacing',
+    'joblib',
+    'matplotlib',
+    'mne-bids',
+    'mne-qt-browser',
+    'mypy',
+    'numpydoc',
+    'pandas',
+    'pooch',
+    'pydocstyle',
+    'pymatreader',
+    'pytest',
+    'pytest-cov',
+    'pytest-timeout',
+    'pytest-harvest',
+    'python-picard',
+    'qtpy',
+    'PyQt5',
+    'scikit-learn',
+    'twine',
+    'wheel',
+
+]
+all = [
+    'mne-icalabel[build]',
+    'mne-icalabel[doc]',
+    'mne-icalabel[ica]'
+    'mne-icalabel[style]',
+    'mne-icalabel[test]',
+]
+
+[project.urls]
+documentation = 'https://mne.tools/mne-icalabel'
+source = 'https://github.com/mne-tools/mne-icalabel'
+tracker = 'https://github.com/mne-tools/mne-icalabel/issues'
+
+[project.scripts]
+mne_gui_ic_annotation = 'mne_icalabel.commands.mne_gui_ic_annotation:main'
+
+[tool.setuptools]
+include-package-data = false
+
+[tool.setuptools.packages.find]
+include = ['mne_icalabel*']
+exclude = ['mne_icalabel*tests']
+
 [tool.black]
 line-length = 100
-
+target-version = ['py38']
 include = '\.pyi?$'
-
-exclude = '''
+extend-exclude = '''
 (
       __pycache__
-    | \.git
-    | \.mypy_cache
-    | \.pytest_cache
-    | \.vscode
-    | \.venv
-    | \bdist\b
-    | \bdoc\b
+    | \.github
+    | setup.py
+    | doc/
+    | examples/
 )
 '''
-[tool.isort]
-profile = "black"
-multi_line_output = 3
 
-[build-system]
-requires = ["setuptools", "wheel"]
-build-backend = "setuptools.build_meta"
+[tool.isort]
+profile = 'black'
+multi_line_output = 3
+line_length = 100
+py_version = 38
+extend_skip_glob = [
+    'setup.py',
+    'doc/*',
+    'examples/*',
+]
+
+[tool.pydocstyle]
+convention = 'numpy'
+ignore-decorators = '(copy_doc|property|.*setter|.*getter|pyqtSlot|Slot)'
+match = '^(?!setup|__init__|test_).*\.py'
+match-dir = '^(?!build|dist|\.).*'
+add_ignore = 'D100,D104,D107'

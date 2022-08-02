@@ -121,6 +121,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+          path: main
       - name: Setup Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
         with:
@@ -129,7 +131,7 @@ jobs:
       - name: Install package
         run: |
           python -m pip install --progress-bar off --upgrade pip setuptools wheel
-          python -m pip install --progress-bar off .[test]
+          python -m pip install --progress-bar off main/.[test]
       - name: Install MNE (main)
         if: "matrix.mne == 'main'"
         run: |
@@ -138,9 +140,7 @@ jobs:
       - name: Display MNE infos
         run: mne sys_info
       - name: Run pytest
-        shell: bash
-        run: |
-          python -m pytest ./mne_icalabel --cov=mne_icalabel --cov-report=xml --cov-config=setup.cfg --verbose --ignore mne-python -vv mne_icalabel/gui
+        run: pytest main/mne_icalabel --cov=main/mne_icalabel --cov-report=xml --cov-config=pyproject.toml
       - name: Upload coverage stats to codecov
         if: ${{ matrix.os == 'ubuntu' && matrix.python-version == '3.10' && matrix.mne == 'stable' }}
         uses: codecov/codecov-action@v3

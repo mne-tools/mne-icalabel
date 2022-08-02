@@ -29,6 +29,7 @@ class ICAComponentLabeler(QMainWindow):
     ----------
     inst : Raw | Epochs
     ica : ICA
+    show : bool
     """
 
     def __init__(self, inst: Union[BaseRaw, BaseEpochs], ica: ICA, show: bool = True) -> None:
@@ -163,7 +164,7 @@ class ICAComponentLabeler(QMainWindow):
         if ica.current_fit == "unfitted":
             raise ValueError(
                 "ICA instance should be fit on the raw data before "
-                "running the ICA labeling GUI. Run `ica.fit(inst)`."
+                "running the ICA labeling GUI. Run 'ica.fit(inst)'."
             )
 
     # - Properties ------------------------------------------------------------

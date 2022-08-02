@@ -20,8 +20,13 @@ def _validate_inst_and_ica(inst: Union[BaseRaw, BaseEpochs], ica: ICA):
         )
 
 
-def _check_qt_version() -> Union[Tuple[None, None], Tuple[str, str]]:
+def _check_qt_version(raise_on_error: bool = False) -> Union[Tuple[None, None], Tuple[str, str]]:
     """Check if Qt is available.
+
+    Parameters
+    ----------
+    raise_on_error : bool
+        If True, missing Qt bindings will raise an error. Else 'api' and 'version' are set to None.
 
     Returns
     -------
@@ -34,6 +39,8 @@ def _check_qt_version() -> Union[Tuple[None, None], Tuple[str, str]]:
         from qtpy import API_NAME as api
         from qtpy import QtCore
     except Exception:
+        if raise_on_error:
+            raise
         api = version = None
     else:
         try:  # pyside

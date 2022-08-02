@@ -84,12 +84,19 @@ def get_psds(
     psds_mean : ndarray, shape(n_channels, n_freqs)
          Mean of power spectral densities on channel.
     """
+    if np.any(np.isnan(inst.get_data())) == True:
+        raise ValueError("One or more channels contains NaN values")
     picks = _picks_to_idx(ica.n_components_, picks)
     kind, dropped_indices, epochs_src, data = _prepare_data_ica_properties(
         inst, ica, reject_by_annotation=True, reject="auto"
     )
     nyquist = inst.info["sfreq"] / 2.0
-    fmax = min(inst.info["lowpass"] * 1.25, nyquist)
+    if fmax is None:
+        fmax = min(inst.info["lowpass"] * 1.25, nyquist)
+    elif isinstance(fmax, float):
+        fmax = fmax
+    else:
+        raise ValueError(f"fmax should be float, instead found {type(fmax)}.")
     _check_option("normalization", normalization, ["length", "full"])
     psds, freq = psd_multitaper(
         epochs_src,

@@ -101,6 +101,7 @@ test = [
 all = [
     'mne-icalabel[build]',
     'mne-icalabel[doc]',
+    'mne-icalabel[gui]',
     'mne-icalabel[ica]',
     'mne-icalabel[style]',
     'mne-icalabel[test]',

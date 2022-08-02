@@ -79,7 +79,7 @@ style = [
     'pydocstyle[toml]',
 ]
 test = [
-    'joblib',
+    'mne-icalabel[ica]',
     'matplotlib',
     'mne-bids',
     'mne-qt-browser',
@@ -92,10 +92,8 @@ test = [
     'pytest-cov',
     'pytest-timeout',
     'pytest-harvest',
-    'python-picard',
     'qtpy',
     'PyQt5',
-    'scikit-learn',
 ]
 all = [
     'mne-icalabel[build]',

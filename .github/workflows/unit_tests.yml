@@ -105,20 +105,7 @@ jobs:
       matrix:
         os: [ubuntu, macos, windows]
         python-version: [3.7, "3.10"]  # oldest and newest supported versions
-        mne: [stable]
-        include:
-          - os: ubuntu-latest
-            python-version: 3.7
-            mne: main
-          - os: ubuntu-latest
-            python-version: 3.8
-            mne: main
-          - os: ubuntu-latest
-            python-version: 3.9
-            mne: main
-          - os: ubuntu-latest
-            python-version: "3.10"
-            mne: main
+        mne: [stable, main]
     name: pytest ${{ matrix.os }} - py${{ matrix.python-version }} - MNE ${{ matrix.mne }}
     runs-on: ${{ matrix.os }}-latest
     defaults:

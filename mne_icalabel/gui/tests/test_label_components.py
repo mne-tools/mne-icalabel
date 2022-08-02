@@ -5,9 +5,9 @@ import pytest
 from mne.datasets import testing
 from mne.io import read_raw_edf
 from mne.preprocessing import ICA
-from mne.utils import requires_version
 
 import mne_icalabel
+from mne_icalabel.utils._testing import requires_version
 
 
 @pytest.fixture
@@ -50,7 +50,7 @@ def _fitted_ica(load_raw_and_fit_ica):
     return raw, ica.copy()
 
 
-@requires_version("mne", "1.1dev0")
+@requires_version("mne", "1.1")
 @testing.requires_testing_data
 def test_label_components_gui_io(_fitted_ica, _label_ica_components):
     """Test the input/output of the labeling ICA components GUI."""
@@ -63,7 +63,7 @@ def test_label_components_gui_io(_fitted_ica, _label_ica_components):
         _label_ica_components(raw, ica_copy)
 
 
-@requires_version("mne", "1.1dev0")
+@requires_version("mne", "1.1")
 @testing.requires_testing_data
 def test_label_components_gui_display(_fitted_ica, _label_ica_components):
     raw, ica = _fitted_ica

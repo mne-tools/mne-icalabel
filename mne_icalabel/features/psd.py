@@ -84,7 +84,7 @@ def get_psds(
     psds : array of shape (n_channels, n_freqs)
          The independent component power spectral density.
     """
-    if np.any(np.isnan(inst.get_data())) == True:
+    if np.any(np.isnan(inst.get_data())):
         raise ValueError("One or more channels contains NaN values")
     picks = _picks_to_idx(ica.n_components_, picks)
     kind, dropped_indices, epochs_src, data = _prepare_data_ica_properties(

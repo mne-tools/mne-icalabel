@@ -1,5 +1,5 @@
 import sys
-from typing import Union
+from typing import Tuple, Union
 
 from mne import BaseEpochs
 from mne.fixes import _compare_version
@@ -20,8 +20,16 @@ def _validate_inst_and_ica(inst: Union[BaseRaw, BaseEpochs], ica: ICA):
         )
 
 
-def _check_qt_version(*, return_api=False):
-    """Check if Qt is installed."""
+def _check_qt_version() -> Union[Tuple[None, None], Tuple[str, str]]:
+    """Check if Qt is available.
+
+    Returns
+    -------
+    api : str | None
+        Which API is used. One of 'PyQt5', 'PyQt6', 'PySide2', 'PySide6'.
+    version : str | None
+        Version of the API.
+    """
     try:
         from qtpy import API_NAME as api
         from qtpy import QtCore
@@ -39,7 +47,4 @@ def _check_qt_version(*, return_api=False):
                     f"got {version}. Please upgrade e.g. with:\n\n"
                     f'    pip install "{api}>=5.10"\n'
                 )
-    if return_api:
-        return version, api
-    else:
-        return version
+    return api, version

@@ -84,11 +84,10 @@ style = [
     'pydocstyle[toml]',
 ]
 test = [
-    'mne-icalabel[gui]'
+    'mne-icalabel[gui]',
     'mne-icalabel[ica]',
     'matplotlib',
     'mne-bids',
-    'numpydoc',
     'pandas',
     'pooch',
     'pydocstyle',

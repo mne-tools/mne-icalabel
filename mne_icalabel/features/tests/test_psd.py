@@ -28,9 +28,7 @@ def test_psd_nan():
     pytest.raises(ValueError, get_psds, ica, inst_2)
 
 
-@pytest.mark.parametrize(
-    "picks", [0, [0, 1, 2], slice(1, 3), np.array([1, 2])], "fmax", [[210, 410]]
-)
+@pytest.mark.parametrize("picks", [0, [0, 1, 2], slice(1, 3), np.array([1, 2])])
 def test_psd_arguments(picks):
     """Test arguments that influence the output shape."""
     psds = get_psds(ica, inst, picks=picks)

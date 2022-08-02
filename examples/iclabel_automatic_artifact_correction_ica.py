@@ -213,7 +213,7 @@ ica.plot_properties(raw, picks=[0])
 # Note: there is a warning since the frequency of the data we consider
 # here has a Nyquist rate of 75 Hz, which is lower than the dataset
 # used to train the ICLabel model.
-ic_labels = label_components(raw, ica, method="iclabel")
+ic_labels = label_components(filt_raw, ica, method="iclabel")
 
 # ICA0 was correctly identified as an eye blink, whereas ICA12 was
 # also classified as a muscle artifact

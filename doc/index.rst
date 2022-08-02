@@ -6,7 +6,7 @@ from an `Independent Component Analysis (ICA) <https://en.wikipedia.org/wiki/Ind
 
 Scalp electroencephalography (EEG) and magnetoencephalography (MEG) analysis is typically very noisy
 and contains various non-neural signals, such as heart beat artifacts. Independent
-component analysis (ICA) is a common procedure to remove these artifacts [@Bell1995].
+component analysis (ICA) is a common procedure to remove these artifacts.
 However, removing artifacts requires manual annotation of ICA components, which is
 subject to human error and very laborious when operating on large datasets. The first
 few version of MNE-ICALabel replicated the popular ICLabel model for Python (previously only available

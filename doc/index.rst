@@ -5,7 +5,7 @@ mne-icalabel is a Python package for labeling independent components that stem
 from an `Independent Component Analysis (ICA) <https://en.wikipedia.org/wiki/Independent_component_analysis>`_.
 
 Scalp electroencephalography (EEG) and magnetoencephalography (MEG) analysis is typically very noisy
-and contains various non-neural signals, such as heart beat artifacts. Independent
+and contains various non-neural signals, such as heartbeat artifacts. Independent
 component analysis (ICA) is a common procedure to remove these artifacts.
 However, removing artifacts requires manual annotation of ICA components, which is
 subject to human error and very laborious when operating on large datasets. The first

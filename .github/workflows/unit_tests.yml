@@ -80,7 +80,7 @@ jobs:
           python -m pip install --progress-bar off --upgrade pip setuptools wheel
           python -m pip install --progress-bar off .[build]
       - name: Test package install
-        run: python -c "import mne_icalabel; print(mne_icalabel.__version__)"
+        run: python -c "import blabla; print(mne_icalabel.__version__)"
       - name: Remove package install
         run: python -m pip uninstall -y mne_icalabel
       - name: Build package

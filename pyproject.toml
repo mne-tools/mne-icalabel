@@ -79,12 +79,6 @@ style = [
     'pydocstyle[toml]',
 ]
 test = [
-    'black',
-    'check-manifest',
-    'codespell',
-    'isort',
-    'flake8',
-    'flake8-array-spacing',
     'joblib',
     'matplotlib',
     'mne-bids',
@@ -102,9 +96,6 @@ test = [
     'qtpy',
     'PyQt5',
     'scikit-learn',
-    'twine',
-    'wheel',
-
 ]
 all = [
     'mne-icalabel[build]',

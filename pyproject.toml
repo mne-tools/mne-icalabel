@@ -88,7 +88,7 @@ test = [
     'pooch',
     'pydocstyle',
     'pymatreader',
-    'pytest',
+    'pytest>=6.0.0',
     'pytest-cov',
     'pytest-timeout',
     'pytest-harvest',
@@ -160,7 +160,8 @@ add_ignore = 'D100,D104,D107'
 ignore_missing_imports = true
 no_site_packages = true
 
-[tool.pytest]
+[tool.pytest.ini_options]
+minversion = '6.0'
 addopts = '--verbose'
 
 [tool.coverage.run]

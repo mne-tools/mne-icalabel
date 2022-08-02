@@ -139,6 +139,15 @@ jobs:
           python -m pip install git+https://github.com/mne-tools/mne-python
       - name: Display MNE infos
         run: mne sys_info
+      - name: Retrieve MNE testing dataset version
+        run: curl https://raw.githubusercontent.com/mne-tools/mne-testing-data/master/version.txt -o mne_testing_data_version.txt
+      - name: Cache MNE testing dataset
+        uses: actions/cache@v3
+        with:
+          key: ${{ matrix.os }}-${{ hashFiles('mne_testing_data_version.txt') }}
+          path: ~/mne_data/MNE-testing-data
+      - name: Download MNE testing dataset
+        run: python -c "import mne; mne.datasets.testing.data_path()"
       - name: Run pytest
         run: pytest main/mne_icalabel --cov=main/mne_icalabel --cov-report=xml --cov-config=pyproject.toml
       - name: Upload coverage stats to codecov

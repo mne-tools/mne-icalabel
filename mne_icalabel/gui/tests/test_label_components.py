@@ -1,14 +1,20 @@
 import pytest
 from mne.datasets import testing
-from mne.io import read_raw_edf
+from mne.io import BaseRaw, read_raw
 from mne.preprocessing import ICA
 
 from mne_icalabel.gui import label_ica_components
 from mne_icalabel.utils._testing import requires_version
 
-raw = read_raw_edf(testing.data_path() / "EDF" / "test_reduced.edf", preload=True)
-raw.filter(l_freq=1, h_freq=100)
-ica = ICA(n_components=15, random_state=12345)
+directory = testing.data_path() / "MEG" / "sample"
+raw = read_raw(directory / "sample_audvis_trunc_raw.fif", preload=False)
+raw.pick_types(eeg=True, exclude="bads")
+raw.load_data()
+# preprocess
+with raw.info._unlock():  # fake filtering, testing dataset is filtered between [0.1, 80] Hz
+    raw.info["highpass"] = 1.0
+    raw.info["lowpass"] = 100.0
+ica = ICA(n_components=5, random_state=12345, fit_params=dict(tol=1e-1))
 ica.fit(raw)
 
 
@@ -17,8 +23,8 @@ def test_label_components_gui_display():
     ica_ = ica.copy()
     gui = label_ica_components(raw, ica_, show=False)
     # test setting the label
-    assert gui.inst == raw
-    assert gui.ica == ica
+    assert isinstance(gui.inst, BaseRaw)
+    assert isinstance(gui.ica, ICA)
     assert gui.n_components_ == ica.n_components_
     # the initial component should be 0
     assert gui.selected_component == 0

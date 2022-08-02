@@ -9,7 +9,7 @@ from mne_icalabel.utils._testing import requires_version
 
 raw = read_raw_edf(testing.data_path() / "EDF" / "test_reduced.edf", preload=True)
 raw.filter(l_freq=1, h_freq=100)
-ica = ICA(n_components=10, random_state=12345)
+ica = ICA(n_components=15, random_state=12345)
 ica.fit(raw)
 
 

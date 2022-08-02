@@ -161,17 +161,19 @@ ignore_missing_imports = true
 no_site_packages = true
 
 [tool.pytest]
-addopts = --verbose
+addopts = '--verbose'
 
 [tool.coverage.run]
 branch = true
 cover_pylib = false
-source = 'mne_icalabel'
+source = [
+    'mne_icalabel',
+]
 omit = [
     'mne_icalabel/conftest.py',
     'mne_icalabel/**/__init__.py',
-    'mne_icalabel/**/tests/**',
     'mne_icalabel/commands/*',
+    '**/tests/**',
 ]
 
 [tool.coverage.report]

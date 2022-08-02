@@ -149,7 +149,7 @@ jobs:
         run: |
           python -m pytest ./mne_icalabel --cov=mne_icalabel --cov-report=xml --cov-config=setup.cfg --verbose --ignore mne-python -vv mne_icalabel/gui
       - name: Upload coverage stats to codecov
-        if: ${{ matrix.os == 'ubuntu' && matrix.python-version == "3.10" && matrix.mne == "stable" }}
+        if: ${{ matrix.os == 'ubuntu' && matrix.python-version == '3.10' && matrix.mne == 'stable' }}
         uses: codecov/codecov-action@v3
         with:
           files: ./coverage.xml

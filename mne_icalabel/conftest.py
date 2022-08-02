@@ -33,13 +33,12 @@ def matplotlib_config():
     """Configure matplotlib for viz tests."""
     from matplotlib import cbook, use
 
-    want = "agg"  # don't pop up windows
     with warnings.catch_warnings(record=True):  # ignore warning
         warnings.filterwarnings("ignore")
-        use(want, force=True)
+        use("agg", force=True)
     import matplotlib.pyplot as plt
 
-    assert plt.get_backend() == want
+    assert plt.get_backend() == "agg"
     # overwrite some params that can horribly slow down tests that
     # users might have changed locally (but should not otherwise affect
     # functionality)
@@ -60,7 +59,6 @@ def matplotlib_config():
 @pytest.fixture(autouse=True)
 def close_all():
     """Close all matplotlib plots, regardless of test status."""
-    # This adds < 1 µS in local testing, and we have ~2500 tests, so ~2 ms max
     import matplotlib.pyplot as plt
 
     yield

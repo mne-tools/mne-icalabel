@@ -81,8 +81,8 @@ def get_psds(
 
     Returns
     -------
-    psds_mean : ndarray, shape(n_channels, n_freqs)
-         Mean of power spectral densities on channel.
+    psds : array of shape (n_channels, n_freqs)
+         The independent component power spectral density.
     """
     if np.any(np.isnan(inst.get_data())) == True:
         raise ValueError("One or more channels contains NaN values")

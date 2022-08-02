@@ -65,6 +65,11 @@ doc = [
     'sphinx_rtd_theme',
     'typing-extensions',
 ]
+gui = [
+    'mne-qt-browser',
+    'PyQt5',
+    'qtpy',
+]
 ica = [
     'joblib',
     'python-picard',
@@ -79,10 +84,10 @@ style = [
     'pydocstyle[toml]',
 ]
 test = [
+    'mne-icalabel[gui]'
     'mne-icalabel[ica]',
     'matplotlib',
     'mne-bids',
-    'mne-qt-browser',
     'numpydoc',
     'pandas',
     'pooch',
@@ -92,8 +97,6 @@ test = [
     'pytest-cov',
     'pytest-timeout',
     'pytest-harvest',
-    'qtpy',
-    'PyQt5',
 ]
 all = [
     'mne-icalabel[build]',

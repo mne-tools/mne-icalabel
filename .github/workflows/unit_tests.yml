@@ -126,9 +126,6 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
           architecture: 'x64'
-      - name: Setup xvfb
-        if: "matrix.os == 'ubuntu'"
-        run: ./scripts/setup_xvfb.sh
       - name: Install package
         run: |
           python -m pip install --progress-bar off --upgrade pip setuptools wheel
@@ -140,10 +137,6 @@ jobs:
           python -m pip install git+https://github.com/mne-tools/mne-python
       - name: Display MNE infos
         run: mne sys_info
-      - shell: bash -el {0}
-        run: |
-          QT_QPA_PLATFORM=xcb LIBGL_DEBUG=verbose LD_DEBUG=libs
-        name: 'Check Qt GL'
       - name: Run pytest
         shell: bash
         run: |

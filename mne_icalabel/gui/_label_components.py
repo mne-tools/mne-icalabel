@@ -163,7 +163,7 @@ class ICAComponentLabeler(QMainWindow):
         _validate_type(ica, ICA, "ica", "ICA")
         if ica.current_fit == "unfitted":
             raise ValueError(
-                "ICA instance should be fit on the raw data before "
+                "ICA instance should be fitted on raw/epochs data before "
                 "running the ICA labeling GUI. Run 'ica.fit(inst)'."
             )
 

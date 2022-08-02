@@ -138,10 +138,6 @@ jobs:
         run: |
           python -m pip uninstall -y mne
           python -m pip install git+https://github.com/mne-tools/mne-python
-      - name: Display versions and environments infos
-        run: |
-          which python
-          python --version
       - name: Display MNE infos
         run: mne sys_info
       - shell: bash -el {0}
@@ -164,16 +160,17 @@ jobs:
     needs: [style, build, test]
     if: startsWith(github.ref, 'refs/tags/')
     steps:
-      - uses: actions/checkout@v3
-
-      - name: Setup Python
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Setup Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
         with:
-          python-version: "3.10"
-
-      - name: Install requirements
+          python-version: 3.9
+          architecture: 'x64'
+      - name: Install dependencies
         run: |
-          pip install --upgrade --progress-bar off pip setuptools wheel twine
+          python -m pip install --progress-bar off --upgrade pip setuptools wheel
+          python -m pip install --progress-bar off .[build]
 
       - name: Prepare environment
         run: |

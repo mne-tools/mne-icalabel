@@ -162,7 +162,8 @@ no_site_packages = true
 
 [tool.pytest.ini_options]
 minversion = '6.0'
-addopts = '--verbose'
+addopts = '--durations 20 --junit-xml=junit-results.xml --verbose'
+filterwarnings = []
 
 [tool.coverage.run]
 branch = true

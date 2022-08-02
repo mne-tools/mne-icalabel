@@ -123,7 +123,9 @@ jobs:
           architecture: 'x64'
       - name: Retrieve xvfb setup script
         if: matrix.os == 'ubuntu'
-        run: curl https://raw.githubusercontent.com/mne-tools/mne-python/main/tools/setup_xvfb.sh -o setup_xvfb.sh
+        run: |
+          curl https://raw.githubusercontent.com/mne-tools/mne-python/main/tools/setup_xvfb.sh -o setup_xvfb.sh
+          chmod +x setup_xvfb.sh
       - name: Setup xvfb
         if: matrix.os == 'ubuntu'
         run: ./setup_xvfb.sh

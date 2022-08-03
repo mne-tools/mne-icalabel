@@ -1,11 +1,13 @@
 """Configure details for documentation with sphinx."""
 import os
+import subprocess
 import sys
 import warnings
 from datetime import date
 
 import mne
 import sphinx_gallery  # noqa: F401
+from mne.fixes import _compare_version
 from sphinx_gallery.sorting import ExampleTitleSortKey
 
 sys.path.insert(0, os.path.abspath(".."))
@@ -201,8 +203,8 @@ html_sidebars = {
 
 html_context = {
     'versions_dropdown': {
-        'dev': 'v0.2 (devel)',
-        'stable': 'v0.1',
+        'dev': 'v0.3 (devel)',
+        'stable': 'v0.2',
         'v0.1': 'v0.1',
     },
 }
@@ -238,6 +240,14 @@ else:
 os.environ['_MNE_BUILDING_DOC'] = 'true'
 scrapers = ('matplotlib',)
 try:
+    import mne_qt_browser
+    _min_ver = _compare_version(mne_qt_browser.__version__, '>=', '0.2')
+    if mne.viz.get_browser_backend() == 'qt' and _min_ver:
+        scrapers += (mne.viz._scraper._MNEQtBrowserScraper(),)
+except ImportError:
+    pass
+
+try:
     with warnings.catch_warnings():
         warnings.filterwarnings("ignore", category=DeprecationWarning)
         import pyvista
@@ -246,26 +256,45 @@ except Exception:
     pass
 else:
     scrapers += ('pyvista',)
+
 if 'pyvista' in scrapers:
     brain_scraper = mne.viz._brain._BrainScraper()
     scrapers = list(scrapers)
     scrapers.insert(scrapers.index('pyvista'), brain_scraper)
     scrapers = tuple(scrapers)
 
+compress_images = ('images', 'thumbnails')
+# let's make things easier on Windows users
+# (on Linux and macOS it's easy enough to require this)
+if sys.platform.startswith('win'):
+    try:
+        subprocess.check_call(['optipng', '--version'])
+    except Exception:
+        compress_images = ()
+
 sphinx_gallery_conf = {
-    'doc_module': 'mne_icalabel',
+    'doc_module': ('mne_icalabel',),
     'reference_url': {
         'mne_icalabel': None,
     },
-    'backreferences_dir': 'generated',
-    'plot_gallery': 'True',  # Avoid annoying Unicode/bool default warning
-    'within_subsection_order': ExampleTitleSortKey,
     'examples_dirs': ['../examples'],
     'gallery_dirs': ['auto_examples'],
-    'filename_pattern': '^((?!sgskip).)*$',
-    'matplotlib_animations': True,
-    'compress_images': ('images', 'thumbnails'),
+    'backreferences_dir': 'generated',
+    'plot_gallery': 'True',  # Avoid annoying Unicode/bool default warning
+    'thumbnail_size': (160, 112),
+    'remove_config_comments': True,
+    'min_reported_time': 1.,
+    'abort_on_example_error': False,
+    # 'reset_modules_order': 'both',
     'image_scrapers': scrapers,
+    'show_memory': not sys.platform.startswith(('win', 'darwin')),
+    'line_numbers': False,  # messes with style
+    'within_subsection_order': ExampleTitleSortKey,
+    'capture_repr': ('_repr_html_',),
+    'junit': os.path.join('..', 'test-results', 'sphinx-gallery', 'junit.xml'),
+    'matplotlib_animations': True,
+    'compress_images': compress_images,
+    'filename_pattern': '^((?!sgskip).)*$',
 }
 
 # sphinxcontrib-bibtex

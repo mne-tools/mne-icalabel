@@ -94,6 +94,7 @@ jobs:
               pip install --upgrade --progress-bar off -r requirements_doc.txt
               pip install --upgrade --progress-bar off PyQt5
               python -m pip uninstall -yq sphinx-gallery mne-qt-browser
+              python -m pip install --upgrade --no-deps https://github.com/mne-tools/mne-python/archive/main.zip
               # TODO: Revert to upstream/main once https://github.com/mne-tools/mne-qt-browser/pull/105 is merged
               python -m pip install --upgrade --progress-bar off https://github.com/mne-tools/mne-qt-browser/zipball/main https://github.com/sphinx-gallery/sphinx-gallery/zipball/master
         
@@ -111,6 +112,7 @@ jobs:
         # - run:
         #     name: Check Qt
         #     command: LD_DEBUG=libs python -c "from PySide6.QtWidgets import QApplication, QWidget; app = QApplication([])"
+
 
         # Look at what we have and fail early if there is some library conflict
         - run:
@@ -149,11 +151,14 @@ jobs:
         - store_artifacts:
             path: doc/_build/html/
             destination: dev
-
+        - store_artifacts:
+            path: doc/_build/html_stable/
+            destination: stable
         - persist_to_workspace:
             root: doc/_build
             paths:
               - html
+              - html_stable
 
     linkcheck:
       # there are a few files excluded from this for expediency, see Makefile

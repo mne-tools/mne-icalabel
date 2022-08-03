@@ -90,8 +90,6 @@ test = [
     'mne-bids',
     'pandas',
     'pooch',
-    'pydocstyle',
-    'pymatreader',
     'pytest>=6.0.0',
     'pytest-cov',
     'pytest-harvest',

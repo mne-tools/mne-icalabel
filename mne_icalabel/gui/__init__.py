@@ -26,7 +26,7 @@ def label_ica_components(inst, ica: ICA, show: bool = True, block: bool = False)
     from ._label_components import ICAComponentLabeler
 
     # get application
-    app = _init_mne_qtapp(pg_app=True)
+    app = _init_mne_qtapp()
     gui = ICAComponentLabeler(inst=inst, ica=ica, show=show)
     if block:
         _qt_app_exec(app)

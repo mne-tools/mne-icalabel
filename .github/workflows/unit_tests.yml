@@ -1,4 +1,4 @@
-name: "unit tests"
+name: unit tests
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.number }}-${{ github.event.type }}
   cancel-in-progress: true

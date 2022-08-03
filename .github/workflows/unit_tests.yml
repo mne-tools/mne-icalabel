@@ -150,19 +150,17 @@ jobs:
         run: |
           python -c "import mne; mne.datasets.testing.data_path()"
           python -c "import mne_icalabel; mne_icalabel.datasets.icalabel.data_path()"
-      # - name: Run pytest  # headless via Xvfb on linux
-      #   uses: GabrielBB/xvfb-action@v1.6
-      #   with:
-      #     run: pytest main/mne_icalabel --cov=main/mne_icalabel --cov-report=xml --cov-config=main/pyproject.toml
-      - name: Run pytest
-        run: pytest main/mne_icalabel --cov=main/mne_icalabel --cov-report=xml --cov-config=main/pyproject.toml
+      - name: Run pytest  # headless via Xvfb on linux
+        uses: GabrielBB/xvfb-action@v1.6
+        with:
+          run: pytest main/mne_icalabel --cov=main/mne_icalabel --cov-report=xml --cov-config=main/pyproject.toml
       - name: Upload coverage stats to codecov
         if: ${{ matrix.os == 'ubuntu' && matrix.python-version == '3.10' && matrix.mne == 'stable' }}
         uses: codecov/codecov-action@v3
         with:
           files: ./coverage.xml
-          fail_ci_if_error: true # optional (default = false)
-          verbose: true # optional (default = false)
+          fail_ci_if_error: true
+          verbose: true
 
   release:
     name: Release

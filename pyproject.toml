@@ -97,7 +97,6 @@ test = [
     'pytest-harvest',
     'pytest-qt',
     'pytest-timeout',
-    'pytest-xvfb',
 ]
 all = [
     'mne-icalabel[build]',

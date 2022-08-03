@@ -10,7 +10,7 @@ readme = 'README.md'
 license = {file = 'LICENSE'}
 requires-python = '~=3.7'
 maintainers = [
-    {name = 'Adam Li', email = 'ali39@jhu.edu'},
+    {name = 'Adam Li', email = 'adam.li@columbia.edu'},
     {name = 'Mathieu Scheltienne', email = 'mathieu.scheltienne@fcbg.ch'},
 ]
 keywords = [

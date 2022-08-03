@@ -86,7 +86,7 @@ jobs:
             name: Get Python running and install dependencies
             command: |
               python -m pip install --progress-bar off --upgrade pip setuptools wheel
-              python -m pip install --progress-bar off -e .
+              python -m pip install --progress-bar off .
               python -m pip install --progress-bar off .[doc,gui]
               python -m pip install --progress-bar off git+https://github.com/mne-tools/mne-python
               python -m pip install --progress-bar off git+https://github.com/mne-tools/mne-qt-browser
@@ -105,7 +105,7 @@ jobs:
             name: Check installation
             command: |
                pip freeze
-               python -c "import mne_icalabel; print('Imported mne-icalabel correctly');"
+               python -c "print('Imported mne-icalabel correctly'); import mne_icalabel;"
                mne sys_info
                LIBGL_DEBUG=verbose python -c "import matplotlib.pyplot as plt; plt.figure()"
                python -c "import mne; mne.set_config('MNE_LOGGING_LEVEL', 'info')"

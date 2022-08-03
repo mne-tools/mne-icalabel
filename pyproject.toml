@@ -67,6 +67,7 @@ doc = [
     'typing-extensions',
 ]
 gui = [
+    'matplotlib',
     'mne-qt-browser',
     'PyQt5',
     'qtpy',
@@ -87,7 +88,6 @@ style = [
 test = [
     'mne-icalabel[gui]',
     'mne-icalabel[ica]',
-    'matplotlib',
     'mne-bids',
     'pandas',
     'pymatreader',

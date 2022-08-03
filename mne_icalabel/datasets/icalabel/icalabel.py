@@ -1,8 +1,3 @@
-# Authors: Adam Li
-# License: BSD (3-clause)
-#
-# This downloads ICLabel model testing data.
-
 import os
 import shutil
 from functools import partial

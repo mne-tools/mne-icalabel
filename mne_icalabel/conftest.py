@@ -1,12 +1,9 @@
-# -*- coding: utf-8 -*-
 # Author: Eric Larson <larson.eric.d@gmail.com>
 #
 # License: BSD-3-Clause
 import warnings
 
 import pytest
-
-# most of this adapted from MNE-Python
 
 
 def pytest_configure(config):

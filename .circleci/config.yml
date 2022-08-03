@@ -105,8 +105,8 @@ jobs:
             name: Check installation
             command: |
                pip freeze
+               python -c "import mne_icalabel; print('Imported mne-icalabel correctly');"
                mne sys_info
-               python -c "import mne_icalabel;"
                LIBGL_DEBUG=verbose python -c "import matplotlib.pyplot as plt; plt.figure()"
                python -c "import mne; mne.set_config('MNE_LOGGING_LEVEL', 'info')"
                python -c "import mne; level = mne.get_config('MNE_LOGGING_LEVEL'); assert level.lower() == 'info', repr(level)"

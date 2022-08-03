@@ -68,11 +68,14 @@ jobs:
         - run:
             name: DEBUG
             command: ls -l
-        - run:
-            name: Install relevant dependencies
-            command: |
-              set -e
-              ./scripts/circle_ci_dependencies.sh
+        # - run:
+        #     name: Install relevant dependencies
+        #     command: |
+        #       set -e
+        #       curl https://raw.githubusercontent.com/mne-tools/mne-python/main/tools/circle_ci_dependencies.sh -o circle_ci_dependencies.sh
+        #       chmod +x circle_ci_dependencies.sh
+        #       ./circle_ci_dependencies.sh
+
         - restore_cache:
             keys:
               - pip-cache

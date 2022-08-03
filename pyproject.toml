@@ -39,7 +39,7 @@ classifiers = [
 dependencies = [
     'numpy >= 1.16.0',
     'scipy >= 1.2.0',
-    'mne >= 1.0',
+    'mne >= 1.1',
     'pooch',
     'torch',
     'importlib-metadata; python_version<"3.8"',
@@ -69,7 +69,6 @@ doc = [
 gui = [
     'matplotlib',
     'mne-qt-browser',
-    'PyQt5',
     'qtpy',
 ]
 ica = [
@@ -90,6 +89,7 @@ test = [
     'mne-icalabel[ica]',
     'mne-bids',
     'pandas',
+    'PyQt5',
     'pymatreader',
     'pytest',
     'pytest-cov',

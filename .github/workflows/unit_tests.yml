@@ -82,7 +82,7 @@ jobs:
       - name: Test package install
         run: python -c "import mne_icalabel; print(mne_icalabel.__version__)"
       - name: Remove package install
-        run: python -m pip uninstall -y mne_icalabel
+        run: python -m pip uninstall -yq mne_icalabel
       - name: Build package
         run: python -m build
       - name: Install sdist
@@ -90,13 +90,13 @@ jobs:
       - name: Test sdist install
         run: python -c "import mne_icalabel; print(mne_icalabel.__version__)"
       - name: Remove sdist install
-        run: python -m pip uninstall -y mne_icalabel
+        run: python -m pip uninstall -yq mne_icalabel
       - name: Install wheel
         run: pip install ./dist/*.whl
       - name: Test wheel install
         run: python -c "import mne_icalabel; print(mne_icalabel.__version__)"
       - name: Remove wheel install
-        run: python -m pip uninstall -y mne_icalabel
+        run: python -m pip uninstall -yq mne_icalabel
 
   test:
     timeout-minutes: 30
@@ -124,7 +124,7 @@ jobs:
       - name: Install Qt dependencies
         if: "matrix.os == 'ubuntu'"
         run: |
-          sudo apt update
+          sudo apt-get update
           sudo apt-get install qt5-default
       - name: Install package
         run: |
@@ -133,7 +133,7 @@ jobs:
       - name: Install MNE (main)
         if: "matrix.mne == 'main'"
         run: |
-          python -m pip uninstall -y mne
+          python -m pip uninstall -yq mne
           python -m pip install git+https://github.com/mne-tools/mne-python
       - name: Display MNE infos
         run: mne sys_info

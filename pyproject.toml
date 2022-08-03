@@ -94,8 +94,10 @@ test = [
     'pymatreader',
     'pytest>=6.0.0',
     'pytest-cov',
-    'pytest-timeout',
     'pytest-harvest',
+    'pytest-qt',
+    'pytest-timeout',
+    'pytest-xvfb',
 ]
 all = [
     'mne-icalabel[build]',

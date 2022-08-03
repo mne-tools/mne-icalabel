@@ -88,9 +88,9 @@ jobs:
               python -m pip install --progress-bar off --upgrade pip setuptools wheel
               python -m pip install --progress-bar off .
               python -m pip install --progress-bar off .[doc,gui]
-              python -m pip uninstall -yq mne mne-qt-browser
               python -m pip install --progress-bar off git+https://github.com/mne-tools/mne-python
               python -m pip install --progress-bar off git+https://github.com/mne-tools/mne-qt-browser
+              # python -m pip uninstall -yq mne mne-qt-browser
 
         - save_cache:
             key: pip-cache
@@ -104,6 +104,7 @@ jobs:
         - run:
             name: Check installation
             command: |
+               pip freeze
                mne sys_info
                python -c "import mne_icalabel;"
                LIBGL_DEBUG=verbose python -c "import matplotlib.pyplot as plt; plt.figure()"

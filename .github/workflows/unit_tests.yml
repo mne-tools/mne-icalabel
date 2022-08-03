@@ -137,10 +137,6 @@ jobs:
           python -m pip install git+https://github.com/mne-tools/mne-python
       - name: Display MNE infos
         run: mne sys_info
-      - name: DEBUG
-        run: ls -l
-      - name: DEBUG
-        run: ls -l ~
       - name: Retrieve MNE/ICA-Label testing dataset version
         run: |
           curl https://raw.githubusercontent.com/mne-tools/mne-testing-data/master/version.txt -o mne_testing_data_version.txt
@@ -150,10 +146,6 @@ jobs:
         with:
           key: ${{ matrix.os }}-${{ hashFiles('mne_testing_data_version.txt') }}-${{ hashFiles('mne_icalabel_testing_data_version.txt') }}
           path: ~/mne_data
-      - name: DEBUG
-        run: ls -l
-      - name: DEBUG
-        run: ls -l ~
       - name: Download MNE/ICA-Label testing dataset
         run: |
           python -c "import mne; mne.datasets.testing.data_path()"

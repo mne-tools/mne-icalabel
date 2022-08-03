@@ -5,10 +5,6 @@
 
 def pytest_configure(config):
     """Configure pytest options."""
-    # Markers
-    for marker in ("examples",):
-        config.addinivalue_line("markers", marker)
-
     warning_lines = r"""
     error::
     ignore:.*Setting non-standard config type.*:

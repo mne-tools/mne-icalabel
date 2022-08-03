@@ -124,7 +124,7 @@ jobs:
       - name: Install Qt dependencies
         if: "matrix.os == 'ubuntu'"
         run: |
-          sudo apt update
+          sudo apt-get update
           sudo apt-get install python3-pyqt6
       - name: Install package
         run: |

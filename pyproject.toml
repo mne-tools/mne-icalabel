@@ -65,6 +65,7 @@ doc = [
     'sphinx-gallery',
     'sphinx_rtd_theme',
     'typing-extensions',
+    'scikit-learn',
 ]
 gui = [
     'matplotlib',

@@ -4,7 +4,6 @@ from mne.io import BaseRaw, read_raw
 from mne.preprocessing import ICA
 
 from mne_icalabel.gui import label_ica_components
-from mne_icalabel.utils._testing import requires_version
 
 directory = testing.data_path() / "MEG" / "sample"
 raw = read_raw(directory / "sample_audvis_trunc_raw.fif", preload=False)
@@ -18,7 +17,6 @@ ica = ICA(n_components=5, random_state=12345, fit_params=dict(tol=1e-1))
 ica.fit(raw)
 
 
-@requires_version("mne", "1.1")
 def test_label_components_gui_display():
     ica_ = ica.copy()
     gui = label_ica_components(raw, ica_, show=False)
@@ -30,7 +28,6 @@ def test_label_components_gui_display():
     assert gui.selected_component == 0
 
 
-@requires_version("mne", "1.1")
 def test_invalid_arguments():
     """Test error error raised with invalid arguments."""
     with pytest.raises(TypeError, match="ica must be an instance of ICA"):

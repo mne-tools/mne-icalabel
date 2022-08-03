@@ -66,6 +66,9 @@ jobs:
                 git pull --ff-only upstream "refs/pull/$(cat merge.txt)/merge";
               fi
         - run:
+            name: DEBUG
+            command: ls -l
+        - run:
             name: Install relevant dependencies
             command: |
               set -e

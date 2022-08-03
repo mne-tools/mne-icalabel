@@ -93,7 +93,6 @@ test = [
     'pymatreader',
     'pytest>=6.0.0',
     'pytest-cov',
-    'pytest-harvest',
     'pytest-timeout',
 ]
 all = [

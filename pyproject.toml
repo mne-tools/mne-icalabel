@@ -91,9 +91,8 @@ test = [
     'pandas',
     'pooch',
     'pymatreader',
-    'pytest>=6.0.0',
+    'pytest',
     'pytest-cov',
-    'pytest-timeout',
 ]
 all = [
     'mne-icalabel[build]',

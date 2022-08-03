@@ -5,18 +5,11 @@ jobs:
       docker:
         - image: cimg/base:stable-20.04
       steps:
-        - run:
-            name: Check-skip
-            command: |
-              set -e
-              export COMMIT_MESSAGE=$(git log --format=oneline -n 1);
-              if [[ -v CIRCLE_PULL_REQUEST ]] && ([[ "$COMMIT_MESSAGE" == *"[skip circle]"* ]] || [[ "$COMMIT_MESSAGE" == *"[circle skip]"* ]]); then
-                echo "Skip detected, exiting job ${CIRCLE_JOB} for PR ${CIRCLE_PULL_REQUEST}."
-                circleci-agent step halt;
-              fi
         - restore_cache:
             keys:
               - source-cache-iclabel
+        # needed
+        - checkout
         - run:
             name: Complete checkout
             command: |
@@ -29,6 +22,24 @@ jobs:
             key: source-cache-iclabel
             paths:
               - ".git"
+        - run:
+            name: Check-skip
+            command: |
+              set -e
+              export COMMIT_MESSAGE=$(git log --format=oneline -n 1);
+              if [[ -v CIRCLE_PULL_REQUEST ]] && ([[ "$COMMIT_MESSAGE" == *"[skip circle]"* ]] || [[ "$COMMIT_MESSAGE" == *"[circle skip]"* ]]); then
+                echo "Skip detected, exiting job ${CIRCLE_JOB} for PR ${CIRCLE_PULL_REQUEST}."
+                circleci-agent step halt;
+              fi
+        - run:
+            name: Merge with upstream
+            command: |
+              echo $(git log -1 --pretty=%B) | tee gitlog.txt
+              echo ${CI_PULL_REQUEST//*pull\//} | tee merge.txt
+              if [[ $(cat merge.txt) != "" ]]; then
+                echo "Merging $(cat merge.txt)";
+                git pull --ff-only upstream "refs/pull/$(cat merge.txt)/merge";
+              fi
         - add_ssh_keys:
             fingerprints:
               - "d6:88:6b:a0:80:bf:14:8e:80:2e:ed:11:52:26:37:68"
@@ -57,15 +68,6 @@ jobs:
             name: Setup pandoc
             command: sudo apt update && sudo apt install -y pandoc optipng
         - run:
-            name: Merge with upstream
-            command: |
-              echo $(git log -1 --pretty=%B) | tee gitlog.txt
-              echo ${CI_PULL_REQUEST//*pull\//} | tee merge.txt
-              if [[ $(cat merge.txt) != "" ]]; then
-                echo "Merging $(cat merge.txt)";
-                git pull --ff-only upstream "refs/pull/$(cat merge.txt)/merge";
-              fi
-        - run:
             name: DEBUG
             command: ls -l
         # - run:
@@ -81,7 +83,7 @@ jobs:
               - pip-cache
         - restore_cache:
             keys:
-              - user-install-bin-cachev1
+              - user-install-bin-cache
         - run:
             name: Get Python running and install dependencies
             command: |
@@ -97,13 +99,14 @@ jobs:
             paths:
               - ~/.cache/pip
         - save_cache:
-            key: user-install-bin-cachev1
+            key: user-install-bin-cache
             paths:
               - ~/.local/lib/python3.8/site-packages
               - ~/.local/bin
         - run:
             name: Check installation
             command: |
+               which python
                pip freeze
                python -c "print('Imported mne-icalabel correctly'); import mne_icalabel;"
                mne sys_info

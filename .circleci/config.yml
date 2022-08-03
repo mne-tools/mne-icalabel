@@ -97,12 +97,15 @@ jobs:
               - ~/.local/lib/python3.8/site-packages
               - ~/.local/bin
         - run:
+            name: Check Qt
+            command: LD_DEBUG=libs python -c "from PySide6.QtWidgets import QApplication, QWidget; app = QApplication([])"
+        - run:
             name: Check installation
             command: |
                which python
                pip freeze
                python -c "print('Imported mne-icalabel correctly'); import mne_icalabel;"
-               mne sys_info
+               QT_DEBUG_PLUGINS=1 mne sys_info -pd
                LIBGL_DEBUG=verbose python -c "import matplotlib.pyplot as plt; plt.figure()"
                python -c "import mne; mne.set_config('MNE_LOGGING_LEVEL', 'info')"
                python -c "import mne; level = mne.get_config('MNE_LOGGING_LEVEL'); assert level.lower() == 'info', repr(level)"

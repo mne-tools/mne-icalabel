@@ -125,7 +125,7 @@ jobs:
         if: "matrix.os == 'ubuntu'"
         run: |
           sudo apt update
-          sudo apt-get install qt6-default
+          sudo apt-get install python3-pyqt6
       - name: Install package
         run: |
           python -m pip install --progress-bar off --upgrade pip setuptools wheel

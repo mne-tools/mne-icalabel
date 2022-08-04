@@ -54,7 +54,6 @@ build = [
 doc = [
     'mne-icalabel[gui]',
     'mne-icalabel[ica]',
-    'memory_profiler',
     'numpydoc',
     'pydata-sphinx-theme',
     'PyQt5',

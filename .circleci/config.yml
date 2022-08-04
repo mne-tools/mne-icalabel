@@ -45,7 +45,6 @@ jobs:
         - run:
             name: Set BASH_ENV
             command: |
-              set -e
               curl https://raw.githubusercontent.com/mne-tools/mne-python/main/tools/setup_xvfb.sh -o setup_xvfb.sh
               chmod +x setup_xvfb.sh
               ./setup_xvfb.sh

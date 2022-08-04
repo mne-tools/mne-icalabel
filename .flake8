@@ -12,6 +12,11 @@ ignore =
 exclude =
     .git
     .github
+    .venv
+    .mypy_cache
+    .pytest_cache
+    .circleci
+    paper
     setup.py
     doc
 

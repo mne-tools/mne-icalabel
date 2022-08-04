@@ -6,6 +6,7 @@ jobs:
         - image: cimg/base:stable-20.04
       steps:
         - restore_cache:
+            name: Restore .git
             keys:
               - source-cache-iclabel
         - checkout
@@ -18,6 +19,7 @@ jobs:
               git remote set-url upstream https://github.com/mne-tools/mne-icalabel.git
               git fetch upstream
         - save_cache:
+            name: Save .git
             key: source-cache-iclabel
             paths:
               - ".git"
@@ -65,9 +67,11 @@ jobs:
             name: Setup pandoc
             command: sudo apt update && sudo apt install -y pandoc optipng
         - restore_cache:
+            name: Restore pip cache
             keys:
               - pip-cache
         - restore_cache:
+            name: Restore install-bin-cache
             keys:
               - user-install-bin-cache
         - run:
@@ -80,10 +84,12 @@ jobs:
               python -m pip install --progress-bar off git+https://github.com/mne-tools/mne-python
               python -m pip install --progress-bar off git+https://github.com/mne-tools/mne-qt-browser
         - save_cache:
+            name: Save pip cache
             key: pip-cache
             paths:
               - ~/.cache/pip
         - save_cache:
+            name: Save install-bin-cache
             key: user-install-bin-cache
             paths:
               - ~/.local/lib/python3.8/site-packages

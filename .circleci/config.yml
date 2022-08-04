@@ -170,7 +170,6 @@ jobs:
             name: Get Python running
             command: |
               python -m pip install --progress-bar off --upgrade pip setuptools wheel
-              python -m pip install --progress-bar off .
               python -m pip install --progress-bar off .[doc]
         - run:
             name: Check installation
@@ -246,7 +245,7 @@ workflows:
               only:
                 - main
                 - maint/0.2
-  
+
   main:
     jobs:
       - build_doc:

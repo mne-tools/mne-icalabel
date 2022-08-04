@@ -143,7 +143,7 @@ jobs:
           type: string
           default: "false"
       docker:
-        - image: cimg/python:3.9.2-buster
+        - image: cimg/python:3.9.2
       steps:
         - restore_cache:
             keys:

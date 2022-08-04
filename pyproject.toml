@@ -52,12 +52,10 @@ build = [
     'twine',
 ]
 doc = [
+    'mne-icalabel[gui]',
     'mne-icalabel[ica]',
-    'matplotlib',
     'memory_profiler',
-    'mne-bids',
     'numpydoc',
-    'pooch',
     'pydata-sphinx-theme',
     'PyQt5',
     'sphinx',

@@ -45,6 +45,7 @@ jobs:
         - run:
             name: Set BASH_ENV
             command: |
+              set -e
               curl https://raw.githubusercontent.com/mne-tools/mne-python/main/tools/setup_xvfb.sh -o setup_xvfb.sh
               chmod +x setup_xvfb.sh
               ./setup_xvfb.sh
@@ -60,7 +61,6 @@ jobs:
               ln -s ~/python_env/bin/python ~/.local/bin/python
               echo "BASH_ENV:"
               cat $BASH_ENV
-              mkdir -p ~/mne_icalabel_data
         - run:
             name: Setup pandoc
             command: sudo apt update && sudo apt install -y pandoc optipng

@@ -189,7 +189,7 @@ jobs:
             path: doc/_build/linkcheck
             destination: linkcheck
 
-    doc-deploy:
+    deploy:
         machine:
           image: cimg/node:lts
         steps:
@@ -238,7 +238,7 @@ workflows:
           name: build_doc
       - linkcheck:
           name: linkcheck
-      - doc-deploy:
+      - deploy:
           requires:
             - build_doc
           filters:
@@ -253,7 +253,7 @@ workflows:
           scheduled: "true"
           name: build_doc_main
       - deploy:
-          name: doc-deploy_main
+          name: deploy_main
           requires:
             - build_doc_main
     triggers:

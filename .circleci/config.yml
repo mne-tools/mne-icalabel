@@ -115,6 +115,12 @@ jobs:
         - run:
             name: DEBUG
             command: ls -l
+        - run:
+            name: DEBUG
+            command: ls -l doc
+        - run:
+            name: DEBUG
+            command: ls -l doc/_build
         # Save the JUnit file
         - store_test_results:
             path: doc/_build/test-results

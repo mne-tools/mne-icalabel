@@ -174,7 +174,6 @@ source = [
     'mne_icalabel',
 ]
 omit = [
-    'mne_icalabel/conftest.py',
     'mne_icalabel/**/__init__.py',
     'mne_icalabel/commands/*',
     '**/tests/**',

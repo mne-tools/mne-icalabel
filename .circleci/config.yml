@@ -253,7 +253,7 @@ workflows:
           scheduled: "true"
           name: build_doc_main
       - deploy:
-          name: deploy_main
+          name: doc_deploy_main
           requires:
             - build_doc_main
     triggers:

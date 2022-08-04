@@ -108,7 +108,7 @@ jobs:
             name: Build documentation
             command: |
               cd doc
-              xvfb make html
+              xvfb-run make html
         # Save the example test result file
         - store_test_results:
             path: doc/_build/test-results

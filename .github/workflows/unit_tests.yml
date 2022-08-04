@@ -89,6 +89,12 @@ jobs:
         run: pip install ./dist/*.tar.gz
       - name: Test sdist install
         run: python -c "import mne_icalabel; print(mne_icalabel.__version__)"
+      # upload build artifacts, so that release can use them
+      - name: Upload package distribution files
+        uses: actions/upload-artifact@v3
+        with:
+          name: package
+          path: dist
       - name: Remove sdist install
         run: python -m pip uninstall -yq mne_icalabel
       - name: Install wheel
@@ -162,6 +168,7 @@ jobs:
           fail_ci_if_error: true
           verbose: true
 
+  # release is ran when a release is made on Github
   release:
     name: Release
     runs-on: ubuntu-latest
@@ -188,9 +195,10 @@ jobs:
         with:
           name: package
           path: dist
-      - name: Generate release notes
-        run: |
-          python scripts/release_notes.py > ${{ github.workspace }}-RELEASE_NOTES.md
+      # TODO: refactor scripts to generate release notes from `whats_new.rst` file instead
+      # - name: Generate release notes
+      #   run: |
+      #     python scripts/release_notes.py > ${{ github.workspace }}-RELEASE_NOTES.md
       - name: Publish package to PyPI
         run: |
           twine upload -u ${{ secrets.PYPI_USERNAME }} -p ${{ secrets.PYPI_PASSWORD }} dist/*
@@ -199,7 +207,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          body_path: ${{ github.workspace }}-RELEASE_NOTES.md
+          # body_path: ${{ github.workspace }}-RELEASE_NOTES.md
           prerelease: ${{ contains(env.TAG, 'rc') }}
           files: |
             dist/*

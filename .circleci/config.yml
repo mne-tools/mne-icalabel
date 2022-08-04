@@ -2,6 +2,10 @@ version: 2.1
 
 jobs:
     build_doc:
+      parameters:
+        scheduled:
+          type: string
+          default: "false"
       docker:
         - image: cimg/base:stable-20.04
       steps:
@@ -40,9 +44,6 @@ jobs:
                 echo "Merging $(cat merge.txt)";
                 git pull --ff-only upstream "refs/pull/$(cat merge.txt)/merge";
               fi
-        - add_ssh_keys:
-            fingerprints:
-              - "d6:88:6b:a0:80:bf:14:8e:80:2e:ed:11:52:26:37:68"
         - run:
             name: Set BASH_ENV
             command: |
@@ -148,14 +149,6 @@ jobs:
       docker:
         - image: circleci/python:3.9.2-buster
       steps:
-        - run:
-            name: Check-skip
-            command: |
-              export COMMIT_MESSAGE=$(git log --format=oneline -n 1);
-              if [[ "$COMMIT_MESSAGE" != *"[circle linkcheck]"* ]] && [ "<< parameters.scheduled >>" != "true" ]; then
-                echo "Skip detected, exiting job ${CIRCLE_JOB}."
-                circleci-agent step halt;
-              fi
         - restore_cache:
             keys:
               - source-cache
@@ -166,13 +159,23 @@ jobs:
               set -e
               echo "set -e" >> $BASH_ENV
               echo "export PATH=~/.local/bin/:$PATH" >> $BASH_ENV
+        - run:
+            name: Check-skip
+            command: |
+              export COMMIT_MESSAGE=$(git log --format=oneline -n 1);
+              if [[ "$COMMIT_MESSAGE" != *"[circle linkcheck]"* ]] && [ "<< parameters.scheduled >>" != "true" ]; then
+                echo "Skip detected, exiting job ${CIRCLE_JOB}."
+                circleci-agent step halt;
+              fi
         - restore_cache:
             keys:
               - pip-cache
         - run:
             name: Get Python running
             command: |
-              ./scripts/circleci_dependencies.sh
+              python -m pip install --progress-bar off --upgrade pip setuptools wheel
+              python -m pip install --progress-bar off .
+              python -m pip install --progress-bar off .[doc]
         - run:
             name: Check installation
             command: |
@@ -191,14 +194,24 @@ jobs:
             destination: linkcheck
 
     doc-deploy:
-        docker:
-          - image: cimg/node:lts
+        machine:
+          image: cimg/node:lts
         steps:
           - attach_workspace:
-              at: doc/_build
-          - restore_cache:
-              keys:
-                - website-cache
+              at: /doc/_build
+          - run:
+              name: Set BASH_ENV
+              command: |
+                set -e
+                echo "set -e" >> $BASH_ENV
+          # Don't try to deploy if nothing is there or not on the right branch
+          - run:
+              name: Check docs
+              command: |
+                if [ ! -f /doc/_build/html/index.html ] && [ ! -f /doc/_build/html_stable/index.html ]; then
+                  echo "No files found to upload (build: ${CIRCLE_BRANCH}).";
+                  circleci-agent step halt;
+                fi;
           - run:
               name: Install and configure dependencies
               # do not update gh-pages above 3.0.0
@@ -219,12 +232,8 @@ jobs:
                   node_modules/gh-pages/bin/gh-pages.js --dotfiles --message "doc updates [skip ci]" --dist doc/_build/html --dest ./dev
                 else
                   echo "Deploying stable doc for ${CIRCLE_BRANCH}.";
-                  node_modules/gh-pages/bin/gh-pages.js --dotfiles --message "doc updates [skip ci]" --dist doc/_build/html --dest ./stable
+                  node_modules/gh-pages/bin/gh-pages.js --dotfiles --message "doc updates [skip ci]" --dist doc/_build/html_stable --dest ./stable
                 fi;
-          - save_cache:
-              key: website-cache
-              paths:
-                - ~/mne-icalabel
 
 workflows:
   default:
@@ -236,6 +245,40 @@ workflows:
       - doc-deploy:
           requires:
             - build_doc
+          filters:
+            branches:
+              only:
+                - main
+                - maint/0.2
+  
+  main:
+    jobs:
+      - build_docs:
+          scheduled: "true"
+          name: build_docs_main
+      - deploy:
+          name: deploy_main
+          requires:
+            - build_docs_main
+    triggers:
+      - schedule:
+          # "At 00:00" (once a day) should be enough "0 0 * * *",
+          # But for testing at first, let's do once an hour (6 AM GMT)
+          cron: "0 6 * * *"
+          filters:
+            branches:
+              only:
+                - main
+
+  weekly:
+    jobs:
+      - linkcheck:
+          name: linkcheck_weekly
+          scheduled: "true"
+    triggers:
+      - schedule:
+          # "At 00:00 on Sunday" should be often enough
+          cron: "0 0 * * 0"
           filters:
             branches:
               only:

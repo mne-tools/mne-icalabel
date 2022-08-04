@@ -48,9 +48,6 @@ jobs:
             name: Set BASH_ENV
             command: |
               set -e
-              curl https://raw.githubusercontent.com/mne-tools/mne-python/main/tools/setup_xvfb.sh -o setup_xvfb.sh
-              chmod +x setup_xvfb.sh
-              ./setup_xvfb.sh
               sudo apt install -qq graphviz optipng python3.8-venv python3-venv libxft2
               python3.8 -m venv ~/python_env
               echo "set -e" >> $BASH_ENV
@@ -111,17 +108,8 @@ jobs:
             name: Build documentation
             command: |
               cd doc
-              make html
-        - run:
-            name: DEBUG
-            command: ls -l
-        - run:
-            name: DEBUG
-            command: ls -l doc
-        - run:
-            name: DEBUG
-            command: ls -l doc/_build
-        # Save the JUnit file
+              xvfb make html
+        # Save the example test result file
         - store_test_results:
             path: doc/_build/test-results
         - store_artifacts:

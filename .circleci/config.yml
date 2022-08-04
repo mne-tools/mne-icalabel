@@ -43,9 +43,6 @@ jobs:
             fingerprints:
               - "d6:88:6b:a0:80:bf:14:8e:80:2e:ed:11:52:26:37:68"
         - run:
-            name: DEBUG
-            command: ls -l
-        - run:
             name: Set BASH_ENV
             command: |
               curl https://raw.githubusercontent.com/mne-tools/mne-python/main/tools/setup_xvfb.sh -o setup_xvfb.sh
@@ -65,8 +62,6 @@ jobs:
               echo "BASH_ENV:"
               cat $BASH_ENV
               mkdir -p ~/mne_icalabel_data
-              ls -l
-              touch pattern.txt
         - run:
             name: Setup pandoc
             command: sudo apt update && sudo apt install -y pandoc optipng

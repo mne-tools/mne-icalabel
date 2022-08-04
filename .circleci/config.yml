@@ -112,6 +112,9 @@ jobs:
             command: |
               cd doc
               make html
+        - run:
+            name: DEBUG
+            command: ls -l
         # Save the JUnit file
         - store_test_results:
             path: doc/_build/test-results

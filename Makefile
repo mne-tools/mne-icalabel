@@ -44,39 +44,8 @@ test-fast: in
 	rm -f .coverage
 	$(PYTESTS) -m 'not slowtest' mne_icalabel
 
-test-full: in
-	rm -f .coverage
-	$(PYTESTS) mne_icalabel
-
-test-no-network: in
-	sudo unshare -n -- sh -c 'MNE_SKIP_NETWORK_TESTS=1 py.test mne_icalabel'
-
-test-no-testing-data: in
-	@MNE_SKIP_TESTING_DATASET_TESTS=true \
-	$(PYTESTS) mne
-
-test-no-sample-with-coverage: in testing_data
-	rm -rf coverage .coverage
-	$(PYTESTS) --cov=mne_icalabel --cov-report html:coverage
-
-test-doc: sample_data testing_data
-	$(PYTESTS) --doctest-modules --doctest-ignore-import-errors --doctest-glob='*.rst' ./doc/
-
-test-coverage: testing_data
-	rm -rf coverage .coverage
-	$(PYTESTS) --cov=mne_icalabel --cov-report html:coverage
-# what's the difference with test-no-sample-with-coverage?
-
 test-mem: in testing_data
 	ulimit -v 1097152 && $(PYTESTS) mne
-
-trailing-spaces:
-	find . -name "*.py" | xargs perl -pi -e 's/[ \t]*$$//'
-
-ctags:
-	# make tags for symbol based navigation in emacs and vim
-	# Install with: sudo apt-get install exuberant-ctags
-	$(CTAGS) -R *
 
 upload-pipy:
 	python setup.py sdist bdist_egg register upload
@@ -111,9 +80,6 @@ pydocstyle:
 	@echo "Running pydocstyle"
 	@pydocstyle mne_icalabel
 
-check-readme:
-	python setup.py check --restructuredtext --strict
-
 isort:
 	@if command -v isort > /dev/null; then \
 		echo "Running isort"; \
@@ -123,9 +89,6 @@ isort:
 		exit 1; \
 	fi;
 	@echo "isort passed"
-
-pep:
-	@$(MAKE) -k black pydocstyle codespell-error
 
 docstyle: pydocstyle
 

@@ -2,10 +2,6 @@ version: 2.1
 
 jobs:
     build_doc:
-      parameters:
-        scheduled:
-          type: string
-          default: "false"
       docker:
         - image: cimg/base:stable-20.04
       steps:
@@ -249,7 +245,6 @@ workflows:
   main:
     jobs:
       - build_doc:
-          scheduled: "true"
           name: build_doc_main
       - deploy:
           name: deploy_main

@@ -137,7 +137,6 @@ jobs:
               - html_stable
 
     linkcheck:
-      # there are a few files excluded from this for expediency, see Makefile
       parameters:
         scheduled:
           type: string
@@ -145,6 +144,10 @@ jobs:
       docker:
         - image: circleci/python:3.9.2-buster
       steps:
+        - restore_cache:
+            keys:
+              - source-cache-iclabel
+        - checkout
         - run:
             name: Check-skip
             command: |
@@ -153,10 +156,6 @@ jobs:
                 echo "Skip detected, exiting job ${CIRCLE_JOB}."
                 circleci-agent step halt;
               fi
-        - restore_cache:
-            keys:
-              - source-cache
-        - checkout
         - run:
             name: Set BASH_ENV
             command: |

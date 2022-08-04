@@ -48,7 +48,7 @@ jobs:
               curl https://raw.githubusercontent.com/mne-tools/mne-python/main/tools/setup_xvfb.sh -o setup_xvfb.sh
               chmod +x setup_xvfb.sh
               ./setup_xvfb.sh
-              sudo apt install -qq graphviz optipng python3.8-venv python3-venv libxft2 ffmpeg
+              sudo apt install -qq graphviz optipng python3.8-venv python3-venv libxft2
               python3.8 -m venv ~/python_env
               echo "set -e" >> $BASH_ENV
               echo "export OPENBLAS_NUM_THREADS=4" >> $BASH_ENV

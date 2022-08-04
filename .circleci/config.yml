@@ -10,9 +10,9 @@ jobs:
         - image: cimg/base:stable-20.04
       steps:
         - restore_cache:
+            name: Restore .git
             keys:
               - source-cache-iclabel
-        # needed
         - checkout
         - run:
             name: Complete checkout
@@ -23,6 +23,7 @@ jobs:
               git remote set-url upstream https://github.com/mne-tools/mne-icalabel.git
               git fetch upstream
         - save_cache:
+            name: Save .git
             key: source-cache-iclabel
             paths:
               - ".git"
@@ -51,8 +52,7 @@ jobs:
               curl https://raw.githubusercontent.com/mne-tools/mne-python/main/tools/setup_xvfb.sh -o setup_xvfb.sh
               chmod +x setup_xvfb.sh
               ./setup_xvfb.sh
-              sudo apt install -qq graphviz optipng python3.8-venv python3-venv libxft2 ffmpeg
-              sudo apt install qt5-default
+              sudo apt install -qq graphviz optipng python3.8-venv python3-venv libxft2
               python3.8 -m venv ~/python_env
               echo "set -e" >> $BASH_ENV
               echo "export OPENBLAS_NUM_THREADS=4" >> $BASH_ENV
@@ -64,18 +64,15 @@ jobs:
               ln -s ~/python_env/bin/python ~/.local/bin/python
               echo "BASH_ENV:"
               cat $BASH_ENV
-              mkdir -p ~/mne_icalabel_data
-              touch pattern.txt
         - run:
             name: Setup pandoc
             command: sudo apt update && sudo apt install -y pandoc optipng
-        - run:
-            name: DEBUG
-            command: ls -l
         - restore_cache:
+            name: Restore pip cache
             keys:
               - pip-cache
         - restore_cache:
+            name: Restore install-bin-cache
             keys:
               - user-install-bin-cache
         - run:
@@ -84,29 +81,29 @@ jobs:
               python -m pip install --progress-bar off --upgrade pip setuptools wheel
               python -m pip install --progress-bar off .
               python -m pip install --progress-bar off .[doc,gui]
+              python -m pip uninstall -yq mne mne-qt-browser
               python -m pip install --progress-bar off git+https://github.com/mne-tools/mne-python
               python -m pip install --progress-bar off git+https://github.com/mne-tools/mne-qt-browser
-              # python -m pip uninstall -yq mne mne-qt-browser
-
         - save_cache:
+            name: Save pip cache
             key: pip-cache
             paths:
               - ~/.cache/pip
         - save_cache:
+            name: Save install-bin-cache
             key: user-install-bin-cache
             paths:
               - ~/.local/lib/python3.8/site-packages
               - ~/.local/bin
         - run:
-            name: Check Qt
-            command: LD_DEBUG=libs python -c "from PySide6.QtWidgets import QApplication, QWidget; app = QApplication([])"
+            name: Check pip package versions
+            command: pip freeze
+        - run:
+            name: Display MNE infos
+            command: QT_DEBUG_PLUGINS=1 mne sys_info -pd
         - run:
             name: Check installation
             command: |
-               which python
-               pip freeze
-               python -c "print('Imported mne-icalabel correctly'); import mne_icalabel;"
-               QT_DEBUG_PLUGINS=1 mne sys_info -pd
                LIBGL_DEBUG=verbose python -c "import matplotlib.pyplot as plt; plt.figure()"
                python -c "import mne; mne.set_config('MNE_LOGGING_LEVEL', 'info')"
                python -c "import mne; level = mne.get_config('MNE_LOGGING_LEVEL'); assert level.lower() == 'info', repr(level)"
@@ -116,7 +113,7 @@ jobs:
             command: |
               cd doc
               make html
-        # Save the JUnit file
+        # Save the example test results
         - store_test_results:
             path: doc/_build/test-results
         - store_artifacts:
@@ -141,7 +138,6 @@ jobs:
               - html_stable
 
     linkcheck:
-      # there are a few files excluded from this for expediency, see Makefile
       parameters:
         scheduled:
           type: string
@@ -151,14 +147,8 @@ jobs:
       steps:
         - restore_cache:
             keys:
-              - source-cache
+              - source-cache-iclabel
         - checkout
-        - run:
-            name: Set BASH_ENV
-            command: |
-              set -e
-              echo "set -e" >> $BASH_ENV
-              echo "export PATH=~/.local/bin/:$PATH" >> $BASH_ENV
         - run:
             name: Check-skip
             command: |
@@ -167,6 +157,12 @@ jobs:
                 echo "Skip detected, exiting job ${CIRCLE_JOB}."
                 circleci-agent step halt;
               fi
+        - run:
+            name: Set BASH_ENV
+            command: |
+              set -e
+              echo "set -e" >> $BASH_ENV
+              echo "export PATH=~/.local/bin/:$PATH" >> $BASH_ENV
         - restore_cache:
             keys:
               - pip-cache

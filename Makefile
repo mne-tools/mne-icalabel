@@ -42,14 +42,14 @@ test: in
 
 test-fast: in
 	rm -f .coverage
-	$(PYTESTS) -m 'not slowtest' mne
+	$(PYTESTS) -m 'not slowtest' mne_icalabel
 
 test-full: in
 	rm -f .coverage
-	$(PYTESTS) mne
+	$(PYTESTS) mne_icalabel
 
 test-no-network: in
-	sudo unshare -n -- sh -c 'MNE_SKIP_NETWORK_TESTS=1 py.test mne'
+	sudo unshare -n -- sh -c 'MNE_SKIP_NETWORK_TESTS=1 py.test mne_icalabel'
 
 test-no-testing-data: in
 	@MNE_SKIP_TESTING_DATASET_TESTS=true \
@@ -102,17 +102,14 @@ black:
 	@echo "black passed"
 
 codespell:  # running manually
-	@codespell -w -i 3 -q 3 -S $(CODESPELL_SKIPS) --ignore-words=ignore_words.txt $(CODESPELL_DIRS)
+	@codespell -w -i 3 -q 3 -S $(CODESPELL_SKIPS) --ignore-words=.codespellignore $(CODESPELL_DIRS)
 
 codespell-error:  # running on travis
-	@codespell -i 0 -q 7 -S $(CODESPELL_SKIPS) --ignore-words=ignore_words.txt $(CODESPELL_DIRS)
+	@codespell -i 0 -q 7 -S $(CODESPELL_SKIPS) --ignore-words=.codespellignore $(CODESPELL_DIRS)
 
 pydocstyle:
 	@echo "Running pydocstyle"
 	@pydocstyle mne_icalabel
-
-check-manifest:
-	check-manifest --ignore .circleci*,doc,logo,.DS_Store
 
 check-readme:
 	python setup.py check --restructuredtext --strict
@@ -128,7 +125,7 @@ isort:
 	@echo "isort passed"
 
 pep:
-	@$(MAKE) -k black pydocstyle codespell-error check-manifest
+	@$(MAKE) -k black pydocstyle codespell-error
 
 docstyle: pydocstyle
 
@@ -138,7 +135,6 @@ run-checks:
 	flake8 .
 	mypy ./mne_icalabel
 	@$(MAKE) pydocstyle
-	check-manifest
 	@$(MAKE) codespell-error
 
 build-doc:

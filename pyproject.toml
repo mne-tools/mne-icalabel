@@ -52,12 +52,12 @@ build = [
     'twine',
 ]
 doc = [
-    'matplotlib',
+    'mne-icalabel[gui]',
+    'mne-icalabel[ica]',
     'memory_profiler',
-    'mne-bids',
     'numpydoc',
-    'pooch',
     'pydata-sphinx-theme',
+    'PyQt5',
     'sphinx',
     'sphinxcontrib-bibtex',
     'sphinx-autodoc-typehints',
@@ -65,13 +65,11 @@ doc = [
     'sphinx-gallery',
     'sphinx_rtd_theme',
     'typing-extensions',
-    'scikit-learn',
 ]
 gui = [
     'matplotlib',
     'mne-qt-browser',
     'qtpy',
-    'PySide6!=6.3.0',
 ]
 ica = [
     'joblib',
@@ -174,8 +172,7 @@ source = [
     'mne_icalabel',
 ]
 omit = [
-    'mne_icalabel/conftest.py',
-    'mne_icalabel/**/__init__.py',
+    '**/__init__.py',
     'mne_icalabel/commands/*',
     '**/tests/**',
 ]

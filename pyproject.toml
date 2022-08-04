@@ -52,6 +52,7 @@ build = [
     'twine',
 ]
 doc = [
+    'mne-icalabel[ica]',
     'matplotlib',
     'memory_profiler',
     'mne-bids',
@@ -65,7 +66,6 @@ doc = [
     'sphinx-gallery',
     'sphinx_rtd_theme',
     'typing-extensions',
-    'scikit-learn',
 ]
 gui = [
     'matplotlib',

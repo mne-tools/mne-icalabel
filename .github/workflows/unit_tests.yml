@@ -160,7 +160,7 @@ jobs:
         with:
           run: pytest main/mne_icalabel --cov=main/mne_icalabel --cov-report=xml --cov-config=main/pyproject.toml
       - name: Upload coverage stats to codecov
-        if: ${{ matrix.os == 'ubuntu' && matrix.python-version == '3.10' && matrix.mne == 'stable' }}
+        if: ${{ matrix.os == 'ubuntu' && matrix.python-version == 3.9 && matrix.mne == 'stable' }}
         uses: codecov/codecov-action@v3
         with:
           files: ./coverage.xml

@@ -45,6 +45,18 @@ simply run the following at the root of the repository:
     python -m venv .venv
     pip install mne-icalabel
 
+    # If you would like other GUI functionalities
+    pip install mne-icalabel[gui]
+
+    # If you would like the ability to run ICA
+    pip install mne-icalabel[ica]
+
+    # If you are a developer and would like to install the developer dependencies
+    pip install mne-icalabel[doc,style,test]
+
+    # If you would like full functionality, which installs all the above
+    pip install mne-icalabel[all]
+
 If you want to install a snapshot of the current development version, run:
 
 .. code-block:: bash

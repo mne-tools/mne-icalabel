@@ -82,7 +82,7 @@ def write_components_tsv(ica: ICA, fname):
         "'muscle artifact', 'eye blink', 'heart beat', 'line noise', "
         "'channel noise', 'other']",
     }
-    fname = fname.copy().update(extension=".json")
+    fname = fname.copy().update(suffix="digitizer", extension=".json")
     if not fname.fpath.exists():
         _write_json(fname, component_json)
     else:

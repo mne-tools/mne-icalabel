@@ -85,16 +85,15 @@ jobs:
         run: python -m pip uninstall -yq mne_icalabel
       - name: Build package
         run: python -m build
-      - name: Install sdist
-        run: pip install ./dist/*.tar.gz
-      - name: Test sdist install
-        run: python -c "import mne_icalabel; print(mne_icalabel.__version__)"
-      # upload build artifacts, so that release can use them
       - name: Upload package distribution files
         uses: actions/upload-artifact@v3
         with:
           name: package
           path: dist
+      - name: Install sdist
+        run: pip install ./dist/*.tar.gz
+      - name: Test sdist install
+        run: python -c "import mne_icalabel; print(mne_icalabel.__version__)"
       - name: Remove sdist install
         run: python -m pip uninstall -yq mne_icalabel
       - name: Install wheel

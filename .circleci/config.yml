@@ -185,7 +185,7 @@ jobs:
             destination: linkcheck
 
     deploy:
-        machine:
+        docker:
           image: cimg/node:lts
         steps:
           - attach_workspace:

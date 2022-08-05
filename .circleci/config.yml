@@ -188,6 +188,8 @@ jobs:
         docker:
           - image: cimg/node:lts
         steps:
+          - checkout
+          
           - attach_workspace:
               at: /doc/_build
           - run:

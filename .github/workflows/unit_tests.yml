@@ -28,14 +28,12 @@ jobs:
         run: |
           python -m pip install --progress-bar off --upgrade pip setuptools wheel
           python -m pip install --progress-bar off .[style]
-      - name: Setup flake8 annotations
-        uses: rbialon/flake8-annotations@v1
       - name: Run flake8
         uses: py-actions/flake8@v2
         with:
           path: "mne_icalabel"
       - name: Run isort
-        uses: jamescurtin/isort-action@master
+        uses: isort/isort-action@master
       - name: Run black
         uses: psf/black@stable
         with:

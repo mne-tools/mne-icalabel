@@ -1,84 +1,40 @@
-import os.path as op
-
-import matplotlib.pyplot as plt
 import pytest
 from mne.datasets import testing
-from mne.io import read_raw_edf
+from mne.io import BaseRaw, read_raw
 from mne.preprocessing import ICA
-from mne.utils import requires_version
 
-import mne_icalabel
+from mne_icalabel.gui import label_ica_components
 
-
-@pytest.fixture
-def _label_ica_components():
-    # Use a fixture to create these classes so we can ensure that they
-    # are closed at the end of the test
-    guis = list()
-
-    def fun(*args, **kwargs):
-        guis.append(mne_icalabel.gui.label_ica_components(*args, **kwargs))
-        return guis[-1]
-
-    yield fun
-
-    for gui in guis:
-        try:
-            gui.close()
-        except Exception:
-            pass
+directory = testing.data_path() / "MEG" / "sample"
+raw = read_raw(directory / "sample_audvis_trunc_raw.fif", preload=False)
+raw.pick_types(eeg=True, exclude="bads")
+raw.load_data()
+# preprocess
+with raw.info._unlock():  # fake filtering, testing dataset is filtered between [0.1, 80] Hz
+    raw.info["highpass"] = 1.0
+    raw.info["lowpass"] = 100.0
+ica = ICA(n_components=5, random_state=12345, fit_params=dict(tol=1e-1))
+ica.fit(raw)
 
 
-@pytest.fixture(scope="module")
-def load_raw_and_fit_ica():
-    data_path = op.join(testing.data_path(), "EDF")
-    raw_fname = op.join(data_path, "test_reduced.edf")
-    raw = read_raw_edf(raw_fname, preload=True)
-
-    # high-pass filter
-    raw.filter(l_freq=1, h_freq=100)
-
-    # compute ICA
-    ica = ICA(n_components=15, random_state=12345)
-    ica.fit(raw)
-    return raw, ica
-
-
-@pytest.fixture(scope="function")
-def _fitted_ica(load_raw_and_fit_ica):
-    raw, ica = load_raw_and_fit_ica
-    return raw, ica.copy()
-
-
-@requires_version("mne", "1.1dev0")
-@testing.requires_testing_data
-def test_label_components_gui_io(_fitted_ica, _label_ica_components):
-    """Test the input/output of the labeling ICA components GUI."""
-    # get the Raw and fitted ICA instance
-    raw, ica = _fitted_ica
-    ica_copy = ica.copy()
-
-    with pytest.raises(ValueError, match="ICA instance should be fit on"):
-        ica_copy.current_fit = "unfitted"
-        _label_ica_components(raw, ica_copy)
-
-
-@requires_version("mne", "1.1dev0")
-@testing.requires_testing_data
-def test_label_components_gui_display(_fitted_ica, _label_ica_components):
-    raw, ica = _fitted_ica
-
-    # test functions
-    gui = _label_ica_components(raw, ica)
-
+def test_label_components_gui_display():
+    ica_ = ica.copy()
+    gui = label_ica_components(raw, ica_, show=False)
     # test setting the label
-    assert gui.inst == raw
-    assert gui.ica == ica
+    assert isinstance(gui.inst, BaseRaw)
+    assert isinstance(gui.ica, ICA)
     assert gui.n_components_ == ica.n_components_
-
     # the initial component should be 0
     assert gui.selected_component == 0
 
-    # there should be three figures inside the QT window
-    figs = list(map(plt.figure, plt.get_fignums()))
-    assert len(figs) == 3
+
+def test_invalid_arguments():
+    """Test error error raised with invalid arguments."""
+    with pytest.raises(TypeError, match="ica must be an instance of ICA"):
+        label_ica_components(raw, 101)
+
+    with pytest.raises(TypeError, match="inst must be an instance of raw or epochs"):
+        label_ica_components(101, ica)
+
+    with pytest.raises(ValueError, match="ICA instance should be fitted"):
+        label_ica_components(raw, ICA(n_components=10, random_state=12345))

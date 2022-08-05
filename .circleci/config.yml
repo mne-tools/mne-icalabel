@@ -6,11 +6,10 @@ jobs:
         - image: cimg/base:stable-20.04
       steps:
         - restore_cache:
+            name: Restore .git
             keys:
               - source-cache-iclabel
-
         - checkout
-
         - run:
             name: Complete checkout
             command: |
@@ -19,12 +18,11 @@ jobs:
               fi
               git remote set-url upstream https://github.com/mne-tools/mne-icalabel.git
               git fetch upstream
-
         - save_cache:
+            name: Save .git
             key: source-cache-iclabel
             paths:
               - ".git"
-
         - run:
             name: Check-skip
             command: |
@@ -34,17 +32,23 @@ jobs:
                 echo "Skip detected, exiting job ${CIRCLE_JOB} for PR ${CIRCLE_PULL_REQUEST}."
                 circleci-agent step halt;
               fi
-
-        - add_ssh_keys:
-            fingerprints:
-              - "d6:88:6b:a0:80:bf:14:8e:80:2e:ed:11:52:26:37:68"
-
+        - run:
+            name: Merge with upstream
+            command: |
+              echo $(git log -1 --pretty=%B) | tee gitlog.txt
+              echo ${CI_PULL_REQUEST//*pull\//} | tee merge.txt
+              if [[ $(cat merge.txt) != "" ]]; then
+                echo "Merging $(cat merge.txt)";
+                git pull --ff-only upstream "refs/pull/$(cat merge.txt)/merge";
+              fi
         - run:
             name: Set BASH_ENV
             command: |
               set -e
-              ./scripts/setup_xvfb.sh
-              sudo apt install -qq graphviz optipng python3.8-venv python3-venv libxft2 ffmpeg
+              curl https://raw.githubusercontent.com/mne-tools/mne-python/main/tools/setup_xvfb.sh -o setup_xvfb.sh
+              chmod +x setup_xvfb.sh
+              ./setup_xvfb.sh
+              sudo apt install -qq graphviz optipng python3.8-venv python3-venv libxft2
               python3.8 -m venv ~/python_env
               echo "set -e" >> $BASH_ENV
               echo "export OPENBLAS_NUM_THREADS=4" >> $BASH_ENV
@@ -56,97 +60,66 @@ jobs:
               ln -s ~/python_env/bin/python ~/.local/bin/python
               echo "BASH_ENV:"
               cat $BASH_ENV
-              mkdir -p ~/mne_icalabel_data
-              touch pattern.txt;
-
-        # make sure pandoc is on the system
-        - run: sudo apt update && sudo apt install -y pandoc optipng
-
         - run:
-            name: Merge with upstream
-            command: |
-              echo $(git log -1 --pretty=%B) | tee gitlog.txt
-              echo ${CI_PULL_REQUEST//*pull\//} | tee merge.txt
-              if [[ $(cat merge.txt) != "" ]]; then
-                echo "Merging $(cat merge.txt)";
-                git pull --ff-only upstream "refs/pull/$(cat merge.txt)/merge";
-              fi
-
-        - run:
-            name: Install relevant dependencies
-            command: |
-              set -e
-              ./scripts/circle_ci_dependencies.sh
-
-        # Load pip cache
+            name: Setup pandoc
+            command: sudo apt update && sudo apt install -y pandoc optipng
         - restore_cache:
+            name: Restore pip cache
             keys:
               - pip-cache
         - restore_cache:
+            name: Restore install-bin-cache
             keys:
-              - user-install-bin-cachev1
-
+              - user-install-bin-cache
         - run:
             name: Get Python running and install dependencies
             command: |
-              pip install --progress-bar off .
-              pip install --upgrade --progress-bar off -r requirements_testing.txt
-              pip install --upgrade --progress-bar off -r requirements_doc.txt
-              pip install --upgrade --progress-bar off PyQt5
-              python -m pip uninstall -yq sphinx-gallery mne-qt-browser
-              python -m pip install --upgrade --no-deps https://github.com/mne-tools/mne-python/archive/main.zip
-              # TODO: Revert to upstream/main once https://github.com/mne-tools/mne-qt-browser/pull/105 is merged
-              python -m pip install --upgrade --progress-bar off https://github.com/mne-tools/mne-qt-browser/zipball/main https://github.com/sphinx-gallery/sphinx-gallery/zipball/master
-        
+              python -m pip install --progress-bar off --upgrade pip setuptools wheel
+              python -m pip install --progress-bar off .
+              python -m pip install --progress-bar off .[doc,gui]
+              python -m pip uninstall -yq mne mne-qt-browser
+              python -m pip install --progress-bar off git+https://github.com/mne-tools/mne-python
+              python -m pip install --progress-bar off git+https://github.com/mne-tools/mne-qt-browser
         - save_cache:
+            name: Save pip cache
             key: pip-cache
             paths:
               - ~/.cache/pip
-
         - save_cache:
-            key: user-install-bin-cachev1
+            name: Save install-bin-cache
+            key: user-install-bin-cache
             paths:
               - ~/.local/lib/python3.8/site-packages
               - ~/.local/bin
-
-        # - run:
-        #     name: Check Qt
-        #     command: LD_DEBUG=libs python -c "from PySide6.QtWidgets import QApplication, QWidget; app = QApplication([])"
-
-
-        # Look at what we have and fail early if there is some library conflict
+        - run:
+            name: Check pip package versions
+            command: pip freeze
+        - run:
+            name: Display MNE infos
+            command: QT_DEBUG_PLUGINS=1 mne sys_info -pd
         - run:
             name: Check installation
             command: |
-               which python
-               python -c "import mne_icalabel;"
-               python -c "import mne; mne.sys_info()"
                LIBGL_DEBUG=verbose python -c "import matplotlib.pyplot as plt; plt.figure()"
                python -c "import mne; mne.set_config('MNE_LOGGING_LEVEL', 'info')"
                python -c "import mne; level = mne.get_config('MNE_LOGGING_LEVEL'); assert level.lower() == 'info', repr(level)"
                python -c "import numpy; numpy.show_config()"
-
-        # Build doc
         - run:
-            name: make html
+            name: Build documentation
             command: |
-              cd doc;
-              make html;
-
-        # Save the JUnit file
+              cd doc
+              make html
+        # Save the example test results
         - store_test_results:
             path: doc/_build/test-results
-
         - store_artifacts:
             path: doc/_build/test-results
             destination: test-results
-
         # Save the SG RST
         - store_artifacts:
             path: doc/auto_examples.zip
         - store_artifacts:
             path: doc/generated.zip
-
         # Save the outputs
         - store_artifacts:
             path: doc/_build/html/
@@ -161,24 +134,17 @@ jobs:
               - html_stable
 
     linkcheck:
-      # there are a few files excluded from this for expediency, see Makefile
       parameters:
         scheduled:
           type: string
           default: "false"
       docker:
-        - image: circleci/python:3.9.2-buster
+        - image: cimg/python:3.9.2
       steps:
         - restore_cache:
             keys:
-              - source-cache
+              - source-cache-iclabel
         - checkout
-        - run:
-            name: Set BASH_ENV
-            command: |
-              set -e
-              echo "set -e" >> $BASH_ENV
-              echo "export PATH=~/.local/bin/:$PATH" >> $BASH_ENV
         - run:
             name: Check-skip
             command: |
@@ -187,13 +153,20 @@ jobs:
                 echo "Skip detected, exiting job ${CIRCLE_JOB}."
                 circleci-agent step halt;
               fi
+        - run:
+            name: Set BASH_ENV
+            command: |
+              set -e
+              echo "set -e" >> $BASH_ENV
+              echo "export PATH=~/.local/bin/:$PATH" >> $BASH_ENV
         - restore_cache:
             keys:
               - pip-cache
         - run:
             name: Get Python running
             command: |
-              ./scripts/circleci_dependencies.sh
+              python -m pip install --progress-bar off --upgrade pip setuptools wheel
+              python -m pip install --progress-bar off .[doc]
         - run:
             name: Check installation
             command: |
@@ -211,19 +184,25 @@ jobs:
             path: doc/_build/linkcheck
             destination: linkcheck
 
-    doc-deploy:
-        docker:
-          - image: cimg/node:lts
+    deploy:
+        machine:
+          image: cimg/node:lts
         steps:
-          - checkout
-
           - attach_workspace:
-              at: doc/_build
-
-          - restore_cache:
-              keys:
-                - website-cache
-
+              at: /doc/_build
+          - run:
+              name: Set BASH_ENV
+              command: |
+                set -e
+                echo "set -e" >> $BASH_ENV
+          # Don't try to deploy if nothing is there or not on the right branch
+          - run:
+              name: Check docs
+              command: |
+                if [ ! -f /doc/_build/html/index.html ] && [ ! -f /doc/_build/html_stable/index.html ]; then
+                  echo "No files found to upload (build: ${CIRCLE_BRANCH}).";
+                  circleci-agent step halt;
+                fi;
           - run:
               name: Install and configure dependencies
               # do not update gh-pages above 3.0.0
@@ -232,11 +211,9 @@ jobs:
                 npm install gh-pages@3.0
                 git config --global user.email "circle@mne.com"
                 git config --global user.name "Circle Ci"
-
           - add_ssh_keys:
               fingerprints:
                 - "b5:1e:a1:6d:8d:48:f2:8f:dd:bd:2d:66:a9:30:fe:b9"
-
           - run:
               # push built doc into the `dev` directory on the `gh-pages` branch
               name: Deploy doc to gh-pages branch
@@ -246,13 +223,8 @@ jobs:
                   node_modules/gh-pages/bin/gh-pages.js --dotfiles --message "doc updates [skip ci]" --dist doc/_build/html --dest ./dev
                 else
                   echo "Deploying stable doc for ${CIRCLE_BRANCH}.";
-                  node_modules/gh-pages/bin/gh-pages.js --dotfiles --message "doc updates [skip ci]" --dist doc/_build/html --dest ./stable
+                  node_modules/gh-pages/bin/gh-pages.js --dotfiles --message "doc updates [skip ci]" --dist doc/_build/html_stable --dest ./stable
                 fi;
-
-          - save_cache:
-              key: website-cache
-              paths:
-                - ~/mne-icalabel
 
 workflows:
   default:
@@ -261,9 +233,42 @@ workflows:
           name: build_doc
       - linkcheck:
           name: linkcheck
-      - doc-deploy:
+      - deploy:
           requires:
             - build_doc
+          filters:
+            branches:
+              only:
+                - main
+                - maint/0.2
+
+  main:
+    jobs:
+      - build_doc:
+          name: build_doc_main
+      - deploy:
+          name: deploy_main
+          requires:
+            - build_doc_main
+    triggers:
+      - schedule:
+          # "At 00:00" (once a day) should be enough "0 0 * * *",
+          # But for testing at first, let's do once an hour (6 AM GMT)
+          cron: "0 6 * * *"
+          filters:
+            branches:
+              only:
+                - main
+
+  weekly:
+    jobs:
+      - linkcheck:
+          name: linkcheck_weekly
+          scheduled: "true"
+    triggers:
+      - schedule:
+          # "At 00:00 on Sunday" should be often enough
+          cron: "0 0 * * 0"
           filters:
             branches:
               only:

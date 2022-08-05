@@ -1,0 +1,49 @@
+# YAML 1.2
+---
+# Metadata for citation of this software according to the CFF format (https://citation-file-format.github.io/)
+cff-version: 1.2.0
+title: 'MNE-ICALabel: Automatically annotating ICA components with ICLabel in Python'
+abstract: 'MNE-ICALabel is a Python library to facilitate the automatic annotation of ICA components for MEG, EEG, and iEEG data with MNE-Python. More information about MNE-Python can be found at <a href="https://mne.tools">mne.tools</a>.'
+authors:
+    - given-names: Adam
+      family-names: Li
+      affiliation: 'Department of Computer Science, Columbia University, New York, NY, USA'
+      orcid: 'https://orcid.org/0000-0001-8421-365X'
+    - given-names: Richard
+      family-names: Höchenberger
+      affiliation: 'Institute of Neuroscience and Medicine (INM-3), Research Center Jülich, Germany'
+      orcid: 'https://orcid.org/0000-0002-0380-4798'
+    - given-names: Thomas
+      family-names: Donoghue
+      affiliation: 'Department of Biomedical Engineering, Columbia University'
+      orcid: 'https://orcid.org/0000-0001-5911-0472'
+    - given-names: Mathieu
+      family-names: Scheltienne
+      affiliation: 'Human Neuroscience Platform, Fondation Campus Biotech Geneva, Geneva, Switzerland'
+      orcid: 'https://orcid.org/0000-0001-8316-7436'
+    - given-names: Jacob
+      family-names: Feitelberg
+      affiliation: 'Department of Biomedical Engineering, Johns Hopkins University, Baltimore, MD, USA'
+      orcid: 'https://orcid.org/0000-0002-4551-0245'
+    - given-names: Anand
+      family-names: Saini
+      affiliation: 'Human Neuroscience Platform, Fondation Campus Biotech Geneva, Geneva, Switzerland'
+      orcid: 'https://orcid.org/0000-0003-3595-5969'
+type: software
+repository-code: 'https://github.com/mne-tools/mne-icalabel'
+license: BSD-3-Clause
+keywords:
+  - neuroscience
+  - neuroimaging
+  - mne
+  - python
+  - magnetoencephalography
+  - meg
+  - electroencephalography
+  - eeg
+  - ieeg
+  - ica
+message: >-
+  Please cite this software using the metadata from
+  'preferred-citation' in the CITATION.cff file.
+...

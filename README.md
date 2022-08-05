@@ -2,7 +2,7 @@
 
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![Codecov](https://codecov.io/gh/mne-tools/mne-icalabel/branch/main/graph/badge.svg)](https://codecov.io/gh/mne-tools/mne-icalabel)
-[![unit_tests](https://github.com/mne-tools/mne-icalabel/actions/workflows/unit_tests.yml/badge.svg?branch=main)](https://github.com/mne-tools/mne-icalabel/actions/workflows/unit_tests.yml)
+[![unit-tests](https://github.com/mne-tools/mne-icalabel/actions/workflows/unit-tests.yml/badge.svg?branch=main)](https://github.com/mne-tools/mne-icalabel/actions/workflows/unit-tests.yml)
 [![CircleCI](https://circleci.com/gh/mne-tools/mne-icalabel/tree/main.svg?style=svg)](https://circleci.com/gh/mne-tools/mne-icalabel/tree/main)
 [![PyPI Download count](https://pepy.tech/badge/mne-icalabel)](https://pepy.tech/project/mne-icalabel)
 [![Latest PyPI release](https://img.shields.io/pypi/v/mne-icalabel.svg)](https://pypi.org/project/mne-icalabel/)
@@ -11,7 +11,7 @@
 [![status](https://joss.theoj.org/papers/d91770e35a985ecda4f2e1f124977207/status.svg)](https://joss.theoj.org/papers/d91770e35a985ecda4f2e1f124977207)
 
 This repository is a conversion of the popular Matlab-based
-[ICLabel](https://github.com/sccn/ICLabel) classifier for Python. 
+[ICLabel](https://github.com/sccn/ICLabel) classifier for Python.
 In addition, `mne-icalabel` provides extensions and improvements in the form of other models.
 
 # Why?
@@ -49,8 +49,8 @@ The only current available method is `'iclabel'`.
 The current stable release of `mne-icalabel` can be installed with pip, for example, by running:
 
     pip install mne-icalabel
-    
-For further details about installation, see the 
+
+For further details about installation, see the
 [install](https://mne.tools/mne-icalabel/stable/install.html) page.
 
 To get the latest (development) version, using [git](https://git-scm.com/), open a terminal and type:

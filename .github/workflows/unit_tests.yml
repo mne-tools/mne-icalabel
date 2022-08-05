@@ -43,7 +43,7 @@ jobs:
         with:
           check_filenames: true
           check_hidden: true
-          skip: './.git,./build'
+          skip: './.git,./build,./.mypy_cache,./.pytest_cache'
           ignore_words_file: ./.codespellignore
       - name: Run pydocstyle
         run: pydocstyle .
@@ -140,7 +140,7 @@ jobs:
           python -m pip install git+https://github.com/mne-tools/mne-python
       - name: Display MNE infos
         run: mne sys_info
-      - name: Retrieve MNE/ICA-Label testing dataset version
+      - name: Retrieve MNE/MNE-ICALabel testing dataset version
         run: |
           curl https://raw.githubusercontent.com/mne-tools/mne-testing-data/master/version.txt -o mne_testing_data_version.txt
           curl https://raw.githubusercontent.com/adam2392/mne-testing-icalabel-data/main/version.txt -o mne_icalabel_testing_data_version.txt
@@ -149,7 +149,7 @@ jobs:
         with:
           key: ${{ matrix.os }}-${{ matrix.mne }}-${{ hashFiles('mne_testing_data_version.txt') }}-${{ hashFiles('mne_icalabel_testing_data_version.txt') }}
           path: ~/mne_data
-      - name: Download MNE/ICA-Label testing dataset
+      - name: Download MNE/MNE-ICALabel testing dataset
         run: |
           python -c "import mne; mne.datasets.testing.data_path()"
           python -c "import mne_icalabel; mne_icalabel.datasets.icalabel.data_path()"

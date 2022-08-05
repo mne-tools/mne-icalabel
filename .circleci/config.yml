@@ -201,7 +201,7 @@ jobs:
           - run:
               name: Check docs
               command: |
-                if [ ! -f /doc/_build/html/index.html ] && [ ! -f /doc/_build/html_stable/index.html ]; then
+                if [ ! -f doc/_build/html/index.html ] && [ ! -f doc/_build/html_stable/index.html ]; then
                   echo "No files found to upload (build: ${CIRCLE_BRANCH}).";
                   circleci-agent step halt;
                 fi;

@@ -147,20 +147,21 @@ When you're ready to contribute code to address an open issue, please follow the
 
     We also strive to maintain high test coverage, so most contributions should include additions to [the unit tests](https://github.com/mne-tools/mne-icalabel/tree/main/tests). These tests are run with [`pytest`](https://docs.pytest.org/en/latest/), which you can use to locally run any test modules that you've added or changed.
 
-    For example, if you've fixed a bug in `causal_networkx/a/b.py`, you can run the tests specific to that module with
+    For example, if you've fixed a bug in `mne_icalabel/a/b.py`, you can run the tests specific to that module with
 
         pytest -v tests/a/b_test.py
 
     Our CI will automatically check that test coverage stays above a certain threshold (around 90%). To check the coverage locally in this example, you could run
 
-        pytest -v --cov causal_networkx.a.b tests/a/b_test.py
+        pytest -v --cov mne_icalabel.a.b tests/a/b_test.py
 
     If your contribution involves additions to any public part of the API, we require that you write docstrings
     for each function, method, class, or module that you add.
     See the [Writing docstrings](#writing-docstrings) section below for details on the syntax.
     You should test to make sure the API documentation can build without errors by running
 
-        make docs
+        cd doc
+        make html
 
     If the build fails, it's most likely due to small formatting issues. If the error message isn't clear, feel free to comment on this in your pull request.
 

@@ -189,9 +189,9 @@ jobs:
           - image: cimg/node:lts
         steps:
           - checkout
-          
+
           - attach_workspace:
-              at: /doc/_build
+              at: doc/_build
           - run:
               name: Set BASH_ENV
               command: |

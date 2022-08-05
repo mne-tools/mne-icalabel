@@ -11,7 +11,7 @@
 [![status](https://joss.theoj.org/papers/d91770e35a985ecda4f2e1f124977207/status.svg)](https://joss.theoj.org/papers/d91770e35a985ecda4f2e1f124977207)
 
 This repository is a conversion of the popular Matlab-based
-[ICLabel](https://github.com/sccn/ICLabel) classifier for Python. 
+[ICLabel](https://github.com/sccn/ICLabel) classifier for Python.
 In addition, `mne-icalabel` provides extensions and improvements in the form of other models.
 
 # Why?
@@ -49,8 +49,8 @@ The only current available method is `'iclabel'`.
 The current stable release of `mne-icalabel` can be installed with pip, for example, by running:
 
     pip install mne-icalabel
-    
-For further details about installation, see the 
+
+For further details about installation, see the
 [install](https://mne.tools/mne-icalabel/stable/install.html) page.
 
 To get the latest (development) version, using [git](https://git-scm.com/), open a terminal and type:

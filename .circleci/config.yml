@@ -186,7 +186,7 @@ jobs:
 
     deploy:
         docker:
-          image: cimg/node:lts
+          - image: cimg/node:lts
         steps:
           - attach_workspace:
               at: /doc/_build

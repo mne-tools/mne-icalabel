@@ -212,7 +212,8 @@ def _format_input_for_torch(topo: ArrayLike, psd: ArrayLike, autocorr: ArrayLike
 def run_iclabel(images: ArrayLike, psds: ArrayLike, autocorr: ArrayLike):
     """Run the ICLabel network on the provided set of features.
 
-    The features are un-formatted and are as-returned by `~mne_icalabel.iclabel.get_iclabel_features`.
+    The features are un-formatted and are as-returned by
+    `~mne_icalabel.iclabel.get_iclabel_features`.
 
     Parameters
     ----------
@@ -240,6 +241,6 @@ def run_iclabel(images: ArrayLike, psds: ArrayLike, autocorr: ArrayLike):
     labels = iclabel_net(*_format_input_for_torch(*_format_input(images, psds, autocorr)))
     labels = labels.detach().numpy()
 
-    # outputs are:
-    # ordered as in https://github.com/sccn/ICLabel/blob/e8abc99e0c371ff49eff115cf7955fafc7f7969a/iclabel.m#L60-L62
+    # outputs are ordered as in
+    # https://github.com/sccn/ICLabel/blob/e8abc99e0c371ff49eff115cf7955fafc7f7969a/iclabel.m#L60-L62
     return labels

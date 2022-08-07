@@ -2,22 +2,10 @@ from typing import Optional, Union
 
 import numpy as np
 from mne.channels.layout import _find_topomap_coords
-from mne.defaults import _BORDER_DEFAULT, _EXTRAPOLATE_DEFAULT
-
-try:
-    from mne.defaults import _INTERPOLATION_DEFAULT
-except ImportError:  # import is valid only for MNE ≥ 1.1
-    _INTERPOLATION_DEFAULT = "cubic"
-
+from mne.defaults import _BORDER_DEFAULT, _EXTRAPOLATE_DEFAULT, _INTERPOLATION_DEFAULT
 from mne.io import Info
-from mne.io.pick import (
-    _get_channel_types,
-    _pick_data_channels,
-    _picks_to_idx,
-    pick_info,
-)
+from mne.io.pick import _get_channel_types, _pick_data_channels, _picks_to_idx, pick_info
 from mne.preprocessing import ICA
-from mne.utils import check_version
 from mne.viz.topomap import _check_extrapolate, _make_head_outlines, _setup_interp
 from numpy.typing import NDArray
 
@@ -52,7 +40,6 @@ def get_topomaps(
     topomaps : array of shape (n_components, n_pixels, n_pixels)
         Topographic maps of each picked independent component.
     """
-    _check_mne_version()
     picks = _picks_to_idx(ica.n_components_, picks)
     data = np.dot(
         ica.mixing_matrix_[:, : ica.n_components_].T,
@@ -102,8 +89,6 @@ def _get_topomap_array(
     topomap : array of shape (n_pixels, n_pixels)
         Topographic map array.
     """
-    _check_mne_version()
-
     picks = _pick_data_channels(pos, exclude=())  # pick only data channels
     pos = pick_info(pos, picks)
     ch_type = _get_channel_types(pos, unique=True)
@@ -129,10 +114,3 @@ def _get_topomap_array(
     extent, Xi, Yi, interp = _setup_interp(pos, res, image_interp, extrapolate, outlines, border)
     interp.set_values(data)
     return interp.set_locations(Xi, Yi)()  # Zi, topomap of shape (n_pixels, n_pixels)
-
-
-# TODO: remove this and the corresponding import when mne v1.1 is released
-def _check_mne_version():
-    """Check that MNE version is above 1.1."""
-    if not check_version("mne", "1.1"):
-        raise RuntimeError("Topographic feature is only available for MNE ≥ 1.1")

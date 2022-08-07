@@ -45,7 +45,7 @@ def get_iclabel_features(inst: Union[BaseRaw, BaseEpochs], ica: ICA):
     if inst.info["custom_ref_applied"] == 0:
         warn(
             f"The provided {'Raw' if isinstance(inst, BaseRaw) else 'Epochs'} instance "
-            "does not seems to be referenced to a common average reference (CAR). "
+            "does not seem to be referenced to a common average reference (CAR). "
             "ICLabel was designed to classify features extracted from an EEG dataset "
             "referenced to a CAR (see the 'set_eeg_reference()' method for Raw and "
             "Epochs instances)."
@@ -144,7 +144,7 @@ def _compute_ica_activations(inst: Union[BaseRaw, BaseEpochs], ica: ICA) -> NDAr
 
     Notes
     -----
-    In EEGLAB, the ICA activation are computed after the data and the ICA
+    In EEGLAB, the ICA activations are computed after the data and the ICA
     decomposition are re-referenced to a common average, if the field 'EEG.ref'
     is different from 'averef'. The EEGLAB sample dataset's field 'EEG.ref' is
     set to 'common', thus triggering the re-referencing with 'pop_reref' which
@@ -443,7 +443,7 @@ def _eeg_autocorr_welch(raw: BaseRaw, ica: ICA, icaact: NDArray[float]) -> NDArr
 
 
 def _eeg_autocorr(raw: BaseRaw, ica: ICA, icaact: NDArray[float]) -> NDArray[float]:
-    """Autocorrelation feature applied on raw object that do not have enough sampes for eeg_autocorr_welch.
+    """Autocorrelation feature applied on raw object without enough sampes for eeg_autocorr_welch.
 
     MATLAB: 'eeg_autocorr.m'.
     """
@@ -525,7 +525,7 @@ def _resample(ac: NDArray[float], fs: Union[int, float]) -> NDArray[float]:
     Parameters
     ----------
     ac : array
-        Array of shape (n_comp, samples)
+        Array of shape (n_comp, samples).
     fs : int | float
         Sampling frequency of the MNE instance.
     """

@@ -221,13 +221,13 @@ def _mergesimpts(
     """
     Parameters
     ----------
-        data : array
-        tols : list of 3 arrays
-        mode : str
+    data : array
+    tols : list of 3 arrays
+    mode : str
 
     Returns
     -------
-        array
+    array
     """
     data_ = data.copy()[np.argsort(data[:, 0])]
     newdata = []

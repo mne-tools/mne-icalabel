@@ -4,6 +4,7 @@ from typing import Union
 from mne.preprocessing import ICA
 from mne.utils import _check_pandas_installed
 
+from ..config import ICLABEL_LABELS_TO_MNE
 from ..iclabel.config import ICLABEL_STRING_TO_NUMERICAL
 
 
@@ -41,17 +42,31 @@ def write_components_tsv(ica: ICA, fname):
     if not isinstance(fname, BIDSPath):
         fname = get_bids_path_from_fname(fname)
 
+    # initialize status, description and IC type
+    status = ["good"] * ica.n_components_
+    status_description = ["n/a"] * ica.n_components_
+    ic_type = ["n/a"] * ica.n_components_
+
+    # extract the component labels if they are present in the ICA instance
+    if ica.labels_:
+        for label, comps in ica.labels_.items():
+            this_status = "good" if label == "brain" else "bad"
+            if label in ICLABEL_LABELS_TO_MNE.values():
+                for comp in comps:
+                    status[comp] = this_status
+                    ic_type[comp] = label
+
     # Create TSV.
     tsv_data = pd.DataFrame(
         dict(
             component=list(range(ica.n_components_)),
             type=["ica"] * ica.n_components_,
             description=["Independent Component"] * ica.n_components_,
-            status=["good"] * ica.n_components_,
-            status_description=["n/a"] * ica.n_components_,
+            status=status,
+            status_description=status_description,
             annotate_method=["n/a"] * ica.n_components_,
             annotate_author=["n/a"] * ica.n_components_,
-            ic_type=["n/a"] * ica.n_components_,
+            ic_type=ic_type,
         )
     )
     # make sure parent directories exist

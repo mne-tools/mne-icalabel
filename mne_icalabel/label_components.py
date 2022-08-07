@@ -28,16 +28,18 @@ def label_components(inst: Union[BaseRaw, BaseEpochs], ica: ICA, method: str):
     Returns
     -------
     component_dict : dict
-        A dictionary with the following output:
+        A dictionary with the following fields:
+
         - 'y_pred_proba' : np.ndarray of shape (n_components,)
-        Estimated corresponding predicted probability of the output class
-        for each independent component.
+            Estimated predicted probability of the output class
+            for each independent component.
         - 'labels': list of shape (n_components,)
-        The corresponding string label of each class in 'y_pred'.
+            The corresponding string label of each class in 'y_pred'.
 
     Notes
     -----
     For ICLabel model, the output classes are ordered:
+
     - 'brain'
     - 'muscle artifact'
     - 'eye blink'

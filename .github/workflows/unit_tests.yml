@@ -1,207 +1,210 @@
-name: "unit_tests"
+name: unit-tests
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.number }}-${{ github.event.type }}
   cancel-in-progress: true
 on:
-  push:
-    branches:
-      - "main"
   pull_request:
-    branches:
-      - "*"
+    paths:
+      - '**.py'
+  push:
+    branches: [main]
+    paths:
+      - '**.py'
+  workflow_dispatch:
 
 jobs:
-  # Run style tests
   style:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest]
-        python-version: ["3.10"]
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - name: Set up Python ${{ matrix.python-version }}
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Setup Python 3.9
         uses: actions/setup-python@v4
         with:
-          python-version: ${{ matrix.python-version }}
-      # install only the dependencies required for style
-      - name: Install pip
+          python-version: '3.9'
+          architecture: 'x64'
+      - name: Install dependencies
         run: |
-          pip install --upgrade --progress-bar off pip setuptools wheel
-          pip install --upgrade --upgrade-strategy eager --progress-bar off black check-manifest codespell flake8 flake8-array-spacing isort mypy pydocstyle
-      - name: Run style & documentation tests
-        run: make run-checks
+          python -m pip install --progress-bar off --upgrade pip setuptools wheel
+          python -m pip install --progress-bar off .[style]
+      - name: Run flake8
+        uses: py-actions/flake8@v2
+        with:
+          path: "mne_icalabel"
+      - name: Run isort
+        uses: isort/isort-action@master
+      - name: Run black
+        uses: psf/black@stable
+        with:
+          options: "--check --verbose"
+      - name: Run codespell
+        uses: codespell-project/actions-codespell@master
+        with:
+          check_filenames: true
+          check_hidden: true
+          skip: './.git,./build,./.mypy_cache,./.pytest_cache'
+          ignore_words_file: ./.codespellignore
+      - name: Run pydocstyle
+        run: pydocstyle .
+      - name: Run mypy
+        uses: jpetrucciani/mypy-check@master
+        with:
+          path: './mne_icalabel'
+          mypy_flags: '--config-file pyproject.toml'
 
-  # Run installation tests
   build:
-    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        os: [ubuntu, macos, windows]
         python-version: [3.7, 3.8, 3.9, "3.10"]
+    name: build ${{ matrix.os }} - py${{ matrix.python-version }}
+    runs-on: ${{ matrix.os }}-latest
+    defaults:
+      run:
+        shell: bash
     steps:
-      - uses: actions/checkout@v3
-
-      - name: Set up Python ${{ matrix.python-version }}
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Setup Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
-
+          architecture: 'x64'
       - name: Install dependencies
         run: |
-          pip install --upgrade --progress-bar off pip setuptools wheel
-
-      # build with sdist directly
-      - uses: actions/checkout@v3
-      - name: Build sdist
-        run: python setup.py sdist
+          python -m pip install --progress-bar off --upgrade pip setuptools wheel
+          python -m pip install --progress-bar off .[build]
+      - name: Test package install
+        run: python -c "import mne_icalabel; print(mne_icalabel.__version__)"
+      - name: Remove package install
+        run: python -m pip uninstall -yq mne_icalabel
+      - name: Build package
+        run: python -m build
+      - name: Upload package distribution files
+        uses: actions/upload-artifact@v3
+        with:
+          name: package
+          path: dist
       - name: Install sdist
-        run: pip install ./dist/mne-icalabel-*
-      - name: Clean up working directory
-        run: rm -rf ./*
-      - name: Try importing mne_icalabel
-        run: python -c 'import mne_icalabel; print(mne_icalabel.__version__)'
+        run: pip install ./dist/*.tar.gz
+      - name: Test sdist install
+        run: python -c "import mne_icalabel; print(mne_icalabel.__version__)"
       - name: Remove sdist install
-        run: pip uninstall -y mne-icalabel
-      # build with build wheet
-      - uses: actions/checkout@v3
-      - name: Build wheel
-        run: python setup.py bdist_wheel
+        run: python -m pip uninstall -yq mne_icalabel
       - name: Install wheel
-        run: pip install ./dist/mne_icalabel-*.whl
-      - name: Clean up working directory
-        run: rm -rf ./*
-      - name: Try importing mne_icalabel
-        run: python -c 'import mne_icalabel; print(mne_icalabel.__version__)'
+        run: pip install ./dist/*.whl
+      - name: Test wheel install
+        run: python -c "import mne_icalabel; print(mne_icalabel.__version__)"
       - name: Remove wheel install
-        run: pip uninstall -y mne-icalabel
+        run: python -m pip uninstall -yq mne_icalabel
 
-      - uses: actions/checkout@v3
-      - name: Test extras install
-        run: |
-          pip install .[full]
-          python -c 'import mne_icalabel; print(mne_icalabel.__version__)'
-
-  # Run unit tests
   test:
-    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
-        python-version: [3.7, "3.10"] # oldest and newest supported versions
-        mne-version: [mne-stable, mne-main]
-
-        include:
-          - os: ubuntu-latest
-            python-version: 3.8
-            mne-version: mne-main
-          - os: ubuntu-latest
-            python-version: 3.9
-            mne-version: mne-main
-
-    env:
-      TZ: Europe/Berlin
-      FORCE_COLOR: true
-      DISPLAY: ":99.0"
-      MNE_LOGGING_LEVEL: "info"
-      OPENBLAS_NUM_THREADS: "1"
-      PYTHONUNBUFFERED: "1"
-
+        os: [ubuntu, macos, windows]
+        python-version: [3.7, "3.10"]  # oldest and newest supported versions
+        mne: [stable, main]
+    name: pytest ${{ matrix.os }} - py${{ matrix.python-version }} - MNE ${{ matrix.mne }}
+    runs-on: ${{ matrix.os }}-latest
+    defaults:
+      run:
+        shell: bash
     steps:
-      - name: Set up Python ${{ matrix.python-version }}
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          path: main  # clone repository in a sub-directory
+      - name: Setup Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
-
-      - uses: actions/checkout@v3
-
-      - name: Install mne-icalabel
+          architecture: 'x64'
+      - name: Install Qt dependencies
+        if: "matrix.os == 'ubuntu'"
         run: |
-          pip install --upgrade --progress-bar off pip setuptools wheel
-          pip install --progress-bar off .
-
-      - name: Install dependencies
+          sudo apt update
+          sudo apt install qt5-default
+      - name: Install package
         run: |
-          pip install --upgrade --upgrade-strategy eager --progress-bar off -r requirements_testing.txt
-
+          python -m pip install --progress-bar off --upgrade pip setuptools wheel
+          python -m pip install --progress-bar off main/.[test]
       - name: Install MNE (main)
-        if: "matrix.mne-version == 'mne-main'"
+        if: "matrix.mne == 'main'"
         run: |
-          git clone --depth 1 https://github.com/mne-tools/mne-python.git -b main
-          pip install --force-reinstall --progress-bar off ./mne-python
-
-      - name: Install MNE (stable)
-        if: "matrix.mne-version == 'mne-stable'"
-        run: |
-          pip install --force-reinstall --progress-bar off mne
-
-      - name: Display versions and environment information
-        run: |
-          echo $TZ
-          date
-          python --version
-          which python
-
-      - name: "Show infos"
-        shell: bash -el {0}
+          python -m pip uninstall -yq mne
+          python -m pip install git+https://github.com/mne-tools/mne-python
+      - name: Display MNE infos
         run: mne sys_info
-
-      - name: Run pytest
-        shell: bash
+      - name: Retrieve MNE/MNE-ICALabel testing dataset version
         run: |
-          python -m pytest ./mne_icalabel --cov=mne_icalabel --cov-report=xml --cov-config=setup.cfg --verbose --ignore mne-python
-
+          curl https://raw.githubusercontent.com/mne-tools/mne-testing-data/master/version.txt -o mne_testing_data_version.txt
+          curl https://raw.githubusercontent.com/adam2392/mne-testing-icalabel-data/main/version.txt -o mne_icalabel_testing_data_version.txt
+      - name: Cache MNE/ICA-Label testing dataset
+        uses: actions/cache@v3
+        with:
+          key: ${{ matrix.os }}-${{ matrix.mne }}-${{ hashFiles('mne_testing_data_version.txt') }}-${{ hashFiles('mne_icalabel_testing_data_version.txt') }}
+          path: ~/mne_data
+      - name: Download MNE/MNE-ICALabel testing dataset
+        run: |
+          python -c "import mne; mne.datasets.testing.data_path()"
+          python -c "import mne_icalabel; mne_icalabel.datasets.icalabel.data_path()"
+      - name: Run pytest  # headless via Xvfb on linux
+        uses: GabrielBB/xvfb-action@v1.6
+        with:
+          run: pytest main/mne_icalabel --cov=main/mne_icalabel --cov-report=xml --cov-config=main/pyproject.toml
       - name: Upload coverage stats to codecov
-        if: "matrix.os == 'ubuntu-latest'"
+        if: ${{ matrix.os == 'ubuntu' && matrix.python-version == '3.10' && matrix.mne == 'stable' }}
         uses: codecov/codecov-action@v3
         with:
-          file: ./coverage.xml
+          files: ./coverage.xml
+          fail_ci_if_error: true
+          verbose: true
 
+  # release is ran when a release is made on Github
   release:
     name: Release
     runs-on: ubuntu-latest
     needs: [style, build, test]
     if: startsWith(github.ref, 'refs/tags/')
     steps:
-      - uses: actions/checkout@v3
-
-      - name: Setup Python
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Setup Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
         with:
-          python-version: "3.10"
-
-      - name: Install requirements
+          python-version: 3.9
+          architecture: 'x64'
+      - name: Install dependencies
         run: |
-          pip install --upgrade --progress-bar off pip setuptools wheel twine
-
+          python -m pip install --progress-bar off --upgrade pip setuptools wheel
+          python -m pip install --progress-bar off .[build]
       - name: Prepare environment
         run: |
           echo "RELEASE_VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
           echo "TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
-
       - name: Download package distribution files
         uses: actions/download-artifact@v3
         with:
           name: package
           path: dist
-
-      - name: Generate release notes
-        run: |
-          python scripts/release_notes.py > ${{ github.workspace }}-RELEASE_NOTES.md
-
+      # TODO: refactor scripts to generate release notes from `whats_new.rst` file instead
+      # - name: Generate release notes
+      #   run: |
+      #     python scripts/release_notes.py > ${{ github.workspace }}-RELEASE_NOTES.md
       - name: Publish package to PyPI
         run: |
           twine upload -u ${{ secrets.PYPI_USERNAME }} -p ${{ secrets.PYPI_PASSWORD }} dist/*
-
       - name: Publish GitHub release
         uses: softprops/action-gh-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          body_path: ${{ github.workspace }}-RELEASE_NOTES.md
+          # body_path: ${{ github.workspace }}-RELEASE_NOTES.md
           prerelease: ${{ contains(env.TAG, 'rc') }}
           files: |
             dist/*

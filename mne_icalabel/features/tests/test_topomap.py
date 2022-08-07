@@ -6,7 +6,7 @@ from mne.preprocessing import ICA
 
 from mne_icalabel.features import get_topomaps
 from mne_icalabel.features.topomap import _get_topomap_array
-from mne_icalabel.utils._testing import requires_version
+
 
 directory = testing.data_path() / "MEG" / "sample"
 raw = read_raw(directory / "sample_audvis_trunc_raw.fif", preload=False)
@@ -16,7 +16,6 @@ ica = ICA(n_components=5, method="picard")
 ica.fit(raw)
 
 
-@requires_version("mne", "1.1")
 def test_topomap_defaults():
     """Test scalp topography array generation"""
     topomaps = get_topomaps(ica, picks=None)
@@ -30,7 +29,6 @@ def test_topomap_defaults():
     assert topomap.shape == (64, 64)
 
 
-@requires_version("mne", "1.1")
 @pytest.mark.parametrize(
     "picks, res", [(0, 32), ([0, 1, 2], 50), (slice(1, 3), 128), (np.array([1, 2]), 10)]
 )
@@ -52,7 +50,6 @@ def test_topomap_arguments(picks, res):
     assert topomap.shape == (res, res)
 
 
-@requires_version("mne", "1.1")
 def test_invalid_arguments():
     """Test invalid arguments."""
     with pytest.raises(ValueError):

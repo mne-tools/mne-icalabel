@@ -52,6 +52,9 @@ def test_write_channels_tsv(_ica, _tmp_bids_path):
         suffix="channels",
         extension=".tsv",
     )
+    _ica = _ica.copy()
+    _ica.labels_["ecg"] = [0]
+
     write_components_tsv(_ica, deriv_fname)
 
     assert deriv_fname.fpath.exists()
@@ -59,7 +62,9 @@ def test_write_channels_tsv(_ica, _tmp_bids_path):
     assert expected_json.fpath.exists()
 
     ch_tsv = pd.read_csv(deriv_fname, sep="\t")
-    assert all(status == "good" for status in ch_tsv["status"])
+    assert all(status == "good" for status in ch_tsv["status"][1:])
+    assert ch_tsv["status"][0] == "bad"
+    assert ch_tsv["ic_type"].values[0] == "ecg"
 
 
 def test_mark_components(_ica, _tmp_bids_path):

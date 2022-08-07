@@ -7,7 +7,6 @@ from mne.preprocessing import ICA
 from mne_icalabel.features import get_topomaps
 from mne_icalabel.features.topomap import _get_topomap_array
 
-
 directory = testing.data_path() / "MEG" / "sample"
 raw = read_raw(directory / "sample_audvis_trunc_raw.fif", preload=False)
 raw.pick_types(eeg=True)

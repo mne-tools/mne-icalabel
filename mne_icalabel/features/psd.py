@@ -6,7 +6,7 @@ from mne.io import BaseRaw
 from mne.io.pick import _picks_to_idx
 from mne.preprocessing import ICA
 from mne.time_frequency import psd_multitaper
-from mne.utils import _check_option
+from mne.utils import _check_option, _validate_type
 from mne.viz.ica import _prepare_data_ica_properties
 
 from ..utils._docs import fill_doc
@@ -37,7 +37,7 @@ def get_psds(
     Parameters
     ----------
     ica : instance of mne.preprocessing.ICA
-        The ICA solution.
+        The `~mne.preprocesisng.ICA` fitted decomposition.
     inst : instance of Epochs or Raw
         `~mne.io.Raw` or `~mne.Epochs` instance used to fit the `~mne.preprocessing.ICA`
          decomposition.
@@ -68,16 +68,15 @@ def get_psds(
         Only use tapers with more than 90%% spectral concentration within
         bandwidth.
     proj : bool
-        Apply SSP projection vectors. If inst is ndarray this is not used.
+        Apply SSP projection vectors.
     %(n_jobs)s
     %(normalization)s
     output : str
         The format of the returned ``psds`` array. Can be either ``'complex'``
         or ``'power'``. If ``'power'``, the power spectral density is returned.
-        If ``output='complex'``, the complex fourier coefficients are returned
-        per taper.
+        If ``'complex'``, the complex fourier coefficients are returned per taper.
     dB : bool
-        Whether to plot spectrum in dB. Defaults to True.
+        Whether to return spectrum in dB. Defaults to True.
 
     Returns
     -------
@@ -86,18 +85,29 @@ def get_psds(
     """
     if np.any(np.isnan(inst.get_data())):
         raise ValueError("One or more channels contains NaN values")
-    picks = _picks_to_idx(ica.n_components_, picks)
-    kind, dropped_indices, epochs_src, data = _prepare_data_ica_properties(
-        inst, ica, reject_by_annotation=True, reject="auto"
-    )
+    # check fmin and fmax
+    _validate_type(fmin(float, int), "fmin")
+    if fmin <= 0:
+        raise ValueError(
+            f"Argument 'fmin' should be a strictly positive float, instead '{fmin}' was provided."
+        )
     nyquist = inst.info["sfreq"] / 2.0
-    if fmax is None:
-        fmax = min(inst.info["lowpass"] * 1.25, nyquist)
-    elif isinstance(fmax, float):
-        fmax = fmax
-    else:
-        raise ValueError(f"fmax should be float, instead found {type(fmax)}.")
+    fmax = float(min(inst.info["lowpass"] * 1.25, nyquist)) if fmax is None else fmax
+    _validate_type(fmax, (float, int), "fmax")
+    if fmax <= 0:
+        raise ValueError(
+            f"Argument 'fmax' should be a strictly positive float, instead '{fmax}' was provided."
+        )
     _check_option("normalization", normalization, ["length", "full"])
+    _check_option("output", output, ["power", "complex"])
+
+    picks = _picks_to_idx(ica.n_components_, picks)
+    _, _, epochs_src, _ = _prepare_data_ica_properties(
+        inst,
+        ica,
+        reject_by_annotation=reject_by_annotation,
+        reject=reject,
+    )
     psds, freq = psd_multitaper(
         epochs_src,
         fmin=fmin,

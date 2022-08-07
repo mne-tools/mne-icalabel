@@ -159,20 +159,15 @@ jobs:
               set -e
               echo "set -e" >> $BASH_ENV
               echo "export PATH=~/.local/bin/:$PATH" >> $BASH_ENV
-              python3.8 -m venv ~/python_env
-              echo "source ~/python_env/bin/activate" >> $BASH_ENV
-              mkdir -p ~/.local/bin
-              ln -s ~/python_env/bin/python ~/.local/bin/python
-              echo "BASH_ENV:"
-              cat $BASH_ENV
         - restore_cache:
             keys:
               - pip-cache
         - run:
             name: Get Python running
             command: |
-              python -m pip install --progress-bar off --upgrade pip setuptools wheel
-              python -m pip install --progress-bar off .[doc]
+              curl https://raw.githubusercontent.com/mne-tools/mne-python/main/tools/circleci_dependencies.sh -o circleci_dependencies.sh
+              chmod +x circleci_dependencies.sh
+              ./circleci_dependencies.sh
         - run:
             name: Check installation
             command: |

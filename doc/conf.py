@@ -213,16 +213,16 @@ html_context = {
 
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {
-    'python': ('https://docs.python.org/3', None),
+    'joblib': ('https://joblib.readthedocs.io/en/latest', None),
+    'matplotlib': ('https://matplotlib.org/stable', None),
     'mne': ('https://mne.tools/dev', None),
     'numpy': ('https://numpy.org/devdocs', None),
-    'scipy': ('https://scipy.github.io/devdocs', None),
-    'matplotlib': ('https://matplotlib.org/stable', None),
     'pandas': ('https://pandas.pydata.org/pandas-docs/dev', None),
-    'sklearn': ('https://scikit-learn.org/stable', None),
-    'joblib': ('https://joblib.readthedocs.io/en/latest', None),
-    "torch": ("https://pytorch.org/docs/stable", None),
     'pooch': ('https://www.fatiando.org/pooch/latest/', None),
+    'python': ('https://docs.python.org/3', None),
+    'scipy': ('https://scipy.github.io/devdocs', None),
+    'sklearn': ('https://scikit-learn.org/stable', None),
+    "torch": ("https://pytorch.org/docs/stable", None),
 }
 intersphinx_timeout = 5
 

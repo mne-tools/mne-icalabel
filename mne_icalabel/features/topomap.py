@@ -20,7 +20,7 @@ def get_topomaps(
     outlines: Optional[str] = "head",
     image_interp: str = _INTERPOLATION_DEFAULT,  # 'cubic'
     border: Union[float, str] = _BORDER_DEFAULT,  # 'mean'
-    extrapolate: str = _EXTRAPOLATE_DEFAULT,  # 'head'
+    extrapolate: str = _EXTRAPOLATE_DEFAULT,  # 'auto' -> 'head'
 ):
     """Generate an array of scalp topographies (n_pixels, n_pixels) for the picked components.
 

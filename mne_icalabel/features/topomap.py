@@ -47,7 +47,7 @@ def get_topomaps(
         ica.mixing_matrix_[:, : ica.n_components_].T,
         ica.pca_components_[: ica.n_components_],
     )
-    # Create an empty array of size (len(picks), 64, 64) for the topomap
+    # Create an empty array of size (len(picks), res, res) for the topomap
     topomaps = np.zeros((len(picks), res, res))
     for i, component in enumerate(picks):
         topo = np.flipud(
@@ -59,7 +59,7 @@ def get_topomaps(
         np.nan_to_num(topo, nan=0.0, copy=False)
         # Standardize the values
         topomaps[i, :, :] = topo / np.max(np.abs(topo))
-    return topomaps  # topographic map array for all the picked components (len(picks), 64, 64)
+    return topomaps  # topographic map array for all the picked components (len(picks), res, res)
 
 
 @fill_doc

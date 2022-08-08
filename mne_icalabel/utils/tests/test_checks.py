@@ -5,7 +5,7 @@ from mne.io import RawArray
 from mne.preprocessing import ICA
 from mne.utils import requires_version
 
-from mne_icalabel.utils._checks import _validate_inst_and_ica, _check_qt_version
+from mne_icalabel.utils._checks import _check_qt_version, _validate_inst_and_ica
 
 
 def test_validate_inst_and_ica():
@@ -34,10 +34,10 @@ def test_validate_inst_and_ica():
 # TODO: When tests of the GUI are improved and tests on all 4 Qt bindings, the
 # test below should pass on different CIs.
 # One approach is to:
-# - test mne-icalabel except the GUI on CI (1) without Qt instaled
+# - test mne-icalabel except the GUI on CI (1) without Qt installed
 # - test the GUI only on CI (2) on all 4 Qt bindings
 # CI (1) can be used to test the 'raise_on_error' and the None return.
-# CI (2) can be ujsed to test the 4 functions below.
+# CI (2) can be used to test the 4 functions below.
 @requires_version("PyQt5", min_version="")
 def test_qt_version_PyQt5():
     """Test _check_qt_version with PyQt5."""

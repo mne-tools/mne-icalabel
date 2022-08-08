@@ -1,6 +1,7 @@
 import os
 import shutil
 from functools import partial
+from typing import Optional
 
 import pooch
 from mne.datasets import fetch_dataset
@@ -11,7 +12,13 @@ has_icalabel_testing_data = partial(has_dataset, name="icalabel-testing")
 
 
 @verbose
-def data_path(path=None, force_update=False, update_path=True, download=True, verbose=None):
+def data_path(
+    path: Optional[str] = None,
+    force_update: bool = False,
+    update_path: Optional[bool] = True,
+    download: bool = True,
+    verbose=None,
+):
     """ICA label testing data generated in conjunction with EEGLab.
 
     Parameters

@@ -1,3 +1,5 @@
+import os
+import shutil
 from functools import partial
 from typing import Optional
 
@@ -62,4 +64,13 @@ def data_path(
         download=download,
         processor=pooch.Unzip(extract_dir=f"./{folder_name}"),
     )
+    dpath = str(dpath)
+
+    # Do some wrangling to deal with nested directories
+    bad_name = os.path.join(dpath, "mne-testing-icalabel-data-main")
+    if os.path.isdir(bad_name):
+        os.rename(bad_name, dpath + ".true")
+        shutil.rmtree(dpath)
+        os.rename(dpath + ".true", dpath)
+
     return _mne_path(dpath)

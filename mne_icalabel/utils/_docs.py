@@ -119,8 +119,6 @@ def _indentcount_lines(lines: List[str]) -> int:
         line_stripped = line.lstrip()
         if line_stripped:
             indent = min(indent, len(line) - len(line_stripped))
-    if indent == sys.maxsize:
-        return 0
     return indent
 
 

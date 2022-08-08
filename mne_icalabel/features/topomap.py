@@ -9,6 +9,7 @@ from mne.preprocessing import ICA
 from mne.viz.topomap import _check_extrapolate, _make_head_outlines, _setup_interp
 from numpy.typing import NDArray
 
+from ..utils._checks import _validate_ica
 from ..utils._docs import fill_doc
 
 
@@ -40,6 +41,7 @@ def get_topomaps(
     topomaps : array of shape (n_components, n_pixels, n_pixels)
         Topographic maps of each picked independent component.
     """
+    _validate_ica(ica)
     picks = _picks_to_idx(ica.n_components_, picks)
     data = np.dot(
         ica.mixing_matrix_[:, : ica.n_components_].T,

@@ -11,8 +11,12 @@ from mne.utils import _validate_type, warn
 def _validate_inst_and_ica(inst: Union[BaseRaw, BaseEpochs], ica: ICA):
     """Make sure that the provided instance and ICA are valid."""
     _validate_type(inst, (BaseRaw, BaseEpochs), "inst", "Raw or Epochs")
-    _validate_type(ica, ICA, "ica")
+    _validate_ica(ica)
 
+
+def _validate_ica(ica: ICA):
+    """Make sure that the provided ICA is valid."""
+    _validate_type(ica, ICA, "ica")
     if ica.current_fit == "unfitted":
         raise RuntimeError(
             "The provided ICA instance was not fitted. Please use the '.fit()' method to "

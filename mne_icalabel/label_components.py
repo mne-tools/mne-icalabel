@@ -49,9 +49,7 @@ def label_components(inst: Union[BaseRaw, BaseEpochs], ica: ICA, method: str):
     - 'other'
     """
     _validate_type(method, str, "method")
-    _check_option("method", method, ICALABEL_METHODS)
-    if ICALABEL_METHODS[method] is None:
-        raise RuntimeError('Cannot pass in "manual" as a method.')
+    _check_option("method", method, [elt for elt in ICALABEL_METHODS if elt != "manual"])
 
     _validate_inst_and_ica(inst, ica)
     labels_pred_proba = ICALABEL_METHODS[method](inst, ica)  # type: ignore

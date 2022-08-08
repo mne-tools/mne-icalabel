@@ -140,8 +140,7 @@ class ICLabelNet(nn.Module):
 
     @staticmethod
     def reshape_fortran(x: torch.Tensor, shape) -> torch.Tensor:  # noqa: D102
-        if len(x.shape) > 0:
-            x = x.permute(*reversed(range(len(x.shape))))
+        x = x.permute(*reversed(range(len(x.shape))))
         return x.reshape(*reversed(shape)).permute(*reversed(range(len(shape))))
 
     def reshape_concat(self, tensor: torch.Tensor) -> torch.Tensor:  # noqa: D102

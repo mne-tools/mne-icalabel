@@ -86,7 +86,7 @@ def get_psds(
     if np.any(np.isnan(inst.get_data())):
         raise ValueError("One or more channels contains NaN values")
     # check fmin and fmax
-    _validate_type(fmin(float, int), "fmin")
+    _validate_type(fmin, (float, int), "fmin")
     if fmin <= 0:
         raise ValueError(
             f"Argument 'fmin' should be a strictly positive float, instead '{fmin}' was provided."

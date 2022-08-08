@@ -43,10 +43,10 @@ def _check_qt_version(raise_on_error: bool = False) -> Union[Tuple[None, None], 
             raise
         api = version = None
     else:
-        try:  # pyside
-            version = QtCore.__version__
+        try:
+            version = QtCore.__version__  # PyQt
         except AttributeError:
-            version = QtCore.QT_VERSION_STR
+            version = QtCore.QT_VERSION_STR  # PySide
         if sys.platform == "darwin" and api in ("PyQt5", "PySide2"):
             if not _compare_version(version, ">=", "5.10"):
                 warn(

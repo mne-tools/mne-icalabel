@@ -1,3 +1,6 @@
 """Features for the ICLabel"""
 
-from .topomap import get_topomaps  # noqa: F401
+from .psd import get_psds
+from .topomap import get_topomaps
+
+__all__ = ("get_psds", "get_topomaps")

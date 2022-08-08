@@ -15,7 +15,7 @@ has_icalabel_testing_data = partial(has_dataset, name="icalabel-testing")
 def data_path(
     path: Optional[str] = None,
     force_update: bool = False,
-    update_path: Optional[bool] = True,
+    update_path: bool = True,
     download: bool = True,
     verbose=None,
 ):
@@ -31,9 +31,9 @@ def data_path(
         the data will be automatically downloaded to the specified folder.
     force_update : bool
         Force update of the dataset even if a local copy exists.
-    update_path : bool | None
+    update_path : bool
         If True, set the MNE_DATASETS_FNIRSMOTORGROUP_PATH in
-        mne-python config to the given path. If None, the user is prompted.
+        mne-python config to the given path.
     download : bool
         If False and the dataset has not been downloaded yet,
         it will not be downloaded and the path will be returned

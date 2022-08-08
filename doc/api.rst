@@ -56,6 +56,7 @@ Contains functions to extract features from `~mne.preprocessing.ICA` instance an
    :toctree: generated/
 
    get_psds
+   get_topomap_array
    get_topomaps
 
 Annotating Components

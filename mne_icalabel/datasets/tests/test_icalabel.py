@@ -8,7 +8,7 @@ def test_dataset(tmp_path):
     assert datapath.is_dir()
     assert (datapath / "iclabel").is_dir()
 
-     # no download
+    # no download
     datapath = data_path(path=tmp_path)
     assert datapath.is_dir()
     assert (datapath / "iclabel").is_dir()

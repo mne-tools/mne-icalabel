@@ -95,7 +95,12 @@ def test_warnings():
 def test_comp_in_labels_():
     """Test that components already in labels_ are not added again."""
     picks = pick_types(raw.info, eeg=True, exclude="bads")
-    ica = ICA(n_components=5, method="picard", fit_params=dict(ortho=False, extended=True))
+    ica = ICA(
+        n_components=5,
+        method="picard",
+        fit_params=dict(ortho=False, extended=True),
+        random_state=101,
+    )
     ica.fit(raw, picks=picks)
     ica.labels_["brain"] = [3]
     ica.labels_["other"] = []

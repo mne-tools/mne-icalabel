@@ -51,8 +51,8 @@ def get_topomaps(
     # extrapolate is validated by _check_extrapolate
 
     data = np.dot(
-        ica.mixing_matrix_[:, : ica.n_components_].T,
-        ica.pca_components_[: ica.n_components_],
+        ica.mixing_matrix_[:, picks].T,
+        ica.pca_components_[:ica.n_components_],
     )
     # create an empty array of size (len(picks), n_pixels, n_pixels) for the topomap
     topomaps = np.zeros((len(picks), res, res))

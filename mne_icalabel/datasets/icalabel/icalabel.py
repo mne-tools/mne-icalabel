@@ -1,6 +1,6 @@
-import os
 import shutil
 from functools import partial
+from typing import Optional
 
 import pooch
 from mne.datasets import fetch_dataset
@@ -11,7 +11,13 @@ has_icalabel_testing_data = partial(has_dataset, name="icalabel-testing")
 
 
 @verbose
-def data_path(path=None, force_update=False, update_path=True, download=True, verbose=None):
+def data_path(
+    path: Optional[str] = None,
+    force_update: bool = False,
+    update_path: bool = True,
+    download: bool = True,
+    verbose=None,
+):
     """ICA label testing data generated in conjunction with EEGLab.
 
     Parameters
@@ -24,9 +30,9 @@ def data_path(path=None, force_update=False, update_path=True, download=True, ve
         the data will be automatically downloaded to the specified folder.
     force_update : bool
         Force update of the dataset even if a local copy exists.
-    update_path : bool | None
+    update_path : bool
         If True, set the MNE_DATASETS_FNIRSMOTORGROUP_PATH in
-        mne-python config to the given path. If None, the user is prompted.
+        mne-python config to the given path.
     download : bool
         If False and the dataset has not been downloaded yet,
         it will not be downloaded and the path will be returned
@@ -57,13 +63,12 @@ def data_path(path=None, force_update=False, update_path=True, download=True, ve
         download=download,
         processor=pooch.Unzip(extract_dir=f"./{folder_name}"),
     )
-    dpath = str(dpath)
 
-    # Do some wrangling to deal with nested directories
-    bad_name = os.path.join(dpath, "mne-testing-icalabel-data-main")
-    if os.path.isdir(bad_name):
-        os.rename(bad_name, dpath + ".true")
+    # do some wrangling to deal with nested directories
+    bad_name = dpath / "mne-testing-icalabel-data-main"
+    if bad_name.is_dir():
+        shutil.move(bad_name, dpath.with_suffix(".true"))
         shutil.rmtree(dpath)
-        os.rename(dpath + ".true", dpath)
+        shutil.move(dpath.with_suffix(".true"), dpath)
 
     return _mne_path(dpath)

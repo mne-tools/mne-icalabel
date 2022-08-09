@@ -17,7 +17,6 @@ docdict: Dict[str, str] = {}
 keys: Tuple[str, ...] = (
     "border_topomap",
     "extrapolate_topomap",
-    "picks_ica",
     "verbose",
 )
 
@@ -36,13 +35,6 @@ docdict[
 image_interp : str
     The image interpolation to be used. All matplotlib options are
     accepted."""
-docdict[
-    "outlines_topomap"
-] = """
-outlines : 'head' | 'skirt' | None
-    The outlines of the head. If ``'head'``, the default MNE head scheme. If
-    ``'skirt'``, the default MNE head scheme but sensors are allowed to be positioned
-    outside of the head circle. If None, the outline is disabled."""
 docdict[
     "res_topomap"
 ] = """
@@ -119,8 +111,6 @@ def _indentcount_lines(lines: List[str]) -> int:
         line_stripped = line.lstrip()
         if line_stripped:
             indent = min(indent, len(line) - len(line_stripped))
-    if indent == sys.maxsize:
-        return 0
     return indent
 
 

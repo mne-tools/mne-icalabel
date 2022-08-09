@@ -140,8 +140,7 @@ class ICLabelNet(nn.Module):
 
     @staticmethod
     def reshape_fortran(x: torch.Tensor, shape) -> torch.Tensor:  # noqa: D102
-        if len(x.shape) > 0:
-            x = x.permute(*reversed(range(len(x.shape))))
+        x = x.permute(*reversed(range(len(x.shape))))
         return x.reshape(*reversed(shape)).permute(*reversed(range(len(shape))))
 
     def reshape_concat(self, tensor: torch.Tensor) -> torch.Tensor:  # noqa: D102
@@ -217,16 +216,16 @@ def run_iclabel(images: ArrayLike, psds: ArrayLike, autocorr: ArrayLike):
 
     Parameters
     ----------
-    images : np.ndarray of shape (n_components, 1, 32, 32)
+    images : array of shape (n_components, 1, 32, 32)
         The topoplot images.
-    psds : np.ndarray of shape (n_components, 1, 1, 100)
+    psds : array of shape (n_components, 1, 1, 100)
         The power spectral density features.
-    autocorr : np.ndarray of shape (n_components, 1, 1, 100)
+    autocorr : array of shape (n_components, 1, 1, 100)
         The autocorrelation features.
 
     Returns
     -------
-    labels : np.ndarray of shape (n_components, n_classes)
+    labels : array of shape (n_components, n_classes)
         The predicted numerical probability values for all labels in ICLabel output.
         Columns are ordered with 'Brain', 'Muscle', 'Eye', 'Heart',
         'Line Noise', 'Channel Noise', and 'Other'.

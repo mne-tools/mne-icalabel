@@ -33,3 +33,5 @@ def test_label_components_with_wrong_arguments():
     ica.fit(raw)
     with pytest.raises(ValueError, match="Invalid value for the 'method' parameter"):
         label_components(raw, ica, method="101")
+    with pytest.raises(ValueError, match="Invalid value for the 'method' parameter"):
+        label_components(raw, ica, method="manual")

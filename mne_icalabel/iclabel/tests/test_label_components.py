@@ -5,6 +5,7 @@ from mne.datasets import testing
 from mne.io import RawArray, read_raw
 from mne.preprocessing import ICA
 
+from mne_icalabel.config import ICLABEL_LABELS_TO_MNE
 from mne_icalabel.iclabel import iclabel_label_components
 
 directory = testing.data_path() / "MEG" / "sample"
@@ -37,11 +38,15 @@ raw.set_eeg_reference("average")
 )
 def test_label_components(inst, exclude):
     """Check that label_components does not raise on various data shapes."""
-    picks = pick_types(raw.info, eeg=True, exclude=exclude)
+    picks = pick_types(inst.info, eeg=True, exclude=exclude)
     ica = ICA(n_components=5, method="picard", fit_params=dict(ortho=False, extended=True))
     ica.fit(inst, picks=picks)
-    labels = iclabel_label_components(inst, ica)
+    labels = iclabel_label_components(inst, ica, inplace=False)
     assert labels.shape == (ica.n_components_, 7)
+    assert len(ica.labels_) == 0
+    labels2 = iclabel_label_components(inst, ica, inplace=True)
+    assert sorted(ica.labels_.keys()) == sorted(ICLABEL_LABELS_TO_MNE.values())
+    assert np.allclose(labels, labels2)
 
 
 def test_warnings():
@@ -85,3 +90,20 @@ def test_warnings():
     ica.fit(raw)
     with pytest.warns(RuntimeWarning, match="designed with extended infomax ICA"):
         iclabel_label_components(raw, ica)
+
+
+def test_comp_in_labels_():
+    """Test that components already in labels_ are not added again."""
+    picks = pick_types(raw.info, eeg=True, exclude="bads")
+    ica = ICA(
+        n_components=5,
+        method="picard",
+        fit_params=dict(ortho=False, extended=True),
+        random_state=101,
+    )
+    ica.fit(raw, picks=picks)
+    ica.labels_["brain"] = [3]
+    ica.labels_["other"] = []
+    iclabel_label_components(raw, ica, inplace=True)
+    assert ica.labels_["brain"] == [3]
+    assert ica.labels_["other"] == [1, 2, 4]

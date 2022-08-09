@@ -45,16 +45,20 @@ def test_copy_doc():
     """Test decorator to copy docstring."""
     # test copy of docstring
     def foo(x, y):
-        """
-        My doc.
-        """
+        """My doc."""
         pass
 
     @copy_doc(foo)
     def foo2(x, y):
         pass
 
-    assert "My doc." in foo2.__doc__
+    @copy_doc(foo)
+    def foo3(x, y):
+        """Doc of foo3."""
+        pass
+
+    assert foo.__doc__ == foo2.__doc__
+    assert foo.__doc__ + "Doc of foo3." == foo3.__doc__
 
     # test copy of docstring from a function without docstring
     def foo(x, y):

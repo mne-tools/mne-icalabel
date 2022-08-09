@@ -1,5 +1,6 @@
 """Version number."""
 
+# TODO: Remove try/except once the minimum python requirement is bumped to 3.8
 try:
     from importlib.metadata import version  # type: ignore
 except ImportError:

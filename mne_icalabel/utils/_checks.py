@@ -11,8 +11,12 @@ from mne.utils import _validate_type, warn
 def _validate_inst_and_ica(inst: Union[BaseRaw, BaseEpochs], ica: ICA):
     """Make sure that the provided instance and ICA are valid."""
     _validate_type(inst, (BaseRaw, BaseEpochs), "inst", "Raw or Epochs")
-    _validate_type(ica, ICA, "ica")
+    _validate_ica(ica)
 
+
+def _validate_ica(ica: ICA):
+    """Make sure that the provided ICA is valid."""
+    _validate_type(ica, ICA, "ica")
     if ica.current_fit == "unfitted":
         raise RuntimeError(
             "The provided ICA instance was not fitted. Please use the '.fit()' method to "
@@ -43,10 +47,10 @@ def _check_qt_version(raise_on_error: bool = False) -> Union[Tuple[None, None], 
             raise
         api = version = None
     else:
-        try:  # pyside
-            version = QtCore.__version__
+        try:
+            version = QtCore.__version__  # PyQt
         except AttributeError:
-            version = QtCore.QT_VERSION_STR
+            version = QtCore.QT_VERSION_STR  # PySide
         if sys.platform == "darwin" and api in ("PyQt5", "PySide2"):
             if not _compare_version(version, ">=", "5.10"):
                 warn(

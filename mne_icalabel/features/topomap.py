@@ -52,8 +52,8 @@ def get_topomaps(
 
     # prepare ICs
     data = np.dot(
-        ica.mixing_matrix_[:, ic_picks].T,
-        ica.pca_components_[:ica.n_components_],
+        ica.mixing_matrix_.T,
+        ica.pca_components_[: ica.n_components_],
     )
     # list channel types
     ch_picks = _pick_data_channels(ica.info, exclude=())
@@ -62,7 +62,7 @@ def get_topomaps(
     # compute topomaps
     topomaps = dict()
     for ch_type in ch_types:
-        topomaps[ch_type] = np.zeros((len(ic_picks), res, res))
+        topomaps[ch_type] = np.zeros((ic_picks.size, res, res))
         sel = _picks_to_idx(ica.info, picks=ch_type)
         info = pick_info(ica.info, sel)
         for k, component in enumerate(ic_picks):

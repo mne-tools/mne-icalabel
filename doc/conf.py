@@ -80,15 +80,17 @@ numpydoc_xref_param_type = True
 numpydoc_class_members_toctree = False
 numpydoc_attributes_as_param_list = True
 numpydoc_use_blockquotes = True
-numpydoc_xref_ignore = "all"
+numpydoc_xref_ignore = {
+    "of", "shape", "n_components", "n_pixels", "n_classes",
+}
 numpydoc_xref_aliases = {
     # Python
-    'Path': 'pathlib.Path',
+    "Path": "pathlib.Path",
     # MNE
-    'Epochs': 'mne.Epochs',
-    'ICA': 'mne.preprocessing.ICA',
-    'Info': 'mne.Info',
-    'Raw': 'mne.io.Raw',
+    "Epochs": "mne.Epochs",
+    "ICA": "mne.preprocessing.ICA",
+    "Info": "mne.Info",
+    "Raw": "mne.io.Raw",
 }
 numpydoc_validate = True
 numpydoc_validation_checks = {'all'} | set(error_ignores)

@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Dict, Union
 
 import numpy as np
 from mne.channels.layout import _find_topomap_coords
@@ -22,7 +22,7 @@ def get_topomaps(
     image_interp: str = _INTERPOLATION_DEFAULT,  # 'cubic'
     border: Union[float, str] = _BORDER_DEFAULT,  # 'mean'
     extrapolate: str = _EXTRAPOLATE_DEFAULT,  # 'auto' -> 'head' for EEG, 'local' for MEG
-) -> NDArray[float]:
+) -> Dict[str, NDArray[float]]:
     """Generate an array of scalp topographies (n_pixels, n_pixels) for the picked components.
 
     Parameters

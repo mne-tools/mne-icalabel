@@ -1,4 +1,5 @@
 """Configure details for documentation with sphinx."""
+
 import os
 import subprocess
 import sys
@@ -248,22 +249,6 @@ try:
 except ImportError:
     pass
 
-try:
-    with warnings.catch_warnings():
-        warnings.filterwarnings("ignore", category=DeprecationWarning)
-        import pyvista
-    pyvista.OFF_SCREEN = False
-except Exception:
-    pass
-else:
-    scrapers += ("pyvista",)
-
-if "pyvista" in scrapers:
-    brain_scraper = mne.viz._brain._BrainScraper()
-    scrapers = list(scrapers)
-    scrapers.insert(scrapers.index("pyvista"), brain_scraper)
-    scrapers = tuple(scrapers)
-
 compress_images = ("images", "thumbnails")
 # let's make things easier on Windows users
 # (on Linux and macOS it's easy enough to require this)
@@ -304,7 +289,6 @@ bibtex_style = "unsrt"
 bibtex_footbibliography_header = ""
 
 
-# Enable nitpicky mode - which ensures that all references in the docs
-# resolve.
+# Enable nitpicky mode - which ensures that all references in the docs resolve.
 nitpicky = True
 nitpick_ignore = []

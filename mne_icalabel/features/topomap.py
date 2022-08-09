@@ -37,11 +37,11 @@ def get_topomaps(
 
     Returns
     -------
-    topomaps : array of shape (n_components, n_pixels, n_pixels)
-        Topographic maps of each picked independent component.
+    topomaps : dict of array (n_components, n_pixels, n_pixels)
+        Dictionary of ICs topographic maps for each channel type.
     """
     _validate_ica(ica)
-    picks = _picks_to_idx(ica.n_components_, picks)
+    ic_picks = _picks_to_idx(ica.n_components_, picks)
     _validate_type(res, "int", "res", "int")
     if res <= 0:
         raise ValueError(
@@ -50,17 +50,26 @@ def get_topomaps(
     # image_interp, border are validated by _setup_interp
     # extrapolate is validated by _check_extrapolate
 
+    # prepare ICs
     data = np.dot(
-        ica.mixing_matrix_[:, picks].T,
+        ica.mixing_matrix_[:, ic_picks].T,
         ica.pca_components_[:ica.n_components_],
     )
-    # create an empty array of size (len(picks), n_pixels, n_pixels) for the topomap
-    topomaps = np.zeros((len(picks), res, res))
-    for i, component in enumerate(picks):
-        topomaps[i, :, :] = _get_topomap_array(
-            data[component, :], ica.info, res, image_interp, border, extrapolate
-        )
-    return topomaps  # topographic map array for all the picked components (len(picks), n_pixels, n_pixels)
+    # list channel types
+    ch_picks = _pick_data_channels(ica.info, exclude=())
+    ch_types = _get_channel_types(pick_info(ica.info, ch_picks), unique=True)
+
+    # compute topomaps
+    topomaps = dict()
+    for ch_type in ch_types:
+        topomaps[ch_type] = np.zeros((len(ic_picks), res, res))
+        sel = _picks_to_idx(ica.info, picks=ch_type)
+        info = pick_info(ica.info, sel)
+        for k, component in enumerate(ic_picks):
+            topomaps[ch_type][k, :, :] = _get_topomap_array(
+                data[component, sel], info, res, image_interp, border, extrapolate
+            )
+    return topomaps
 
 
 @fill_doc
@@ -90,24 +99,14 @@ def _get_topomap_array(
     topomap : array of shape (n_pixels, n_pixels)
         Topographic map array.
     """
-    picks = _pick_data_channels(info, exclude=())  # pick only data channels
-    info = pick_info(info, picks)
     ch_type = _get_channel_types(info, unique=True)
-
-    if len(ch_type) > 1:
-        raise ValueError("Multiple channel types in Info structure.")
-    elif len(info["chs"]) != data.shape[0]:
-        raise ValueError(
-            "The number of channels in the Info object and in the data array do not match."
-        )
-    else:
-        ch_type = ch_type.pop()
-
+    assert len(ch_type) == 1  # sanity-check
+    ch_type = ch_type[0]
     picks = list(range(data.shape[0]))
     sphere = np.array([0.0, 0.0, 0.0, 0.095])
 
     # inferring (x, y) coordinates form mne.Info instance
-    pos = _find_topomap_coords(info, picks=picks, sphere=sphere)
+    pos = _find_topomap_coords(info, picks=picks, sphere=sphere, ignore_overlap=True)
     extrapolate = _check_extrapolate(extrapolate, ch_type)
 
     # interpolation, valid only for MNE ≥ 1.1

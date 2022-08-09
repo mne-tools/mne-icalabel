@@ -20,7 +20,6 @@ import mne_icalabel  # noqa: E402
 curdir = os.path.dirname(__file__)
 sys.path.append(os.path.abspath(os.path.join(curdir, "..")))
 sys.path.append(os.path.abspath(os.path.join(curdir, "..", "mne_icalabel")))
-sys.path.append(os.path.abspath(os.path.join(curdir, "sphinxext")))
 
 # -- General configuration ------------------------------------------------
 
@@ -38,11 +37,11 @@ extensions = [
     "sphinx.ext.intersphinx",
     "sphinx.ext.mathjax",
     "sphinx.ext.viewcode",
-    "sphinx_gallery.gen_gallery",
-    "sphinxcontrib.bibtex",
     "numpydoc",
+    "sphinxcontrib.bibtex",
     "sphinx_copybutton",
-    "gh_substitutions",  # custom extension, see sphinxext/gh_substitutions.py
+    "sphinx_gallery.gen_gallery",
+    "sphinx_issues",
 ]
 
 # configure sphinx-copybutton

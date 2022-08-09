@@ -63,7 +63,7 @@ doc = [
     'sphinx-copybutton',
     'sphinx-gallery',
     'sphinx_rtd_theme',
-    'typing-extensions',
+    'sphinx-issues',
 ]
 gui = [
     'matplotlib',

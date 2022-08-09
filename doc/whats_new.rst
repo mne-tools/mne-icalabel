@@ -24,19 +24,19 @@ Version 0.3 (Unreleased)
 Enhancements
 ~~~~~~~~~~~~
 
-- Adding a GUI to facilitate the labeling of ICA components by `Adam Li`_ and `Mathieu Scheltienne`_ (:gh:`66`)
+- Adding a GUI to facilitate the labeling of ICA components by `Adam Li`_ and `Mathieu Scheltienne`_ (:pr:`66`)
 
-- Improve test coverage and documentation by `Mathieu Scheltienne`_ (:gh:`94`)
+- Improve test coverage and documentation by `Mathieu Scheltienne`_ (:pr:`94`)
 
 Bug
 ~~~
 
-- Ignore the ``RuntimeWarning`` issued by the grid inteprolation for ICLabel topographic feature by `Mathieu Scheltienne`_ (:gh:`69`)
+- Ignore the ``RuntimeWarning`` issued by the grid inteprolation for ICLabel topographic feature by `Mathieu Scheltienne`_ (:pr:`69`)
 
 API
 ~~~
 
-- Add topographic feature using MNE with `~mne_icalabel.features.get_topomaps` by `Anand Saini`_ and `Mathieu Scheltienne`_ (:gh:`71`)
+- Add topographic feature using MNE with `~mne_icalabel.features.get_topomaps` by `Anand Saini`_ and `Mathieu Scheltienne`_ (:pr:`71`)
 
 Authors
 ~~~~~~~

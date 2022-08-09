@@ -36,7 +36,6 @@ extensions = [
     "sphinx.ext.autosummary",
     "sphinx.ext.doctest",
     "sphinx.ext.intersphinx",
-    "sphinx_autodoc_typehints",
     "sphinx.ext.mathjax",
     "sphinx.ext.viewcode",
     "sphinx_gallery.gen_gallery",
@@ -55,7 +54,7 @@ copybutton_prompt_is_regexp = True
 autosummary_generate = True
 
 autodoc_default_options = {"inherited-members": None}
-autodoc_typehints = "signature"
+autodoc_typehints = "none"
 
 # prevent jupyter notebooks from being run even if empty cell
 # nbsphinx_execute = 'never'

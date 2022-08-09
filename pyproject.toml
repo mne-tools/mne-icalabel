@@ -60,7 +60,6 @@ doc = [
     'PyQt5',
     'sphinx',
     'sphinxcontrib-bibtex',
-    'sphinx-autodoc-typehints',
     'sphinx-copybutton',
     'sphinx-gallery',
     'sphinx_rtd_theme',

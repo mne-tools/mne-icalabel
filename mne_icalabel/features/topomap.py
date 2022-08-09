@@ -42,7 +42,7 @@ def get_topomaps(
 
     Returns
     -------
-    topomaps : dict of array (n_components, n_pixels, n_pixels)
+    topomaps : dict of array of shape (n_components, n_pixels, n_pixels)
         Dictionary of ICs topographic maps for each channel type.
     """
     _validate_ica(ica)

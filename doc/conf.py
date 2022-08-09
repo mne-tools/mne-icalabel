@@ -80,44 +80,15 @@ numpydoc_xref_param_type = True
 numpydoc_class_members_toctree = False
 numpydoc_attributes_as_param_list = True
 numpydoc_use_blockquotes = True
-numpydoc_xref_ignore = {
-    # words
-    'instance', 'instances', 'of', 'default', 'shape', 'or',
-    'with', 'length', 'pair', 'matplotlib', 'optional', 'kwargs', 'in',
-    'dtype', 'object', 'self.verbose',
-    # shapes
-    'n_times', 'obj', 'n_chan', 'n_epochs', 'n_picks', 'n_ch_groups',
-    'n_node_names', 'n_tapers', 'n_signals', 'n_step', 'n_freqs',
-    'epochs', 'freqs', 'times', 'arrays', 'lists', 'func', 'n_nodes',
-    'n_estimated_nodes', 'n_samples', 'n_channels', 'Renderer',
-    'n_ytimes', 'n_ychannels', 'n_events', 'n_components', 'n_classes',
-    'n_pixels',
-}
+numpydoc_xref_ignore = "all"
 numpydoc_xref_aliases = {
     # Python
-    'file-like': ':term:`file-like <python:file object>`',
-    'ArrayLike': ':term:`array_like`',
     'Path': 'pathlib.Path',
-    # Matplotlib
-    'colormap': ':doc:`colormap <matplotlib:tutorials/colors/colormaps>`',
-    'color': ':doc:`color <matplotlib:api/colors_api>`',
-    'collection': ':doc:`collections <matplotlib:api/collections_api>`',
-    'Axes': 'matplotlib.axes.Axes',
-    'Figure': 'matplotlib.figure.Figure',
-    'Axes3D': 'mpl_toolkits.mplot3d.axes3d.Axes3D',
-    'PolarAxes': 'matplotlib.projections.polar.PolarAxes',
-    'ColorbarBase': 'matplotlib.colorbar.ColorbarBase',
-    # joblib
-    'joblib.Parallel': 'joblib.Parallel',
     # MNE
-    'Label': 'mne.Label', 'Forward': 'mne.Forward', 'Evoked': 'mne.Evoked',
-    'Info': 'mne.Info', 'SourceSpaces': 'mne.SourceSpaces',
-    'SourceMorph': 'mne.SourceMorph',
-    'Epochs': 'mne.Epochs', 'Layout': 'mne.channels.Layout',
-    'EvokedArray': 'mne.EvokedArray', 'BiHemiLabel': 'mne.BiHemiLabel',
-    'AverageTFR': 'mne.time_frequency.AverageTFR',
-    'EpochsTFR': 'mne.time_frequency.EpochsTFR',
-    'Raw': 'mne.io.Raw', 'ICA': 'mne.preprocessing.ICA',
+    'Epochs': 'mne.Epochs',
+    'ICA': 'mne.preprocessing.ICA',
+    'Info': 'mne.Info',
+    'Raw': 'mne.io.Raw',
 }
 numpydoc_validate = True
 numpydoc_validation_checks = {'all'} | set(error_ignores)

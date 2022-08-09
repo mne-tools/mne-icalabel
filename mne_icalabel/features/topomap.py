@@ -66,7 +66,7 @@ def get_topomaps(
 @fill_doc
 def _get_topomap_array(
     data: NDArray[float],
-    pos: Info,
+    info: Info,
     res: int = 64,
     image_interp: str = _INTERPOLATION_DEFAULT,  # 'cubic'
     border: Union[float, str] = _BORDER_DEFAULT,  # 'mean'
@@ -78,7 +78,7 @@ def _get_topomap_array(
     ----------
     data : array of shape (n_channels,)
         The data points used to generate the topographic map.
-    pos : Info
+    info : Info
         Instance of `mne.Info` with the montage associated with the ``(n_channels,)`` points.
     %(res_topomap)s
     %(image_interp_topomap)s
@@ -90,13 +90,13 @@ def _get_topomap_array(
     topomap : array of shape (n_pixels, n_pixels)
         Topographic map array.
     """
-    picks = _pick_data_channels(pos, exclude=())  # pick only data channels
-    pos = pick_info(pos, picks)
-    ch_type = _get_channel_types(pos, unique=True)
+    picks = _pick_data_channels(info, exclude=())  # pick only data channels
+    info = pick_info(info, picks)
+    ch_type = _get_channel_types(info, unique=True)
 
     if len(ch_type) > 1:
         raise ValueError("Multiple channel types in Info structure.")
-    elif len(pos["chs"]) != data.shape[0]:
+    elif len(info["chs"]) != data.shape[0]:
         raise ValueError(
             "The number of channels in the Info object and in the data array do not match."
         )
@@ -107,7 +107,7 @@ def _get_topomap_array(
     sphere = np.array([0.0, 0.0, 0.0, 0.095])
 
     # inferring (x, y) coordinates form mne.Info instance
-    pos = _find_topomap_coords(pos, picks=picks, sphere=sphere)
+    pos = _find_topomap_coords(info, picks=picks, sphere=sphere)
     extrapolate = _check_extrapolate(extrapolate, ch_type)
 
     # interpolation, valid only for MNE ≥ 1.1

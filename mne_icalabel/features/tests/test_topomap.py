@@ -14,7 +14,7 @@ raw.load_data()
 ica = ICA(n_components=5, method="picard")
 ica.fit(raw)
 ica_eeg = ICA(n_components=5, method="picard")
-ica_eeg.fit(raw.copy().pick_types(eeg=True))
+ica_eeg.fit(raw.pick_types(eeg=True))
 
 
 @pytest.mark.parametrize("ica", (ica, ica_eeg))

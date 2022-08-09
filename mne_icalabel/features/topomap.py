@@ -41,6 +41,11 @@ def get_topomaps(
         Dictionary of ICs topographic maps for each channel type.
     """
     _validate_ica(ica)
+    if isinstance(picks, str):
+        raise TypeError(
+            "Argument 'picks' should be an integer or a list of integers to select the ICs. "
+            "Strings are not supported."
+        )
     ic_picks = _picks_to_idx(ica.n_components_, picks)
     _validate_type(res, "int", "res", "int")
     if res <= 0:

@@ -87,7 +87,21 @@ def test_interpolation_arguments():
 
 def test_invalid_arguments():
     """Test invalid arguments."""
-    with pytest.raises(ValueError):
-        get_topomaps(ica, picks="eeg")
+    with pytest.raises(TypeError, match="ica must be an instance of ICA"):
+        get_topomaps(101)
+    with pytest.raises(RuntimeError, match="The provided ICA instance was not fitted."):
+        get_topomaps(ICA(n_components=5, method="picard"))
+
+    with pytest.raises(TypeError, match="picks must be a list of int or list of str"):
+        get_topomaps(ica, picks=101 + 101j)
+    with pytest.raises(TypeError, match="Strings are not supported."):
+        get_topomaps(ica, picks="101")
     with pytest.raises(ValueError, match="All picks must be < n_channels"):
-        get_topomaps(ica, picks=10)
+        get_topomaps(ica, picks=6)
+
+    with pytest.raises(TypeError, match="res must be an int"):
+        get_topomaps(ica, res="101")
+    with pytest.raises(TypeError, match="res must be an int"):
+        get_topomaps(ica, res=True)
+    with pytest.raises(ValueError, match="strictly positive integer. Provided '-101'"):
+        get_topomaps(ica, res=-101)

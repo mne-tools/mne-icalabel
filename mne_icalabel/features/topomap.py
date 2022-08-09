@@ -21,8 +21,8 @@ def get_topomaps(
     res: int = 64,
     image_interp: str = _INTERPOLATION_DEFAULT,  # 'cubic'
     border: Union[float, str] = _BORDER_DEFAULT,  # 'mean'
-    extrapolate: str = _EXTRAPOLATE_DEFAULT,  # 'auto' -> 'head'
-):
+    extrapolate: str = _EXTRAPOLATE_DEFAULT,  # 'auto' -> 'head' for EEG, 'local' for MEG
+) -> NDArray[float]:
     """Generate an array of scalp topographies (n_pixels, n_pixels) for the picked components.
 
     Parameters
@@ -70,8 +70,8 @@ def _get_topomap_array(
     res: int = 64,
     image_interp: str = _INTERPOLATION_DEFAULT,  # 'cubic'
     border: Union[float, str] = _BORDER_DEFAULT,  # 'mean'
-    extrapolate: str = _EXTRAPOLATE_DEFAULT,  # 'head'
-):
+    extrapolate: str = _EXTRAPOLATE_DEFAULT,  # 'auto' -> 'head' for EEG, 'local' for MEG
+) -> NDArray[float]:
     """Generate a scalp topographic map (n_pixels, n_pixels).
 
     Parameters

@@ -29,7 +29,7 @@ def get_topomaps(
     ----------
     ica : ICA
         MNE `~mne.preprocessing.ICA` decomposition.
-    %(picks_ica)s ``None`` (default) will pick all independent components in the order fitted.
+    %(picks_ica)s
     %(res_topomap)s
     %(image_interp_topomap)s
     %(border_topomap)s

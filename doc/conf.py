@@ -61,19 +61,12 @@ autodoc_typehints = "signature"
 # nbsphinx_execute = 'never'
 # nbsphinx_allow_errors = True
 
-error_ignores = {
-    # These we do not live by:
-    "GL01",  # Docstring should start in the line immediately after the quotes
-    "EX01",
-    "EX02",  # examples failed (we test them separately)
-    "ES01",  # no extended summary
-    "SA01",  # no see also
-    "YD01",  # no yields section
-    "SA04",  # no description in See Also
-    "PR04",  # Parameter "shape (n_channels" has no type
+error_ignores = {  # These we do not live by:
+    "GL01",  # docstring should start in the line immediately after the quotes
+    "EX01",  # section 'Examples' not found
+    "ES01",  # no extended summary found
+    "SA01",  # section 'See Also' not found
     "RT02",  # The first line of the Returns section should contain only the type, unless multiple values are being returned  # noqa
-    # XXX should also verify that | is used rather than , to separate params
-    # XXX should maybe also restore the parameter-desc-length < 800 char check
 }
 
 # -- numpydoc
@@ -101,26 +94,6 @@ numpydoc_xref_aliases = {
 numpydoc_validate = True
 numpydoc_validation_checks = {"all"} | set(error_ignores)
 numpydoc_validation_exclude = {  # set of regex
-    # dict subclasses
-    r"\.clear",
-    r"\.get$",
-    r"\.copy$",
-    r"\.fromkeys",
-    r"\.items",
-    r"\.keys",
-    r"\.pop",
-    r"\.popitem",
-    r"\.setdefault",
-    r"\.update",
-    r"\.values",
-    # list subclasses
-    r"\.append",
-    r"\.count",
-    r"\.extend",
-    r"\.index",
-    r"\.insert",
-    r"\.remove",
-    r"\.sort",
     # we currently don't document these properly (probably okay)
     r"\.__getitem__",
     r"\.__contains__",
@@ -131,8 +104,6 @@ numpydoc_validation_exclude = {  # set of regex
     r"\.__iter__",
     r"\.__div__",
     r"\.__neg__",
-    r"plot_circle",
-    r"nn.Module",
 }
 
 

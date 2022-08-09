@@ -24,11 +24,11 @@ def get_iclabel_features(inst: Union[BaseRaw, BaseEpochs], ica: ICA):
 
     Returns
     -------
-    topo : np.ndarray of shape (32, 32, 1, n_components)
+    topo : array of shape (32, 32, 1, n_components)
         The topoplot feature.
-    psd : np.ndarray of shape (1, 100, 1, n_components)
+    psd : array of shape (1, 100, 1, n_components)
         The psd feature.
-    autocorr : np.ndarray of shape (1, 100, 1, n_components)
+    autocorr : array of shape (1, 100, 1, n_components)
         The autocorrelations feature. Depending on the length of the
         raw data passed in, different methods of computing autocorrelation
         will be used. See :footcite:`iclabel2019` for details.

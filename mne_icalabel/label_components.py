@@ -30,7 +30,7 @@ def label_components(inst: Union[BaseRaw, BaseEpochs], ica: ICA, method: str):
     component_dict : dict
         A dictionary with the following fields:
 
-        - 'y_pred_proba' : np.ndarray of shape (n_components,)
+        - 'y_pred_proba' : array of shape (n_components,)
             Estimated predicted probability of the output class
             for each independent component.
         - 'labels': list of shape (n_components,)

@@ -261,3 +261,6 @@ bibtex_footbibliography_header = ""
 # Enable nitpicky mode - which ensures that all references in the docs resolve.
 nitpicky = True
 nitpick_ignore = []
+
+# -- Sphinx-issues -----------------------------------------------------------
+issues_github_path = "mne-tools/mne-icalabel"

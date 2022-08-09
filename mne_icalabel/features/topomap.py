@@ -29,7 +29,12 @@ def get_topomaps(
     ----------
     ica : ICA
         MNE `~mne.preprocessing.ICA` decomposition.
-    %(picks_ica)s
+    picks : int | list of int | slice | None
+        Indices of the independent components (ICs) to select.
+        If an integer, represents the index of the IC to pick.
+        Multiple ICs can be selected using a list of int or a slice.
+        The indices are 0-indexed, so ``picks=1`` will pick the second IC: ``ICA001``.
+        ``None`` (default) will pick all independent components in the order fitted.
     %(res_topomap)s
     %(image_interp_topomap)s
     %(border_topomap)s

@@ -109,7 +109,6 @@ jobs:
             command: |
               echo "PATTERN=$(cat pattern.txt)"
               echo "BUILD=$(cat build.txt)"
-              ls -al ~/mne_data;
         - run:
             name: Build documentation
             command: |

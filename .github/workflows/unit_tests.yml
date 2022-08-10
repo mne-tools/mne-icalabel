@@ -7,7 +7,7 @@ on:
     paths:
       - '**.py'
   push:
-    branches: [main]
+    branches: [main, maint/0.2, maint/0.3]
     paths:
       - '**.py'
   workflow_dispatch:

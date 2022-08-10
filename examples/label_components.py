@@ -51,7 +51,7 @@ ica.fit(filt_raw)
 # The GUI will modify the ICA instance in place, and add the
 # labels of each component to the ``labels_`` attribute. The
 # GUI will show features of the ICA components similar to the
-# `mne.ICA.plot_properties` function. It will also provide an
+# :func:`mne.viz.plot_ica_properties` function. It will also provide an
 # interface to label each ICA component into one of seven categories:
 #
 # - Brain

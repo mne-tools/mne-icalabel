@@ -69,3 +69,15 @@ derivative standard of BIDS for EEG data.
 
    mark_component
    write_components_tsv
+
+In addition, as of v0.3, we have introduced a beta-version of a GUI that
+assists in annotated ICA components. This was heavily inspired by the annotation
+process in ``ICLabel``. If you use this feature, please note that there may be
+significant bugs still. Please report these in the GH issues tab.
+
+.. currentmodule:: mne_icalabel
+
+.. autosummary::
+   :toctree: generated/
+
+   gui.label_ica_components

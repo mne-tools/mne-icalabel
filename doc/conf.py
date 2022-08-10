@@ -79,6 +79,8 @@ numpydoc_xref_ignore = {
     "n_components",
     "n_pixels",
     "n_classes",
+    "instance",
+    "ICAComponentLabeler",
 }
 numpydoc_xref_aliases = {
     # Python

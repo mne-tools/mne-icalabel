@@ -6,6 +6,9 @@ Labeling ICA components with a GUI
 ==================================
 
 This tutorial covers how to label ICA components with a GUI.
+
+.. warning:: The GUI is still in active development, and may contain
+             bugs, or changes without deprecation in future versions.
 """
 
 # %%
@@ -35,25 +38,42 @@ raw.load_data()
 # ----------------------------------
 # Before labeling components with the GUI, one needs to filter the data
 # and then fit the ICA instance. Afterwards, one can run the GUI using the
-# ``Raw`` data object and the fitted ``ICA`` instance. The GUI will modify
-# the ICA instance in place, and add the labels of each component to
-# the ``labels_`` attribute.
+# ``Raw`` data object and the fitted ``ICA`` instance.
 
 # high-pass filter the data and then perform ICA
 filt_raw = raw.copy().filter(l_freq=1.0, h_freq=None)
 ica = ICA(n_components=15, max_iter="auto", random_state=97)
 ica.fit(filt_raw)
 
-# now label the components using a GUI
-mne.set_log_level("DEBUG")
+# %%
+# Annotate ICA components with the GUI
+# ------------------------------------
+# The GUI will modify the ICA instance in place, and add the
+# labels of each component to the ``labels_`` attribute. The
+# GUI will show features of the ICA components similar to the
+# :func:`mne.viz.plot_ica_properties` function. It will also provide an
+# interface to label each ICA component into one of seven categories:
+#
+# - Brain
+# - Muscle
+# - Eye
+# - Heart
+# - Line Noise
+# - Channel Noise
+# - Other
+#
+# For more information on annotating ICA components, we suggest
+# reading through the tutorial from ``ICLabel``
+# (https://labeling.ucsd.edu/tutorial/about).
+
 gui = label_ica_components(raw, ica)
 
 # The `ica` object is modified to contain the component labels
 # after closing the GUI and can now be saved
 # gui.close()  # typically you close when done
 
-# Now, we can take a look at the components, which can be
-# saved into the BIDs directory.
+# Now, we can take a look at the components, which were modified in-place
+# for the ICA instance.
 print(ica.labels_)
 
 # %%

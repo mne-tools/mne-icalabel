@@ -108,7 +108,11 @@ jobs:
             name: Build documentation
             command: |
               cd doc
-              make html
+              if [ "${CIRCLE_BRANCH}" == "main" ]; then
+                make html
+              else
+                make html_stable
+              fi;
         # Save the example test results
         - store_test_results:
             path: doc/_build/test-results
@@ -218,6 +222,11 @@ jobs:
               fingerprints:
                 - "b5:1e:a1:6d:8d:48:f2:8f:dd:bd:2d:66:a9:30:fe:b9"
           - run:
+              name: Check workspace
+              command: |
+                ls -al ./;
+                ls -al doc/_build/;
+          - run:
               # push built doc into the `dev` directory on the `gh-pages` branch
               name: Deploy doc to gh-pages branch
               command: |
@@ -243,6 +252,7 @@ workflows:
             branches:
               only:
                 - main
+                - maint/0.3
                 - maint/0.2
 
   main:

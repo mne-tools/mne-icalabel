@@ -16,16 +16,17 @@ Here we list a changelog of MNE-ICALabel.
 
 .. _current:
 
-Version 0.3 (Unreleased)
+Version 0.3
 ------------------------
 
-...
+This new version adds an experimental GUI for annotating ICA components. Please test it out if you find
+it useful in your workflow! Moreover, we consolidated our testing suite and improved overall coverage
+and added some bug fixes. We also created a function to extract topomap features from fitted ICA instances.
 
 Enhancements
 ~~~~~~~~~~~~
 
 - Adding a GUI to facilitate the labeling of ICA components by `Adam Li`_ and `Mathieu Scheltienne`_ (:pr:`66`)
-
 - Improve test coverage and documentation by `Mathieu Scheltienne`_ (:pr:`94`)
 
 Bug

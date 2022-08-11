@@ -1,4 +1,4 @@
 Examples
 --------
 
-Examples demonstrating ICA labeling.
+Examples demonstrating ICA labeling for artifact correction, or annotating ICA components.

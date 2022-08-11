@@ -52,6 +52,11 @@ clean:
 	-rm -rf generated/*
 	-rm -rf modules/generated/*
 
+html_stable:
+	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) _build/html_stable
+	@echo
+	@echo "Build finished. The HTML pages are in _build/html_stable."
+
 html:
 	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
 	@echo

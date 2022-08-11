@@ -4,7 +4,7 @@ from typing import Optional
 
 import pooch
 from mne.datasets import fetch_dataset
-from mne.datasets.utils import _mne_path, has_dataset
+from mne.datasets.utils import has_dataset
 from mne.utils import verbose
 
 has_icalabel_testing_data = partial(has_dataset, name="icalabel-testing")
@@ -71,4 +71,4 @@ def data_path(
         shutil.rmtree(dpath)
         shutil.move(dpath.with_suffix(".true"), dpath)
 
-    return _mne_path(dpath)
+    return dpath

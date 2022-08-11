@@ -7,6 +7,36 @@
 What was new in previous releases?
 ==================================
 
+Version 0.3 (08/10/2022)
+------------------------
+
+This new version adds an experimental GUI for annotating ICA components. Please test it out if you find
+it useful in your workflow! Moreover, we consolidated our testing suite and improved overall coverage
+and added some bug fixes. We also created a function to extract topomap features from fitted ICA instances.
+
+Enhancements
+~~~~~~~~~~~~
+
+- Adding a GUI to facilitate the labeling of ICA components by `Adam Li`_ and `Mathieu Scheltienne`_ (:pr:`66`)
+- Improve test coverage and documentation by `Mathieu Scheltienne`_ (:pr:`94`)
+
+Bug
+~~~
+
+- Ignore the ``RuntimeWarning`` issued by the grid inteprolation for ICLabel topographic feature by `Mathieu Scheltienne`_ (:pr:`69`)
+
+API
+~~~
+
+- Add topographic feature using MNE with `~mne_icalabel.features.get_topomaps` by `Anand Saini`_ and `Mathieu Scheltienne`_ (:pr:`71`)
+
+Authors
+~~~~~~~
+
+* `Mathieu Scheltienne`_
+* `Anand Saini`_
+* `Adam Li`_
+
 Version 0.2 (06/30/2022)
 ------------------------
 

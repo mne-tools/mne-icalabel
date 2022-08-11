@@ -16,7 +16,7 @@ Here we list a changelog of MNE-ICALabel.
 
 .. _current:
 
-Version 0.4
+Version 0.4 (unreleased)
 ------------------------
 
 ...
@@ -24,22 +24,22 @@ Version 0.4
 Enhancements
 ~~~~~~~~~~~~
 
-- 
+-
 
 Bug
 ~~~
 
-- 
+-
 
 API
 ~~~
 
-- 
+-
 
 Authors
 ~~~~~~~
 
-* 
+*
 
 :doc:`Find out what was new in previous releases <whats_new_previous_releases>`
 

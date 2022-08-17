@@ -90,7 +90,14 @@ def write_components_tsv(ica: ICA, fname):
         update_sidecar_json(fname, component_json)
 
 
-def mark_component(component: int, fname: Union[str, Path], method: str, label: str, author: str, strict_label:bool=True):
+def mark_component(
+    component: int, 
+    fname: Union[str, Path], 
+    method: str, 
+    label: str, 
+    author: str, 
+    strict_label: bool = True,
+):
     """Mark a component with a label.
 
     Parameters

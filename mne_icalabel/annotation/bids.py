@@ -91,11 +91,11 @@ def write_components_tsv(ica: ICA, fname):
 
 
 def mark_component(
-    component: int, 
-    fname: Union[str, Path], 
-    method: str, 
-    label: str, 
-    author: str, 
+    component: int,
+    fname: Union[str, Path],
+    method: str,
+    label: str,
+    author: str,
     strict_label: bool = True,
 ):
     """Mark a component with a label.

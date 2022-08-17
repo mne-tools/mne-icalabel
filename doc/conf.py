@@ -3,7 +3,6 @@
 import os
 import subprocess
 import sys
-import warnings
 from datetime import date
 
 import mne
@@ -85,6 +84,7 @@ numpydoc_xref_ignore = {
 numpydoc_xref_aliases = {
     # Python
     "Path": "pathlib.Path",
+    "bool": ":class:`python:bool`",
     # MNE
     "Epochs": "mne.Epochs",
     "ICA": "mne.preprocessing.ICA",

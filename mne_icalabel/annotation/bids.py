@@ -71,7 +71,7 @@ def write_components_tsv(ica: ICA, fname):
     )
     # make sure parent directories exist
     fname.mkdir(exist_ok=True)
-    tsv_data.to_csv(fname, sep="\t", index=False, encoding='utf-8')
+    tsv_data.to_csv(fname, sep="\t", index=False, encoding="utf-8")
 
     # create an accompanying JSON file describing the corresponding
     # extra columns for ICA labeling
@@ -132,7 +132,7 @@ def mark_component(
         fname = get_bids_path_from_fname(fname)
 
     # read the file
-    with open(fname, 'r') as fin:
+    with open(fname, "r") as fin:
         tsv_data = pd.read_csv(fin, sep="\t", index_col=None)
 
     if component not in tsv_data["component"]:

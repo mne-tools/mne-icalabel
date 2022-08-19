@@ -12,8 +12,9 @@ from .network import run_iclabel
 def iclabel_label_components(inst: Union[BaseRaw, BaseEpochs], ica: ICA, inplace: bool = True):
     """Label the provided ICA components with the ICLabel neural network.
 
-    This model is designed for ICs fitted with the extended infomax algorithm
-    on EEG data referenced to a common average. It uses 3 features:
+    ICLabel is designed to classify ICs fitted with an extended infomax ICA
+    decomposition algorithm on EEG datasets referenced to a common average and
+    filtered between [1., 100.] Hz. It uses 3 features:
 
     - Topographic maps, based on the ICA decomposition.
     - Power Spectral Density (PSD), based on the ICA decomposition and the

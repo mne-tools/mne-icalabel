@@ -14,9 +14,10 @@ tutorial
 <https://mne.tools/stable/auto_tutorials/preprocessing/40_artifact_correction_ica.html>`_
 in MNE-Python.
 
-ICLabel was designed to label ICs fitted with an extended infomax algorithm on
-EEG data referenced to a common average. This model was not validated on other
-type of dataset.
+ICLabel is designed to classify ICs fitted with an extended infomax ICA
+decomposition algorithm on EEG datasets referenced to a common average and
+filtered between [1., 100.] Hz. This model is not validated on other type of
+dataset.
 
 .. note::
     This example involves running the ICA Infomax algorithm, which requires
@@ -84,8 +85,7 @@ raw.plot(order=artifact_picks, n_channels=len(artifact_picks), show_scrollbars=F
 # the unfiltered `~mne.io.Raw` object around so we can apply the ICA solution
 # to it later.
 
-# the Nyquist frequency is 75 Hz
-filt_raw = raw.copy().filter(l_freq=1.0, h_freq=75)
+filt_raw = raw.copy().filter(l_freq=1.0, h_freq=100.0)
 
 # %%
 # Fitting and plotting the ICA solution

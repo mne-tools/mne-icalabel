@@ -26,18 +26,22 @@ ICLabel
 This is the model originally available for `EEGLab <https://github.com/sccn/ICLabel>`_.
 The model was ported from matconvnet using `pytorch <https://pytorch.org/>`_.
 
-ICLabel is designed to classify ICs fitted with an extended infomax ICA decomposition
-algorithm on EEG datasets referenced to a common average.
+ICLabel is designed to classify ICs fitted with an extended infomax ICA
+decomposition algorithm on EEG datasets referenced to a common average and
+filtered between [1., 100.] Hz.
 
 Architecture:
 
 .. image:: _static/ICLabel_DagNN_Architecture.png
    :width: 400
    :alt: ICLabel Neural Network Architecture
+   :align: center
 
-The model has three inputs: image, psd, and autocorrelation features. To encourage generalization, the image
-features are rotated and negated, thus quadrupling the feature. The psd and autocorrelation features
-are copied to the new image features. Then, the predicted probabilities are averaged over all four images.
+The model has three inputs: image (topomap), psd, and autocorrelation features.
+To encourage generalization, the image features are rotated and negated, thus
+quadrupling the feature. The psd and autocorrelation features are copied to the
+new image features. Then, the predicted probabilities are averaged over all four
+images.
 
 .. currentmodule:: mne_icalabel.iclabel
 

@@ -31,22 +31,17 @@ def label_components(inst: Union[BaseRaw, BaseEpochs], ica: ICA, method: str):
         A dictionary with the following fields:
 
         - 'y_pred_proba' : array of shape (n_components,)
-            Estimated predicted probability of the output class
-            for each independent component.
+              Estimated predicted probability of the output class
+              for each independent component.
         - 'labels': list of shape (n_components,)
-            The corresponding string label of each class in 'y_pred'.
+              The corresponding string label of each class in 'y_pred'.
 
     Notes
     -----
-    For ICLabel model, the output classes are ordered:
+    Please refer to the following function for additional information on each
+    method:
 
-    - 'brain'
-    - 'muscle artifact'
-    - 'eye blink'
-    - 'heart beat'
-    - 'line noise'
-    - 'channel noise'
-    - 'other'
+    - ``'iclabel'``: `~mne_icalabel.iclabel.iclabel_label_components`
     """
     _validate_type(method, str, "method")
     _check_option("method", method, [elt for elt in ICALABEL_METHODS if elt != "manual"])

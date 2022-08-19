@@ -228,6 +228,7 @@ ica.plot_properties(raw, picks=[0, 12], verbose=False)
 # non-brain classified components, keeping 'brain' and 'other'.
 # "Other" is a catch-all that for non-classifiable components.
 # We will stay on the side of caution and assume we cannot blindly remove these.
+
 labels = ic_labels["labels"]
 exclude_idx = [idx for idx, label in enumerate(labels) if label not in ["brain", "other"]]
 print(f"Excluding these ICA components: {exclude_idx}")

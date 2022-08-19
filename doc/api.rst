@@ -26,6 +26,9 @@ ICLabel
 This is the model originally available for `EEGLab <https://github.com/sccn/ICLabel>`_.
 The model was ported from matconvnet using `pytorch <https://pytorch.org/>`_.
 
+ICLabel is designed to classify ICs fitted with an extended infomax ICA decomposition
+algorithm on EEG datasets referenced to a common average.
+
 Architecture:
 
 .. image:: _static/ICLabel_DagNN_Architecture.png
@@ -41,6 +44,7 @@ are copied to the new image features. Then, the predicted probabilities are aver
 .. autosummary::
    :toctree: generated/
 
+   iclabel_label_components
    get_iclabel_features
    run_iclabel
 

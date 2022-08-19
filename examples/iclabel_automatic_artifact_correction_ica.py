@@ -6,7 +6,7 @@ Repairing artifacts with ICA automatically using ICLabel Model
 ==============================================================
 
 This tutorial covers automatically repairing signals using ICA with
-the ICLabel model :footcite:`iclabel2019`, which originates in EEGLab.
+the ICLabel model\ :footcite:`iclabel2019`, which originates in EEGLab.
 For conceptual background on ICA, see :ref:`this scikit-learn tutorial
 <sphx_glr_auto_examples_decomposition_plot_ica_blind_source_separation.py>`.
 For a basic understanding of how to use ICA to remove artifacts, see `the
@@ -14,33 +14,34 @@ tutorial
 <https://mne.tools/stable/auto_tutorials/preprocessing/40_artifact_correction_ica.html>`_
 in MNE-Python.
 
-We begin as always by importing the necessary Python modules and loading some
-:ref:`example data <sample-dataset>`. Because ICA can be computationally
-intense, we'll also crop the data to 60 seconds; and to save ourselves from
-repeatedly typing ``mne.preprocessing`` we'll directly import a few functions
-and classes from that submodule.
+ICLabel was designed to label ICs fitted with an extended infomax algorithm on
+EEG data referenced to a common average. This model was not validated on other
+type of dataset.
 
-Note: this example involves running the ICA algorithm, which requires `scikit-learn`_
-to be installed. Please install this optional dependency before running the example.
+.. note::
+    This example involves running the ICA Infomax algorithm, which requires
+    `scikit-learn`_ to be installed. Please install this optional dependency before
+    running the example.
 """
 
 # %%
-
-import os
+# We begin as always by importing the necessary Python modules and loading some
+# :ref:`example data <sample-dataset>`. Because ICA can be computationally
+# intense, we'll also crop the data to 60 seconds; and to save ourselves from
+# repeatedly typing ``mne.preprocessing`` we'll directly import a few functions
+# and classes from that submodule.
 
 import mne
 from mne.preprocessing import ICA
 
 from mne_icalabel import label_components
 
-sample_data_folder = mne.datasets.sample.data_path()
-sample_data_raw_file = os.path.join(
-    sample_data_folder, "MEG", "sample", "sample_audvis_filt-0-40_raw.fif"
-)
+sample_data_folder = mne.datasets.sample.data_path() / "MEG" / "sample"
+sample_data_raw_file = sample_data_folder / "sample_audvis_raw.fif"
 raw = mne.io.read_raw_fif(sample_data_raw_file)
 
-# Here we'll crop to 60 seconds and drop gradiometer channels for speed
-raw.crop(tmax=60.0).pick_types(meg="mag", eeg=True, stim=True, eog=True)
+# we'll crop to 60 seconds and drop MEG channels
+raw.crop(tmax=60.0).pick_types(eeg=True, stim=True, eog=True)
 raw.load_data()
 
 # %%
@@ -62,13 +63,8 @@ raw.load_data()
 # Let's begin by visualizing the artifacts that we want to repair. In this
 # dataset they are big enough to see easily in the raw data:
 
-# Note: for this example, we are using ICLabel which has only
-# been validated and works for EEG systems with less than 32 electrodes.
-raw = raw.pick_types(eeg=True, eog=True, ecg=True, emg=True)
-
 # pick some channels that clearly show heartbeats and blinks
-regexp = r"(EEG 00.)"
-artifact_picks = mne.pick_channels_regexp(raw.ch_names, regexp=regexp)
+artifact_picks = mne.pick_channels_regexp(raw.ch_names, regexp=r"(EEG 00.)")
 raw.plot(order=artifact_picks, n_channels=len(artifact_picks), show_scrollbars=False)
 
 # %%
@@ -84,10 +80,9 @@ raw.plot(order=artifact_picks, n_channels=len(artifact_picks), show_scrollbars=F
 # solution. A high-pass filter with 1 Hz cutoff frequency is recommended.
 # However, because filtering is a linear operation, the ICA solution found from
 # the filtered signal can be applied to the unfiltered signal (see
-# :footcite:`WinklerEtAl2015` for
-# more information), so we'll keep a copy of the unfiltered
-# `~mne.io.Raw` object around so we can apply the ICA solution to it
-# later.
+# :footcite:`WinklerEtAl2015` for more information), so we'll keep a copy of
+# the unfiltered `~mne.io.Raw` object around so we can apply the ICA solution
+# to it later.
 
 # the Nyquist frequency is 75 Hz
 filt_raw = raw.copy().filter(l_freq=1.0, h_freq=75)
@@ -118,7 +113,7 @@ filt_raw = raw.copy().filter(l_freq=1.0, h_freq=75)
 # (though it is usually preferable to include more components for a more
 # accurate solution). As a first guess, we'll run ICA with ``n_components=15``
 # (use only the first 15 PCA components to compute the ICA decomposition) — a
-# very small number given that our data has over 300 channels, but with the
+# very small number given that our data has 59 good EEG channels, but with the
 # advantage that it will run quickly and we will able to tell easily whether it
 # worked or not (because we already know what the EOG / ECG artifacts should
 # look like).
@@ -128,12 +123,18 @@ filt_raw = raw.copy().filter(l_freq=1.0, h_freq=75)
 # we'll also specify a `random seed`_ so that we get identical results each
 # time this tutorial is built by our web servers.
 
-# Before fitting ICA, we will apply a common average referencing.
+#%%
+# Before fitting ICA, we will apply a common average referencing, to comply
+# with the ICLabel requirements.
+
 filt_raw = filt_raw.set_eeg_reference("average")
 
-# Note: we will use the 'infomax' method for fitting the ICA because
-# that is what is supported in the ICLabel model. In practice, one can
-# use any method they choose.
+#%%
+# We will use the 'extended infomax' method for fitting the ICA, to comply with
+# the ICLabel requirements. ICLabel was not tested with other ICA decomposition
+# algorithm, but its performance and accuracy should not be impacted by the
+# algorithm.
+
 ica = ICA(
     n_components=15,
     max_iter="auto",
@@ -212,23 +213,21 @@ ica.plot_properties(raw, picks=[0])
 # predicted probability values for each of these classes in that order.
 # See :footcite:`iclabel2019` for full details.
 
-# Note: there is a warning since the frequency of the data we consider
-# here has a Nyquist rate of 75 Hz, which is lower than the dataset
-# used to train the ICLabel model.
 ic_labels = label_components(filt_raw, ica, method="iclabel")
 
 # ICA0 was correctly identified as an eye blink, whereas ICA12 was
-# also classified as a muscle artifact
+# classified as a muscle artifact.
 print(ic_labels["labels"])
 ica.plot_properties(raw, picks=[0, 12], verbose=False)
 
 # %%
 # Extract Labels and Reconstruct Raw Data
 # ---------------------------------------
+#
 # We can extract the labels of each component and exclude
 # non-brain classified components, keeping 'brain' and 'other'.
 # "Other" is a catch-all that for non-classifiable components.
-# We will ere on the side of caution and assume we cannot blindly remove these.
+# We will stay on the side of caution and assume we cannot blindly remove these.
 labels = ic_labels["labels"]
 exclude_idx = [idx for idx, label in enumerate(labels) if label not in ["brain", "other"]]
 print(f"Excluding these ICA components: {exclude_idx}")

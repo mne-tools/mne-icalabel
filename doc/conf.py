@@ -1,9 +1,12 @@
 """Configure details for documentation with sphinx."""
 
+import inspect
 import os
 import subprocess
 import sys
 from datetime import date
+from importlib import import_module
+from typing import Dict, Optional
 
 import mne
 import sphinx_gallery  # noqa: F401
@@ -47,8 +50,8 @@ extensions = [
     "sphinx.ext.autosummary",
     "sphinx.ext.doctest",
     "sphinx.ext.intersphinx",
+    "sphinx.ext.linkcode",
     "sphinx.ext.mathjax",
-    "sphinx.ext.viewcode",
     "numpydoc",
     "sphinxcontrib.bibtex",
     "sphinx_copybutton",
@@ -276,3 +279,49 @@ bibtex_footbibliography_header = ""
 
 # -- Sphinx-issues -----------------------------------------------------------
 issues_github_path = "mne-tools/mne-icalabel"
+
+# -- sphinx.ext.linkcode -----------------------------------------------------
+# https://www.sphinx-doc.org/en/master/usage/extensions/linkcode.html
+
+def linkcode_resolve(domain: str, info: Dict[str, str]) -> Optional[str]:
+    """Determine the URL corresponding to a Python object.
+
+    Parameters
+    ----------
+    domain : str
+        One of 'py', 'c', 'cpp', 'javascript'.
+    info : dict
+        With keys "module" and "fullname".
+
+    Returns
+    -------
+    url : str | None
+        The code URL. If None, no link is added.
+    """
+    if domain != "py":
+        return None  # only document python objects
+
+    # retrieve pyobject and file
+    try:
+        module = import_module(info["module"])
+        pyobject = module
+        for elt in info["fullname"].split("."):
+            pyobject = getattr(pyobject, elt)
+        fname = inspect.getsourcefile(pyobject).replace("\\", "/")
+    except Exception:
+        # Either the object could not be loaded or the file was not found.
+        # For instance, properties will raise.
+        return None
+
+    # retrieve start/stop lines
+    source, start_line = inspect.getsourcelines(pyobject)
+    lines = "L%d-L%d" % (start_line, start_line + len(source) - 1)
+
+    # create URL
+    if "dev" in release:
+        branch = "main"
+    else:
+        return None  # alternatively, link to a maint/version branch
+    fname = fname.split("/mne_icalabel/")[1]
+    url = f"https://github.com/mne-tools/mne-icalabel/blob/{branch}/mne_icalabel/{fname}#{lines}"
+    return url

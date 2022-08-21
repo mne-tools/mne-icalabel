@@ -71,7 +71,7 @@ def write_components_tsv(ica: ICA, fname):
     )
     # make sure parent directories exist
     fname.mkdir(exist_ok=True)
-    tsv_data.to_csv(fname, sep="\t", index=False)
+    tsv_data.to_csv(fname, sep="\t", index=False, encoding="utf-8")
 
     # create an accompanying JSON file describing the corresponding
     # extra columns for ICA labeling
@@ -83,13 +83,21 @@ def write_components_tsv(ica: ICA, fname):
         "'channel noise', 'other']",
     }
     fname = fname.copy().update(extension=".json")
+
     if not fname.fpath.exists():
         _write_json(fname, component_json)
     else:
         update_sidecar_json(fname, component_json)
 
 
-def mark_component(component: int, fname: Union[str, Path], method: str, label: str, author: str):
+def mark_component(
+    component: int,
+    fname: Union[str, Path],
+    method: str,
+    label: str,
+    author: str,
+    strict_label: bool = True,
+):
     """Mark a component with a label.
 
     Parameters
@@ -106,6 +114,9 @@ def mark_component(component: int, fname: Union[str, Path], method: str, label: 
         'channel noise', 'other'].
     author : str
         The annotating author.
+    strict_label : bool
+        Whether to raise an error if ``label`` is not an accepted value.
+        Default is True.
 
     Notes
     -----
@@ -121,13 +132,14 @@ def mark_component(component: int, fname: Union[str, Path], method: str, label: 
         fname = get_bids_path_from_fname(fname)
 
     # read the file
-    tsv_data = pd.read_csv(fname, sep="\t")
+    with open(fname, "r") as fin:
+        tsv_data = pd.read_csv(fin, sep="\t", index_col=None)
 
     if component not in tsv_data["component"]:
         raise ValueError(f"Component {component} not in tsv data of {fname}.")
 
     # check label is correct
-    if label not in ICLABEL_STRING_TO_NUMERICAL.keys():
+    if label not in ICLABEL_STRING_TO_NUMERICAL.keys() and strict_label:
         raise ValueError(
             f"IC annotated label {label} is not a valid label. "
             f"Please use one of {list(ICLABEL_STRING_TO_NUMERICAL.keys())}."

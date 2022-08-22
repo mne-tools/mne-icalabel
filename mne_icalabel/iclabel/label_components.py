@@ -12,7 +12,14 @@ from .network import run_iclabel
 def iclabel_label_components(inst: Union[BaseRaw, BaseEpochs], ica: ICA, inplace: bool = True):
     """Label the provided ICA components with the ICLabel neural network.
 
-    This network uses 3 features:
+    ICLabel is designed to classify ICs fitted with an extended infomax ICA
+    decomposition algorithm on EEG datasets referenced to a common average and
+    filtered between [1., 100.] Hz. It is possible to run ICLabel on datasets that
+    do not meet those specification, but the classification performance
+    might be negatively impacted. Moreover, the ICLabel paper did not study the
+    effects of these preprocessing steps.
+
+    ICLabel uses 3 features:
 
     - Topographic maps, based on the ICA decomposition.
     - Power Spectral Density (PSD), based on the ICA decomposition and the
@@ -29,7 +36,8 @@ def iclabel_label_components(inst: Union[BaseRaw, BaseEpochs], ica: ICA, inplace
         referenced to a common average and bandpass filtered between 1 and
         100 Hz.
     ica : ICA
-        ICA decomposition of the provided instance.
+        ICA decomposition of the provided instance. The ICA decomposition
+        should use the extended infomax method.
     inplace : bool
         Whether to modify the ``ica`` instance in place by adding the automatic
         annotations to the ``labels_`` property. By default True.

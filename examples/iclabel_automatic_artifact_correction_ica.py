@@ -16,8 +16,10 @@ in MNE-Python.
 
 ICLabel is designed to classify ICs fitted with an extended infomax ICA
 decomposition algorithm on EEG datasets referenced to a common average and
-filtered between [1., 100.] Hz. This model is not validated on other type of
-dataset.
+filtered between [1., 100.] Hz. It is possible to run ICLabel on datasets that
+do not meet those specification, but the classification performance
+might be negatively impacted. Moreover, the ICLabel paper did not study the
+effects of these preprocessing steps.
 
 .. note::
     This example involves running the ICA Infomax algorithm, which requires

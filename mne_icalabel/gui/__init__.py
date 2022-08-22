@@ -23,7 +23,10 @@ def label_ica_components(inst, ica: ICA, show: bool = True, block: bool = False)
     """
     from mne.viz.backends._utils import _init_mne_qtapp, _qt_app_exec
 
-    from ._label_components import ICAComponentLabeler
+    try:
+        from ._label_components import ICAComponentLabeler
+    except ImportError as e:
+        raise ImportError(f"{e}. Users must install QT bindings on their own.")
 
     # get application
     app = _init_mne_qtapp()

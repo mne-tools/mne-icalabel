@@ -41,10 +41,9 @@ Architecture:
    :align: center
 
 The model has three inputs: image (topomap), psd, and autocorrelation features.
-To encourage generalization, the image features are rotated and negated, thus
-quadrupling the feature. The psd and autocorrelation features are copied to the
-new image features. Then, the predicted probabilities are averaged over all four
-images.
+To encourage generalization, the image feature is rotated and negated, thus
+quadrupling the feature. After 3 convolutional layer with a ReLu activation,
+the 3 features are concatenated for the final layer.
 
 .. currentmodule:: mne_icalabel.iclabel
 

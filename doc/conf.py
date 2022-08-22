@@ -14,7 +14,7 @@ from mne.fixes import _compare_version
 from sphinx_gallery.sorting import ExampleTitleSortKey
 
 sys.path.insert(0, os.path.abspath(".."))
-import mne_icalabel  # noqa: E402
+import mne_icalabel
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -89,6 +89,7 @@ default_role = "py:obj"
 # Clean up sidebar: Do not show "Source" link
 html_show_sourcelink = False
 html_copy_source = False
+html_show_sphinx = False
 
 html_theme = "pydata_sphinx_theme"
 

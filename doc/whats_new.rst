@@ -24,7 +24,7 @@ Version 0.4 (unreleased)
 Enhancements
 ~~~~~~~~~~~~
 
--
+- Add ``strict_label`` keyword argument to :func:`mne_icalabel.annotation.mark_component` to enable users to input labels that are not part of the accepted ICLabel key words, by `Adam Li`_ (:pr:`101`)
 
 Bug
 ~~~

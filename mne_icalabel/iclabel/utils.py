@@ -54,7 +54,7 @@ def _mne_to_eeglab_locs(raw: BaseRaw, picks: List[str]) -> Tuple[NDArray[float],
     # get locations as a 2D array
     locs = np.vstack(list(ch_pos.values()))
 
-    # Obtain carthesian coordinates
+    # Obtain cartesian coordinates
     x = locs[:, 1]
 
     # be mindful of the nose orientation in eeglab and mne

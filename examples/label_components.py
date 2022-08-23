@@ -7,6 +7,17 @@ Labeling ICA components with a GUI
 
 This tutorial covers how to label ICA components with a GUI.
 
+.. note:: Similar to ``mne-qt-browser``, we require the users
+          to install a specific version of ``Qt``. Our installation
+          ``pip install mne-icalabel[gui]`` will not install any 
+          specific ``Qt`` version. Therefore, one can install ``Qt5`` 
+          through either ``PyQt5`` or ``PySide2`` or a more modern 
+          ``Qt6`` through either ``PyQt6`` or ``PySide6`` depending 
+          on their system. The users should install this separately 
+          to use the GUI functionality. See:
+          https://www.riverbankcomputing.com/software/pyqt/ for more info
+          on installing.
+
 .. warning:: The GUI is still in active development, and may contain
              bugs, or changes without deprecation in future versions.
 """

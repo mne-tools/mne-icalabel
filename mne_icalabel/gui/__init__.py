@@ -26,7 +26,7 @@ def label_ica_components(inst, ica: ICA, show: bool = True, block: bool = False)
     try:
         from ._label_components import ICAComponentLabeler
     except ImportError as e:
-        raise ImportError(f"{e}. Users must install QT bindings on their own.")
+        raise ImportError(f"{e}. Users must install Qt bindings on their own.")
 
     # get application
     app = _init_mne_qtapp()

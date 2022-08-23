@@ -16,10 +16,10 @@ Here we list a changelog of MNE-ICALabel.
 
 .. _current:
 
-Version 0.4 (unreleased)
-------------------------
+Version 0.4
+-----------
 
-...
+Short release for the JOSS paper. Minor enhancements to BIDS pipeline and bug fixes to code.
 
 Enhancements
 ~~~~~~~~~~~~

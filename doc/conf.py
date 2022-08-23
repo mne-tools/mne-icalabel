@@ -122,8 +122,9 @@ html_context = {
     "pygment_light_style": "tango",
     "pygment_dark_style": "native",
     "versions_dropdown": {
-        "dev": "v0.4 (devel)",
-        "stable": "v0.3",
+        "dev": "v0.5 (devel)",
+        "stable": "v0.4",
+        "v0.3": "v0.3",
         "v0.2": "v0.2",
         "v0.1": "v0.1",
     },

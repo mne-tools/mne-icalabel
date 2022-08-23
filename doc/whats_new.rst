@@ -16,16 +16,15 @@ Here we list a changelog of MNE-ICALabel.
 
 .. _current:
 
-Version 0.4
------------
+Version 0.5 (unreleased)
+------------------------
 
-Short release for the JOSS paper. Minor enhancements to BIDS pipeline and bug fixes to code.
-See here for review: https://github.com/openjournals/joss-reviews/issues/4484.
+...
 
 Enhancements
 ~~~~~~~~~~~~
 
-- Add ``strict_label`` keyword argument to :func:`mne_icalabel.annotation.mark_component` to enable users to input labels that are not part of the accepted ICLabel key words, by `Adam Li`_ (:pr:`101`)
+- 
 
 Bug
 ~~~

@@ -37,7 +37,7 @@ classifiers = [
     'Topic :: Scientific/Engineering',
 ]
 dependencies = [
-    'numpy >= 1.16.0',
+    'numpy >= 1.21',
     'scipy >= 1.2.0',
     'mne >= 1.1',
     'pooch',

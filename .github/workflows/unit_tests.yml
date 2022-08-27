@@ -167,7 +167,7 @@ jobs:
           files: ./coverage.xml
           fail_ci_if_error: true
           verbose: true
-          token: 6e048351-71e0-42d9-9e8b-2897d2bef5e4
+          token: ${{ secrets.CODECOV_TOKEN }}
 
   # release is ran when a release is made on Github
   release:

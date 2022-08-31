@@ -15,6 +15,9 @@ that build upon the ICLabel model.
 
 We encourage you to use the package for your research and also build on top
 with relevant Pull Requests. See our examples for walk-throughs of how to use the package.
+Also, see our `contributing guide <https://github.com/mne-tools/mne-icalabel/blob/main/CONTRIBUTING.md>`_.
+
+We are licensed under BSD-3 (see `License <https://github.com/mne-tools/mne-icalabel/blob/main/LICENSE>`_).
 
 Contents
 --------
@@ -27,19 +30,6 @@ Contents
    install
    api
    auto_examples/index
-
-.. toctree::
-   :hidden:
-   :caption: Development
-
-   License <https://raw.githubusercontent.com/mne-tools/mne-icalabel/main/LICENSE>
-   Contributing <https://github.com/mne-tools/mne-icalabel/blob/main/CONTRIBUTING.md>
-
-License
--------
-
-**mne-icalabel** is licensed under `BSD 3.0 <https://opensource.org/licenses/BSD-3-Clause>`_.
-A full copy of the license can be found `on GitHub <https://raw.githubusercontent.com/mne-tools/mne-icalabel/main/LICENSE>`_.
 
 Indices and tables
 ------------------

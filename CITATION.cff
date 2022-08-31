@@ -46,4 +46,43 @@ keywords:
 message: >-
   Please cite this software using the metadata from
   'preferred-citation' in the CITATION.cff file.
+preferred-citation:
+  title: >-
+    MNE-ICALabel: Automatically annotating ICA components with ICLabel in Python
+  journal: Journal of Open Source Software
+  type: article
+  year: 2022
+  volume: 7
+  issue: 76
+  start: 4484
+  doi: 10.21105/joss.04484
+  authors:
+    - given-names: Adam
+      family-names: Li
+      affiliation: 'Department of Computer Science, Columbia University, New York, NY, USA'
+      orcid: 'https://orcid.org/0000-0001-8421-365X'
+    - given-names: Richard
+      family-names: Höchenberger
+      affiliation: 'Institute of Neuroscience and Medicine (INM-3), Research Center Jülich, Germany'
+      orcid: 'https://orcid.org/0000-0002-0380-4798'
+    - given-names: Thomas
+      family-names: Donoghue
+      affiliation: 'Department of Biomedical Engineering, Columbia University'
+      orcid: 'https://orcid.org/0000-0001-5911-0472'
+    - given-names: Mathieu
+      family-names: Scheltienne
+      affiliation: 'Human Neuroscience Platform, Fondation Campus Biotech Geneva, Geneva, Switzerland'
+      orcid: 'https://orcid.org/0000-0001-8316-7436'
+    - given-names: Jacob
+      family-names: Feitelberg
+      affiliation: 'Department of Biomedical Engineering, Johns Hopkins University, Baltimore, MD, USA'
+      orcid: 'https://orcid.org/0000-0002-4551-0245'
+    - given-names: Anand
+      family-names: Saini
+      affiliation: 'Human Neuroscience Platform, Fondation Campus Biotech Geneva, Geneva, Switzerland'
+      orcid: 'https://orcid.org/0000-0003-3595-5969'
+identifiers:
+  - description: "Code archive on Zenodo"
+    type: doi
+    value: 10.5281/zenodo.7017165
 ...

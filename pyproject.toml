@@ -167,13 +167,10 @@ filterwarnings = []
 [tool.coverage.run]
 branch = true
 cover_pylib = false
-source = [
-    'mne_icalabel',
-]
 omit = [
     '**/__init__.py',
-    'mne_icalabel/commands/*',
-    'mne_icalabel/_version.py',
+    '**/mne_icalabel/_version.py',
+    '**/mne_icalabel/commands/*',
     '**/tests/**',
 ]
 

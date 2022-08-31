@@ -78,3 +78,26 @@ If you are interested in contributing, please read the
 For any usage questions, please post to the
 [MNE Forum](https://mne.discourse.group). Be sure to add the `mne-icalabel` tag to
 your question.
+
+# Citing
+
+If you use the ``ICLabel`` model, please consider citing our paper:
+
+    Li et al., (2022). MNE-ICALabel: Automatically annotating ICA components with ICLabel in Python. Journal of Open Source Software, 7(76), 4484, https://doi.org/10.21105/joss.04484
+
+with the corresponding BibTex:
+
+    @article{Li2022,
+        doi       = {10.21105/joss.04484},
+        url       = {https://doi.org/10.21105/joss.04484},
+        year      = {2022},
+        publisher = {The Open Journal},
+        volume    = {7},
+        number    = {76},
+        pages     = {4484},
+        author    = {Adam Li and Jacob Feitelberg and Anand Prakash Saini and Richard Höchenberger and Mathieu Scheltienne},
+        title     = {MNE-ICALabel: Automatically annotating ICA components with ICLabel in Python},
+        journal   = {Journal of Open Source Software}
+    }
+
+Future versions of the software are aimed at improved models and may have different papers associated with it.

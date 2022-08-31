@@ -5,13 +5,13 @@ concurrency:
 on:
   pull_request:
     paths:
-      - '**.py'
+      - "**.py"
   push:
     branches: [main, maint/0.2, maint/0.3]
     tags:
-      - 'v*.*.*'
+      - "v*.*.*"
     paths:
-      - '**.py'
+      - "**.py"
   workflow_dispatch:
 
 jobs:
@@ -24,8 +24,8 @@ jobs:
       - name: Setup Python 3.9
         uses: actions/setup-python@v4
         with:
-          python-version: '3.9'
-          architecture: 'x64'
+          python-version: "3.9"
+          architecture: "x64"
       - name: Install dependencies
         run: |
           python -m pip install --progress-bar off --upgrade pip setuptools wheel
@@ -45,15 +45,15 @@ jobs:
         with:
           check_filenames: true
           check_hidden: true
-          skip: './.git,./build,./.mypy_cache,./.pytest_cache'
+          skip: "./.git,./build,./.mypy_cache,./.pytest_cache"
           ignore_words_file: ./.codespellignore
       - name: Run pydocstyle
         run: pydocstyle .
       - name: Run mypy
         uses: jpetrucciani/mypy-check@master
         with:
-          path: './mne_icalabel'
-          mypy_flags: '--config-file pyproject.toml'
+          path: "./mne_icalabel"
+          mypy_flags: "--config-file pyproject.toml"
 
   build:
     timeout-minutes: 10
@@ -74,7 +74,7 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
-          architecture: 'x64'
+          architecture: "x64"
       - name: Install dependencies
         run: |
           python -m pip install --progress-bar off --upgrade pip setuptools wheel
@@ -110,7 +110,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu, macos, windows]
-        python-version: [3.7, "3.10"]  # oldest and newest supported versions
+        python-version: [3.7, "3.10"] # oldest and newest supported versions
         mne: [stable, main]
     name: pytest ${{ matrix.os }} - py${{ matrix.python-version }} - MNE ${{ matrix.mne }}
     runs-on: ${{ matrix.os }}-latest
@@ -121,12 +121,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
-          path: main  # clone repository in a sub-directory
+          path: main # clone repository in a sub-directory
       - name: Setup Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
-          architecture: 'x64'
+          architecture: "x64"
       - name: Install Qt dependencies
         if: "matrix.os == 'ubuntu'"
         run: |
@@ -156,7 +156,7 @@ jobs:
         run: |
           python -c "import mne; mne.datasets.testing.data_path()"
           python -c "import mne_icalabel; mne_icalabel.datasets.icalabel.data_path()"
-      - name: Run pytest  # headless via Xvfb on linux
+      - name: Run pytest # headless via Xvfb on linux
         uses: GabrielBB/xvfb-action@v1.6
         with:
           run: pytest main/mne_icalabel --cov=main/mne_icalabel --cov-report=xml --cov-config=main/pyproject.toml
@@ -183,7 +183,7 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: 3.9
-          architecture: 'x64'
+          architecture: "x64"
       - name: Install dependencies
         run: |
           python -m pip install --progress-bar off --upgrade pip setuptools wheel

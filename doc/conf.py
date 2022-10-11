@@ -204,7 +204,6 @@ intersphinx_mapping = {
 intersphinx_timeout = 5
 
 # -- sphinx-gallery ----------------------------------------------------------
-os.environ["_MNE_BUILDING_DOC"] = "true"
 scrapers = ("matplotlib",)
 if mne.viz.get_browser_backend() == "qt":
     scrapers += (mne.viz._scraper._MNEQtBrowserScraper(),)
@@ -225,8 +224,9 @@ sphinx_gallery_conf = {
     "compress_images": compress_images,
     "doc_module": ("mne_icalabel",),
     "examples_dirs": ["../examples"],
+    "exclude_implicit_doc": {},  # set
     "filename_pattern": r"\d{2}_",
-    "gallery_dirs": ["auto_examples"],
+    "gallery_dirs": ["generated/examples"],
     "image_scrapers": scrapers,
     "junit": os.path.join("..", "test-results", "sphinx-gallery", "junit.xml"),
     "line_numbers": False,

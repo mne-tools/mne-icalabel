@@ -29,4 +29,4 @@ Contents
    whats_new
    install
    api
-   auto_examples/index
+   generated/examples/index

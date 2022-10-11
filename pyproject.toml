@@ -61,12 +61,13 @@ doc = [
     'sphinx',
     'sphinxcontrib-bibtex',
     'sphinx-copybutton',
+    'sphinx-design',
     'sphinx-gallery',
     'sphinx-issues',
 ]
 gui = [
     'matplotlib',
-    'mne-qt-browser',
+    'mne-qt-browser>=0.2',
     'qtpy',
 ]
 ica = [

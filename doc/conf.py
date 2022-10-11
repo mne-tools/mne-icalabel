@@ -90,6 +90,9 @@ html_css_files = ["style.css"]
 # further.  For a list of options available for each theme, see the
 # documentation.
 html_theme_options = {
+    "external_links": [
+        {"name": "MNE", "url": "https://mne.tools/stable/index.html"}
+    ],
     "icon_links": [
         dict(
             name="GitHub",
@@ -97,10 +100,10 @@ html_theme_options = {
             icon="fab fa-github-square",
         ),
     ],
-    "use_edit_page_button": False,
+    "navbar_end": ["theme-switcher", "version-switcher", "navbar-icon-links"],
     "navigation_with_keys": False,
     "show_toc_level": 1,
-    "navbar_end": ["theme-switcher", "version-switcher", "navbar-icon-links"],
+    "use_edit_page_button": False,
 }
 # Custom sidebar templates, maps document names to template names.
 html_sidebars = {

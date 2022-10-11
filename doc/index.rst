@@ -1,7 +1,7 @@
 .. include:: ./links.inc
 
-MNE-ICALabel
-============
+**MNE-ICALabel**
+================
 
 ``mne-icalabel`` is a Python package for labeling independent components that
 stem from an `Independent Component Analysis (ICA) <ica wikipedia_>`_.

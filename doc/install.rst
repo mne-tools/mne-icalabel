@@ -40,7 +40,7 @@ Methods
 
         .. code-block:: bash
 
-            pip install stimuli
+            pip install mne-icalabel
 
         Additional dependencies can be installed with different keywords:
 

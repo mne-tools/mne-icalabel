@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-.. _tut-auto-artifact-ica:
+.. _tuto-iclabel:
 
 Repairing artifacts with ICA automatically using ICLabel Model
 ==============================================================

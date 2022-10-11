@@ -27,7 +27,7 @@ def iclabel_label_components(inst: Union[BaseRaw, BaseEpochs], ica: ICA, inplace
     - Autocorrelation, based on the ICA decomposition and the provided
       instance.
 
-    For more information, see :footcite:`iclabel2019`.
+    For more information, see :footcite:t:`iclabel2019`.
 
     Parameters
     ----------

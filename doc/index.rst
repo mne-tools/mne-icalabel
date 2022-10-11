@@ -1,7 +1,7 @@
-**mne-icalabel**
-===================
+MNE-ICALabel
+============
 
-mne-icalabel is a Python package for labeling independent components that stem
+``mne-icalabel`` is a Python package for labeling independent components that stem
 from an `Independent Component Analysis (ICA) <https://en.wikipedia.org/wiki/Independent_component_analysis>`_.
 
 Scalp electroencephalography (EEG) and magnetoencephalography (MEG) analysis is typically very noisy
@@ -30,9 +30,3 @@ Contents
    install
    api
    auto_examples/index
-
-Indices and tables
-------------------
-
-* :ref:`genindex`
-* :ref:`modindex`

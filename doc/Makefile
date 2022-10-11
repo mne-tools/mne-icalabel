@@ -48,9 +48,7 @@ help:
 
 clean:
 	-rm -rf $(BUILDDIR)/*
-	-rm -rf auto_examples/
 	-rm -rf generated/*
-	-rm -rf modules/generated/*
 
 html_stable:
 	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) _build/html_stable

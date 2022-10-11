@@ -62,7 +62,6 @@ doc = [
     'sphinxcontrib-bibtex',
     'sphinx-copybutton',
     'sphinx-gallery',
-    'sphinx_rtd_theme',
     'sphinx-issues',
 ]
 gui = [

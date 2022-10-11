@@ -15,7 +15,7 @@
 .. _project github: https://github.com/mne-tools/mne-icalabel
 .. _project citation: https://github.com/mne-tools/mne-icalabel/blob/main/CITATION.cff
 .. _project license: https://github.com/mne-tools/mne-icalabel/blob/main/LICENSE
-
+.. _project contributing: https://github.com/mne-tools/mne-icalabel/blob/main/CONTRIBUTING.md
 
 .. license
 
@@ -28,3 +28,8 @@
 .. _mne stable: https://mne.tools/stable/index.html
 .. _mne install: https://mne.tools/stable/install/index.html
 .. _mne installers: https://mne.tools/stable/install/installers.html
+
+
+.. ica
+
+.. _ica wikipedia: https://en.wikipedia.org/wiki/Independent_component_analysis

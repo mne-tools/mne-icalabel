@@ -54,6 +54,8 @@ jobs:
         with:
           path: "./mne_icalabel"
           mypy_flags: "--config-file pyproject.toml"
+      - name: Run bibclean
+        run: bibclean-check doc/references.bib
 
   build:
     timeout-minutes: 10

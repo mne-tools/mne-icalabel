@@ -11,7 +11,7 @@ typically very noisy and contains various non-neural signals, such as heartbeat
 artifacts. `Independent Component Analysis (ICA) <ica wikipedia_>`_ is a common
 procedure to remove these artifacts. However, removing artifacts requires
 manual annotation of ICA components, which is subject to human error and very
-laborious when operating on large datasets. The first few version of
+laborious when operating on large datasets. The first few versions of
 ``mne-icalabel`` replicated the popular ICLabel model for Python (previously
 only available in MATLAB's EEGLab). In future versions, the package aims to
 develop more robust models that build upon the ICLabel model.

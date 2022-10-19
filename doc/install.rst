@@ -1,81 +1,94 @@
-:orphan:
+.. include:: ./links.inc
 
 Installation
 ============
+
+``mne-icalabel`` requires Python ``3.7`` or higher.
 
 Dependencies
 ------------
 
 * ``mne`` (>=1.1)
-* ``numpy`` (>=1.16)
+* ``numpy`` (>=1.21)
 * ``scipy`` (>=1.2.0)
 * ``pooch`` (for example dataset access)
 * ``torch`` (for running pytorch neural networks)
 
-We require that you use Python ``3.7`` or higher.
-You may choose to install ``mne-icalabel`` `via conda <#Installation via Conda>`_,
-or `via Pip <#Installation via Pip>`_.
+``mne-icalabel`` works best with the latest stable release of MNE-Python. To
+ensure MNE-Python is up-to-date, see
+`MNE installation instructions <mne install_>`_.
+``mne-icalabel`` is available on `Pypi <project pypi_>`_ and
+on `conda-forge <project conda_>`_.
 
-``mne-icalabel`` works best with the latest stable release of MNE-Python. To ensure
-MNE-Python is up-to-date, see their `installation instructions <https://mne.tools/stable/install/index.html>`_.
+Methods
+-------
 
+.. tab-set::
 
-Installation via Conda
-----------------------
+    .. tab-item:: MNE installers
 
-To install ``mne-icalabel`` using conda in a virtual environment,
-simply run the following at the root of the repository:
+        As of MNE-Python 1.0, ``mne-icalabel`` is distributed in the
+        `MNE standalone installers <mne installers_>`_.
 
-.. code-block:: bash
+        The installers create a conda environment with the entire MNE-ecosystem
+        setup, and more!
 
-   # with python>=3.7 at least
-   conda create -n mne
-   conda activate mne
-   conda install -c conda-forge mne-icalabel
+    .. tab-item:: Pypi
 
+        ``mne-icalabel`` is available on `Pypi <project pypi_>`_ and can be
+        installed in a given environment via ``pip``.
 
-Installation via Pip
---------------------
+        .. code-block:: bash
 
-To install ``mne-icalabel`` from `Pypi <https://pypi.org/project/mne-icalabel/>`_,
-run the following command in the desired environment.
+            pip install mne-icalabel
 
-.. code-block:: bash
+        Additional dependencies can be installed with different keywords:
 
-    # with python>=3.7 at least
-    pip install mne-icalabel
+        .. code-block:: bash
 
-Note that you can install extra dependencies with keywords:
+            # GUI functionalities
+            pip install mne-icalabel[gui]
 
-.. code-block:: bash
+            # MNE's ICA dependencies
+            pip install mne-icalabel[ica]
 
-    # If you would like GUI functionalities
-    pip install mne-icalabel[gui]
+            # developer dependencies
+            pip install mne-icalabel[doc,style,test]
 
-    # If you would like MNE's ICA dependencies
-    pip install mne-icalabel[ica]
+            # all of the above
+            pip install mne-icalabel[all]
 
-    # If you are a developer and would like to install the developer dependencies
-    pip install mne-icalabel[doc,style,test]
+    .. tab-item:: Conda
 
-    # If you would like full functionality, which installs all of the above
-    pip install mne-icalabel[all]
+        Depending on your system, you may want to create a separate environment
+        to install ``mne-icalabel``. You can create a virtual environment with
+        conda:
 
-If you want to install a snapshot of the current development version, run:
+        .. code-block:: bash
 
-.. code-block:: bash
+            conda create -n myenv
+            conda activate myenv
 
-   pip install git+https://github.com/mne-tools/mne-icalabel
+        Replace ``myenv`` with the environment name you prefer.
+        ``mne-icalabel`` can then be installed from the
+        `conda-forge <project conda_>`_ channel:
 
-To check if everything worked fine, the following command should not give any
+        .. code-block:: bash
+
+            conda install -c conda-forge mne-icalabel
+
+    .. tab-item:: Source
+
+        If you want to install a snapshot of the current development version,
+        run:
+
+        .. code-block:: bash
+
+            pip install git+https://github.com/mne-tools/mne-icalabel
+
+To check if everything worked fine, the following command should not raise any
 error messages:
 
 .. code-block:: bash
 
    python -c 'import mne_icalabel'
-
-Installation via MNE-Installer
-------------------------------
-
-Since MNE v1.0, there is now a standalone MNE installer, which can also optionally install
-``mne-icalabel``! See `MNE page <https://mne.tools/stable/install/installers.html>`_ for more information.

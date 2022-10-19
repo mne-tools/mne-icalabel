@@ -227,8 +227,8 @@ def run_iclabel(images: ArrayLike, psds: ArrayLike, autocorr: ArrayLike):
     -------
     labels : array of shape (n_components, n_classes)
         The predicted numerical probability values for all labels in ICLabel output.
-        Columns are ordered with 'Brain', 'Muscle', 'Eye', 'Heart',
-        'Line Noise', 'Channel Noise', and 'Other'.
+        Columns are ordered with ``'Brain'``, ``'Muscle'``, ``'Eye'``,
+        ``'Heart'``, ``'Line Noise'``, ``'Channel Noise'``, and ``'Other'``.
     """
     ica_network_file = files("mne_icalabel.iclabel").joinpath("assets/iclabelNet.pt")
 

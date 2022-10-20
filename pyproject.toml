@@ -76,6 +76,7 @@ ica = [
     'scikit-learn',
 ]
 style = [
+    'bibclean',
     'black',
     'codespell',
     'isort',

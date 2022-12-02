@@ -8,7 +8,7 @@ version = "0.5.dev0"
 description = 'MNE-ICALabel: Automatic labeling of ICA components from MEG, EEG and iEEG data with MNE.'
 readme = 'README.md'
 license = {file = 'LICENSE'}
-requires-python = '~=3.7'
+requires-python = '~=3.8'
 maintainers = [
     {name = 'Adam Li', email = 'adam.li@columbia.edu'},
     {name = 'Mathieu Scheltienne', email = 'mathieu.scheltienne@fcbg.ch'},
@@ -42,7 +42,6 @@ dependencies = [
     'mne >= 1.1',
     'pooch',
     'torch',
-    'importlib-metadata; python_version<"3.8"',
     'importlib-resources; python_version<"3.9"',
 ]
 

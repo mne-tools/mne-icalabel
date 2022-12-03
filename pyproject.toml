@@ -88,7 +88,7 @@ test = [
     'mne-icalabel[ica]',
     'mne-bids',
     'pandas',
-    'PyQt5',
+    'PyQt6',
     'pymatreader',
     'pytest',
     'pytest-cov',

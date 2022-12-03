@@ -131,7 +131,7 @@ jobs:
         if: "matrix.os == 'ubuntu'"
         run: |
           sudo apt update
-          sudo apt install qt5-default
+          sudo apt install qt6-base
       - name: Install package
         run: |
           python -m pip install --progress-bar off --upgrade pip setuptools wheel

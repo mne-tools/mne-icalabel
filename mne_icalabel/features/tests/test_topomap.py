@@ -1,3 +1,5 @@
+import re
+
 import numpy as np
 import pytest
 from mne.datasets import testing
@@ -92,7 +94,9 @@ def test_invalid_arguments():
     with pytest.raises(RuntimeError, match="The provided ICA instance was not fitted."):
         get_topomaps(ICA(n_components=5, method="picard"))
 
-    with pytest.raises(TypeError, match="picks must be a list of int or list of str"):
+    with pytest.raises(
+        TypeError, match=re.escape("picks must be a list of int (indices) or list of str (names).")
+    ):
         get_topomaps(ica, picks=101 + 101j)
     with pytest.raises(TypeError, match="Strings are not supported."):
         get_topomaps(ica, picks="101")

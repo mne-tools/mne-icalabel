@@ -159,7 +159,7 @@ jobs:
           python -c "import mne; mne.datasets.testing.data_path()"
           python -c "import mne_icalabel; mne_icalabel.datasets.icalabel.data_path()"
       - name: Run pytest # headless via Xvfb on linux
-        uses: GabrielBB/xvfb-action@v1.6
+        uses: coactions/setup-xvfb@v1
         with:
           run: pytest main/mne_icalabel --cov=main/mne_icalabel --cov-report=xml --cov-config=main/pyproject.toml
       - name: Upload coverage stats to codecov

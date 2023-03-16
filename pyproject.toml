@@ -41,7 +41,7 @@ dependencies = [
     'scipy >= 1.2.0',
     'mne >= 1.1',
     'pooch',
-    'torch >= 2.0',
+    'torch',
     'importlib-resources; python_version<"3.9"',
 ]
 

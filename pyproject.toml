@@ -8,7 +8,7 @@ version = "0.5.dev0"
 description = 'MNE-ICALabel: Automatic labeling of ICA components from MEG, EEG and iEEG data with MNE.'
 readme = 'README.md'
 license = {file = 'LICENSE'}
-requires-python = '~=3.7'
+requires-python = '~=3.8'
 maintainers = [
     {name = 'Adam Li', email = 'adam.li@columbia.edu'},
     {name = 'Mathieu Scheltienne', email = 'mathieu.scheltienne@fcbg.ch'},
@@ -25,10 +25,10 @@ classifiers = [
     'Operating System :: Unix',
     'Operating System :: MacOS',
     'Programming Language :: Python :: 3 :: Only',
-    'Programming Language :: Python :: 3.7',
     'Programming Language :: Python :: 3.8',
     'Programming Language :: Python :: 3.9',
     'Programming Language :: Python :: 3.10',
+    'Programming Language :: Python :: 3.11',
     'Natural Language :: English',
     'License :: OSI Approved :: BSD License',
     'Intended Audience :: Science/Research',
@@ -42,7 +42,6 @@ dependencies = [
     'mne >= 1.1',
     'pooch',
     'torch',
-    'importlib-metadata; python_version<"3.8"',
     'importlib-resources; python_version<"3.9"',
 ]
 
@@ -89,7 +88,7 @@ test = [
     'mne-icalabel[ica]',
     'mne-bids',
     'pandas',
-    'PyQt5',
+    'PyQt6',
     'pymatreader',
     'pytest',
     'pytest-cov',

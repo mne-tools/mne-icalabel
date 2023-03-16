@@ -4,8 +4,6 @@ concurrency:
   cancel-in-progress: true
 on:
   pull_request:
-    paths:
-      - "**.py"
   push:
     branches: [main, maint/0.2, maint/0.3]
     tags:
@@ -65,7 +63,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu, macos, windows]
-        python-version: [3.7, 3.8, 3.9, "3.10"]
+        python-version: [3.8, 3.9, "3.10", "3.11"]
     name: build ${{ matrix.os }} - py${{ matrix.python-version }}
     runs-on: ${{ matrix.os }}-latest
     defaults:
@@ -114,7 +112,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu, macos, windows]
-        python-version: [3.7, "3.10"] # oldest and newest supported versions
+        python-version: [3.8, "3.11"] # oldest and newest supported versions
         mne: [stable, main]
     name: pytest ${{ matrix.os }} - py${{ matrix.python-version }} - MNE ${{ matrix.mne }}
     runs-on: ${{ matrix.os }}-latest
@@ -135,7 +133,7 @@ jobs:
         if: "matrix.os == 'ubuntu'"
         run: |
           sudo apt update
-          sudo apt install qt5-default
+          sudo apt install qt6-base-dev
       - name: Install package
         run: |
           python -m pip install --progress-bar off --upgrade pip setuptools wheel
@@ -161,7 +159,7 @@ jobs:
           python -c "import mne; mne.datasets.testing.data_path()"
           python -c "import mne_icalabel; mne_icalabel.datasets.icalabel.data_path()"
       - name: Run pytest # headless via Xvfb on linux
-        uses: GabrielBB/xvfb-action@v1.6
+        uses: coactions/setup-xvfb@v1
         with:
           run: pytest main/mne_icalabel --cov=main/mne_icalabel --cov-report=xml --cov-config=main/pyproject.toml
       - name: Upload coverage stats to codecov

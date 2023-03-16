@@ -125,13 +125,13 @@ filt_raw = raw.copy().filter(l_freq=1.0, h_freq=100.0)
 # we'll also specify a `random seed`_ so that we get identical results each
 # time this tutorial is built by our web servers.
 
-#%%
+# %%
 # Before fitting ICA, we will apply a common average referencing, to comply
 # with the ICLabel requirements.
 
 filt_raw = filt_raw.set_eeg_reference("average")
 
-#%%
+# %%
 # We will use the 'extended infomax' method for fitting the ICA, to comply with
 # the ICLabel requirements. ICLabel was not tested with other ICA decomposition
 # algorithm, but its performance and accuracy should not be impacted by the

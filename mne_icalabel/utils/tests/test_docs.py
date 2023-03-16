@@ -7,6 +7,7 @@ from mne_icalabel.utils._docs import copy_doc, fill_doc
 
 def test_fill_doc():
     """Test decorator to fill docstring."""
+
     # test filling docstring
     @fill_doc
     def foo(verbose):
@@ -43,6 +44,7 @@ def test_fill_doc():
 
 def test_copy_doc():
     """Test decorator to copy docstring."""
+
     # test copy of docstring
     def foo(x, y):
         """My doc."""

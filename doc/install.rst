@@ -3,7 +3,7 @@
 Installation
 ============
 
-``mne-icalabel`` requires Python ``3.7`` or higher.
+``mne-icalabel`` requires Python ``3.8`` or higher.
 
 Dependencies
 ------------

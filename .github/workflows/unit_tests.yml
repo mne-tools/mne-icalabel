@@ -138,11 +138,13 @@ jobs:
         run: |
           python -m pip install --progress-bar off --upgrade pip setuptools wheel
           python -m pip install --progress-bar off main/.[test]
+      # We install both MNE Python and BIDS to be in-line with their latest version
       - name: Install MNE (main)
         if: "matrix.mne == 'main'"
         run: |
           python -m pip uninstall -yq mne
           python -m pip install git+https://github.com/mne-tools/mne-python
+          python -m pip install git+https://github.com/mne-tools/mne-bids
       - name: Display MNE infos
         run: mne sys_info
       - name: Retrieve MNE/MNE-ICALabel testing dataset version

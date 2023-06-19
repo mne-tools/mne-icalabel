@@ -4,10 +4,10 @@ except ImportError:
     from importlib_resources import files  # type: ignore
 
 import numpy as np
+import onnxruntime as ort
 import torch
 import torch.nn as nn
 from numpy.typing import ArrayLike
-import onnxruntime as ort
 
 
 class _ICLabelNetImg(nn.Module):

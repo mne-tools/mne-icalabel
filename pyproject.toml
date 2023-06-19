@@ -42,6 +42,7 @@ dependencies = [
     'mne >= 1.1',
     'pooch',
     'torch',
+    'onnxruntime',
     'importlib-resources; python_version<"3.9"',
 ]
 
@@ -56,7 +57,7 @@ doc = [
     'memory_profiler',
     'numpydoc',
     'pydata-sphinx-theme',
-    'PyQt5',
+    'PyQt6',
     'sphinx',
     'sphinxcontrib-bibtex',
     'sphinx-copybutton',

@@ -4,6 +4,7 @@ except ImportError:
     from importlib_resources import files  # type: ignore
 
 import numpy as np
+import onnxruntime as ort
 import pytest
 import torch
 from scipy.io import loadmat
@@ -16,6 +17,7 @@ dataset_path = icalabel.data_path() / "iclabel"
 
 # Network weights
 torch_iclabel_path = str(files("mne_icalabel.iclabel").joinpath("assets/iclabelNet.pt"))
+onnx_network_file = files("mne_icalabel.iclabel").joinpath("assets/ICLabelNet.onnx")
 matconvnet_iclabel_path = dataset_path / "network/netICL.mat"
 
 # Network forward pass input/output
@@ -35,7 +37,7 @@ iclabel_output_raw_path = dataset_path / "iclabel-output-raw.mat"
 iclabel_output_epo_path = dataset_path / "iclabel-output-epo.mat"
 
 
-def test_weights():
+def test_weights_pytorch():
     """Compare the weights of pytorch model and matconvnet model."""
     network_python = torch.load(torch_iclabel_path)
     network_matlab = loadmat(matconvnet_iclabel_path)
@@ -81,9 +83,9 @@ def test_weights():
         assert np.allclose(network_python[python_layer], weights_matlab[idx])
 
 
-def test_network_outputs():
+def test_network_outputs_pytorch():
     """
-    Compare that the ICLabel network in python and matlab outputs the same
+    Compare that the ICLabel network in pytorch and matlab outputs the same
     values for a common set of features (input to the forward pass).
 
     Notes
@@ -126,6 +128,50 @@ def test_network_outputs():
     assert np.allclose(matlab_labels, torch_labels, atol=1e-7)
 
 
+def test_network_outputs_onnx():
+    """
+    Compare that the ICLabel network in onnx and matlab outputs the same
+    values for a common set of features (input to the forward pass).
+
+    Notes
+    -----
+    The forward pass has been run in matconvnet with the same input features.
+    The corresponding MATLAB code can be found in 'data/network_output.txt'.
+    """
+    # load features to use for the forward pass
+    features = loadmat(matconvnet_fw_input_path)["input"][0, :]
+    # features is a (6, ) array with:
+    # - elements in position [0, 2, 4] -> 1-element array with the var name
+    # - elements in position [1, 3, 5] -> data arrays
+    assert "in_image" == features[0][0]
+    images = features[1]
+    assert "in_psdmed" == features[2][0]
+    psd = features[3]
+    assert "in_autocorr" == features[4][0]
+    autocorr = features[5]
+
+    # reshape the features to fit torch format
+    images = np.transpose(images, (3, 2, 0, 1)).astype(np.float32)
+    psd = np.transpose(psd, (3, 2, 0, 1)).astype(np.float32)
+    autocorr = np.transpose(autocorr, (3, 2, 0, 1)).astype(np.float32)
+
+    # run the forward pass on onnxruntime
+    ort_session = ort.InferenceSession(onnx_network_file)
+
+    labels = ort_session.run(
+        None,
+        {"topo": images, "psds": psd, "autocorr": autocorr},
+    )
+
+    onnx_labels = labels[0]
+
+    # load the matconvnet output of the forward pass on those 3 feature arrays
+    matlab_labels = loadmat(matconvnet_fw_output_path)["labels"]  # (30, 7)
+
+    # Compare both outputs
+    assert np.allclose(matlab_labels, onnx_labels, atol=1e-7)
+
+
 @pytest.mark.parametrize(
     "eeglab_feature_file, eeglab_feature_formatted_file",
     [
@@ -133,7 +179,7 @@ def test_network_outputs():
         (features_epo_path, features_formatted_epo_path),
     ],
 )
-def test_format_input(eeglab_feature_file, eeglab_feature_formatted_file):
+def test_format_input_pytorch(eeglab_feature_file, eeglab_feature_formatted_file):
     """Test formatting of input feature before feeding them to the network."""
     features_eeglab = loadmat(eeglab_feature_file)["features"]
     topo, psd, autocorr = _format_input(
@@ -157,14 +203,37 @@ def test_format_input(eeglab_feature_file, eeglab_feature_formatted_file):
         (features_epo_path, iclabel_output_epo_path),
     ],
 )
-def test_run_iclabel(eeglab_feature_file, eeglab_output_file):
+def test_run_iclabel_onnx(eeglab_feature_file, eeglab_output_file):
+    """Test that the network outputs the same values for the features in
+    'features_raw_path' and 'features_epo_path' that contains the features
+    extracted in EEGLAB. This set of feature is compared with the set of
+    features retrieved in python in 'test_features.py:test_get_features'."""
+    features_eeglab = loadmat(eeglab_feature_file)["features"]
+    # run the forward pass on onnx
+    labels = run_iclabel(features_eeglab[0, 0], features_eeglab[0, 1], features_eeglab[0, 2], library = 'onnx')
+
+    # load the labels from EEGLAB
+    matlab_labels = loadmat(eeglab_output_file)["labels"]  # (30, 7)
+
+    # Compare both outputs
+    assert np.allclose(matlab_labels, labels, atol=1e-7)
+
+
+@pytest.mark.parametrize(
+    "eeglab_feature_file, eeglab_output_file",
+    [
+        (features_raw_path, iclabel_output_raw_path),
+        (features_epo_path, iclabel_output_epo_path),
+    ],
+)
+def test_run_iclabel_pytorch(eeglab_feature_file, eeglab_output_file):
     """Test that the network outputs the same values for the features in
     'features_raw_path' and 'features_epo_path' that contains the features
     extracted in EEGLAB. This set of feature is compared with the set of
     features retrieved in python in 'test_features.py:test_get_features'."""
     features_eeglab = loadmat(eeglab_feature_file)["features"]
     # run the forward pass on pytorch
-    labels = run_iclabel(features_eeglab[0, 0], features_eeglab[0, 1], features_eeglab[0, 2])
+    labels = run_iclabel(features_eeglab[0, 0], features_eeglab[0, 1], features_eeglab[0, 2], library = 'pytorch')
 
     # load the labels from EEGLAB
     matlab_labels = loadmat(eeglab_output_file)["labels"]  # (30, 7)

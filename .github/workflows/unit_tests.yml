@@ -45,7 +45,7 @@ jobs:
         with:
           check_filenames: true
           check_hidden: true
-          skip: "./.git,./build,./.mypy_cache,./.pytest_cache,./mne_iclabel/iclabel/assets"
+          skip: "./.git,./build,./.mypy_cache,./.pytest_cache,./mne_icalabel/iclabel/assets"
           ignore_words_file: ./.codespellignore
       - name: Run pydocstyle
         run: pydocstyle .

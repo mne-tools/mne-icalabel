@@ -196,9 +196,7 @@ def _format_input(topo: ArrayLike, psd: ArrayLike, autocorr: ArrayLike):
     return formatted_topo, formatted_psd, formatted_autocorr
 
 
-def _format_input_for_torch(
-    topo: ArrayLike, psd: ArrayLike, autocorr: ArrayLike
-) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+def _format_input_for_torch(topo: ArrayLike, psd: ArrayLike, autocorr: ArrayLike):
     """Format the features to the correct shape and type for pytorch."""
     topo = np.transpose(topo, (3, 2, 0, 1))
     psd = np.transpose(psd, (3, 2, 0, 1))
@@ -211,9 +209,7 @@ def _format_input_for_torch(
     return topo, psd, autocorr
 
 
-def _format_input_for_onnx(
-    topo: ArrayLike, psd: ArrayLike, autocorr: ArrayLike
-) -> tuple[ArrayLike, ArrayLike, ArrayLike]:
+def _format_input_for_onnx(topo: ArrayLike, psd: ArrayLike, autocorr: ArrayLike):
     """Format the features to the correct shape and type for ONNX."""
     topo = np.transpose(topo, (3, 2, 0, 1)).astype(np.float32)
     psd = np.transpose(psd, (3, 2, 0, 1)).astype(np.float32)

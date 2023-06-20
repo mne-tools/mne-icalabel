@@ -122,7 +122,7 @@ include = ['mne_icalabel*']
 exclude = ['mne_icalabel*tests']
 
 [tool.setuptools.package-data]
-"mne_icalabel.iclabel" = ["assets/*.pt"]
+"mne_icalabel.iclabel" = ["assets/*"]
 
 [tool.black]
 line-length = 100

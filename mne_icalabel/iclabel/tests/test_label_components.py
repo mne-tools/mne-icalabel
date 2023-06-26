@@ -7,6 +7,7 @@ from mne.preprocessing import ICA
 
 from mne_icalabel.config import ICA_LABELS_TO_MNE
 from mne_icalabel.iclabel import iclabel_label_components
+from mne_icalabel.utils._tests import requires_onnx, requires_torch
 
 directory = testing.data_path() / "MEG" / "sample"
 raw = read_raw(directory / "sample_audvis_trunc_raw.fif", preload=False)
@@ -36,15 +37,57 @@ raw.set_eeg_reference("average")
         (make_fixed_length_epochs(raw, duration=5, preload=True), []),
     ),
 )
-def test_label_components(inst, exclude):
+@requires_onnx
+def test_label_components_onnx(inst, exclude):
     """Check that label_components does not raise on various data shapes."""
     picks = pick_types(inst.info, eeg=True, exclude=exclude)
     ica = ICA(n_components=5, method="picard", fit_params=dict(ortho=False, extended=True))
     ica.fit(inst, picks=picks)
-    labels = iclabel_label_components(inst, ica, inplace=False)
+    labels = iclabel_label_components(inst, ica, inplace=False, backend="onnx")
     assert labels.shape == (ica.n_components_, 7)
     assert len(ica.labels_) == 0
-    labels2 = iclabel_label_components(inst, ica, inplace=True)
+    labels2 = iclabel_label_components(inst, ica, inplace=True, backend="onnx")
+    assert sorted(ica.labels_.keys()) == sorted(ICA_LABELS_TO_MNE.values())
+    assert np.allclose(labels, labels2)
+
+
+@pytest.mark.parametrize(
+    "inst, exclude",
+    (
+        (raw, "bads"),
+        (raw.copy().crop(0, 8), "bads"),
+        (raw.copy().crop(0, 1), "bads"),
+        (make_fixed_length_epochs(raw, duration=0.5, preload=True), "bads"),
+        (make_fixed_length_epochs(raw, duration=1, preload=True), "bads"),
+        (make_fixed_length_epochs(raw, duration=5, preload=True), "bads"),
+        (raw, []),
+        (raw.copy().crop(0, 8), []),
+        (raw.copy().crop(0, 1), []),
+        (make_fixed_length_epochs(raw, duration=0.5, preload=True), []),
+        (make_fixed_length_epochs(raw, duration=1, preload=True), []),
+        (make_fixed_length_epochs(raw, duration=5, preload=True), []),
+    ),
+)
+@requires_torch
+def test_label_components_torch(inst, exclude):
+    """Check that label_components does not raise on various data shapes."""
+    picks = pick_types(inst.info, eeg=True, exclude=exclude)
+    ica = ICA(n_components=5, method="picard", fit_params=dict(ortho=False, extended=True))
+    ica.fit(inst, picks=picks)
+    labels = iclabel_label_components(inst, ica, inplace=False, backend=None)
+    assert labels.shape == (ica.n_components_, 7)
+    assert len(ica.labels_) == 0
+    labels2 = iclabel_label_components(inst, ica, inplace=True, backend=None)
+    assert sorted(ica.labels_.keys()) == sorted(ICA_LABELS_TO_MNE.values())
+    assert np.allclose(labels, labels2)
+
+    picks = pick_types(inst.info, eeg=True, exclude=exclude)
+    ica = ICA(n_components=5, method="picard", fit_params=dict(ortho=False, extended=True))
+    ica.fit(inst, picks=picks)
+    labels = iclabel_label_components(inst, ica, inplace=False, backend="torch")
+    assert labels.shape == (ica.n_components_, 7)
+    assert len(ica.labels_) == 0
+    labels2 = iclabel_label_components(inst, ica, inplace=True, backend="torch")
     assert sorted(ica.labels_.keys()) == sorted(ICA_LABELS_TO_MNE.values())
     assert np.allclose(labels, labels2)
 

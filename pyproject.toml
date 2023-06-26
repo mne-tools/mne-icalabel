@@ -37,24 +37,21 @@ classifiers = [
     'Topic :: Scientific/Engineering',
 ]
 dependencies = [
-    'numpy >= 1.21',
-    'scipy >= 1.2.0',
-    'mne >= 1.1',
-    'pooch',
     'importlib-resources; python_version<"3.9"',
+    'mne >= 1.1',
+    'numpy >= 1.21',
+    'pooch',
+    'scipy >= 1.2.0',
+    'torch',
 ]
 
 [project.optional-dependencies]
-backend = [
-    'torch',
-    'onnxruntime',
-]
 build = [
     'build',
     'twine',
 ]
 doc = [
-    'mne-icalabel[backend]',
+    'mne-icalabel[onnx]',
     'mne-icalabel[gui]',
     'mne-icalabel[ica]',
     'memory_profiler',
@@ -78,6 +75,9 @@ ica = [
     'python-picard',
     'scikit-learn',
 ]
+onnx = [
+    'onnxruntime',
+]
 style = [
     'bibclean',
     'black',
@@ -88,7 +88,7 @@ style = [
     'pydocstyle[toml]',
 ]
 test = [
-    'mne-icalabel[backend]',
+    'mne-icalabel[onnx]',
     'mne-icalabel[gui]',
     'mne-icalabel[ica]',
     'mne-bids',
@@ -99,7 +99,7 @@ test = [
     'pytest-cov',
 ]
 all = [
-    'mne-icalabel[backend]',
+    'mne-icalabel[onnx]',
     'mne-icalabel[build]',
     'mne-icalabel[doc]',
     'mne-icalabel[gui]',

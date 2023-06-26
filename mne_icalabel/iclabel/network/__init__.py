@@ -33,7 +33,7 @@ def run_iclabel(
         Columns are ordered with ``'Brain'``, ``'Muscle'``, ``'Eye'``,
         ``'Heart'``, ``'Line Noise'``, ``'Channel Noise'``, and ``'Other'``.
     """
-    _check_option(backend, (None, "torch", "onnx"), "backend")
+    _check_option("backend", backend, (None, "torch", "onnx"))
     if backend is None:
         torch = import_optional_dependency("torch", raise_error=False)
         onnx = import_optional_dependency("onnxruntime", raise_error=False)

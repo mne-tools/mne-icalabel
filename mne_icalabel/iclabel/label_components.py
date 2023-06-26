@@ -9,7 +9,9 @@ from .features import get_iclabel_features
 from .network import run_iclabel
 
 
-def iclabel_label_components(inst: Union[BaseRaw, BaseEpochs], ica: ICA, inplace: bool = True, backend: Optional[str] = None):
+def iclabel_label_components(
+    inst: Union[BaseRaw, BaseEpochs], ica: ICA, inplace: bool = True, backend: Optional[str] = None
+):
     """Label the provided ICA components with the ICLabel neural network.
 
     ICLabel is designed to classify ICs fitted with an extended infomax ICA

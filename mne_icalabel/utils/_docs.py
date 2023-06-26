@@ -151,8 +151,7 @@ def copy_doc(source: Callable) -> Callable:
     def wrapper(func):
         if source.__doc__ is None or len(source.__doc__) == 0:
             raise RuntimeError(
-                f"The docstring from {source.__name__} could not be copied because it "
-                "was empty."
+                f"The docstring from {source.__name__} could not be copied because it " "was empty."
             )
         doc = source.__doc__
         if func.__doc__ is not None:

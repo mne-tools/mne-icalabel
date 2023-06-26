@@ -4,7 +4,9 @@ import numpy as np
 from numpy.typing import ArrayLike, NDArray
 
 
-def _format_input(topo: ArrayLike, psd: ArrayLike, autocorr: ArrayLike) -> Tuple[NDArray, NDArray, NDArray]:
+def _format_input(
+    topo: ArrayLike, psd: ArrayLike, autocorr: ArrayLike
+) -> Tuple[NDArray, NDArray, NDArray]:
     """Replicate the input formatting in EEGLAB -ICLabel.
 
     .. code-block:: matlab

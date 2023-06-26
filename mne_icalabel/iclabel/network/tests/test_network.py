@@ -218,7 +218,9 @@ def test_run_iclabel_onnx(eeglab_feature_file, eeglab_output_file):
     features_eeglab = loadmat(eeglab_feature_file)["features"]
     # run the forward pass on onnx
     labels = _run_iclabel(
-        features_eeglab[0, 0], features_eeglab[0, 1], features_eeglab[0, 2],
+        features_eeglab[0, 0],
+        features_eeglab[0, 1],
+        features_eeglab[0, 2],
     )
 
     # load the labels from EEGLAB
@@ -246,7 +248,9 @@ def test_run_iclabel_pytorch(eeglab_feature_file, eeglab_output_file):
     features_eeglab = loadmat(eeglab_feature_file)["features"]
     # run the forward pass on pytorch
     labels = _run_iclabel(
-        features_eeglab[0, 0], features_eeglab[0, 1], features_eeglab[0, 2],
+        features_eeglab[0, 0],
+        features_eeglab[0, 1],
+        features_eeglab[0, 2],
     )
 
     # load the labels from EEGLAB

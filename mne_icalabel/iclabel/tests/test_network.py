@@ -150,7 +150,7 @@ def test_network_outputs_onnx():
     assert "in_autocorr" == features[4][0]
     autocorr = features[5]
 
-    # reshape the features to fit torch format
+    # reshape the features to fit onnx format
     images = np.transpose(images, (3, 2, 0, 1)).astype(np.float32)
     psd = np.transpose(psd, (3, 2, 0, 1)).astype(np.float32)
     autocorr = np.transpose(autocorr, (3, 2, 0, 1)).astype(np.float32)
@@ -179,7 +179,7 @@ def test_network_outputs_onnx():
         (features_epo_path, features_formatted_epo_path),
     ],
 )
-def test_format_input_pytorch(eeglab_feature_file, eeglab_feature_formatted_file):
+def test_format_input(eeglab_feature_file, eeglab_feature_formatted_file):
     """Test formatting of input feature before feeding them to the network."""
     features_eeglab = loadmat(eeglab_feature_file)["features"]
     topo, psd, autocorr = _format_input(

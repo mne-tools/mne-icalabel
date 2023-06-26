@@ -1,7 +1,12 @@
+from typing import Optional
+
+from mne.utils import _check_option
 from numpy.typing import ArrayLike, NDArray
 
+from ...utils._imports import import_optional_dependency
 
-def run_iclabel(images: ArrayLike, psds: ArrayLike, autocorr: ArrayLike, library: str = "pytorch") -> NDArray:
+
+def run_iclabel(images: ArrayLike, psds: ArrayLike, autocorr: ArrayLike, backend: Optional[str] = "pytorch") -> NDArray:
     """Run the ICLabel network on the provided set of features.
 
     The features are un-formatted and are as-returned by
@@ -15,6 +20,9 @@ def run_iclabel(images: ArrayLike, psds: ArrayLike, autocorr: ArrayLike, library
         The power spectral density features.
     autocorr : array of shape (n_components, 1, 1, 100)
         The autocorrelation features.
+    backend : None | ``torch`` | ``onnx``
+        Backend to use to run ICLabel. If None, returns the first available backend in
+        the order ``torch``, ``onnx``.
 
     Returns
     -------
@@ -23,10 +31,26 @@ def run_iclabel(images: ArrayLike, psds: ArrayLike, autocorr: ArrayLike, library
         Columns are ordered with ``'Brain'``, ``'Muscle'``, ``'Eye'``,
         ``'Heart'``, ``'Line Noise'``, ``'Channel Noise'``, and ``'Other'``.
     """
-    if library == "pytorch":
+    _check_option(backend, (None, "torch", "onnx"), "backend")
+    if backend is None:
+        torch = import_optional_dependency("torch", raise_error=False)
+        onnx = import_optional_dependency("onnxruntime", raise_error=False)
+
+        if torch is not None:
+            from .torch import _run_iclabel
+        elif torch is None and onnx is not None:
+            from .onnx import _run_iclabel
+        else:
+            raise ImportError(
+                "Missing optional dependency. ICLabel requires either pytorch or "
+                "onnxruntime. Use pip or conda to install one of them."
+            )
+    elif backend == "torch":
+        import_optional_dependency("torch", raise_error=True)
+
         from .torch import _run_iclabel
-    elif library == "onnx":
+    elif backend == "onnx":
+        import_optional_dependency("onnxruntime", raise_error=True)
+
         from .onnx import _run_iclabel
-    else:
-        raise ValueError(f"Library {library} is not supported")
     return _run_iclabel(images, psds, autocorr)

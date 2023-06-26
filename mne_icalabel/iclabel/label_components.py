@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Optional, Union
 
 import numpy as np
 from mne import BaseEpochs
@@ -9,7 +9,7 @@ from .features import get_iclabel_features
 from .network import run_iclabel
 
 
-def iclabel_label_components(inst: Union[BaseRaw, BaseEpochs], ica: ICA, inplace: bool = True):
+def iclabel_label_components(inst: Union[BaseRaw, BaseEpochs], ica: ICA, inplace: bool = True, backend: Optional[str] = None):
     """Label the provided ICA components with the ICLabel neural network.
 
     ICLabel is designed to classify ICs fitted with an extended infomax ICA
@@ -41,6 +41,9 @@ def iclabel_label_components(inst: Union[BaseRaw, BaseEpochs], ica: ICA, inplace
     inplace : bool
         Whether to modify the ``ica`` instance in place by adding the automatic
         annotations to the ``labels_`` property. By default True.
+    backend : None | ``torch`` | ``onnx``
+        Backend to use to run ICLabel. If None, returns the first available backend in
+        the order ``torch``, ``onnx``.
 
     Returns
     -------
@@ -55,7 +58,7 @@ def iclabel_label_components(inst: Union[BaseRaw, BaseEpochs], ica: ICA, inplace
     .. footbibliography::
     """
     features = get_iclabel_features(inst, ica)
-    labels_pred_proba = run_iclabel(*features)
+    labels_pred_proba = run_iclabel(*features, backend=backend)
 
     if inplace:
         from mne_icalabel.config import ICA_LABELS_TO_MNE

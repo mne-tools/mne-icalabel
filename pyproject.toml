@@ -69,7 +69,7 @@ doc = [
 ]
 gui = [
     'matplotlib',
-    'mne-qt-browser>=0.2',
+    'mne-qt-browser>=0.3.2',
     'qtpy',
     'PyQt6',
 ]

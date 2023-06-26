@@ -58,13 +58,13 @@ def iclabel_label_components(inst: Union[BaseRaw, BaseEpochs], ica: ICA, inplace
     labels_pred_proba = run_iclabel(*features)
 
     if inplace:
-        from mne_icalabel.config import ICLABEL_LABELS_TO_MNE
+        from mne_icalabel.config import ICA_LABELS_TO_MNE
 
         ica.labels_scores_ = labels_pred_proba
         argmax_labels = np.argmax(labels_pred_proba, axis=1)
 
         # add labels to the ICA instance
-        for idx, (_, mne_label) in enumerate(ICLABEL_LABELS_TO_MNE.items()):
+        for idx, (_, mne_label) in enumerate(ICA_LABELS_TO_MNE.items()):
             auto_labels = list(np.argwhere(argmax_labels == idx).flatten())
             if mne_label not in ica.labels_:
                 ica.labels_[mne_label] = auto_labels

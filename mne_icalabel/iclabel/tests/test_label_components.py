@@ -5,7 +5,7 @@ from mne.datasets import testing
 from mne.io import RawArray, read_raw
 from mne.preprocessing import ICA
 
-from mne_icalabel.config import ICLABEL_LABELS_TO_MNE
+from mne_icalabel.config import ICA_LABELS_TO_MNE
 from mne_icalabel.iclabel import iclabel_label_components
 
 directory = testing.data_path() / "MEG" / "sample"
@@ -45,7 +45,7 @@ def test_label_components(inst, exclude):
     assert labels.shape == (ica.n_components_, 7)
     assert len(ica.labels_) == 0
     labels2 = iclabel_label_components(inst, ica, inplace=True)
-    assert sorted(ica.labels_.keys()) == sorted(ICLABEL_LABELS_TO_MNE.values())
+    assert sorted(ica.labels_.keys()) == sorted(ICA_LABELS_TO_MNE.values())
     assert np.allclose(labels, labels2)
 
 

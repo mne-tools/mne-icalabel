@@ -4,7 +4,7 @@ from typing import Union
 from mne.preprocessing import ICA
 from mne.utils import _check_pandas_installed
 
-from ..config import ICLABEL_LABELS_TO_MNE
+from ..config import ICA_LABELS_TO_MNE
 from ..iclabel.config import ICLABEL_STRING_TO_NUMERICAL
 
 
@@ -51,7 +51,7 @@ def write_components_tsv(ica: ICA, fname):
     if ica.labels_:
         for label, comps in ica.labels_.items():
             this_status = "good" if label == "brain" else "bad"
-            if label in ICLABEL_LABELS_TO_MNE.values():
+            if label in ICA_LABELS_TO_MNE.values():
                 for comp in comps:
                     status[comp] = this_status
                     ic_type[comp] = label

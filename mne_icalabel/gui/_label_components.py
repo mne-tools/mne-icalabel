@@ -19,7 +19,7 @@ from qtpy.QtWidgets import (
     QWidget,
 )
 
-from mne_icalabel.config import ICLABEL_LABELS_TO_MNE
+from mne_icalabel.config import ICA_LABELS_TO_MNE
 
 
 class ICAComponentLabeler(QMainWindow):
@@ -41,7 +41,7 @@ class ICAComponentLabeler(QMainWindow):
         self._inst = inst
         self._ica = ica
         # define valid labels
-        self._labels = list(ICLABEL_LABELS_TO_MNE.keys())
+        self._labels = list(ICA_LABELS_TO_MNE.keys())
         # prepare the GUI
         self._load_ui()
 
@@ -70,7 +70,7 @@ class ICAComponentLabeler(QMainWindow):
         assert all(len(elt) == len(set(elt)) for elt in labels2save.values())
 
         for label, comp_list in labels2save.items():
-            mne_label = ICLABEL_LABELS_TO_MNE[label]
+            mne_label = ICA_LABELS_TO_MNE[label]
             if mne_label not in self._ica.labels_:
                 self._ica.labels_[mne_label] = comp_list
                 continue

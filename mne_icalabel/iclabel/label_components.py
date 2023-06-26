@@ -60,7 +60,7 @@ def iclabel_label_components(
     .. footbibliography::
     """
     features = get_iclabel_features(inst, ica)
-    labels_pred_proba = run_iclabel(*features, backend=backend)
+    labels_pred_proba = run_iclabel(*features, backend=backend)  # type: ignore
 
     if inplace:
         from mne_icalabel.config import ICA_LABELS_TO_MNE

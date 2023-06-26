@@ -4,6 +4,7 @@ except ImportError:
     from importlib_resources import files  # type: ignore
 
 import numpy as np
+import onnxruntime as ort
 import torch
 import torch.nn as nn
 from numpy.typing import ArrayLike
@@ -208,7 +209,16 @@ def _format_input_for_torch(topo: ArrayLike, psd: ArrayLike, autocorr: ArrayLike
     return topo, psd, autocorr
 
 
-def run_iclabel(images: ArrayLike, psds: ArrayLike, autocorr: ArrayLike):
+def _format_input_for_onnx(topo: ArrayLike, psd: ArrayLike, autocorr: ArrayLike):
+    """Format the features to the correct shape and type for ONNX."""
+    topo = np.transpose(topo, (3, 2, 0, 1)).astype(np.float32)
+    psd = np.transpose(psd, (3, 2, 0, 1)).astype(np.float32)
+    autocorr = np.transpose(autocorr, (3, 2, 0, 1)).astype(np.float32)
+
+    return topo, psd, autocorr
+
+
+def run_iclabel(images: ArrayLike, psds: ArrayLike, autocorr: ArrayLike, library: str = "pytorch"):
     """Run the ICLabel network on the provided set of features.
 
     The features are un-formatted and are as-returned by
@@ -230,16 +240,37 @@ def run_iclabel(images: ArrayLike, psds: ArrayLike, autocorr: ArrayLike):
         Columns are ordered with ``'Brain'``, ``'Muscle'``, ``'Eye'``,
         ``'Heart'``, ``'Line Noise'``, ``'Channel Noise'``, and ``'Other'``.
     """
-    ica_network_file = files("mne_icalabel.iclabel").joinpath("assets/iclabelNet.pt")
+    if library == "pytorch":
+        ica_network_file = files("mne_icalabel.iclabel").joinpath("assets/iclabelNet.pt")
 
-    # Get network and load weights
-    iclabel_net = ICLabelNet()
-    iclabel_net.load_state_dict(torch.load(ica_network_file))
+        # Get network and load weights
+        iclabel_net = ICLabelNet()
+        iclabel_net.load_state_dict(torch.load(ica_network_file))
 
-    # Format input and get labels
-    labels = iclabel_net(*_format_input_for_torch(*_format_input(images, psds, autocorr)))
-    labels = labels.detach().numpy()
+        # Format input and get labels
+        labels = iclabel_net(*_format_input_for_torch(*_format_input(images, psds, autocorr)))
+        labels = labels.detach().numpy()
 
-    # outputs are ordered as in
-    # https://github.com/sccn/ICLabel/blob/e8abc99e0c371ff49eff115cf7955fafc7f7969a/iclabel.m#L60-L62
-    return labels
+        # outputs are ordered as in
+        # https://github.com/sccn/ICLabel/blob/e8abc99e0c371ff49eff115cf7955fafc7f7969a/iclabel.m#L60-L62
+        return labels
+    elif library == "onnx":
+        # Get network
+        onnx_network_file = files("mne_icalabel.iclabel").joinpath("assets/ICLabelNet.onnx")
+        ort_session = ort.InferenceSession(onnx_network_file)
+
+        # Format input and get labels
+        topo_npy, psds_npy, autocorr_npy = _format_input_for_onnx(
+            *_format_input(images, psds, autocorr)
+        )
+
+        labels = ort_session.run(
+            None,
+            {"topo": topo_npy, "psds": psds_npy, "autocorr": autocorr_npy},
+        )
+
+        # outputs are ordered as in
+        # https://github.com/sccn/ICLabel/blob/e8abc99e0c371ff49eff115cf7955fafc7f7969a/iclabel.m#L60-L62
+        return labels[0]
+    else:
+        raise ValueError(f"Library {library} is not supported")

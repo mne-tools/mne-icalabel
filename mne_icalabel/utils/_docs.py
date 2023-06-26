@@ -43,7 +43,7 @@ res : int
 
 
 # ------------------------- Documentation functions --------------------------
-docdict_indented: Dict[int, Dict[str, str]] = {}
+docdict_indented: Dict[int, Dict[str, str]] = dict()
 
 
 def fill_doc(f: Callable) -> Callable:
@@ -117,10 +117,11 @@ def _indentcount_lines(lines: List[str]) -> int:
 def copy_doc(source: Callable) -> Callable:
     """Copy the docstring from another function (decorator).
 
-    The docstring of the source function is prepepended to the docstring of the
-    function wrapped by this decorator.
-    This is useful when inheriting from a class and overloading a method. This
-    decorator can be used to copy the docstring of the original method.
+    The docstring of the source function is prepepended to the docstring of the function
+    wrapped by this decorator.
+
+    This is useful when inheriting from a class and overloading a method. This decorator
+    can be used to copy the docstring of the original method.
 
     Parameters
     ----------
@@ -150,7 +151,8 @@ def copy_doc(source: Callable) -> Callable:
     def wrapper(func):
         if source.__doc__ is None or len(source.__doc__) == 0:
             raise RuntimeError(
-                f"The docstring from {source.__name__} could not be copied " "because it was empty."
+                f"The docstring from {source.__name__} could not be copied because it "
+                "was empty."
             )
         doc = source.__doc__
         if func.__doc__ is not None:

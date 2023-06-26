@@ -5,8 +5,8 @@ ICALABEL_METHODS = {
     "manual": None,
 }
 
-# map ICLabel labels to MNE str format
-ICLABEL_LABELS_TO_MNE = {
+# map labels to the equivalent str format in MNE
+ICA_LABELS_TO_MNE = {
     "Brain": "brain",
     "Muscle": "muscle",
     "Eye": "eog",

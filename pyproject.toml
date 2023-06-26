@@ -37,13 +37,12 @@ classifiers = [
     'Topic :: Scientific/Engineering',
 ]
 dependencies = [
-    'numpy >= 1.21',
-    'scipy >= 1.2.0',
-    'mne >= 1.1',
-    'pooch',
-    'torch',
-    'onnxruntime',
     'importlib-resources; python_version<"3.9"',
+    'mne >= 1.1',
+    'numpy >= 1.21',
+    'pooch',
+    'scipy >= 1.2.0',
+    'torch',
 ]
 
 [project.optional-dependencies]
@@ -52,12 +51,12 @@ build = [
     'twine',
 ]
 doc = [
+    'mne-icalabel[onnx]',
     'mne-icalabel[gui]',
     'mne-icalabel[ica]',
     'memory_profiler',
     'numpydoc',
     'pydata-sphinx-theme',
-    'PyQt6',
     'sphinx',
     'sphinxcontrib-bibtex',
     'sphinx-copybutton',
@@ -67,13 +66,17 @@ doc = [
 ]
 gui = [
     'matplotlib',
-    'mne-qt-browser>=0.2',
+    'mne-qt-browser>=0.3.2',
     'qtpy',
+    'PyQt6',
 ]
 ica = [
     'joblib',
     'python-picard',
     'scikit-learn',
+]
+onnx = [
+    'onnxruntime',
 ]
 style = [
     'bibclean',
@@ -85,6 +88,7 @@ style = [
     'pydocstyle[toml]',
 ]
 test = [
+    'mne-icalabel[onnx]',
     'mne-icalabel[gui]',
     'mne-icalabel[ica]',
     'mne-bids',
@@ -95,6 +99,7 @@ test = [
     'pytest-cov',
 ]
 all = [
+    'mne-icalabel[onnx]',
     'mne-icalabel[build]',
     'mne-icalabel[doc]',
     'mne-icalabel[gui]',
@@ -122,7 +127,7 @@ include = ['mne_icalabel*']
 exclude = ['mne_icalabel*tests']
 
 [tool.setuptools.package-data]
-"mne_icalabel.iclabel" = ["assets/*"]
+"mne_icalabel.iclabel.network" = ["assets/*"]
 
 [tool.black]
 line-length = 88

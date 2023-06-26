@@ -4,20 +4,20 @@ except ImportError:
     from importlib_resources import files  # type: ignore
 
 import numpy as np
-import onnxruntime as ort
 import pytest
 import torch
 from scipy.io import loadmat
 
 from mne_icalabel.datasets import icalabel
-from mne_icalabel.iclabel.network import ICLabelNet, _format_input, run_iclabel
+from mne_icalabel.iclabel.network.utils import _format_input
+from mne_icalabel.utils._tests import requires_onnx, requires_torch
 
 dataset_path = icalabel.data_path() / "iclabel"
 
 
 # Network weights
-torch_iclabel_path = str(files("mne_icalabel.iclabel").joinpath("assets/iclabelNet.pt"))
-onnx_network_file = files("mne_icalabel.iclabel").joinpath("assets/ICLabelNet.onnx")
+torch_iclabel_path = files("mne_icalabel.iclabel.network") / "assets" / "ICLabelNet.pt"
+onnx_network_file = files("mne_icalabel.iclabel.network") / "assets" / "ICLabelNet.onnx"
 matconvnet_iclabel_path = dataset_path / "network/netICL.mat"
 
 # Network forward pass input/output
@@ -83,6 +83,7 @@ def test_weights_pytorch():
         assert np.allclose(network_python[python_layer], weights_matlab[idx])
 
 
+@requires_torch
 def test_network_outputs_pytorch():
     """
     Compare that the ICLabel network in pytorch and matlab outputs the same
@@ -93,6 +94,8 @@ def test_network_outputs_pytorch():
     The forward pass has been run in matconvnet with the same input features.
     The corresponding MATLAB code can be found in 'data/network_output.txt'.
     """
+    from mne_icalabel.iclabel.network.torch import ICLabelNet
+
     # load features to use for the forward pass
     features = loadmat(matconvnet_fw_input_path)["input"][0, :]
     # features is a (6, ) array with:
@@ -128,6 +131,7 @@ def test_network_outputs_pytorch():
     assert np.allclose(matlab_labels, torch_labels, atol=1e-7)
 
 
+@requires_onnx
 def test_network_outputs_onnx():
     """
     Compare that the ICLabel network in onnx and matlab outputs the same
@@ -138,6 +142,8 @@ def test_network_outputs_onnx():
     The forward pass has been run in matconvnet with the same input features.
     The corresponding MATLAB code can be found in 'data/network_output.txt'.
     """
+    import onnxruntime as ort
+
     # load features to use for the forward pass
     features = loadmat(matconvnet_fw_input_path)["input"][0, :]
     # features is a (6, ) array with:
@@ -157,12 +163,10 @@ def test_network_outputs_onnx():
 
     # run the forward pass on onnxruntime
     ort_session = ort.InferenceSession(onnx_network_file)
-
     labels = ort_session.run(
         None,
         {"topo": images, "psds": psd, "autocorr": autocorr},
     )
-
     onnx_labels = labels[0]
 
     # load the matconvnet output of the forward pass on those 3 feature arrays
@@ -203,15 +207,20 @@ def test_format_input(eeglab_feature_file, eeglab_feature_formatted_file):
         (features_epo_path, iclabel_output_epo_path),
     ],
 )
+@requires_onnx
 def test_run_iclabel_onnx(eeglab_feature_file, eeglab_output_file):
     """Test that the network outputs the same values for the features in
     'features_raw_path' and 'features_epo_path' that contains the features
     extracted in EEGLAB. This set of feature is compared with the set of
     features retrieved in python in 'test_features.py:test_get_features'."""
+    from mne_icalabel.iclabel.network.onnx import _run_iclabel
+
     features_eeglab = loadmat(eeglab_feature_file)["features"]
     # run the forward pass on onnx
-    labels = run_iclabel(
-        features_eeglab[0, 0], features_eeglab[0, 1], features_eeglab[0, 2], library="onnx"
+    labels = _run_iclabel(
+        features_eeglab[0, 0],
+        features_eeglab[0, 1],
+        features_eeglab[0, 2],
     )
 
     # load the labels from EEGLAB
@@ -228,15 +237,20 @@ def test_run_iclabel_onnx(eeglab_feature_file, eeglab_output_file):
         (features_epo_path, iclabel_output_epo_path),
     ],
 )
+@requires_torch
 def test_run_iclabel_pytorch(eeglab_feature_file, eeglab_output_file):
     """Test that the network outputs the same values for the features in
     'features_raw_path' and 'features_epo_path' that contains the features
     extracted in EEGLAB. This set of feature is compared with the set of
     features retrieved in python in 'test_features.py:test_get_features'."""
+    from mne_icalabel.iclabel.network.torch import _run_iclabel
+
     features_eeglab = loadmat(eeglab_feature_file)["features"]
     # run the forward pass on pytorch
-    labels = run_iclabel(
-        features_eeglab[0, 0], features_eeglab[0, 1], features_eeglab[0, 2], library="pytorch"
+    labels = _run_iclabel(
+        features_eeglab[0, 0],
+        features_eeglab[0, 1],
+        features_eeglab[0, 2],
     )
 
     # load the labels from EEGLAB

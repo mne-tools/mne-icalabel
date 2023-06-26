@@ -7,7 +7,9 @@ from mne_icalabel.gui._label_components import ICAComponentLabeler
 
 def main():
     """Entry point for mne_gui_ic_annotation."""
-    parser = argparse.ArgumentParser(prog="mne-icalabel", description="IC annotation GUI")
+    parser = argparse.ArgumentParser(
+        prog="mne-icalabel", description="IC annotation GUI"
+    )
     parser.add_argument("--dev", help="loads a sample dataset.", action="store_true")
     args = parser.parse_args()
 

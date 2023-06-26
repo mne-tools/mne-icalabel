@@ -51,7 +51,9 @@ def test_weights_pytorch():
         elif weight.ndim == 3:
             weights_matlab[k] = weight.transpose((2, 0, 1))
 
-    network_python_layers = [layer for layer in network_python.keys() if "seq" not in layer]
+    network_python_layers = [
+        layer for layer in network_python.keys() if "seq" not in layer
+    ]
     network_matlab_layers = [elt[0] for elt in network_matlab["params"]["name"][0, :]]
 
     # match layer names torch -> matconvnet

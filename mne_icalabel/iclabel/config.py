@@ -8,4 +8,6 @@ ICLABEL_NUMERICAL_TO_STRING = {
     6: "other",
 }
 
-ICLABEL_STRING_TO_NUMERICAL = {val: key for key, val in ICLABEL_NUMERICAL_TO_STRING.items()}
+ICLABEL_STRING_TO_NUMERICAL = {
+    val: key for key, val in ICLABEL_NUMERICAL_TO_STRING.items()
+}

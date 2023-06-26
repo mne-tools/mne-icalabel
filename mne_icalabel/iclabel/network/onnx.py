@@ -25,7 +25,9 @@ def _run_iclabel(images: ArrayLike, psds: ArrayLike, autocorr: ArrayLike) -> NDA
     network_file = files("mne_icalabel.iclabel.network") / "assets" / "ICLabelNet.onnx"
     session = ort.InferenceSession(network_file)
     # format inputs
-    topo, psds, autocorr = _format_input_for_onnx(*_format_input(images, psds, autocorr))
+    topo, psds, autocorr = _format_input_for_onnx(
+        *_format_input(images, psds, autocorr)
+    )
     # run the forward pass
     labels = session.run(
         None,

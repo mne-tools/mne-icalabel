@@ -6,7 +6,9 @@ from mne.io import BaseRaw
 from numpy.typing import ArrayLike, NDArray
 
 
-def _mne_to_eeglab_locs(raw: BaseRaw, picks: List[str]) -> Tuple[NDArray[float], NDArray[float]]:
+def _mne_to_eeglab_locs(
+    raw: BaseRaw, picks: List[str]
+) -> Tuple[NDArray[float], NDArray[float]]:
     """Obtain EEGLab-like spherical coordinate from EEG channel positions.
 
     TODO: @JACOB:
@@ -76,7 +78,9 @@ def _mne_to_eeglab_locs(raw: BaseRaw, picks: List[str]) -> Tuple[NDArray[float],
     return rd.reshape([1, -1]), np.degrees(th).reshape([1, -1])
 
 
-def _pol2cart(theta: NDArray[float], rho: NDArray[float]) -> Tuple[NDArray[float], NDArray[float]]:
+def _pol2cart(
+    theta: NDArray[float], rho: NDArray[float]
+) -> Tuple[NDArray[float], NDArray[float]]:
     """Convert polar coordinates to cartesian coordinates.
 
     Parameters
@@ -139,10 +143,14 @@ def _gdatav4(
     # Determine weights for interpolation
     with warnings.catch_warnings():
         warnings.filterwarnings(
-            "ignore", message="divide by zero encountered in log", category=RuntimeWarning
+            "ignore",
+            message="divide by zero encountered in log",
+            category=RuntimeWarning,
         )
         warnings.filterwarnings(
-            "ignore", message="invalid value encountered in multiply", category=RuntimeWarning
+            "ignore",
+            message="invalid value encountered in multiply",
+            category=RuntimeWarning,
         )
         g = np.square(d) * (np.log(d) - 1)  # Green's function.
     # Fixup value of Green's function along diagonal
@@ -159,7 +167,9 @@ def _gdatav4(
             g = np.square(d) * (np.log(d) - 1)
             # Value of Green's function at zero
             g[np.where(np.isclose(d, 0))] = 0
-            vq[i, j] = (np.expand_dims(g, axis=0) @ np.expand_dims(weights, axis=1))[0][0]
+            vq[i, j] = (np.expand_dims(g, axis=0) @ np.expand_dims(weights, axis=1))[0][
+                0
+            ]
     return xq, yq, vq
 
 
@@ -238,7 +248,9 @@ def _mergesimpts(
         if point in idxs_ready:
             continue
         else:
-            similar_pts = np.where(np.prod(np.abs(data_ - data_[point]) < tols_, axis=-1))
+            similar_pts = np.where(
+                np.prod(np.abs(data_ - data_[point]) < tols_, axis=-1)
+            )
             similar_pts = np.array(list(set(similar_pts[0].tolist()) - set(idxs_ready)))
             idxs_ready += similar_pts.tolist()
             if mode == "average":

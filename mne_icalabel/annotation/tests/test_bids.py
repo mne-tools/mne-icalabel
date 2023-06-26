@@ -21,7 +21,12 @@ raw_fname = op.join(data_path, "test_reduced.edf")
 @pytest.fixture(scope="function")
 def _tmp_bids_path(tmp_path):
     bids_path = BIDSPath(
-        subject=subject_id, session=session_id, run=run, acquisition=acq, task=task, root=tmp_path
+        subject=subject_id,
+        session=session_id,
+        run=run,
+        acquisition=acq,
+        task=task,
+        root=tmp_path,
     )
 
     raw = read_raw_edf(raw_fname, verbose=False)

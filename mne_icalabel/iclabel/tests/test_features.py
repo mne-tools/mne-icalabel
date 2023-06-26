@@ -79,7 +79,9 @@ kwargs = {"raw": dict(preload=True), "epo": dict()}
         (epo_eeglab_path, psd_constants_epo_path, features_epo_path),
     ],
 )
-def test_get_features_from_precomputed_ica(file, psd_constant_file, eeglab_feature_file):
+def test_get_features_from_precomputed_ica(
+    file, psd_constant_file, eeglab_feature_file
+):
     """Test that we get the correct set of features from an MNE instance.
     Corresponds to the output from 'ICL_feature_extractor.m'."""
     type_ = str(Path(file).stem)[-3:]
@@ -210,7 +212,9 @@ def test_eeg_rpsd_constants(fname, constants_fname, type_):
     """Test _eeg_rpsd_constants function."""
     inst = reader[type_](fname, **kwargs[type_])
     ica = read_ica_eeglab(fname)
-    ncomp, nfreqs, n_points, nyquist, index, window, subset = _eeg_rpsd_constants(inst, ica)
+    ncomp, nfreqs, n_points, nyquist, index, window, subset = _eeg_rpsd_constants(
+        inst, ica
+    )
 
     constants_eeglab = loadmat(constants_fname)["constants"][0, 0]
     ncomp_eeglab = constants_eeglab["ncomp"][0, 0]
@@ -240,8 +244,20 @@ def test_eeg_rpsd_constants(fname, constants_fname, type_):
 @pytest.mark.parametrize(
     "fname, constants_fname, step_by_step_fname, psd_fname, type_",
     (
-        (raw_eeglab_path, psd_constants_raw_path, psd_steps_raw_path, psd_raw_path, "raw"),
-        (epo_eeglab_path, psd_constants_epo_path, psd_steps_epo_path, psd_epo_path, "epo"),
+        (
+            raw_eeglab_path,
+            psd_constants_raw_path,
+            psd_steps_raw_path,
+            psd_raw_path,
+            "raw",
+        ),
+        (
+            epo_eeglab_path,
+            psd_constants_epo_path,
+            psd_steps_epo_path,
+            psd_epo_path,
+            "epo",
+        ),
         (
             epo_long_eeglab_path,
             psd_constants_long_epo_path,

@@ -19,7 +19,9 @@ raw.set_eeg_reference("average")
 @pytest.mark.parametrize("n_components", (5, 15))
 def test_label_components(n_components):
     """Simple test to check that label_components runs without raising."""
-    ica = ICA(n_components=n_components, method="infomax", fit_params=dict(extended=True))
+    ica = ICA(
+        n_components=n_components, method="infomax", fit_params=dict(extended=True)
+    )
     ica.fit(raw)
     labels = label_components(raw, ica, method="iclabel")
     assert isinstance(labels, dict)

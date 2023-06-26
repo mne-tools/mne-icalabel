@@ -32,7 +32,9 @@ class ICAComponentLabeler(QMainWindow):
     show : bool
     """
 
-    def __init__(self, inst: Union[BaseRaw, BaseEpochs], ica: ICA, show: bool = True) -> None:
+    def __init__(
+        self, inst: Union[BaseRaw, BaseEpochs], ica: ICA, show: bool = True
+    ) -> None:
         ICAComponentLabeler._check_inst_ica(inst, ica)
         super().__init__()  # initialize the QMainwindow
         set_browser_backend("qt")  # force MNE to use the QT Browser
@@ -196,7 +198,9 @@ class ICAComponentLabeler(QMainWindow):
     # - Slots -----------------------------------------------------------------
     def _connect_signals_to_slots(self) -> None:
         """Connect all the signals and slots of the GUI."""
-        self._components_listWidget.currentRowChanged.connect(self._components_listWidget_clicked)
+        self._components_listWidget.currentRowChanged.connect(
+            self._components_listWidget_clicked
+        )
         self._labels_buttonGroup.buttons()[-1].clicked.connect(self._reset)
 
     @Slot()
@@ -222,7 +226,9 @@ class ICAComponentLabeler(QMainWindow):
             dummy_axes[2],
         ]
         # update matplotlib plots with plot_properties
-        self.ica.plot_properties(self.inst, axes=axes, picks=self.selected_component, show=False)
+        self.ica.plot_properties(
+            self.inst, axes=axes, picks=self.selected_component, show=False
+        )
         del dummy_fig
         # remove title from topomap axes
         self._mpl_figures["topomap"].axes[0].set_title("")
@@ -233,8 +239,12 @@ class ICAComponentLabeler(QMainWindow):
             fig.canvas.flush_events()
 
         # swap timeSeries widget
-        timeSeries_widget = self.ica.plot_sources(self.inst, picks=[self.selected_component])
-        self._central_widget.layout().replaceWidget(self._timeSeries_widget, timeSeries_widget)
+        timeSeries_widget = self.ica.plot_sources(
+            self.inst, picks=[self.selected_component]
+        )
+        self._central_widget.layout().replaceWidget(
+            self._timeSeries_widget, timeSeries_widget
+        )
         self._timeSeries_widget.setParent(None)
         self._timeSeries_widget = timeSeries_widget
 

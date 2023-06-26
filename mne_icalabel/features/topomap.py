@@ -4,7 +4,12 @@ import numpy as np
 from mne.channels.layout import _find_topomap_coords
 from mne.defaults import _BORDER_DEFAULT, _EXTRAPOLATE_DEFAULT, _INTERPOLATION_DEFAULT
 from mne.io import Info
-from mne.io.pick import _get_channel_types, _pick_data_channels, _picks_to_idx, pick_info
+from mne.io.pick import (
+    _get_channel_types,
+    _pick_data_channels,
+    _picks_to_idx,
+    pick_info,
+)
 from mne.preprocessing import ICA
 from mne.utils import _validate_type
 from mne.viz.topomap import _check_extrapolate, _make_head_outlines, _setup_interp
@@ -121,9 +126,13 @@ def _get_topomap_array(
 
     # interpolation, valid only for MNE ≥ 1.1
     outlines = _make_head_outlines(sphere, pos, None, (0.0, 0.0))
-    extent, Xi, Yi, interp = _setup_interp(pos, res, image_interp, extrapolate, outlines, border)
+    extent, Xi, Yi, interp = _setup_interp(
+        pos, res, image_interp, extrapolate, outlines, border
+    )
     interp.set_values(data)
-    topomap = np.flipud(interp.set_locations(Xi, Yi)())  # Zi, shape (n_pixels, n_pixels)
+    topomap = np.flipud(
+        interp.set_locations(Xi, Yi)()
+    )  # Zi, shape (n_pixels, n_pixels)
     np.nan_to_num(topomap, nan=0.0, copy=False)
     topomap = topomap / np.max(np.abs(topomap))  # standardize
     return topomap  # (n_pixels, n_pixels)

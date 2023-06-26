@@ -4,7 +4,12 @@ import numpy as np
 import pytest
 from mne.datasets import testing
 from mne.io import read_raw
-from mne.io.pick import _get_channel_types, _pick_data_channels, _picks_to_idx, pick_info
+from mne.io.pick import (
+    _get_channel_types,
+    _pick_data_channels,
+    _picks_to_idx,
+    pick_info,
+)
 from mne.preprocessing import ICA
 
 from mne_icalabel.features import get_topomaps
@@ -95,7 +100,10 @@ def test_invalid_arguments():
         get_topomaps(ICA(n_components=5, method="picard"))
 
     with pytest.raises(
-        TypeError, match=re.escape("picks must be a list of int (indices) or list of str (names).")
+        TypeError,
+        match=re.escape(
+            "picks must be a list of int (indices) or list of str (names)."
+        ),
     ):
         get_topomaps(ica, picks=101 + 101j)
     with pytest.raises(TypeError, match="Strings are not supported."):

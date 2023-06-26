@@ -15,9 +15,6 @@ Merge checklist
 Maintainer, please confirm the following before merging:
 
 - [ ] All comments resolved
-- [ ] This is not your own PR
 - [ ] All CIs are happy
-- [ ] PR title starts with [MRG]
-- [ ] [whats_new.rst](https://github.com/mne-tools/mne-connectivity/blob/main/doc/whats_new.rst) is updated
-- [ ] New contributors have been added to [CITATION.cff](https://github.com/mne-tools/mne-icalabel/blob/main/CITATION.cff)
+- [ ] Updated a changelog entry and contributor name in [whats_new.rst](https://github.com/mne-tools/mne-icalabel/blob/main/doc/whats_new.rst) is updated
 - [ ] PR description includes phrase "closes <#issue-number>"

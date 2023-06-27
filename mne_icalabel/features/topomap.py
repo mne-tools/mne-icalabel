@@ -26,9 +26,9 @@ def get_topomaps(
     res: int = 64,
     image_interp: str = _INTERPOLATION_DEFAULT,  # 'cubic'
     border: Union[float, str] = _BORDER_DEFAULT,  # 'mean'
-    extrapolate: str = _EXTRAPOLATE_DEFAULT,  # 'auto' -> 'head' for EEG, 'local' for MEG
+    extrapolate: str = _EXTRAPOLATE_DEFAULT,  # 'auto' -> 'head' (EEG), 'local' (MEG)
 ) -> Dict[str, NDArray[float]]:
-    """Generate an array of scalp topographies (n_pixels, n_pixels) for the picked components.
+    """Generate an array of scalp topographies for the picked components.
 
     Parameters
     ----------
@@ -53,14 +53,15 @@ def get_topomaps(
     _validate_ica(ica)
     if isinstance(picks, str):
         raise TypeError(
-            "Argument 'picks' should be an integer or a list of integers to select the ICs. "
-            "Strings are not supported."
+            "Argument 'picks' should be an integer or a list of integers to select the "
+            "ICs. Strings are not supported."
         )
     ic_picks = _picks_to_idx(ica.n_components_, picks)
     _validate_type(res, "int", "res", "int")
     if res <= 0:
         raise ValueError(
-            f"Argument 'res' should be a strictly positive integer. Provided '{res}' is invalid."
+            f"Argument 'res' should be a strictly positive integer. Provided '{res}' "
+            "is invalid."
         )
     # image_interp, border are validated by _setup_interp
     # extrapolate is validated by _check_extrapolate
@@ -94,7 +95,7 @@ def _get_topomap_array(
     res: int = 64,
     image_interp: str = _INTERPOLATION_DEFAULT,  # 'cubic'
     border: Union[float, str] = _BORDER_DEFAULT,  # 'mean'
-    extrapolate: str = _EXTRAPOLATE_DEFAULT,  # 'auto' -> 'head' for EEG, 'local' for MEG
+    extrapolate: str = _EXTRAPOLATE_DEFAULT,  # 'auto' -> 'head' (EEG), 'local' (MEG)
 ) -> NDArray[float]:
     """Generate a scalp topographic map (n_pixels, n_pixels).
 
@@ -103,7 +104,8 @@ def _get_topomap_array(
     data : array of shape (n_channels,)
         The data points used to generate the topographic map.
     info : Info
-        Instance of `mne.Info` with the montage associated with the ``(n_channels,)`` points.
+        Instance of `mne.Info` with the montage associated with the ``(n_channels,)``
+        points.
     %(res_topomap)s
     %(image_interp_topomap)s
     %(border_topomap)s

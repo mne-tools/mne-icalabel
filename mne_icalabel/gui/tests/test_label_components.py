@@ -9,8 +9,8 @@ directory = testing.data_path() / "MEG" / "sample"
 raw = read_raw(directory / "sample_audvis_trunc_raw.fif", preload=False)
 raw.pick_types(eeg=True, exclude="bads")
 raw.load_data()
-# preprocess
-with raw.info._unlock():  # fake filtering, testing dataset is filtered between [0.1, 80] Hz
+# preprocess, fake filtering, testing dataset is filtered between [0.1, 80] Hz
+with raw.info._unlock():
     raw.info["highpass"] = 1.0
     raw.info["lowpass"] = 100.0
 ica = ICA(n_components=5, random_state=12345, fit_params=dict(tol=1e-1))

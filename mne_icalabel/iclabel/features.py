@@ -67,9 +67,10 @@ def get_iclabel_features(inst: Union[BaseRaw, BaseEpochs], ica: ICA):
         warn(
             f"The provided ICA instance was fitted with a '{ica.method}' algorithm. "
             "ICLabel was designed with extended infomax ICA decompositions. To use the "
-            "extended infomax algorithm, use the 'mne.preprocessing.ICA' instance with the "
-            "arguments 'ICA(method='infomax', fit_params=dict(extended=True))' (scikit-learn) or "
-            "'ICA(method='picard', fit_params=dict(ortho=False, extended=True))' (python-picard)."
+            "extended infomax algorithm, use the 'mne.preprocessing.ICA' instance with "
+            "the arguments 'ICA(method='infomax', fit_params=dict(extended=True))' "
+            "(scikit-learn) or 'ICA(method='picard', fit_params=dict(ortho=False, "
+            "extended=True))' (python-picard)."
         )
 
     icawinv, _ = _retrieve_eeglab_icawinv(ica)
@@ -339,7 +340,7 @@ def _eeg_rpsd_compute_psdmed(
 def _eeg_rpsd_format(
     psd: NDArray[float],
 ) -> NDArray[float]:
-    """Apply the formatting steps after 'eeg_rpsd.m' from the MATLAB feature extraction."""
+    """Apply the formatting steps after 'eeg_rpsd.m'."""
     # extrapolate or prune as needed
     nfreq = psd.shape[1]
     if nfreq < 100:
@@ -376,7 +377,7 @@ def _eeg_rpsd_format(
 def _eeg_autocorr_welch(
     raw: BaseRaw, ica: ICA, icaact: NDArray[float]
 ) -> NDArray[float]:
-    """Autocorrelation feature applied on raw object with at least 5 * fs samples (5 seconds).
+    """Autocorrelation feature applied on raw object with at least 5 * fs samples.
 
     MATLAB: 'eeg_autocorr_welch.m'.
     """
@@ -453,7 +454,7 @@ def _eeg_autocorr_welch(
 
 
 def _eeg_autocorr(raw: BaseRaw, ica: ICA, icaact: NDArray[float]) -> NDArray[float]:
-    """Autocorrelation feature applied on raw object without enough sampes for eeg_autocorr_welch.
+    """Autocorr applied on raw object without enough sampes for eeg_autocorr_welch.
 
     MATLAB: 'eeg_autocorr.m'.
     """

@@ -57,6 +57,7 @@ doc = [
     'memory_profiler',
     'numpydoc',
     'pydata-sphinx-theme',
+    'PyQt6',
     'sphinx',
     'sphinxcontrib-bibtex',
     'sphinx-copybutton',
@@ -68,7 +69,6 @@ gui = [
     'matplotlib',
     'mne-qt-browser>=0.3.2',
     'qtpy',
-    'PyQt6',
 ]
 ica = [
     'joblib',

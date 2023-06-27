@@ -7,7 +7,10 @@ from ...utils._imports import import_optional_dependency
 
 
 def run_iclabel(
-    images: ArrayLike, psds: ArrayLike, autocorr: ArrayLike, backend: Optional[str] = "pytorch"
+    images: ArrayLike,
+    psds: ArrayLike,
+    autocorr: ArrayLike,
+    backend: Optional[str] = "pytorch",
 ) -> NDArray:
     """Run the ICLabel network on the provided set of features.
 

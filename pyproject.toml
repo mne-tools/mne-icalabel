@@ -130,8 +130,8 @@ exclude = ['mne_icalabel*tests']
 "mne_icalabel.iclabel.network" = ["assets/*"]
 
 [tool.black]
-line-length = 100
-target-version = ['py38']
+line-length = 88
+target-version = ['py39']
 include = '\.pyi?$'
 extend-exclude = '''
 (
@@ -146,8 +146,8 @@ extend-exclude = '''
 [tool.isort]
 profile = 'black'
 multi_line_output = 3
-line_length = 100
-py_version = 38
+line_length = 88
+py_version = 39
 extend_skip_glob = [
     'setup.py',
     'doc/*',

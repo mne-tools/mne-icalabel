@@ -10,7 +10,10 @@ from .network import run_iclabel
 
 
 def iclabel_label_components(
-    inst: Union[BaseRaw, BaseEpochs], ica: ICA, inplace: bool = True, backend: Optional[str] = None
+    inst: Union[BaseRaw, BaseEpochs],
+    ica: ICA,
+    inplace: bool = True,
+    backend: Optional[str] = None,
 ):
     """Label the provided ICA components with the ICLabel neural network.
 

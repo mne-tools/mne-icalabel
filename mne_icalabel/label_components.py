@@ -44,7 +44,9 @@ def label_components(inst: Union[BaseRaw, BaseEpochs], ica: ICA, method: str):
     - ``'iclabel'``: `~mne_icalabel.iclabel.iclabel_label_components`
     """
     _validate_type(method, str, "method")
-    _check_option("method", method, [elt for elt in ICALABEL_METHODS if elt != "manual"])
+    _check_option(
+        "method", method, [elt for elt in ICALABEL_METHODS if elt != "manual"]
+    )
 
     _validate_inst_and_ica(inst, ica)
     labels_pred_proba = ICALABEL_METHODS[method](inst, ica)  # type: ignore

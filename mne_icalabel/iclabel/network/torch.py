@@ -198,5 +198,7 @@ def _run_iclabel(images: ArrayLike, psds: ArrayLike, autocorr: ArrayLike) -> NDA
     iclabel_net = ICLabelNet()
     iclabel_net.load_state_dict(torch.load(network_file))
     # format inputs and run forward pass
-    labels = iclabel_net(*_format_input_for_torch(*_format_input(images, psds, autocorr)))
+    labels = iclabel_net(
+        *_format_input_for_torch(*_format_input(images, psds, autocorr))
+    )
     return labels.detach().numpy()

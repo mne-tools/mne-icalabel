@@ -17,6 +17,6 @@ def _validate_ica(ica: ICA):
     _validate_type(ica, ICA, "ica")
     if ica.current_fit == "unfitted":
         raise RuntimeError(
-            "The provided ICA instance was not fitted. Please use the '.fit()' method to "
-            "determine the independent components before trying to label them."
+            "The provided ICA instance was not fitted. Please use the '.fit()' method "
+            "to determine the independent components before trying to label them."
         )

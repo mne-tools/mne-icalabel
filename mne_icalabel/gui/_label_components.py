@@ -19,7 +19,7 @@ from qtpy.QtWidgets import (
     QWidget,
 )
 
-from mne_icalabel.config import ICLABEL_LABELS_TO_MNE
+from mne_icalabel.config import ICA_LABELS_TO_MNE
 
 
 class ICAComponentLabeler(QMainWindow):
@@ -32,7 +32,9 @@ class ICAComponentLabeler(QMainWindow):
     show : bool
     """
 
-    def __init__(self, inst: Union[BaseRaw, BaseEpochs], ica: ICA, show: bool = True) -> None:
+    def __init__(
+        self, inst: Union[BaseRaw, BaseEpochs], ica: ICA, show: bool = True
+    ) -> None:
         ICAComponentLabeler._check_inst_ica(inst, ica)
         super().__init__()  # initialize the QMainwindow
         set_browser_backend("qt")  # force MNE to use the QT Browser
@@ -41,7 +43,7 @@ class ICAComponentLabeler(QMainWindow):
         self._inst = inst
         self._ica = ica
         # define valid labels
-        self._labels = list(ICLABEL_LABELS_TO_MNE.keys())
+        self._labels = list(ICA_LABELS_TO_MNE.keys())
         # prepare the GUI
         self._load_ui()
 
@@ -70,7 +72,7 @@ class ICAComponentLabeler(QMainWindow):
         assert all(len(elt) == len(set(elt)) for elt in labels2save.values())
 
         for label, comp_list in labels2save.items():
-            mne_label = ICLABEL_LABELS_TO_MNE[label]
+            mne_label = ICA_LABELS_TO_MNE[label]
             if mne_label not in self._ica.labels_:
                 self._ica.labels_[mne_label] = comp_list
                 continue
@@ -196,7 +198,9 @@ class ICAComponentLabeler(QMainWindow):
     # - Slots -----------------------------------------------------------------
     def _connect_signals_to_slots(self) -> None:
         """Connect all the signals and slots of the GUI."""
-        self._components_listWidget.currentRowChanged.connect(self._components_listWidget_clicked)
+        self._components_listWidget.currentRowChanged.connect(
+            self._components_listWidget_clicked
+        )
         self._labels_buttonGroup.buttons()[-1].clicked.connect(self._reset)
 
     @Slot()
@@ -222,7 +226,9 @@ class ICAComponentLabeler(QMainWindow):
             dummy_axes[2],
         ]
         # update matplotlib plots with plot_properties
-        self.ica.plot_properties(self.inst, axes=axes, picks=self.selected_component, show=False)
+        self.ica.plot_properties(
+            self.inst, axes=axes, picks=self.selected_component, show=False
+        )
         del dummy_fig
         # remove title from topomap axes
         self._mpl_figures["topomap"].axes[0].set_title("")
@@ -233,8 +239,12 @@ class ICAComponentLabeler(QMainWindow):
             fig.canvas.flush_events()
 
         # swap timeSeries widget
-        timeSeries_widget = self.ica.plot_sources(self.inst, picks=[self.selected_component])
-        self._central_widget.layout().replaceWidget(self._timeSeries_widget, timeSeries_widget)
+        timeSeries_widget = self.ica.plot_sources(
+            self.inst, picks=[self.selected_component]
+        )
+        self._central_widget.layout().replaceWidget(
+            self._timeSeries_widget, timeSeries_widget
+        )
         self._timeSeries_widget.setParent(None)
         self._timeSeries_widget = timeSeries_widget
 

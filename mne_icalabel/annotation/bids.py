@@ -4,7 +4,7 @@ from typing import Union
 from mne.preprocessing import ICA
 from mne.utils import _check_pandas_installed
 
-from ..config import ICLABEL_LABELS_TO_MNE
+from ..config import ICA_LABELS_TO_MNE
 from ..iclabel.config import ICLABEL_STRING_TO_NUMERICAL
 
 
@@ -26,13 +26,13 @@ def write_components_tsv(ica: ICA, fname):
     -----
     Components are stored in a ``.tsv`` file essentially in the same manner as
     ``channels.tsv`` files for BIDS-EEG data. For more information, see the
-    `BIDS specification <https://bids-specification.readthedocs.io/en/stable/04-modality-specific-files/03-electroencephalography.html#channels-description-_channelstsv>`_  # noqa
+    `BIDS specification <https://bids-specification.readthedocs.io/en/stable/04-modality-specific-files/03-electroencephalography.html#channels-description-_channelstsv>`_
     for EEG channels metadata.
 
     Storage of ICA annotations as a ``.tsv`` file is currently experimental in the
     context of BIDS-EEG Derivatives. The API and functionality is subject to change
     as the community converges on the specification of BIDS-Derivatives.
-    """
+    """  # noqa: E501
     from mne_bids import BIDSPath, get_bids_path_from_fname, update_sidecar_json
     from mne_bids.write import _write_json
 
@@ -51,7 +51,7 @@ def write_components_tsv(ica: ICA, fname):
     if ica.labels_:
         for label, comps in ica.labels_.items():
             this_status = "good" if label == "brain" else "bad"
-            if label in ICLABEL_LABELS_TO_MNE.values():
+            if label in ICA_LABELS_TO_MNE.values():
                 for comp in comps:
                     status[comp] = this_status
                     ic_type[comp] = label
@@ -76,7 +76,8 @@ def write_components_tsv(ica: ICA, fname):
     # create an accompanying JSON file describing the corresponding
     # extra columns for ICA labeling
     component_json = {
-        "annotate_method": "Method used for annotating components (e.g. manual, iclabel)",
+        "annotate_method": "Method used for annotating components (e.g. manual, "
+        + "iclabel)",
         "annotate_author": "The name of the person who ran the annotation",
         "ic_type": "The type of annotation must be one of ['brain', "
         "'muscle artifact', 'eye blink', 'heart beat', 'line noise', "

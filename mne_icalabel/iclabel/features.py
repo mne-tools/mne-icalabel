@@ -73,9 +73,10 @@ def get_iclabel_features(inst: Union[BaseRaw, BaseEpochs], ica: ICA):
         warn(
             f"The provided ICA instance was fitted with a '{ica.method}' algorithm. "
             "ICLabel was designed with extended infomax ICA decompositions. To use the "
-            "extended infomax algorithm, use the 'mne.preprocessing.ICA' instance with the "
-            "arguments 'ICA(method='infomax', fit_params=dict(extended=True))' (scikit-learn) or "
-            "'ICA(method='picard', fit_params=dict(ortho=False, extended=True))' (python-picard)."
+            "extended infomax algorithm, use the 'mne.preprocessing.ICA' instance with "
+            "the arguments 'ICA(method='infomax', fit_params=dict(extended=True))' "
+            "(scikit-learn) or 'ICA(method='picard', fit_params=dict(ortho=False, "
+            "extended=True))' (python-picard)."
         )
 
     icawinv, _ = _retrieve_eeglab_icawinv(ica)
@@ -132,7 +133,9 @@ def _retrieve_eeglab_icawinv(
     return icawinv, weights
 
 
-def _compute_ica_activations(inst: Union[BaseRaw, BaseEpochs], ica: ICA) -> NDArray[float]:
+def _compute_ica_activations(
+    inst: Union[BaseRaw, BaseEpochs], ica: ICA
+) -> NDArray[float]:
     """Compute the ICA activations 'icaact' variable from an MNE ICA instance.
 
     Parameters
@@ -189,7 +192,9 @@ def _eeg_topoplot(
     return topo.astype(np.float32)
 
 
-def _topoplotFast(values: NDArray[float], rd: NDArray[float], th: NDArray[float]) -> NDArray[float]:
+def _topoplotFast(
+    values: NDArray[float], rd: NDArray[float], th: NDArray[float]
+) -> NDArray[float]:
     """Implement topoplotFast.m from MATLAB. Each topographic map is a 32x32 images."""
     # constants
     GRID_SCALE = 32  # number of pixels
@@ -245,7 +250,9 @@ def _topoplotFast(values: NDArray[float], rd: NDArray[float], th: NDArray[float]
 
 
 # ----------------------------------------------------------------------------
-def _eeg_rpsd(inst: Union[BaseRaw, BaseEpochs], ica: ICA, icaact: NDArray[float]) -> NDArray[float]:
+def _eeg_rpsd(
+    inst: Union[BaseRaw, BaseEpochs], ica: ICA, icaact: NDArray[float]
+) -> NDArray[float]:
     """PSD feature."""
     assert isinstance(inst, (BaseRaw, BaseEpochs))  # sanity-check
     constants = _eeg_rpsd_constants(inst, ica)
@@ -321,7 +328,9 @@ def _eeg_rpsd_compute_psdmed(
             # equivalent to:
             # np.vstack([icaact[it, index[:, k]] for k in range(index.shape[-1])]).T
         elif isinstance(inst, BaseEpochs):
-            temp = np.vstack([icaact[it, index[:, k], :] for k in range(index.shape[-1])])
+            temp = np.vstack(
+                [icaact[it, index[:, k], :] for k in range(index.shape[-1])]
+            )
             temp = temp.reshape(index.shape[0], index.shape[1] * len(inst), order="F")
         temp = (temp[:, subset].T * window).T
         temp = np.fft.fft(temp, n_points, axis=0)
@@ -337,7 +346,7 @@ def _eeg_rpsd_compute_psdmed(
 def _eeg_rpsd_format(
     psd: NDArray[float],
 ) -> NDArray[float]:
-    """Apply the formatting steps after 'eeg_rpsd.m' from the MATLAB feature extraction."""
+    """Apply the formatting steps after 'eeg_rpsd.m'."""
     # extrapolate or prune as needed
     nfreq = psd.shape[1]
     if nfreq < 100:
@@ -371,8 +380,10 @@ def _eeg_rpsd_format(
     return psd[:, :, np.newaxis, np.newaxis].transpose([2, 1, 3, 0]).astype(np.float32)
 
 
-def _eeg_autocorr_welch(raw: BaseRaw, ica: ICA, icaact: NDArray[float]) -> NDArray[float]:
-    """Autocorrelation feature applied on raw object with at least 5 * fs samples (5 seconds).
+def _eeg_autocorr_welch(
+    raw: BaseRaw, ica: ICA, icaact: NDArray[float]
+) -> NDArray[float]:
+    """Autocorrelation feature applied on raw object with at least 5 * fs samples.
 
     MATLAB: 'eeg_autocorr_welch.m'.
     """
@@ -449,7 +460,7 @@ def _eeg_autocorr_welch(raw: BaseRaw, ica: ICA, icaact: NDArray[float]) -> NDArr
 
 
 def _eeg_autocorr(raw: BaseRaw, ica: ICA, icaact: NDArray[float]) -> NDArray[float]:
-    """Autocorrelation feature applied on raw object without enough sampes for eeg_autocorr_welch.
+    """Autocorr applied on raw object without enough sampes for eeg_autocorr_welch.
 
     MATLAB: 'eeg_autocorr.m'.
     """
@@ -483,7 +494,9 @@ def _eeg_autocorr(raw: BaseRaw, ica: ICA, icaact: NDArray[float]) -> NDArray[flo
     return resamp.astype(np.float32)
 
 
-def _eeg_autocorr_fftw(epochs: BaseEpochs, ica: ICA, icaact: NDArray[float]) -> NDArray[float]:
+def _eeg_autocorr_fftw(
+    epochs: BaseEpochs, ica: ICA, icaact: NDArray[float]
+) -> NDArray[float]:
     """Autocorrelation feature applied on epoch object.
 
     MATLAB: 'eeg_autocorr_fftw.m'.
@@ -503,7 +516,9 @@ def _eeg_autocorr_fftw(epochs: BaseEpochs, ica: ICA, icaact: NDArray[float]) -> 
     ac = np.fft.ifft(ac)
 
     if epochs.times.size < epochs.info["sfreq"]:
-        zeros = np.zeros((ac.shape[0], int(epochs.info["sfreq"]) - epochs.times.size + 1))
+        zeros = np.zeros(
+            (ac.shape[0], int(epochs.info["sfreq"]) - epochs.times.size + 1)
+        )
         ac = np.hstack([ac[:, : epochs.times.size], zeros])
     else:
         ac = ac[:, : int(epochs.info["sfreq"]) + 1]

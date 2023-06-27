@@ -45,7 +45,7 @@ jobs:
         with:
           check_filenames: true
           check_hidden: true
-          skip: "./.git,./build,./.mypy_cache,./.pytest_cache"
+          skip: "./.git,./build,./.mypy_cache,./.pytest_cache,./mne_icalabel/iclabel/network/assets"
           ignore_words_file: ./.codespellignore
       - name: Run pydocstyle
         run: pydocstyle .
@@ -129,11 +129,10 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
           architecture: "x64"
-      - name: Install Qt dependencies
-        if: "matrix.os == 'ubuntu'"
-        run: |
-          sudo apt update
-          sudo apt install qt6-base-dev
+      - name: Setup headless display
+        uses: pyvista/setup-headless-display-action@main
+        with:
+          qt: true
       - name: Install package
         run: |
           python -m pip install --progress-bar off --upgrade pip setuptools wheel
@@ -160,10 +159,8 @@ jobs:
         run: |
           python -c "import mne; mne.datasets.testing.data_path()"
           python -c "import mne_icalabel; mne_icalabel.datasets.icalabel.data_path()"
-      - name: Run pytest # headless via Xvfb on linux
-        uses: coactions/setup-xvfb@v1
-        with:
-          run: pytest main/mne_icalabel --cov=main/mne_icalabel --cov-report=xml --cov-config=main/pyproject.toml
+      - name: Run pytest
+        run: pytest main/mne_icalabel --cov=main/mne_icalabel --cov-report=xml --cov-config=main/pyproject.toml
       - name: Upload coverage stats to codecov
         if: ${{ matrix.os == 'ubuntu' && matrix.python-version == '3.10' && matrix.mne == 'stable' }}
         uses: codecov/codecov-action@v3

@@ -38,6 +38,12 @@ def get_iclabel_features(inst: Union[BaseRaw, BaseEpochs], ica: ICA):
     .. footbibliography::
     """
     _validate_inst_and_ica(inst, ica)
+    if "eeg" not in inst:
+        raise RuntimeError(
+            "Could not find EEG channels in the provided "
+            f"{'Raw' if isinstance(inst, BaseRaw) else 'Epochs'} instance. The ICLabel "
+            "model was fitted on EEG data and is not suited for other types of channels."
+        )
 
     # TODO: 'custom_ref_applied' does not necessarily correspond to a CAR reference.
     # At the moment, the reference of the EEG data is not stored in the info.

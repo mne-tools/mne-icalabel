@@ -153,6 +153,22 @@ def test_warnings():
     with pytest.warns(RuntimeWarning, match="designed with extended infomax ICA"):
         iclabel_label_components(raw, ica)
 
+    raw = read_raw(directory / "sample_audvis_trunc_raw.fif", preload=False)
+    raw.pick_types(meg=True)
+    raw.load_data()
+    ica = ICA(n_components=3, method="infomax", fit_params=dict(extended=True), random_state=101)
+    ica.fit(raw)
+    # raw without EEG channels
+    with pytest.raises(RuntimeError, match="Could not find EEG channels"):
+        iclabel_label_components(raw, ica)
+
+    epochs = make_fixed_length_epochs(raw)
+    ica = ICA(n_components=3, method="infomax", fit_params=dict(extended=True), random_state=101)
+    ica.fit(epochs)
+    # epochs without EEG channels
+    with pytest.raises(RuntimeError, match="Could not find EEG channels"):
+        iclabel_label_components(epochs, ica)
+
 
 def test_comp_in_labels_():
     """Test that components already in labels_ are not added again."""

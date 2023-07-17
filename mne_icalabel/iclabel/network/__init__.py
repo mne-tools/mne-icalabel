@@ -44,7 +44,7 @@ def run_iclabel(
         if torch is not None:
             from .torch import _run_iclabel
         elif torch is None and onnx is not None:
-            from .onnx import _run_iclabel
+            from .onnx import _run_iclabel  # type: ignore
         else:
             raise ImportError(
                 "Missing optional dependency. ICLabel requires either pytorch or "
@@ -53,9 +53,9 @@ def run_iclabel(
     elif backend == "torch":
         import_optional_dependency("torch", raise_error=True)
 
-        from .torch import _run_iclabel
+        from .torch import _run_iclabel  # type: ignore
     elif backend == "onnx":
         import_optional_dependency("onnxruntime", raise_error=True)
 
-        from .onnx import _run_iclabel
+        from .onnx import _run_iclabel  # type: ignore
     return _run_iclabel(images, psds, autocorr)

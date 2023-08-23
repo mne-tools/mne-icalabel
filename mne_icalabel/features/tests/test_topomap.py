@@ -2,15 +2,16 @@ import re
 
 import numpy as np
 import pytest
+from mne import pick_info
 from mne.datasets import testing
 from mne.io import read_raw
-from mne.io.pick import (
-    _get_channel_types,
-    _pick_data_channels,
-    _picks_to_idx,
-    pick_info,
-)
 from mne.preprocessing import ICA
+from mne.utils import check_version
+
+if check_version("mne", "1.6"):
+    from mne._fiff.pick import _get_channel_types, _pick_data_channels, _picks_to_idx
+else:
+    from mne.io.pick import _get_channel_types, _pick_data_channels, _picks_to_idx
 
 from mne_icalabel.features import get_topomaps
 

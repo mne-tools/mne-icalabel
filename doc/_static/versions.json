@@ -1,0 +1,18 @@
+[
+    {
+        "version": "dev",
+        "url": "https://mne.tools/mne-icalabel/dev"
+    },
+    {
+        "version": "stable",
+        "url": "https://mne.tools/mne-icalabel/stable"
+    },
+    {
+        "name": "0.3",
+        "url": "https://mne.tools/mne-icalabel/0.3"
+    },
+    {
+        "name": "0.2",
+        "url": "https://mne.tools/mne-icalabel/0.2"
+    }
+]

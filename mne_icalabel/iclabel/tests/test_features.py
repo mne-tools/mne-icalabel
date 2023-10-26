@@ -85,8 +85,9 @@ def test_get_features_from_precomputed_ica(
     """Test that we get the correct set of features from an MNE instance.
     Corresponds to the output from 'ICL_feature_extractor.m'."""
     type_ = str(Path(file).stem)[-3:]
-    inst = reader[type_](file, **kwargs[type_])
-    ica = read_ica_eeglab(file)
+    with pytest.warns(RuntimeWarning, match="is below the 3rd percentile for infant"):
+        inst = reader[type_](file, **kwargs[type_])
+        ica = read_ica_eeglab(file)
 
     # Retrieve topo and autocorr
     with warnings.catch_warnings():
@@ -125,7 +126,8 @@ def test_get_features_from_precomputed_ica(
 @pytest.mark.parametrize("file", (raw_eeglab_path, epo_eeglab_path))
 def test_retrieve_eeglab_icawinv(file):
     """Test that the icawinv is correctly retrieved from an MNE ICA object."""
-    ica = read_ica_eeglab(file)
+    with pytest.warns(RuntimeWarning, match="is above the 99th percentile for adult"):
+        ica = read_ica_eeglab(file)
     icawinv, _ = _retrieve_eeglab_icawinv(ica)
 
     eeg = _check_load_mat(file, None)
@@ -142,8 +144,9 @@ def test_retrieve_eeglab_icawinv(file):
 def test_compute_ica_activations(file, eeglab_result_file):
     """Test that the icaact is correctly retrieved from an MNE ICA object."""
     type_ = str(Path(file).stem)[-3:]
-    inst = reader[type_](file, **kwargs[type_])
-    ica = read_ica_eeglab(file)
+    with pytest.warns(RuntimeWarning, match="is below the 3rd percentile for infant"):
+        inst = reader[type_](file, **kwargs[type_])
+        ica = read_ica_eeglab(file)
     icaact = _compute_ica_activations(inst, ica)
 
     icaact_eeglab = loadmat(eeglab_result_file)["icaact"]
@@ -159,9 +162,9 @@ def test_topoplotFast(file, eeglab_result_file):
     """Test topoplotFast on a single component."""
     # load inst
     type_ = str(Path(file).stem)[-3:]
-    inst = reader[type_](file, **kwargs[type_])
-    # load ICA
-    ica = read_ica_eeglab(file)
+    with pytest.warns(RuntimeWarning, match="is below the 3rd percentile for infant"):
+        inst = reader[type_](file, **kwargs[type_])
+        ica = read_ica_eeglab(file)
     # convert coordinates
     rd, th = _mne_to_eeglab_locs(inst, ica.ch_names)
     th = np.pi / 180 * th
@@ -186,9 +189,9 @@ def test_eeg_topoplot(file, eeglab_result_file):
     """Test eeg_topoplot feature extraction."""
     # load inst
     type_ = str(Path(file).stem)[-3:]
-    inst = reader[type_](file, **kwargs[type_])
-    # load ICA
-    ica = read_ica_eeglab(file)
+    with pytest.warns(RuntimeWarning, match="is below the 3rd percentile for infant"):
+        inst = reader[type_](file, **kwargs[type_])
+        ica = read_ica_eeglab(file)
     # get icawinv
     icawinv, _ = _retrieve_eeglab_icawinv(ica)
     # compute feature
@@ -210,8 +213,9 @@ def test_eeg_topoplot(file, eeglab_result_file):
 )
 def test_eeg_rpsd_constants(fname, constants_fname, type_):
     """Test _eeg_rpsd_constants function."""
-    inst = reader[type_](fname, **kwargs[type_])
-    ica = read_ica_eeglab(fname)
+    with pytest.warns(RuntimeWarning, match="is below the 3rd percentile for infant"):
+        inst = reader[type_](fname, **kwargs[type_])
+        ica = read_ica_eeglab(fname)
     ncomp, nfreqs, n_points, nyquist, index, window, subset = _eeg_rpsd_constants(
         inst, ica
     )
@@ -279,8 +283,9 @@ def test_eeg_rpsd(fname, constants_fname, step_by_step_fname, psd_fname, type_):
     del psd2
 
     # compute psd in Python
-    inst = reader[type_](fname, **kwargs[type_])
-    ica = read_ica_eeglab(fname)
+    with pytest.warns(RuntimeWarning, match="is below the 3rd percentile for infant"):
+        inst = reader[type_](fname, **kwargs[type_])
+        ica = read_ica_eeglab(fname)
     icaact = _compute_ica_activations(inst, ica)
 
     # retrieve subset from eeglab
@@ -304,8 +309,9 @@ def test_eeg_rpsd(fname, constants_fname, step_by_step_fname, psd_fname, type_):
 # ----------------------------------------------------------------------------
 def test_eeg_autocorr_welch():
     """Test eeg_autocorr_welch feature used on long raw datasets."""
-    raw = read_raw(raw_eeglab_path, preload=True)
-    ica = read_ica_eeglab(raw_eeglab_path)
+    with pytest.warns(RuntimeWarning, match="is below the 3rd percentile for infant"):
+        raw = read_raw(raw_eeglab_path, preload=True)
+        ica = read_ica_eeglab(raw_eeglab_path)
     icaact = _compute_ica_activations(raw, ica)
     autocorr = _eeg_autocorr_welch(raw, ica, icaact)
     assert autocorr.shape[1] == 100  # check resampling
@@ -316,8 +322,9 @@ def test_eeg_autocorr_welch():
 def test_eeg_autocorr():
     """Test eeg_autocorr feature used on short raw datasets."""
     # Raw between 1 and 5 seconds
-    raw = read_raw(raw_short_eeglab_path, preload=True)
-    ica = read_ica_eeglab(raw_short_eeglab_path)
+    with pytest.warns(RuntimeWarning, match="is below the 3rd percentile for infant"):
+        raw = read_raw(raw_short_eeglab_path, preload=True)
+        ica = read_ica_eeglab(raw_short_eeglab_path)
     icaact = _compute_ica_activations(raw, ica)
     autocorr = _eeg_autocorr(raw, ica, icaact)
     assert autocorr.shape[1] == 100  # check resampling
@@ -325,8 +332,9 @@ def test_eeg_autocorr():
     assert np.allclose(autocorr, autocorr_eeglab, atol=1e-7)
 
     # Raw shorter than 1 second
-    raw = read_raw(raw_very_short_eeglab_path, preload=True)
-    ica = read_ica_eeglab(raw_very_short_eeglab_path)
+    with pytest.warns(RuntimeWarning, match="is below the 3rd percentile for infant"):
+        raw = read_raw(raw_very_short_eeglab_path, preload=True)
+        ica = read_ica_eeglab(raw_very_short_eeglab_path)
     icaact = _compute_ica_activations(raw, ica)
     autocorr = _eeg_autocorr(raw, ica, icaact)
 
@@ -336,8 +344,9 @@ def test_eeg_autocorr():
 
 def test_eeg_autocorr_fftw():
     """Test eeg_autocorr_fftw feature used on epoch datasets."""
-    epochs = read_epochs_eeglab(epo_eeglab_path)
-    ica = read_ica_eeglab(epo_eeglab_path)
+    with pytest.warns(RuntimeWarning, match="is below the 3rd percentile for infant"):
+        epochs = read_epochs_eeglab(epo_eeglab_path)
+        ica = read_ica_eeglab(epo_eeglab_path)
     icaact = _compute_ica_activations(epochs, ica)
     autocorr = _eeg_autocorr_fftw(epochs, ica, icaact)
     assert autocorr.shape[1] == 100  # check resampling

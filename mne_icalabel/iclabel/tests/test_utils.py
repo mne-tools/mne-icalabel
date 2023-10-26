@@ -39,7 +39,8 @@ def test_loc(file, eeglab_result_file):
     This test works because MNE does the conversion from EEGLAB to MNE montage
     when loading the datasets."""
     type_ = str(Path(file).stem)[-3:]
-    inst = reader[type_](file, **kwargs[type_])
+    with pytest.warns(RuntimeWarning, match="is below the 3rd percentile for infant"):
+        inst = reader[type_](file, **kwargs[type_])
     rd, th = _mne_to_eeglab_locs(inst, picks=inst.ch_names)
     eeglab_loc = loadmat(eeglab_result_file)["loc"][0, 0]
     eeglab_rd = eeglab_loc["rd"]

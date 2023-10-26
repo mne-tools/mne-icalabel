@@ -51,7 +51,7 @@ def data_path(
         url="https://github.com/adam2392/mne-testing-icalabel-data/archive/main.zip",
         folder_name="MNE-testing-icalabel-data",
         dataset_name="icalabel-testing",
-        config_key="MNE_DATASETS_ICALABEL_TESTING_PATH",
+        config_key="MNE_ICALABEL_DATASET_TESTING_PATH",
     )
     folder_name = dataset_params["folder_name"]
 

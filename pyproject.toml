@@ -151,7 +151,6 @@ omit = [
   '**/__init__.py',
   '**/mne_icalabel/_version.py',
   '**/mne_icalabel/commands/*',
-  '**/mne_icalabel/utils/_fixes.py',
   '**/tests/**',
 ]
 

@@ -1,6 +1,6 @@
 [build-system]
 build-backend = 'setuptools.build_meta'
-requires = ['setuptools >= 61.0.0']
+requires = ['setuptools >= 64.0.0']
 
 [project]
 classifiers = [
@@ -23,6 +23,7 @@ dependencies = [
   'numpy >= 1.21',
   'packaging',
   'pooch',
+  'psutil',
   'scipy >= 1.4.0',
   'torch',
 ]
@@ -59,7 +60,7 @@ build = [
   'twine',
 ]
 doc = [
-  'memory_profiler',
+  'memory-profiler',
   'mne-icalabel[gui]',
   'mne-icalabel[ica]',
   'mne-icalabel[onnx]',
@@ -78,7 +79,7 @@ full = [
 ]
 gui = [
   'matplotlib',
-  'mne-qt-browser>=0.3.2',
+  'mne-qt-browser>=0.6.0',
   'qtpy',
 ]
 ica = [
@@ -93,10 +94,12 @@ style = [
   'bibclean',
   'black',
   'codespell',
-  'flake8',
   'isort',
   'mypy',
   'pydocstyle[toml]',
+  'ruff',
+  'toml-sort',
+  'yamllint',
 ]
 test = [
   'mne-bids',
@@ -122,7 +125,7 @@ tracker = 'https://github.com/mne-tools/mne-icalabel/issues'
 extend-exclude = '''
 (
       __pycache__
-    | \.github
+    | .github
     | setup.py
     | doc/
     | examples/
@@ -135,6 +138,7 @@ target-version = ['py39']
 [tool.coverage.report]
 exclude_lines = [
   'if __name__ == .__main__.:',
+  'if TYPE_CHECKING:',
   'pragma: no cover',
 ]
 precision = 2
@@ -146,6 +150,7 @@ omit = [
   '**/__init__.py',
   '**/mne_icalabel/_version.py',
   '**/mne_icalabel/commands/*',
+  '**/mne_icalabel/utils/_fixes.py',
   '**/tests/**',
 ]
 
@@ -172,15 +177,25 @@ match = '^(?!setup|__init__|test_).*\.py'
 match-dir = '^mne_icalabel.*'
 
 [tool.pytest.ini_options]
-addopts = '--durations 20 --junit-xml=junit-results.xml --verbose'
-filterwarnings = []
+addopts = '--durations 20 --junit-xml=junit-results.xml -v --color=yes'
+junit_family = 'xunit2'
 minversion = '6.0'
+
+[tool.ruff]
+extend-exclude = [
+  'doc',
+  'setup.py',
+]
+line-length = 88
+
+[tool.ruff.per-file-ignores]
+'__init__.py' = ['F401']
 
 [tool.setuptools]
 include-package-data = false
 
 [tool.setuptools.package-data]
-"mne_icalabel.iclabel.network" = ["assets/*"]
+'mne_icalabel.iclabel.network' = ['assets/*']
 
 [tool.setuptools.packages.find]
 exclude = ['mne_icalabel*tests']

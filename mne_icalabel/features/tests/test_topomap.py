@@ -25,6 +25,7 @@ ica_eeg = ICA(n_components=5, method="picard")
 ica_eeg.fit(raw.pick_types(eeg=True))
 
 
+@pytest.mark.filterwarnings("ignore:invalid value encountered in divide:RuntimeWarning")
 @pytest.mark.parametrize("ica", (ica, ica_eeg))
 def test_topomap_defaults(ica):
     """Test scalp topography array generation"""
@@ -38,6 +39,7 @@ def test_topomap_defaults(ica):
     assert sorted(topomaps) == sorted(ch_types)
 
 
+@pytest.mark.filterwarnings("ignore:invalid value encountered in divide:RuntimeWarning")
 @pytest.mark.parametrize(
     "picks, res", [(0, 32), ([0, 1, 2], 50), (slice(1, 3), 128), (np.array([1, 2]), 10)]
 )
@@ -51,6 +53,7 @@ def test_topomap_arguments(picks, res):
         assert topomaps_.shape == (ic_picks.size, res, res)
 
 
+@pytest.mark.filterwarnings("ignore:invalid value encountered in divide:RuntimeWarning")
 def test_interpolation_arguments():
     """Test arguments that influence the interpolation."""
     # default

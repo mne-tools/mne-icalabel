@@ -29,6 +29,7 @@ reader = {"raw": read_raw, "epo": read_epochs_eeglab}
 kwargs = {"raw": dict(preload=True), "epo": dict()}
 
 
+@pytest.mark.filterwarnings("ignore:.*is below the 3rd percentile for infant.*")
 @pytest.mark.parametrize(
     "file, eeglab_result_file",
     [(raw_eeglab_path, loc_raw_path), (epo_eeglab_path, loc_epo_path)],
@@ -39,8 +40,7 @@ def test_loc(file, eeglab_result_file):
     This test works because MNE does the conversion from EEGLAB to MNE montage
     when loading the datasets."""
     type_ = str(Path(file).stem)[-3:]
-    with pytest.warns(RuntimeWarning, match="is below the 3rd percentile for infant"):
-        inst = reader[type_](file, **kwargs[type_])
+    inst = reader[type_](file, **kwargs[type_])
     rd, th = _mne_to_eeglab_locs(inst, picks=inst.ch_names)
     eeglab_loc = loadmat(eeglab_result_file)["loc"][0, 0]
     eeglab_rd = eeglab_loc["rd"]

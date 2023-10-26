@@ -7,8 +7,6 @@ from typing import IO, Callable, List, Optional
 import psutil
 from packaging.requirements import Requirement
 
-from ._checks import check_type
-
 
 def sys_info(fid: Optional[IO] = None, developer: bool = False):
     """Print the system information for debugging.
@@ -21,8 +19,6 @@ def sys_info(fid: Optional[IO] = None, developer: bool = False):
     developer : bool
         If True, display information about optional dependencies.
     """
-    check_type(developer, (bool,), "developer")
-
     ljust = 26
     out = partial(print, end="", file=fid)
     package = __package__.split(".")[0]

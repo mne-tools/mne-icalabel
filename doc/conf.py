@@ -12,7 +12,6 @@ from importlib import import_module
 from typing import Dict, Optional
 
 import mne
-import sphinx_gallery  # noqa: F401
 from sphinx_gallery.sorting import FileNameSortKey
 
 import mne_icalabel
@@ -23,7 +22,8 @@ import mne_icalabel
 project = "MNE-ICALabel"
 author = "Adam Li, Mathieu Scheltienne"
 copyright = (
-    f"2021-{date.today().year}, MNE Developers. " f"Last updated on {date.today().isoformat()}"
+    f"2021-{date.today().year}, MNE Developers. "
+    f"Last updated on {date.today().isoformat()}"
 )
 release = mne_icalabel.__version__
 package = mne_icalabel.__name__
@@ -33,7 +33,7 @@ gh_url = "https://github.com/mne-tools/mne-icalabel"
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 # If your documentation needs a minimal Sphinx version, state it here.
-needs_sphinx = "4.0"
+needs_sphinx = "5.0"
 
 # The document name of the “root” document, that is, the document that contains
 # the root toctree directive.
@@ -44,8 +44,8 @@ root_doc = "index"
 # ones.
 extensions = [
     "sphinx.ext.autodoc",
+    "sphinx.ext.autosectionlabel",
     "sphinx.ext.autosummary",
-    "sphinx.ext.doctest",
     "sphinx.ext.intersphinx",
     "sphinx.ext.linkcode",
     "sphinx.ext.mathjax",
@@ -89,21 +89,34 @@ html_css_files = ["style.css"]
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
+switcher_version_match = "dev" if release.endswith("dev0") else version
 html_theme_options = {
-    "external_links": [
-        {"name": "MNE", "url": "https://mne.tools/stable/index.html"}
-    ],
+    "external_links": [{"name": "MNE", "url": "https://mne.tools/stable/index.html"}],
     "icon_links": [
         dict(
             name="GitHub",
             url=gh_url,
             icon="fab fa-github-square",
         ),
+        dict(
+            name="Forum",
+            url="https://mne.discourse.group/",
+            icon="fa-brands fa-discourse",
+        ),
+        dict(
+            name="Discord",
+            url="https://discord.gg/rKfvxTuATa",
+            icon="fa-brands fa-discord",
+        ),
     ],
     "navbar_end": ["theme-switcher", "version-switcher", "navbar-icon-links"],
     "navigation_with_keys": False,
     "show_toc_level": 1,
     "use_edit_page_button": False,
+    "switcher": {
+        "json_url": "https://mne.tools/dev/_static/versions.json",
+        "version_match": switcher_version_match,
+    },
 }
 # Custom sidebar templates, maps document names to template names.
 html_sidebars = {
@@ -113,13 +126,6 @@ html_sidebars = {
 html_context = {
     "pygment_light_style": "tango",
     "pygment_dark_style": "native",
-    "versions_dropdown": {
-        "dev": "v0.5 (dev)",
-        "stable": "v0.4",
-        "v0.3": "v0.3",
-        "v0.2": "v0.2",
-        "v0.1": "v0.1",
-    },
 }
 
 # -- autosummary -------------------------------------------------------------
@@ -289,6 +295,6 @@ def linkcode_resolve(domain: str, info: Dict[str, str]) -> Optional[str]:
         branch = "main"
     else:
         return None  # alternatively, link to a maint/version branch
-    fname = fname.split("/mne_icalabel/")[1]
+    fname = fname.rsplit("/mne_icalabel/")[1]
     url = f"{gh_url}/blob/{branch}/mne_icalabel/{fname}#{lines}"
     return url

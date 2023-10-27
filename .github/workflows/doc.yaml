@@ -10,7 +10,7 @@ on:  # yamllint disable-line rule:truthy
 
 jobs:
   build:
-    timeout-minutes: 10
+    timeout-minutes: 30
     runs-on: ubuntu-latest
     defaults:
       run:

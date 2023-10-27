@@ -1,7 +1,4 @@
-try:
-    from importlib.resources import files  # type: ignore
-except ImportError:
-    from importlib_resources import files  # type: ignore
+from importlib.resources import files  # type: ignore
 
 import numpy as np
 import onnxruntime as ort

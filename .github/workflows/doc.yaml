@@ -16,10 +16,6 @@ jobs:
       run:
         shell: bash
     steps:
-      - name: Install linux dependencies
-        run: |
-          sudo apt update
-          sudo apt install optipng
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
@@ -29,6 +25,10 @@ jobs:
         with:
           python-version: 3.9
           architecture: 'x64'
+      - name: Install linux dependencies
+        run: |
+          sudo apt update
+          sudo apt install optipng
       - name: Setup headless display
         uses: pyvista/setup-headless-display-action@main
         with:

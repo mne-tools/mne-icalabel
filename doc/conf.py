@@ -89,7 +89,7 @@ html_css_files = ["style.css"]
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
-switcher_version_match = "dev" if release.endswith("dev0") else version
+switcher_version_match = "dev" if release.endswith("dev0") else release
 html_theme_options = {
     "check_switcher": True,
     "external_links": [{"name": "MNE", "url": "https://mne.tools/stable/index.html"}],

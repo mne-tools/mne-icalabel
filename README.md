@@ -2,13 +2,12 @@
 
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![Codecov](https://codecov.io/gh/mne-tools/mne-icalabel/branch/main/graph/badge.svg)](https://codecov.io/gh/mne-tools/mne-icalabel)
-[![unit-tests](https://github.com/mne-tools/mne-icalabel/actions/workflows/unit_tests.yml/badge.svg)](https://github.com/mne-tools/mne-icalabel/actions/workflows/unit_tests.yml)
-[![CircleCI](https://circleci.com/gh/mne-tools/mne-icalabel/tree/main.svg?style=svg)](https://circleci.com/gh/mne-tools/mne-icalabel/tree/main)
+[![tests](https://github.com/mne-tools/mne-icalabel/actions/workflows/pytest.yaml/badge.svg?branch=main)](https://github.com/mne-tools/mne-icalabel/actions/workflows/pytest.yaml)
+[![doc](https://github.com/mne-tools/mne-icalabel/actions/workflows/doc.yaml/badge.svg?branch=main)](https://github.com/mne-tools/mne-icalabel/actions/workflows/doc.yaml)
 [![PyPI Download count](https://pepy.tech/badge/mne-icalabel)](https://pepy.tech/project/mne-icalabel)
 [![Latest PyPI release](https://img.shields.io/pypi/v/mne-icalabel.svg)](https://pypi.org/project/mne-icalabel/)
 [![Latest conda-forge release](https://img.shields.io/conda/vn/conda-forge/mne-icalabel.svg)](https://anaconda.org/conda-forge/mne-icalabel/)
-[![Checked with mypy](http://www.mypy-lang.org/static/mypy_badge.svg)](http://mypy-lang.org/)
-[![status](https://joss.theoj.org/papers/d91770e35a985ecda4f2e1f124977207/status.svg)](https://joss.theoj.org/papers/d91770e35a985ecda4f2e1f124977207)
+[![JOSS](https://joss.theoj.org/papers/d91770e35a985ecda4f2e1f124977207/status.svg)](https://joss.theoj.org/papers/d91770e35a985ecda4f2e1f124977207)
 
 This repository is a conversion of the popular Matlab-based
 [ICLabel](https://github.com/sccn/ICLabel) classifier for Python.

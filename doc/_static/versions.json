@@ -1,12 +1,12 @@
 [
     {
-        "name": "0.6 (dev)",
+        "name": "0.6.0 (dev)",
         "version": "dev",
         "url": "https://mne.tools/mne-icalabel/dev"
     },
     {
-        "name": "0.5 (stable)",
-        "version": "0.5",
+        "name": "0.5.0 (stable)",
+        "version": "0.5.0",
         "url": "https://mne.tools/mne-icalabel/stable"
     },
     {

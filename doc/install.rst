@@ -3,16 +3,10 @@
 Installation
 ============
 
-``mne-icalabel`` requires Python ``3.8`` or higher.
+``mne-icalabel`` requires Python ``3.9`` or higher.
 
 Dependencies
 ------------
-
-* ``mne`` (>=1.1)
-* ``numpy`` (>=1.21)
-* ``scipy`` (>=1.2.0)
-* ``pooch`` (for example dataset access)
-* ``torch`` (for running pytorch neural networks)
 
 ``mne-icalabel`` works best with the latest stable release of MNE-Python. To
 ensure MNE-Python is up-to-date, see
@@ -33,9 +27,9 @@ Methods
         The installers create a conda environment with the entire MNE-ecosystem
         setup, and more!
 
-    .. tab-item:: Pypi
+    .. tab-item:: PyPI
 
-        ``mne-icalabel`` is available on `Pypi <project pypi_>`_ and can be
+        ``mne-icalabel`` is available on `PyPI <project pypi_>`_ and can be
         installed in a given environment via ``pip``.
 
         .. code-block:: bash

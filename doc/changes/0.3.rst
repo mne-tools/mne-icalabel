@@ -1,0 +1,21 @@
+.. NOTE: we use cross-references to highlight new functions and classes.
+   Please follow the examples below, so the changelog page will have a link to
+   the function/class documentation.
+
+.. NOTE: there are 3 separate sections for changes, based on type:
+   - "Enhancements" for new features
+   - "Bugs" for bug fixes
+   - "API changes" for backward-incompatible changes
+
+.. NOTE: You can use the :pr:`xx` and :issue:`xx` role to x-ref to a GitHub PR
+   or issue from this project.
+
+.. include:: ./authors.inc
+
+Version 0.3
+===========
+
+- Adding an experimental GUI to facilitate the labeling of ICA components (:pr:`66` by `Adam Li`_ and `Mathieu Scheltienne`_)
+- Improve test coverage and documentation (:pr:`94` by `Mathieu Scheltienne`_)
+- Ignore the ``RuntimeWarning`` issued by the grid inteprolation for ICLabel topographic feature (:pr:`69` by `Mathieu Scheltienne`_)
+- Add topographic feature using MNE with `~mne_icalabel.features.get_topomaps` (:pr:`71` by `Anand Saini`_ and `Mathieu Scheltienne`_)

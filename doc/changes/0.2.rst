@@ -1,0 +1,22 @@
+.. NOTE: we use cross-references to highlight new functions and classes.
+   Please follow the examples below, so the changelog page will have a link to
+   the function/class documentation.
+
+.. NOTE: there are 3 separate sections for changes, based on type:
+   - "Enhancements" for new features
+   - "Bugs" for bug fixes
+   - "API changes" for backward-incompatible changes
+
+.. NOTE: You can use the :pr:`xx` and :issue:`xx` role to x-ref to a GitHub PR
+   or issue from this project.
+
+.. include:: ./authors.inc
+
+Version 0.3
+===========
+
+- Add functions for annotating and labeling ICA components in BIDS format :func:`mne_icalabel.annotation.write_components_tsv`, :func:`mne_icalabel.annotation.mark_component` (:pr:`60` by `Adam Li`_)
+- Fix shape of ``'y_pred_proba'`` output from :func:`mne_icalabel.label_components` (:pr:`36` by `Mathieu Scheltienne`_)
+- Add a warning if the ICA decomposition provided does not match the expected decomposition by ``ICLabel`` (:pr:`42` by `Mathieu Scheltienne`_)
+- Fix extraction of PSD feature from ``ICLabel`` model on epochs by (:pr:`64` by `Mathieu Scheltienne`_)
+- Fix ICLabel topographic features on ICA fitted with a channel selection performed by ``picks`` (:pr:`68` by `Mathieu Scheltienne`_)

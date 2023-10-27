@@ -31,7 +31,7 @@ Contents
    :maxdepth: 2
    :caption: Getting started:
 
-   whats_new
    install
    api
    generated/examples/index
+   changes/index

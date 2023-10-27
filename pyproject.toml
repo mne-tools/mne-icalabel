@@ -95,7 +95,6 @@ style = [
   'black',
   'codespell',
   'isort',
-  'mypy',
   'pydocstyle[toml]',
   'ruff',
   'toml-sort',

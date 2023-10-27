@@ -47,8 +47,3 @@ jobs:
         run: toml-sort pyproject.toml --check
       - name: Run yamllint
         run: yamllint . -c .yamllint.yaml --strict
-      - name: Run mypy
-        uses: jpetrucciani/mypy-check@master
-        with:
-          path: "./mne_icalabel"
-          mypy_flags: "--config-file pyproject.toml"

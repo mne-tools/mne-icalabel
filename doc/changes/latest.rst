@@ -18,5 +18,5 @@ Version 0.5
 ===========
 
 - Compatibility with MNE 1.6 (:pr:`136`, :pr:`140` by `Mathieu Scheltienne`_)
-- Raise error if EEG channels are missing from the instance provided to ``ICLABEL`` (:pr:`124` by `Mathieu Scheltienne`_ and `Adam Li`_)
-- Add ONNX backend support to ``ICLABEL`` (:pr:`129` by `Jacob Feitelberg`_)
+- Raise error if EEG channels are missing from the instance provided to ``ICLabel`` (:pr:`124` by `Mathieu Scheltienne`_ and `Adam Li`_)
+- Add ONNX backend support to ``ICLabel`` (:pr:`129` by `Jacob Feitelberg`_)

@@ -72,7 +72,7 @@ kwargs = {"raw": dict(preload=True), "epo": dict()}
 
 
 # ----------------------------------------------------------------------------
-@pytest.mark.filterwarnings("ignore:.*is below the 3rd percentile for infant.*")
+@pytest.mark.filterwarnings("ignore:Estimated head radius.*:RuntimeWarning")
 @pytest.mark.parametrize(
     "file, psd_constant_file, eeglab_feature_file",
     [
@@ -123,7 +123,7 @@ def test_get_features_from_precomputed_ica(
 
 
 # ----------------------------------------------------------------------------
-@pytest.mark.filterwarnings("ignore:.*is above the 99th percentile for adult.*")
+@pytest.mark.filterwarnings("ignore:Estimated head radius.*:RuntimeWarning")
 @pytest.mark.parametrize("file", (raw_eeglab_path, epo_eeglab_path))
 def test_retrieve_eeglab_icawinv(file):
     """Test that the icawinv is correctly retrieved from an MNE ICA object."""
@@ -134,7 +134,7 @@ def test_retrieve_eeglab_icawinv(file):
     assert np.allclose(icawinv, eeg.icawinv)
 
 
-@pytest.mark.filterwarnings("ignore:.*is below the 3rd percentile for infant.*")
+@pytest.mark.filterwarnings("ignore:Estimated head radius.*:RuntimeWarning")
 @pytest.mark.parametrize(
     "file, eeglab_result_file",
     [
@@ -154,7 +154,7 @@ def test_compute_ica_activations(file, eeglab_result_file):
 
 
 # ----------------------------------------------------------------------------
-@pytest.mark.filterwarnings("ignore:.*is below the 3rd percentile for infant.*")
+@pytest.mark.filterwarnings("ignore:Estimated head radius.*:RuntimeWarning")
 @pytest.mark.parametrize(
     "file, eeglab_result_file",
     [(raw_eeglab_path, raw_topo1_path), (epo_eeglab_path, epo_topo1_path)],
@@ -178,7 +178,7 @@ def test_topoplotFast(file, eeglab_result_file):
     assert np.allclose(topo1, topo1_eeglab, equal_nan=True)
 
 
-@pytest.mark.filterwarnings("ignore:.*is below the 3rd percentile for infant.*")
+@pytest.mark.filterwarnings("ignore:Estimated head radius.*:RuntimeWarning")
 @pytest.mark.parametrize(
     "file, eeglab_result_file",
     [
@@ -203,7 +203,7 @@ def test_eeg_topoplot(file, eeglab_result_file):
 
 
 # ----------------------------------------------------------------------------
-@pytest.mark.filterwarnings("ignore:.*is below the 3rd percentile for infant.*")
+@pytest.mark.filterwarnings("ignore:Estimated head radius.*:RuntimeWarning")
 @pytest.mark.parametrize(
     "fname, constants_fname, type_",
     (
@@ -245,7 +245,7 @@ def test_eeg_rpsd_constants(fname, constants_fname, type_):
     assert len(set(list(subset_eeglab[0, :] - 1)).difference(set(list(subset)))) == 0
 
 
-@pytest.mark.filterwarnings("ignore:.*is below the 3rd percentile for infant.*")
+@pytest.mark.filterwarnings("ignore:Estimated head radius.*")
 @pytest.mark.parametrize(
     "fname, constants_fname, step_by_step_fname, psd_fname, type_",
     (
@@ -307,7 +307,7 @@ def test_eeg_rpsd(fname, constants_fname, step_by_step_fname, psd_fname, type_):
 
 
 # ----------------------------------------------------------------------------
-@pytest.mark.filterwarnings("ignore:.*is below the 3rd percentile for infant.*")
+@pytest.mark.filterwarnings("ignore:Estimated head radius.*:RuntimeWarning")
 def test_eeg_autocorr_welch():
     """Test eeg_autocorr_welch feature used on long raw datasets."""
     raw = read_raw(raw_eeglab_path, preload=True)
@@ -319,7 +319,7 @@ def test_eeg_autocorr_welch():
     assert np.allclose(autocorr, autocorr_eeglab)
 
 
-@pytest.mark.filterwarnings("ignore:.*is below the 3rd percentile for infant.*")
+@pytest.mark.filterwarnings("ignore:Estimated head radius.*:RuntimeWarning")
 def test_eeg_autocorr():
     """Test eeg_autocorr feature used on short raw datasets."""
     # Raw between 1 and 5 seconds
@@ -341,7 +341,7 @@ def test_eeg_autocorr():
     assert np.allclose(autocorr, autocorr_eeglab, atol=1e-6)
 
 
-@pytest.mark.filterwarnings("ignore:.*is below the 3rd percentile for infant.*")
+@pytest.mark.filterwarnings("ignore:Estimated head radius.*:RuntimeWarning")
 def test_eeg_autocorr_fftw():
     """Test eeg_autocorr_fftw feature used on epoch datasets."""
     epochs = read_epochs_eeglab(epo_eeglab_path)

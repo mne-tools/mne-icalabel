@@ -12,8 +12,6 @@
 
 .. include:: ./authors.inc
 
-.. _latest:
-
 Version 0.5
 ===========
 

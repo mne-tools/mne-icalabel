@@ -29,6 +29,7 @@ reader = {"raw": read_raw, "epo": read_epochs_eeglab}
 kwargs = {"raw": dict(preload=True), "epo": dict()}
 
 
+@pytest.mark.filterwarnings("ignore:Estimated head radius.*:RuntimeWarning")
 @pytest.mark.parametrize(
     "file, eeglab_result_file",
     [(raw_eeglab_path, loc_raw_path), (epo_eeglab_path, loc_epo_path)],

@@ -10,9 +10,9 @@ from mne.viz.topomap import _check_extrapolate, _make_head_outlines, _setup_inte
 from numpy.typing import NDArray
 
 if check_version("mne", "1.6"):
-    from mne._fiff.pick import _get_channel_types, _pick_data_channels, _picks_to_idx
+    from mne._fiff.pick import _pick_data_channels, _picks_to_idx
 else:
-    from mne.io.pick import _get_channel_types, _pick_data_channels, _picks_to_idx
+    from mne.io.pick import _pick_data_channels, _picks_to_idx
 
 from ..utils._checks import _validate_ica
 from ..utils._docs import fill_doc
@@ -72,7 +72,7 @@ def get_topomaps(
     )
     # list channel types
     ch_picks = _pick_data_channels(ica.info, exclude=())
-    ch_types = _get_channel_types(pick_info(ica.info, ch_picks), unique=True)
+    ch_types = pick_info(ica.info, ch_picks).get_channel_types(unique=True)
 
     # compute topomaps
     topomaps = dict()
@@ -115,7 +115,7 @@ def _get_topomap_array(
     topomap : array of shape (n_pixels, n_pixels)
         Topographic map array.
     """
-    ch_type = _get_channel_types(info, unique=True)
+    ch_type = info.get_channel_types(unique=True)
     assert len(ch_type) == 1  # sanity-check
     ch_type = ch_type[0]
     picks = list(range(data.shape[0]))

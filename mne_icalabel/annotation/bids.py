@@ -6,6 +6,7 @@ from mne.utils import _check_pandas_installed
 
 from ..config import ICA_LABELS_TO_MNE
 from ..iclabel.config import ICLABEL_STRING_TO_NUMERICAL
+from ..utils._imports import import_optional_dependency
 
 
 def write_components_tsv(ica: ICA, fname):
@@ -33,6 +34,8 @@ def write_components_tsv(ica: ICA, fname):
     context of BIDS-EEG Derivatives. The API and functionality is subject to change
     as the community converges on the specification of BIDS-Derivatives.
     """  # noqa: E501
+    import_optional_dependency("mne_bids")
+
     from mne_bids import BIDSPath, get_bids_path_from_fname, update_sidecar_json
     from mne_bids.write import _write_json
 
@@ -134,7 +137,21 @@ def mark_component(
 
     # read the file
     with open(fname, "r") as fin:
-        tsv_data = pd.read_csv(fin, sep="\t", index_col=None)
+        tsv_data = pd.read_csv(
+            fin,
+            sep="\t",
+            index_col=None,
+            dtype={
+                "component": int,
+                "type": str,
+                "description": str,
+                "status": str,
+                "status_description": str,
+                "annotate_method": str,
+                "annotate_author": str,
+                "ic_type": str,
+            },
+        )
 
     if component not in tsv_data["component"]:
         raise ValueError(f"Component {component} not in tsv data of {fname}.")
@@ -153,9 +170,9 @@ def mark_component(
     # check that method is one of the allowed values
     description = ""
     if method == "manual":
-        description += "Manually-annotated "
+        description += "Manually-annotated: "
     else:
-        description += f"Auto-detected with {method} "
+        description += f"Auto-detected with {method}: "
     description += f"{label}"
 
     # Read sidecar and create required columns if they do not exist.

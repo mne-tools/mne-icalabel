@@ -9,9 +9,9 @@ from mne.preprocessing import ICA
 from mne.utils import check_version
 
 if check_version("mne", "1.6"):
-    from mne._fiff.pick import _get_channel_types, _pick_data_channels, _picks_to_idx
+    from mne._fiff.pick import _pick_data_channels, _picks_to_idx
 else:
-    from mne.io.pick import _get_channel_types, _pick_data_channels, _picks_to_idx
+    from mne.io.pick import _pick_data_channels, _picks_to_idx
 
 from mne_icalabel.features import get_topomaps
 
@@ -25,6 +25,7 @@ ica_eeg = ICA(n_components=5, method="picard")
 ica_eeg.fit(raw.pick_types(eeg=True))
 
 
+@pytest.mark.filterwarnings("ignore:invalid value encountered in divide:RuntimeWarning")
 @pytest.mark.parametrize("ica", (ica, ica_eeg))
 def test_topomap_defaults(ica):
     """Test scalp topography array generation"""
@@ -34,10 +35,11 @@ def test_topomap_defaults(ica):
         assert isinstance(topomaps_, np.ndarray)
         assert topomaps_.shape == (ica.n_components_, 64, 64)
     ch_picks = _pick_data_channels(ica.info, exclude=())
-    ch_types = _get_channel_types(pick_info(ica.info, ch_picks), unique=True)
+    ch_types = pick_info(ica.info, ch_picks).get_channel_types(unique=True)
     assert sorted(topomaps) == sorted(ch_types)
 
 
+@pytest.mark.filterwarnings("ignore:invalid value encountered in divide:RuntimeWarning")
 @pytest.mark.parametrize(
     "picks, res", [(0, 32), ([0, 1, 2], 50), (slice(1, 3), 128), (np.array([1, 2]), 10)]
 )
@@ -51,6 +53,7 @@ def test_topomap_arguments(picks, res):
         assert topomaps_.shape == (ic_picks.size, res, res)
 
 
+@pytest.mark.filterwarnings("ignore:invalid value encountered in divide:RuntimeWarning")
 def test_interpolation_arguments():
     """Test arguments that influence the interpolation."""
     # default

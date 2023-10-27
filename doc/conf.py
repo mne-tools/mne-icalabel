@@ -91,6 +91,7 @@ html_css_files = ["style.css"]
 # documentation.
 switcher_version_match = "dev" if release.endswith("dev0") else version
 html_theme_options = {
+    "check_switcher": True,
     "external_links": [{"name": "MNE", "url": "https://mne.tools/stable/index.html"}],
     "icon_links": [
         dict(
@@ -114,7 +115,7 @@ html_theme_options = {
     "show_toc_level": 1,
     "use_edit_page_button": False,
     "switcher": {
-        "json_url": "https://mne.tools/dev/_static/versions.json",
+        "json_url": "https://mne.tools/mne-icalabel/dev/_static/versions.json",
         "version_match": switcher_version_match,
     },
 }
@@ -130,6 +131,9 @@ html_context = {
 
 # -- autosummary -------------------------------------------------------------
 autosummary_generate = True
+
+# -- autosectionlabels -------------------------------------------------------
+autosectionlabel_prefix_document = True
 
 # -- autodoc -----------------------------------------------------------------
 autoclass_content = "class"

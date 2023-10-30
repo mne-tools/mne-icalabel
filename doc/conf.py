@@ -1,4 +1,7 @@
-"""Configure details for documentation with sphinx."""
+# Configuration file for the Sphinx documentation builder.
+#
+# For the full list of built-in configuration values, see the documentation:
+# https://www.sphinx-doc.org/en/master/usage/configuration.html
 
 import inspect
 import os
@@ -9,45 +12,27 @@ from importlib import import_module
 from typing import Dict, Optional
 
 import mne
-import sphinx_gallery  # noqa: F401
-from mne.fixes import _compare_version
-from sphinx_gallery.sorting import ExampleTitleSortKey
+from sphinx_gallery.sorting import FileNameSortKey
 
-sys.path.insert(0, os.path.abspath(".."))
 import mne_icalabel
-
-# If extensions (or modules to document with autodoc) are in another directory,
-# add these directories to sys.path here. If the directory is relative to the
-# documentation root, use os.path.abspath to make it absolute, like shown here.
-curdir = os.path.dirname(__file__)
-sys.path.append(os.path.abspath(os.path.join(curdir, "..")))
-sys.path.append(os.path.abspath(os.path.join(curdir, "..", "mne_icalabel")))
 
 # -- project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-# General information about the project.
 project = "MNE-ICALabel"
-author = "Adam Li"
-td = date.today()
-copyright = f"2021-{td.year}, MNE Developers. Last updated on {td.isoformat()}"
-
-# The version info for the project you're documenting, acts as replacement for
-# |version| and |release|, also used in various other places throughout the
-# built documents.
-#
-# The short X.Y version.
-version = mne_icalabel.__version__
-# The full version, including alpha/beta/rc tags.
-release = version
-
+author = "Adam Li, Mathieu Scheltienne"
+copyright = (
+    f"2021-{date.today().year}, MNE Developers. " f"Last updated on {date.today().isoformat()}"
+)
+release = mne_icalabel.__version__
+package = mne_icalabel.__name__
 gh_url = "https://github.com/mne-tools/mne-icalabel"
 
 # -- general configuration ------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 # If your documentation needs a minimal Sphinx version, state it here.
-needs_sphinx = "4.0"
+needs_sphinx = "5.0"
 
 # The document name of the “root” document, that is, the document that contains
 # the root toctree directive.
@@ -59,13 +44,13 @@ root_doc = "index"
 extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.autosummary",
-    "sphinx.ext.doctest",
     "sphinx.ext.intersphinx",
     "sphinx.ext.linkcode",
     "sphinx.ext.mathjax",
     "numpydoc",
     "sphinxcontrib.bibtex",
     "sphinx_copybutton",
+    "sphinx_design",
     "sphinx_gallery.gen_gallery",
     "sphinx_issues",
 ]
@@ -77,6 +62,9 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", "**.ipynb_checkpoints"]
 nitpicky = True
 nitpick_ignore = []
 
+# A list of ignored prefixes for module index sorting.
+modindex_common_prefix = [f"{package}."]
+
 # The name of a reST role (builtin or Sphinx extension) to use as the default
 # role, that is, for text marked up `like this`. This can be set to 'py:obj' to
 # make `filter` a cross-reference to the Python function “filter”.
@@ -84,14 +72,14 @@ default_role = "py:obj"
 
 # -- options for HTML output -------------------------------------------------
 
+html_theme = "pydata_sphinx_theme"
+html_title = project
 # HTML options (e.g., theme)
 # see: https://sphinx-bootstrap-theme.readthedocs.io/en/latest/README.html
 # Clean up sidebar: Do not show "Source" link
 html_show_sourcelink = False
 html_copy_source = False
 html_show_sphinx = False
-
-html_theme = "pydata_sphinx_theme"
 
 # Add any paths that contain templates here, relative to this directory.
 html_static_path = ["_static"]
@@ -100,18 +88,35 @@ html_css_files = ["style.css"]
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
+switcher_version_match = "dev" if release.endswith("dev0") else release
 html_theme_options = {
+    "check_switcher": True,
+    "external_links": [{"name": "MNE", "url": "https://mne.tools/stable/index.html"}],
     "icon_links": [
         dict(
             name="GitHub",
             url=gh_url,
             icon="fab fa-github-square",
         ),
+        dict(
+            name="Forum",
+            url="https://mne.discourse.group/",
+            icon="fa-brands fa-discourse",
+        ),
+        dict(
+            name="Discord",
+            url="https://discord.gg/rKfvxTuATa",
+            icon="fa-brands fa-discord",
+        ),
     ],
-    "use_edit_page_button": False,
+    "navbar_end": ["theme-switcher", "version-switcher", "navbar-icon-links"],
     "navigation_with_keys": False,
     "show_toc_level": 1,
-    "navbar_end": ["theme-switcher", "version-switcher", "navbar-icon-links"],
+    "use_edit_page_button": False,
+    "switcher": {
+        "json_url": "https://mne.tools/mne-icalabel/dev/_static/versions.json",
+        "version_match": switcher_version_match,
+    },
 }
 # Custom sidebar templates, maps document names to template names.
 html_sidebars = {
@@ -121,24 +126,19 @@ html_sidebars = {
 html_context = {
     "pygment_light_style": "tango",
     "pygment_dark_style": "native",
-    "versions_dropdown": {
-        "dev": "v0.5 (devel)",
-        "stable": "v0.4",
-        "v0.3": "v0.3",
-        "v0.2": "v0.2",
-        "v0.1": "v0.1",
-    },
 }
 
 # -- autosummary -------------------------------------------------------------
 autosummary_generate = True
+
+# -- autosectionlabels -------------------------------------------------------
+autosectionlabel_prefix_document = True
 
 # -- autodoc -----------------------------------------------------------------
 autoclass_content = "class"
 autodoc_typehints = "none"
 autodoc_member_order = "groupwise"
 autodoc_warningiserror = True
-autodoc_default_options = {"inherited-members": None}
 
 # -- numpydoc ----------------------------------------------------------------
 
@@ -202,27 +202,20 @@ intersphinx_mapping = {
     "joblib": ("https://joblib.readthedocs.io/en/latest", None),
     "matplotlib": ("https://matplotlib.org/stable", None),
     "mne": ("https://mne.tools/dev", None),
-    "numpy": ("https://numpy.org/devdocs", None),
+    "numpy": ("https://numpy.org/doc/stable", None),
     "pandas": ("https://pandas.pydata.org/pandas-docs/dev", None),
     "pooch": ("https://www.fatiando.org/pooch/latest/", None),
     "python": ("https://docs.python.org/3", None),
-    "scipy": ("https://scipy.github.io/devdocs", None),
+    "scipy": ("https://docs.scipy.org/doc/scipy", None),
     "sklearn": ("https://scikit-learn.org/stable", None),
     "torch": ("https://pytorch.org/docs/stable", None),
 }
 intersphinx_timeout = 5
 
 # -- sphinx-gallery ----------------------------------------------------------
-os.environ["_MNE_BUILDING_DOC"] = "true"
 scrapers = ("matplotlib",)
-try:
-    import mne_qt_browser
-
-    _min_ver = _compare_version(mne_qt_browser.__version__, ">=", "0.2")
-    if mne.viz.get_browser_backend() == "qt" and _min_ver:
-        scrapers += (mne.viz._scraper._MNEQtBrowserScraper(),)
-except ImportError:
-    pass
+if mne.viz.get_browser_backend() == "qt":
+    scrapers += (mne.viz._scraper._MNEQtBrowserScraper(),)
 
 compress_images = ("images", "thumbnails")
 # let's make things easier on Windows users
@@ -234,40 +227,37 @@ if sys.platform.startswith("win"):
         compress_images = ()
 
 sphinx_gallery_conf = {
-    "doc_module": ("mne_icalabel",),
-    "reference_url": {
-        "mne_icalabel": None,
-    },
-    "examples_dirs": ["../examples"],
-    "gallery_dirs": ["auto_examples"],
-    "backreferences_dir": "generated",
-    "plot_gallery": "True",  # Avoid annoying Unicode/bool default warning
-    "thumbnail_size": (160, 112),
-    "remove_config_comments": True,
-    "min_reported_time": 1.0,
     "abort_on_example_error": False,
-    # 'reset_modules_order': 'both',
-    "image_scrapers": scrapers,
-    "show_memory": not sys.platform.startswith(("win", "darwin")),
-    "line_numbers": False,  # messes with style
-    "within_subsection_order": ExampleTitleSortKey,
+    "backreferences_dir": "generated/backreferences",
     "capture_repr": ("_repr_html_",),
-    "junit": os.path.join("..", "test-results", "sphinx-gallery", "junit.xml"),
-    "matplotlib_animations": True,
     "compress_images": compress_images,
-    "filename_pattern": "^((?!sgskip).)*$",
+    "doc_module": ("mne_icalabel",),
+    "examples_dirs": ["../examples"],
+    "exclude_implicit_doc": {},  # set
+    "filename_pattern": r"\d{2}_",
+    "gallery_dirs": ["generated/examples"],
+    "image_scrapers": scrapers,
+    "junit": os.path.join("..", "test-results", "sphinx-gallery", "junit.xml"),
+    "line_numbers": False,
+    "matplotlib_animations": True,
+    "min_reported_time": 1.0,
+    "plot_gallery": "True",
+    "reference_url": dict(mne_icalabel=None),
+    "remove_config_comments": True,
+    "show_memory": sys.platform == "linux",
+    "thumbnail_size": (160, 112),
+    "within_subsection_order": FileNameSortKey,
 }
 
 # -- sphinxcontrib-bibtex ----------------------------------------------------
 bibtex_bibfiles = ["./references.bib"]
-bibtex_style = "unsrt"
-bibtex_footbibliography_header = ""
 
 # -- Sphinx-issues -----------------------------------------------------------
 issues_github_path = "mne-tools/mne-icalabel"
 
 # -- sphinx.ext.linkcode -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/extensions/linkcode.html
+
 
 def linkcode_resolve(domain: str, info: Dict[str, str]) -> Optional[str]:
     """Determine the URL corresponding to a Python object.
@@ -308,6 +298,6 @@ def linkcode_resolve(domain: str, info: Dict[str, str]) -> Optional[str]:
         branch = "main"
     else:
         return None  # alternatively, link to a maint/version branch
-    fname = fname.split("/mne_icalabel/")[1]
+    fname = fname.rsplit("/mne_icalabel/")[1]
     url = f"{gh_url}/blob/{branch}/mne_icalabel/{fname}#{lines}"
     return url

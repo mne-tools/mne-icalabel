@@ -24,7 +24,8 @@ ICLabel
 =======
 
 This is the model originally available for `EEGLab <https://github.com/sccn/ICLabel>`_.
-The model was ported from matconvnet using `pytorch <https://pytorch.org/>`_.
+The model was ported from matconvnet using `pytorch <https://pytorch.org/>`_ or
+`Microsoft onnxruntime <https://onnxruntime.ai/>`_.
 
 ICLabel is designed to classify ICs fitted with an extended infomax ICA
 decomposition algorithm on EEG datasets referenced to a common average and

@@ -25,7 +25,6 @@ dependencies = [
   'pooch',
   'psutil',
   'scipy >= 1.4.0',
-  'torch',
 ]
 description = 'MNE-ICALabel: Automatic labeling of ICA components from MEG, EEG and iEEG data with MNE.'
 keywords = [
@@ -54,6 +53,7 @@ all = [
   'mne-icalabel[onnx]',
   'mne-icalabel[style]',
   'mne-icalabel[test]',
+  'mne-icalabel[torch]',
 ]
 build = [
   'build',
@@ -105,11 +105,15 @@ test = [
   'mne-icalabel[gui]',
   'mne-icalabel[ica]',
   'mne-icalabel[onnx]',
+  'mne-icalabel[torch]',
   'pandas',
   'pymatreader',
   'PyQt6',
   'pytest',
   'pytest-cov',
+]
+torch = [
+  'torch',
 ]
 
 [project.scripts]

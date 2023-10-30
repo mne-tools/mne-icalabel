@@ -36,6 +36,14 @@ Methods
 
             pip install mne-icalabel
 
+        The ICLabel model requires either `pytorch <https://pytorch.org/>`_ or
+        `Microsoft onnxruntime <https://onnxruntime.ai/>`_.
+
+        .. code-block:: bash
+
+            pip install torch
+            pip install onnxruntime
+
         Additional dependencies can be installed with different keywords:
 
         .. code-block:: bash
@@ -85,4 +93,4 @@ error messages:
 
 .. code-block:: bash
 
-   python -c 'import mne_icalabel'
+    mne_icalabel-sys_info

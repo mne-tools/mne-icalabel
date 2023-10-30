@@ -56,13 +56,12 @@ doc = [
     'mne-icalabel[ica]',
     'memory_profiler',
     'numpydoc',
-    'pydata-sphinx-theme',
+    'pydata-sphinx-theme==0.14.1',
     'PyQt5',
     'sphinx',
     'sphinxcontrib-bibtex',
     'sphinx-copybutton',
     'sphinx-gallery',
-    'sphinx_rtd_theme',
     'sphinx-issues',
 ]
 gui = [

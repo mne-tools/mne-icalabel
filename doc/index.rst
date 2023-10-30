@@ -1,5 +1,7 @@
-**mne-icalabel**
-===================
+:html_theme.sidebar_secondary.remove:
+
+**MNE-ICALabel**
+================
 
 mne-icalabel is a Python package for labeling independent components that stem
 from an `Independent Component Analysis (ICA) <https://en.wikipedia.org/wiki/Independent_component_analysis>`_.
@@ -26,7 +28,7 @@ Contents
    whats_new
    install
    api
-   auto_examples/index
+   generated/examples/index
 
 .. toctree::
    :hidden:

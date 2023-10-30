@@ -16,7 +16,7 @@ Most-used functions
 .. currentmodule:: mne_icalabel
 
 .. autosummary::
-   :toctree: generated/
+   :toctree: ./generated/
 
    label_components
 
@@ -39,7 +39,7 @@ are copied to the new image features. Then, the predicted probabilities are aver
 .. currentmodule:: mne_icalabel.iclabel
 
 .. autosummary::
-   :toctree: generated/
+   :toctree: ./generated/
 
    get_iclabel_features
    run_iclabel
@@ -53,7 +53,7 @@ Contains functions to extract features from `~mne.preprocessing.ICA` instance an
 .. currentmodule:: mne_icalabel.features
 
 .. autosummary::
-   :toctree: generated/
+   :toctree: ./generated/
 
    get_topomaps
 
@@ -65,7 +65,7 @@ derivative standard of BIDS for EEG data.
 .. currentmodule:: mne_icalabel.annotation
 
 .. autosummary::
-   :toctree: generated/
+   :toctree: ./generated/
 
    mark_component
    write_components_tsv
@@ -78,6 +78,6 @@ significant bugs still. Please report these in the GH issues tab.
 .. currentmodule:: mne_icalabel
 
 .. autosummary::
-   :toctree: generated/
+   :toctree: ./generated/
 
    gui.label_ica_components

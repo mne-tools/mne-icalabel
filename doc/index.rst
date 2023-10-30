@@ -1,3 +1,5 @@
+:html_theme.sidebar_secondary.remove:
+
 .. include:: ./links.inc
 
 **MNE-ICALabel**
@@ -29,9 +31,9 @@ Contents
 
 .. toctree::
    :maxdepth: 2
-   :caption: Getting started:
 
    install
    api
    generated/examples/index
-   changes/index
+
+See our :ref:`changes/index:Changelog` for a full list of changes.

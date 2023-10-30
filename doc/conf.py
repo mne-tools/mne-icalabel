@@ -75,6 +75,7 @@ default_role = "py:obj"
 # -- options for HTML output -------------------------------------------------
 
 html_theme = "pydata_sphinx_theme"
+html_title = project
 # HTML options (e.g., theme)
 # see: https://sphinx-bootstrap-theme.readthedocs.io/en/latest/README.html
 # Clean up sidebar: Do not show "Source" link

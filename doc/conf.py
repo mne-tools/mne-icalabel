@@ -1,279 +1,305 @@
-"""Configure details for documentation with sphinx."""
+# Configuration file for the Sphinx documentation builder.
+#
+# For the full list of built-in configuration values, see the documentation:
+# https://www.sphinx-doc.org/en/master/usage/configuration.html
+
+import inspect
 import os
+import subprocess
 import sys
-import warnings
 from datetime import date
+from importlib import import_module
+from typing import Dict, Optional
 
 import mne
-import sphinx_gallery  # noqa: F401
-from sphinx_gallery.sorting import ExampleTitleSortKey
+from sphinx_gallery.sorting import FileNameSortKey
 
-sys.path.insert(0, os.path.abspath(".."))
-import mne_icalabel  # noqa: E402
+import mne_icalabel
 
-# If extensions (or modules to document with autodoc) are in another directory,
-# add these directories to sys.path here. If the directory is relative to the
-# documentation root, use os.path.abspath to make it absolute, like shown here.
-curdir = os.path.dirname(__file__)
-sys.path.append(os.path.abspath(os.path.join(curdir, '..')))
-sys.path.append(os.path.abspath(os.path.join(curdir, '..', 'mne_icalabel')))
-sys.path.append(os.path.abspath(os.path.join(curdir, 'sphinxext')))
+# -- project information -----------------------------------------------------
+# https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-# -- General configuration ------------------------------------------------
+project = "MNE-ICALabel"
+author = "Adam Li, Mathieu Scheltienne"
+copyright = (
+    f"2021-{date.today().year}, MNE Developers. "
+    f"Last updated on {date.today().isoformat()}"
+)
+release = mne_icalabel.__version__
+package = mne_icalabel.__name__
+gh_url = "https://github.com/mne-tools/mne-icalabel"
+
+# -- general configuration ------------------------------------------------
+# https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 # If your documentation needs a minimal Sphinx version, state it here.
-#
-needs_sphinx = '4.0'
+needs_sphinx = "5.0"
+
+# The document name of the “root” document, that is, the document that contains
+# the root toctree directive.
+root_doc = "index"
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    'sphinx.ext.autodoc',
-    'sphinx.ext.autosummary',
-    'sphinx.ext.doctest',
-    'sphinx.ext.intersphinx',
-    'sphinx_autodoc_typehints',
-    'sphinx.ext.mathjax',
-    'sphinx.ext.viewcode',
-    'sphinx_gallery.gen_gallery',
-    'sphinxcontrib.bibtex',
-    'numpydoc',
-    'sphinx_copybutton',
-    'gh_substitutions',  # custom extension, see sphinxext/gh_substitutions.py
+    "sphinx.ext.autodoc",
+    "sphinx.ext.autosectionlabel",
+    "sphinx.ext.autosummary",
+    "sphinx.ext.intersphinx",
+    "sphinx.ext.linkcode",
+    "sphinx.ext.mathjax",
+    "numpydoc",
+    "sphinxcontrib.bibtex",
+    "sphinx_copybutton",
+    "sphinx_design",
+    "sphinx_gallery.gen_gallery",
+    "sphinx_issues",
 ]
 
-# configure sphinx-copybutton
-copybutton_prompt_text = r">>> |\.\.\. |\$ "
-copybutton_prompt_is_regexp = True
+templates_path = ["_templates"]
+exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", "**.ipynb_checkpoints"]
 
-# generate autosummary even if no references
-# -- sphinx.ext.autosummary
-autosummary_generate = True
+# Sphinx will warn about all references where the target cannot be found.
+nitpicky = True
+nitpick_ignore = []
 
-autodoc_default_options = {'inherited-members': None}
-autodoc_typehints = 'signature'
+# A list of ignored prefixes for module index sorting.
+modindex_common_prefix = [f"{package}."]
 
-# prevent jupyter notebooks from being run even if empty cell
-# nbsphinx_execute = 'never'
-# nbsphinx_allow_errors = True
+# The name of a reST role (builtin or Sphinx extension) to use as the default
+# role, that is, for text marked up `like this`. This can be set to 'py:obj' to
+# make `filter` a cross-reference to the Python function “filter”.
+default_role = "py:obj"
 
-error_ignores = {
-    # These we do not live by:
-    'GL01',  # Docstring should start in the line immediately after the quotes
-    'EX01', 'EX02',  # examples failed (we test them separately)
-    'ES01',  # no extended summary
-    'SA01',  # no see also
-    'YD01',  # no yields section
-    'SA04',  # no description in See Also
-    'PR04',  # Parameter "shape (n_channels" has no type
-    'RT02',  # The first line of the Returns section should contain only the type, unless multiple values are being returned  # noqa
-    # XXX should also verify that | is used rather than , to separate params
-    # XXX should maybe also restore the parameter-desc-length < 800 char check
-}
+# -- options for HTML output -------------------------------------------------
 
-# -- numpydoc
-# Below is needed to prevent errors
-numpydoc_xref_param_type = True
-numpydoc_class_members_toctree = False
-numpydoc_attributes_as_param_list = True
-numpydoc_use_blockquotes = True
-numpydoc_xref_ignore = {
-    # words
-    'instance', 'instances', 'of', 'default', 'shape', 'or',
-    'with', 'length', 'pair', 'matplotlib', 'optional', 'kwargs', 'in',
-    'dtype', 'object', 'self.verbose',
-    # shapes
-    'n_times', 'obj', 'n_chan', 'n_epochs', 'n_picks', 'n_ch_groups',
-    'n_node_names', 'n_tapers', 'n_signals', 'n_step', 'n_freqs',
-    'epochs', 'freqs', 'times', 'arrays', 'lists', 'func', 'n_nodes',
-    'n_estimated_nodes', 'n_samples', 'n_channels', 'Renderer',
-    'n_ytimes', 'n_ychannels', 'n_events', 'n_components', 'n_classes',
-}
-numpydoc_xref_aliases = {
-    # Python
-    'file-like': ':term:`file-like <python:file object>`',
-    'ArrayLike': ':term:`array_like`',
-    'Path': 'pathlib.Path',
-    # Matplotlib
-    'colormap': ':doc:`colormap <matplotlib:tutorials/colors/colormaps>`',
-    'color': ':doc:`color <matplotlib:api/colors_api>`',
-    'collection': ':doc:`collections <matplotlib:api/collections_api>`',
-    'Axes': 'matplotlib.axes.Axes',
-    'Figure': 'matplotlib.figure.Figure',
-    'Axes3D': 'mpl_toolkits.mplot3d.axes3d.Axes3D',
-    'PolarAxes': 'matplotlib.projections.polar.PolarAxes',
-    'ColorbarBase': 'matplotlib.colorbar.ColorbarBase',
-    # joblib
-    'joblib.Parallel': 'joblib.Parallel',
-    # MNE
-    'Label': 'mne.Label', 'Forward': 'mne.Forward', 'Evoked': 'mne.Evoked',
-    'Info': 'mne.Info', 'SourceSpaces': 'mne.SourceSpaces',
-    'SourceMorph': 'mne.SourceMorph',
-    'Epochs': 'mne.Epochs', 'Layout': 'mne.channels.Layout',
-    'EvokedArray': 'mne.EvokedArray', 'BiHemiLabel': 'mne.BiHemiLabel',
-    'AverageTFR': 'mne.time_frequency.AverageTFR',
-    'EpochsTFR': 'mne.time_frequency.EpochsTFR',
-    'Raw': 'mne.io.Raw', 'ICA': 'mne.preprocessing.ICA',
-}
-numpydoc_validate = True
-numpydoc_validation_checks = {'all'} | set(error_ignores)
-numpydoc_validation_exclude = {  # set of regex
-    # dict subclasses
-    r'\.clear', r'\.get$', r'\.copy$', r'\.fromkeys', r'\.items', r'\.keys',
-    r'\.pop', r'\.popitem', r'\.setdefault', r'\.update', r'\.values',
-    # list subclasses
-    r'\.append', r'\.count', r'\.extend', r'\.index', r'\.insert', r'\.remove',
-    r'\.sort',
-    # we currently don't document these properly (probably okay)
-    r'\.__getitem__', r'\.__contains__', r'\.__hash__', r'\.__mul__',
-    r'\.__sub__', r'\.__add__', r'\.__iter__', r'\.__div__', r'\.__neg__',
-    r'plot_circle',
-    r'nn.Module',
-}
-
-
-default_role = 'py:obj'
-
-# The suffix(es) of source filenames.
-# You can specify multiple suffix as a list of string:
-#
-# source_suffix = ['.rst', '.md']
-source_suffix = '.rst'
-
-# The master toctree document.
-master_doc = 'index'
-
-# General information about the project.
-project = u'MNE-ICALabel'
-td = date.today()
-copyright = u'2021-%s, MNE Developers. Last updated on %s' % (td.year,
-                                                              td.isoformat())
-
-author = u'Adam Li'
-
-# The version info for the project you're documenting, acts as replacement for
-# |version| and |release|, also used in various other places throughout the
-# built documents.
-#
-# The short X.Y version.
-version = mne_icalabel.__version__
-# The full version, including alpha/beta/rc tags.
-release = version
-
-# List of patterns, relative to source directory, that match files and
-# directories to ignore when looking for source files.
-# This patterns also effect to html_static_path and html_extra_path
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store', "**.ipynb_checkpoints"]
-
+html_theme = "pydata_sphinx_theme"
+html_title = project
 # HTML options (e.g., theme)
 # see: https://sphinx-bootstrap-theme.readthedocs.io/en/latest/README.html
 # Clean up sidebar: Do not show "Source" link
 html_show_sourcelink = False
 html_copy_source = False
-
-html_theme = 'pydata_sphinx_theme'
+html_show_sphinx = False
 
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ['_templates']
-html_static_path = ['_static']
-html_css_files = ['style.css']
+html_static_path = ["_static"]
+html_css_files = ["style.css"]
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
+switcher_version_match = "dev" if release.endswith("dev0") else release
 html_theme_options = {
-    'icon_links': [
-        dict(name='GitHub',
-             url='https://github.com/mne-tools/MNE-ICALabel',
-             icon='fab fa-github-square'),
+    "check_switcher": True,
+    "external_links": [{"name": "MNE", "url": "https://mne.tools/stable/index.html"}],
+    "icon_links": [
+        dict(
+            name="GitHub",
+            url=gh_url,
+            icon="fab fa-github-square",
+        ),
+        dict(
+            name="Forum",
+            url="https://mne.discourse.group/",
+            icon="fa-brands fa-discourse",
+        ),
+        dict(
+            name="Discord",
+            url="https://discord.gg/rKfvxTuATa",
+            icon="fa-brands fa-discord",
+        ),
     ],
-    'use_edit_page_button': False,
-    'navigation_with_keys': False,
-    'show_toc_level': 1,
-    'navbar_end': ['version-switcher', 'navbar-icon-links'],
+    "navbar_end": ["theme-switcher", "version-switcher", "navbar-icon-links"],
+    "navigation_with_keys": False,
+    "show_toc_level": 1,
+    "use_edit_page_button": False,
+    "switcher": {
+        "json_url": "https://mne.tools/mne-icalabel/dev/_static/versions.json",
+        "version_match": switcher_version_match,
+    },
 }
 # Custom sidebar templates, maps document names to template names.
 html_sidebars = {
-    'index': ['search-field.html'],
+    "index": ["search-field.html"],
 }
 
 html_context = {
-    'versions_dropdown': {
-        'dev': 'v0.2 (devel)',
-        'stable': 'v0.1',
-        'v0.1': 'v0.1',
-    },
+    "pygment_light_style": "tango",
+    "pygment_dark_style": "native",
 }
 
-# html_sidebars = {'**': ['localtoc.html']}
+# -- autosummary -------------------------------------------------------------
+autosummary_generate = True
 
-# Example configuration for intersphinx: refer to the Python standard library.
+# -- autosectionlabels -------------------------------------------------------
+autosectionlabel_prefix_document = True
+
+# -- autodoc -----------------------------------------------------------------
+autoclass_content = "class"
+autodoc_typehints = "none"
+autodoc_member_order = "groupwise"
+autodoc_warningiserror = True
+
+# -- numpydoc ----------------------------------------------------------------
+
+# needed to prevent errors
+numpydoc_class_members_toctree = False
+numpydoc_attributes_as_param_list = True
+
+# x-ref
+numpydoc_xref_param_type = True
+numpydoc_xref_aliases = {
+    # Python
+    "Path": "pathlib.Path",
+    "bool": ":class:`python:bool`",
+    # MNE
+    "Epochs": "mne.Epochs",
+    "ICA": "mne.preprocessing.ICA",
+    "Info": "mne.Info",
+    "Raw": "mne.io.Raw",
+}
+numpydoc_xref_ignore = {
+    "of",
+    "shape",
+    "n_components",
+    "n_pixels",
+    "n_classes",
+    "instance",
+    "ICAComponentLabeler",
+}
+
+# validation
+# https://numpydoc.readthedocs.io/en/latest/validation.html#validation-checks
+error_ignores = {
+    "GL01",  # docstring should start in the line immediately after the quotes
+    "EX01",  # section 'Examples' not found
+    "ES01",  # no extended summary found
+    "SA01",  # section 'See Also' not found
+    "RT02",  # The first line of the Returns section should contain only the type, unless multiple values are being returned  # noqa
+}
+
+numpydoc_validate = True
+numpydoc_validation_checks = {"all"} | set(error_ignores)
+numpydoc_validation_exclude = {  # set of regex
+    # we currently don't document these properly (probably okay)
+    r"\.__getitem__",
+    r"\.__contains__",
+    r"\.__hash__",
+    r"\.__mul__",
+    r"\.__sub__",
+    r"\.__add__",
+    r"\.__iter__",
+    r"\.__div__",
+    r"\.__neg__",
+}
+
+# -- sphinx-copybutton -------------------------------------------------------
+copybutton_prompt_text = r">>> |\.\.\. |\$ "
+copybutton_prompt_is_regexp = True
+
+# -- intersphinx -------------------------------------------------------------
 intersphinx_mapping = {
-    'python': ('https://docs.python.org/3', None),
-    'mne': ('https://mne.tools/dev', None),
-    'numpy': ('https://numpy.org/devdocs', None),
-    'scipy': ('https://scipy.github.io/devdocs', None),
-    'matplotlib': ('https://matplotlib.org/stable', None),
-    'pandas': ('https://pandas.pydata.org/pandas-docs/dev', None),
-    'sklearn': ('https://scikit-learn.org/stable', None),
-    'joblib': ('https://joblib.readthedocs.io/en/latest', None),
+    "joblib": ("https://joblib.readthedocs.io/en/latest", None),
+    "matplotlib": ("https://matplotlib.org/stable", None),
+    "mne": ("https://mne.tools/dev", None),
+    "numpy": ("https://numpy.org/doc/stable", None),
+    "pandas": ("https://pandas.pydata.org/pandas-docs/dev", None),
+    "pooch": ("https://www.fatiando.org/pooch/latest/", None),
+    "python": ("https://docs.python.org/3", None),
+    "scipy": ("https://docs.scipy.org/doc/scipy", None),
+    "sklearn": ("https://scikit-learn.org/stable", None),
     "torch": ("https://pytorch.org/docs/stable", None),
-    'pooch': ('https://www.fatiando.org/pooch/latest/', None),
 }
 intersphinx_timeout = 5
 
-# Resolve binder filepath_prefix. From the docs:
-# "A prefix to append to the filepath in the Binder links. You should use this
-# if you will store your built documentation in a sub-folder of a repository,
-# instead of in the root."
-# we will store dev docs in a `dev` subdirectory and all other docs in a
-# directory "v" + version_str. E.g., "v0.3"
-if 'dev' in version:
-    filepath_prefix = 'dev'
-else:
-    filepath_prefix = 'v{}'.format(version)
+# -- sphinx-gallery ----------------------------------------------------------
+scrapers = ("matplotlib",)
+if mne.viz.get_browser_backend() == "qt":
+    scrapers += (mne.viz._scraper._MNEQtBrowserScraper(),)
 
-os.environ['_MNE_BUILDING_DOC'] = 'true'
-scrapers = ('matplotlib',)
-try:
-    with warnings.catch_warnings():
-        warnings.filterwarnings("ignore", category=DeprecationWarning)
-        import pyvista
-    pyvista.OFF_SCREEN = False
-except Exception:
-    pass
-else:
-    scrapers += ('pyvista',)
-if 'pyvista' in scrapers:
-    brain_scraper = mne.viz._brain._BrainScraper()
-    scrapers = list(scrapers)
-    scrapers.insert(scrapers.index('pyvista'), brain_scraper)
-    scrapers = tuple(scrapers)
+compress_images = ("images", "thumbnails")
+# let's make things easier on Windows users
+# (on Linux and macOS it's easy enough to require this)
+if sys.platform.startswith("win"):
+    try:
+        subprocess.check_call(["optipng", "--version"])
+    except Exception:
+        compress_images = ()
 
 sphinx_gallery_conf = {
-    'doc_module': 'mne_icalabel',
-    'reference_url': {
-        'mne_icalabel': None,
-    },
-    'backreferences_dir': 'generated',
-    'plot_gallery': 'True',  # Avoid annoying Unicode/bool default warning
-    'within_subsection_order': ExampleTitleSortKey,
-    'examples_dirs': ['../examples'],
-    'gallery_dirs': ['auto_examples'],
-    'filename_pattern': '^((?!sgskip).)*$',
-    'matplotlib_animations': True,
-    'compress_images': ('images', 'thumbnails'),
-    'image_scrapers': scrapers,
+    "abort_on_example_error": False,
+    "backreferences_dir": "generated/backreferences",
+    "capture_repr": ("_repr_html_",),
+    "compress_images": compress_images,
+    "doc_module": ("mne_icalabel",),
+    "examples_dirs": ["../examples"],
+    "exclude_implicit_doc": {},  # set
+    "filename_pattern": r"\d{2}_",
+    "gallery_dirs": ["generated/examples"],
+    "image_scrapers": scrapers,
+    "junit": os.path.join("..", "test-results", "sphinx-gallery", "junit.xml"),
+    "line_numbers": False,
+    "matplotlib_animations": True,
+    "min_reported_time": 1.0,
+    "plot_gallery": "True",
+    "reference_url": dict(mne_icalabel=None),
+    "remove_config_comments": True,
+    "show_memory": sys.platform == "linux",
+    "thumbnail_size": (160, 112),
+    "within_subsection_order": FileNameSortKey,
 }
 
-# sphinxcontrib-bibtex
-bibtex_bibfiles = ['./references.bib']
-bibtex_style = 'unsrt'
-bibtex_footbibliography_header = ''
+# -- sphinxcontrib-bibtex ----------------------------------------------------
+bibtex_bibfiles = ["./references.bib"]
+
+# -- Sphinx-issues -----------------------------------------------------------
+issues_github_path = "mne-tools/mne-icalabel"
+
+# -- sphinx.ext.linkcode -----------------------------------------------------
+# https://www.sphinx-doc.org/en/master/usage/extensions/linkcode.html
 
 
-# Enable nitpicky mode - which ensures that all references in the docs
-# resolve.
-nitpicky = True
-nitpick_ignore = []
+def linkcode_resolve(domain: str, info: Dict[str, str]) -> Optional[str]:
+    """Determine the URL corresponding to a Python object.
+
+    Parameters
+    ----------
+    domain : str
+        One of 'py', 'c', 'cpp', 'javascript'.
+    info : dict
+        With keys "module" and "fullname".
+
+    Returns
+    -------
+    url : str | None
+        The code URL. If None, no link is added.
+    """
+    if domain != "py":
+        return None  # only document python objects
+
+    # retrieve pyobject and file
+    try:
+        module = import_module(info["module"])
+        pyobject = module
+        for elt in info["fullname"].split("."):
+            pyobject = getattr(pyobject, elt)
+        fname = inspect.getsourcefile(pyobject).replace("\\", "/")
+    except Exception:
+        # Either the object could not be loaded or the file was not found.
+        # For instance, properties will raise.
+        return None
+
+    # retrieve start/stop lines
+    source, start_line = inspect.getsourcelines(pyobject)
+    lines = "L%d-L%d" % (start_line, start_line + len(source) - 1)
+
+    # create URL
+    if "dev" in release:
+        branch = "main"
+    else:
+        return None  # alternatively, link to a maint/version branch
+    fname = fname.rsplit("/mne_icalabel/")[1]
+    url = f"{gh_url}/blob/{branch}/mne_icalabel/{fname}#{lines}"
+    return url

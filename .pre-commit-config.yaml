@@ -35,7 +35,7 @@ repos:
             additional_dependencies: [tomli]
 
     - repo: https://github.com/mscheltienne/bibclean
-      rev: 0.7.0
+      rev: 0.7.1
       hooks:
           - id: bibclean-fix
             files: doc/references.bib

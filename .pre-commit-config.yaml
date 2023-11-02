@@ -26,6 +26,7 @@ repos:
       rev: v2.2.6
       hooks:
           - id: codespell
+            args: [--check-filenames, --ignore-words=.codespellignore]
 
     - repo: https://github.com/pycqa/pydocstyle
       rev: 6.3.0

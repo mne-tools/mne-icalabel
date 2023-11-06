@@ -16,7 +16,7 @@ repos:
             files: mne_icalabel
 
     - repo: https://github.com/astral-sh/ruff-pre-commit
-      rev: v0.1.3
+      rev: v0.1.4
       hooks:
           - id: ruff
             args: [--fix, --exit-non-zero-on-fix]
@@ -36,7 +36,7 @@ repos:
             additional_dependencies: [tomli]
 
     - repo: https://github.com/mscheltienne/bibclean
-      rev: 0.7.1
+      rev: 0.7.0
       hooks:
           - id: bibclean-fix
             files: doc/references.bib

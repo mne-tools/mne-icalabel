@@ -9,14 +9,14 @@ repos:
             files: mne_icalabel
 
     - repo: https://github.com/psf/black-pre-commit-mirror
-      rev: 23.10.1
+      rev: 23.11.0
       hooks:
           - id: black
             args: [--quiet]
             files: mne_icalabel
 
     - repo: https://github.com/astral-sh/ruff-pre-commit
-      rev: v0.1.4
+      rev: v0.1.5
       hooks:
           - id: ruff
             args: [--fix, --exit-non-zero-on-fix]
@@ -36,7 +36,7 @@ repos:
             additional_dependencies: [tomli]
 
     - repo: https://github.com/mscheltienne/bibclean
-      rev: 0.7.1
+      rev: 0.8.0
       hooks:
           - id: bibclean-fix
             files: doc/references.bib
@@ -49,7 +49,7 @@ repos:
             files: pyproject.toml
 
     - repo: https://github.com/adrienverge/yamllint
-      rev: v1.32.0
+      rev: v1.33.0
       hooks:
           - id: yamllint
             args: [--strict, -c, .yamllint.yaml]

@@ -16,3 +16,5 @@
 
 Version 0.6
 ===========
+
+- Remove splash screen from component labeller GUI (:pr:`149` by `Mathieu Scheltienne`_)

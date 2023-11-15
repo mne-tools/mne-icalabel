@@ -5,7 +5,7 @@ from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg
 from mne import BaseEpochs
 from mne.io import BaseRaw
 from mne.preprocessing import ICA
-from mne.utils import _validate_type
+from mne.utils import _validate_type, check_version
 from mne.viz import set_browser_backend
 from qtpy.QtCore import Qt, Slot
 from qtpy.QtWidgets import (
@@ -239,8 +239,11 @@ class ICAComponentLabeler(QMainWindow):
             fig.canvas.flush_events()
 
         # swap timeSeries widget
+        kwargs_plot_sources = (
+            dict(splash=False) if check_version("mne", "1.6") else dict()
+        )
         timeSeries_widget = self.ica.plot_sources(
-            self.inst, picks=[self.selected_component]
+            self.inst, picks=[self.selected_component], **kwargs_plot_sources
         )
         self._central_widget.layout().replaceWidget(
             self._timeSeries_widget, timeSeries_widget

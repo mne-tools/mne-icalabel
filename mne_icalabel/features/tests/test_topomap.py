@@ -112,7 +112,7 @@ def test_invalid_arguments():
         get_topomaps(ica, picks=101 + 101j)
     with pytest.raises(TypeError, match="Strings are not supported."):
         get_topomaps(ica, picks="101")
-    with pytest.raises(ValueError, match="All picks must be < n_channels"):
+    with pytest.raises(IndexError, match="All picks must be < n_channels"):
         get_topomaps(ica, picks=6)
 
     with pytest.raises(TypeError, match="res must be an int"):

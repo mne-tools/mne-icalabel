@@ -80,7 +80,7 @@ jobs:
           python -m pip install --progress-bar off .[test]
           python -m pip install --progress-bar off --upgrade git+https://github.com/mne-tools/mne-python
           python -m pip install --progress-bar off --upgrade git+https://github.com/mne-tools/mne-bids
-          python -m pip install --progress-bar off --upgrade --pre --only-binary :all: -i https://pypi.anaconda.org/scientific-python-nightly-wheels/simple --timeout=180 numpy scipy
+          python -m pip install --progress-bar off --upgrade --pre --only-binary :all: -i https://pypi.anaconda.org/scientific-python-nightly-wheels/simple --timeout=180 numpy scipy matplotlib
       - name: Display system information
         run: mne_icalabel-sys_info --developer
       - name: Run pytest

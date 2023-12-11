@@ -3,7 +3,7 @@ ci:
 
 repos:
     - repo: https://github.com/pycqa/isort
-      rev: 5.12.0
+      rev: 5.13.1
       hooks:
           - id: isort
             files: mne_icalabel
@@ -16,7 +16,7 @@ repos:
             files: mne_icalabel
 
     - repo: https://github.com/astral-sh/ruff-pre-commit
-      rev: v0.1.6
+      rev: v0.1.7
       hooks:
           - id: ruff
             args: [--fix, --exit-non-zero-on-fix]

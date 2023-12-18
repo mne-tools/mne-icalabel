@@ -44,7 +44,7 @@ jobs:
       - name: Prune sphinx environment
         run: sudo rm -R ./doc-build/dev/.doctrees
       - name: Upload documentation
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: doc-dev
           path: ./doc-build/dev

@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 from mne.utils import _check_pandas_installed
 
 from ..config import ICA_LABELS_TO_MNE
-from ..iclabel.config import ICLABEL_STRING_TO_NUMERICAL
+from ..iclabel._config import ICLABEL_STRING_TO_NUMERICAL
 from ..utils._imports import import_optional_dependency
 
 if TYPE_CHECKING:

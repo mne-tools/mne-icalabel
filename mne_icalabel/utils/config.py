@@ -7,9 +7,8 @@ from importlib.metadata import requires, version
 from typing import TYPE_CHECKING
 
 import psutil
+from mne.utils import _validate_type
 from packaging.requirements import Requirement
-
-from ._checks import check_type
 
 if TYPE_CHECKING:
     from typing import IO, Callable, Optional
@@ -26,7 +25,7 @@ def sys_info(fid: Optional[IO] = None, developer: bool = False):
     developer : bool
         If True, display information about optional dependencies.
     """
-    check_type(developer, (bool,), "developer")
+    _validate_type(developer, bool, "developer")
 
     ljust = 26
     out = partial(print, end="", file=fid)

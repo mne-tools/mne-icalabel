@@ -1,4 +1,4 @@
-ICLABEL_NUMERICAL_TO_STRING = {
+ICLABEL_NUMERICAL_TO_STRING: dict[int, str] = {
     0: "brain",
     1: "muscle artifact",
     2: "eye blink",
@@ -8,6 +8,6 @@ ICLABEL_NUMERICAL_TO_STRING = {
     6: "other",
 }
 
-ICLABEL_STRING_TO_NUMERICAL = {
+ICLABEL_STRING_TO_NUMERICAL: dict[str, int] = {
     val: key for key, val in ICLABEL_NUMERICAL_TO_STRING.items()
 }

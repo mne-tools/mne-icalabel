@@ -1,8 +1,13 @@
+from __future__ import annotations  # c.f. PEP 563, PEP 649
+
 import warnings
+from typing import TYPE_CHECKING
 
 import numpy as np
-from mne.io import BaseRaw
-from numpy.typing import ArrayLike, NDArray
+
+if TYPE_CHECKING:
+    from mne.io import BaseRaw
+    from numpy.typing import ArrayLike, NDArray
 
 
 def _mne_to_eeglab_locs(

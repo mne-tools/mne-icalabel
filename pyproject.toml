@@ -51,6 +51,7 @@ all = [
   'mne-icalabel[gui]',
   'mne-icalabel[ica]',
   'mne-icalabel[onnx]',
+  'mne-icalabel[stubs]',
   'mne-icalabel[style]',
   'mne-icalabel[test]',
   'mne-icalabel[torch]',
@@ -89,6 +90,11 @@ ica = [
 ]
 onnx = [
   'onnxruntime',
+]
+stubs = [
+  'isort',
+  'mypy',
+  'ruff>=0.1.8',
 ]
 style = [
   'bibclean',

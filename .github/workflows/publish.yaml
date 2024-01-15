@@ -19,9 +19,11 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --progress-bar off --upgrade pip setuptools
-          python -m pip install --progress-bar off .[build]
+          python -m pip install --progress-bar off -e .[build,stubs]
       - name: Display system information
         run: mne_icalabel-sys_info --developer
+      - name: Generate stub files
+        run: python tools/stubgen.py
       - name: Build and publish
         env:
           TWINE_USERNAME: __token__

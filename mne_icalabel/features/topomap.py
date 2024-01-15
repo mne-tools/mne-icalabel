@@ -1,4 +1,4 @@
-from typing import Dict, Union
+from typing import Union
 
 import numpy as np
 from mne import Info, pick_info
@@ -26,7 +26,7 @@ def get_topomaps(
     image_interp: str = _INTERPOLATION_DEFAULT,  # 'cubic'
     border: Union[float, str] = _BORDER_DEFAULT,  # 'mean'
     extrapolate: str = _EXTRAPOLATE_DEFAULT,  # 'auto' -> 'head' (EEG), 'local' (MEG)
-) -> Dict[str, NDArray[float]]:
+) -> dict[str, NDArray[float]]:
     """Generate an array of scalp topographies for the picked components.
 
     Parameters

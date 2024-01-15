@@ -1,4 +1,4 @@
-from typing import Dict, List, Union
+from typing import Union
 
 from matplotlib import pyplot as plt
 from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg
@@ -49,7 +49,7 @@ class ICAComponentLabeler(QMainWindow):
 
         # dictionary to remember selected labels, with the key as the 'indice'
         # of the component and the value as the 'label'.
-        self.selected_labels: Dict[int, str] = dict()
+        self.selected_labels: dict[int, str] = dict()
 
         # connect signal to slots
         self._connect_signals_to_slots()
@@ -63,9 +63,9 @@ class ICAComponentLabeler(QMainWindow):
 
     def _save_labels(self) -> None:
         """Save the selected labels to the ICA instance."""
-        # convert the dict[int, str] to dict[str, List[int]] with the key as
+        # convert the dict[int, str] to dict[str, list[int]] with the key as
         # 'label' and value as a list of component indices.
-        labels2save: Dict[str, List[int]] = {key: [] for key in self.labels}
+        labels2save: dict[str, list[int]] = {key: [] for key in self.labels}
         for component, label in self.selected_labels.items():
             labels2save[label].append(component)
         # sanity-check: uniqueness
@@ -186,7 +186,7 @@ class ICAComponentLabeler(QMainWindow):
         return self._ica.n_components_
 
     @property
-    def labels(self) -> List[str]:
+    def labels(self) -> list[str]:
         """List of valid labels."""
         return self._labels
 

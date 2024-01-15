@@ -9,7 +9,7 @@ import subprocess
 import sys
 from datetime import date
 from importlib import import_module
-from typing import Dict, Optional
+from typing import Optional
 
 import mne
 from sphinx_gallery.sorting import FileNameSortKey
@@ -261,7 +261,7 @@ issues_github_path = "mne-tools/mne-icalabel"
 # https://www.sphinx-doc.org/en/master/usage/extensions/linkcode.html
 
 
-def linkcode_resolve(domain: str, info: Dict[str, str]) -> Optional[str]:
+def linkcode_resolve(domain: str, info: dict[str, str]) -> Optional[str]:
     """Determine the URL corresponding to a Python object.
 
     Parameters

@@ -5,16 +5,21 @@ Inspired from mne: https://mne.tools/stable/index.html
 Inspired from mne.utils.docs.py by Eric Larson <larson.eric.d@gmail.com>
 """
 
+from __future__ import annotations  # c.f. PEP 563, PEP 649
+
 import sys
-from typing import Callable, Dict, List, Tuple
+from typing import TYPE_CHECKING
 
 from mne.utils.docs import docdict as docdict_mne
 
+if TYPE_CHECKING:
+    from typing import Callable
+
 # ------------------------- Documentation dictionary -------------------------
-docdict: Dict[str, str] = {}
+docdict: dict[str, str] = {}
 
 # ---- Documentation to inc. from MNE ----
-keys: Tuple[str, ...] = (
+keys: tuple[str, ...] = (
     "border_topomap",
     "extrapolate_topomap",
     "verbose",
@@ -29,21 +34,17 @@ for key in keys:
     docdict[key] = entry
 
 # ---- Features ----
-docdict[
-    "image_interp_topomap"
-] = """
+docdict["image_interp_topomap"] = """
 image_interp : str
     The image interpolation to be used. All matplotlib options are
     accepted."""
-docdict[
-    "res_topomap"
-] = """
+docdict["res_topomap"] = """
 res : int
     The resolution of the square topographic map (in pixels)."""
 
 
 # ------------------------- Documentation functions --------------------------
-docdict_indented: Dict[int, Dict[str, str]] = dict()
+docdict_indented: dict[int, dict[str, str]] = dict()
 
 
 def fill_doc(f: Callable) -> Callable:
@@ -89,7 +90,7 @@ def fill_doc(f: Callable) -> Callable:
     return f
 
 
-def _indentcount_lines(lines: List[str]) -> int:
+def _indentcount_lines(lines: list[str]) -> int:
     """Minimum indent for all lines in line list.
 
     >>> lines = [' one', '  two', '   three']

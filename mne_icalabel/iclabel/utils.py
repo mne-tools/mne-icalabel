@@ -1,5 +1,4 @@
 import warnings
-from typing import List, Tuple
 
 import numpy as np
 from mne.io import BaseRaw
@@ -7,8 +6,8 @@ from numpy.typing import ArrayLike, NDArray
 
 
 def _mne_to_eeglab_locs(
-    raw: BaseRaw, picks: List[str]
-) -> Tuple[NDArray[float], NDArray[float]]:
+    raw: BaseRaw, picks: list[str]
+) -> tuple[NDArray[float], NDArray[float]]:
     """Obtain EEGLab-like spherical coordinate from EEG channel positions.
 
     TODO: @JACOB:
@@ -80,7 +79,7 @@ def _mne_to_eeglab_locs(
 
 def _pol2cart(
     theta: NDArray[float], rho: NDArray[float]
-) -> Tuple[NDArray[float], NDArray[float]]:
+) -> tuple[NDArray[float], NDArray[float]]:
     """Convert polar coordinates to cartesian coordinates.
 
     Parameters
@@ -104,7 +103,7 @@ def _next_power_of_2(x) -> int:
 # ----------------------------------------------------------------------------
 def _gdatav4(
     x: ArrayLike, y: ArrayLike, v: ArrayLike, xq: ArrayLike, yq: ArrayLike
-) -> Tuple[ArrayLike, ArrayLike, ArrayLike]:
+) -> tuple[ArrayLike, ArrayLike, ArrayLike]:
     """GDATAV4 MATLAB 4 GRIDDATA interpolation.
 
     Parameters
@@ -175,7 +174,7 @@ def _gdatav4(
 
 def _mergepoints2D(
     x: ArrayLike, y: ArrayLike, v: ArrayLike
-) -> Tuple[ArrayLike, ArrayLike, ArrayLike]:
+) -> tuple[ArrayLike, ArrayLike, ArrayLike]:
     """Averages values for points that are close to each other.
 
     Parameters
@@ -226,7 +225,7 @@ def _mergepoints2D(
 
 
 def _mergesimpts(
-    data: ArrayLike, tols: List[ArrayLike], mode: str = "average"
+    data: ArrayLike, tols: list[ArrayLike], mode: str = "average"
 ) -> ArrayLike:  # noqa
     """
     Parameters
@@ -242,7 +241,7 @@ def _mergesimpts(
     data_ = data.copy()[np.argsort(data[:, 0])]
     newdata = []
     tols_ = np.array(tols)
-    idxs_ready: List[int] = []
+    idxs_ready: list[int] = []
     point = 0
     for point in range(data_.shape[0]):
         if point in idxs_ready:

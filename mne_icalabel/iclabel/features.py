@@ -1,4 +1,4 @@
-from typing import List, Tuple, Union
+from typing import Union
 
 import numpy as np
 from mne import BaseEpochs
@@ -107,7 +107,7 @@ def get_iclabel_features(inst: Union[BaseRaw, BaseEpochs], ica: ICA):
 
 def _retrieve_eeglab_icawinv(
     ica: ICA,
-) -> Tuple[NDArray[float], NDArray[float]]:
+) -> tuple[NDArray[float], NDArray[float]]:
     """
     Retrieve 'icawinv' from an MNE ICA instance.
 
@@ -264,7 +264,7 @@ def _eeg_rpsd(
 def _eeg_rpsd_constants(
     inst: Union[BaseRaw, BaseEpochs],
     ica: ICA,
-) -> Tuple[int, int, int, int, NDArray[int], NDArray[float], NDArray[int]]:
+) -> tuple[int, int, int, int, NDArray[int], NDArray[float], NDArray[int]]:
     """Compute the constants before ``randperm`` is used to compute the subset."""
     # in MATLAB, 'pct_data' variable is never provided and is always initialized
     # to 100. 'pct_data' is only used in a division by 100.. and thus has no

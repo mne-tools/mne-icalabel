@@ -4,7 +4,7 @@ import re
 from pathlib import Path
 
 import pytest
-from mne.utils.logs import verbose
+from mne.utils import verbose
 
 from mne_icalabel.utils._docs import copy_doc, docdict, fill_doc
 

@@ -184,7 +184,7 @@ def _compute_ica_activations(
 
 # ----------------------------------------------------------------------------
 def _eeg_topoplot(
-    inst: Union[BaseRaw, BaseEpochs], icawinv: NDArray[float], picks: List[str]
+    inst: Union[BaseRaw, BaseEpochs], icawinv: NDArray[float], picks: list[str]
 ) -> NDArray[float]:
     """Topoplot feature."""
     ncomp = icawinv.shape[-1]

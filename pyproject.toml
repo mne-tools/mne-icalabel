@@ -101,7 +101,7 @@ style = [
   'yamllint',
 ]
 test = [
-  'mne-bids',
+  'mne-bids>=0.14',
   'mne-icalabel[gui]',
   'mne-icalabel[ica]',
   'mne-icalabel[onnx]',

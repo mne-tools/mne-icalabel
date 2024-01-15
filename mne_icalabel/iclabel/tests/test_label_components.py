@@ -36,6 +36,7 @@ raw.set_eeg_reference("average")
         (make_fixed_length_epochs(raw, duration=1, preload=True), []),
         (make_fixed_length_epochs(raw, duration=5, preload=True), []),
     ),
+)
 @requires_module("onnxruntime")
 def test_label_components_onnx(inst, exclude):
     """Check that label_components does not raise on various data shapes."""

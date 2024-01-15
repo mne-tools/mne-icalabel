@@ -1,3 +1,7 @@
+from __future__ import annotations  # c.f. PEP 563, PEP 649
+
+from typing import TYPE_CHECKING
+
 import numpy as np
 from mne import pick_info
 from mne.channels.layout import _find_topomap_coords
@@ -14,7 +18,7 @@ from ..utils._checks import _validate_ica
 from ..utils._docs import fill_doc
 
 if TYPE_CHECKING:
-    from typing imprt Union
+    from typing import Union
 
     from mne import Info
     from mne.preprocessing import ICA

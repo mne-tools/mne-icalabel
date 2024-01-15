@@ -24,7 +24,7 @@ from mne_icalabel.iclabel.features import (
     _topoplotFast,
     get_iclabel_features,
 )
-from mne_icalabel.iclabel.utils import _mne_to_eeglab_locs
+from mne_icalabel.iclabel._utils import _mne_to_eeglab_locs
 
 dataset_path = icalabel.data_path() / "iclabel"
 

@@ -7,7 +7,7 @@ from mne.io import read_raw
 from scipy.io import loadmat
 
 from mne_icalabel.datasets import icalabel
-from mne_icalabel.iclabel.utils import _gdatav4, _mne_to_eeglab_locs, _next_power_of_2
+from mne_icalabel.iclabel._utils import _gdatav4, _mne_to_eeglab_locs, _next_power_of_2
 
 dataset_path = icalabel.data_path() / "iclabel"
 

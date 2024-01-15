@@ -18,3 +18,4 @@ Version 0.6
 ===========
 
 - Remove splash screen from component labeller GUI (:pr:`149` by `Mathieu Scheltienne`_)
+- Add support for all valid datasets to the command-line entry-point of the GUI (:pr:`159` by `Mathieu Scheltienne`_)

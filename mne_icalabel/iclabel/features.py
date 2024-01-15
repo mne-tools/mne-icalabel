@@ -48,7 +48,8 @@ def get_iclabel_features(inst: Union[BaseRaw, BaseEpochs], ica: ICA):
         raise RuntimeError(
             "Could not find EEG channels in the provided "
             f"{'Raw' if isinstance(inst, BaseRaw) else 'Epochs'} instance. The ICLabel "
-            "model was fitted on EEG data and is not suited for other types of channels."
+            "model was fitted on EEG data and is not suited for other types of "
+            "channels."
         )
 
     # TODO: 'custom_ref_applied' does not necessarily correspond to a CAR reference.

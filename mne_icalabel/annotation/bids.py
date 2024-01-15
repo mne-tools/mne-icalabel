@@ -142,7 +142,7 @@ def mark_component(
         fname = get_bids_path_from_fname(fname)
 
     # read the file
-    with open(fname, "r") as fin:
+    with open(fname) as fin:
         tsv_data = pd.read_csv(
             fin,
             sep="\t",

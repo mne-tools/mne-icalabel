@@ -130,7 +130,7 @@ def test_network_outputs_pytorch():
     assert np.allclose(matlab_labels, torch_labels, atol=1e-7)
 
 
-@requires_onnx
+@requires_module("onnxruntime")
 def test_network_outputs_onnx():
     """
     Compare that the ICLabel network in onnx and matlab outputs the same
@@ -206,7 +206,7 @@ def test_format_input(eeglab_feature_file, eeglab_feature_formatted_file):
         (features_epo_path, iclabel_output_epo_path),
     ],
 )
-@requires_onnx
+@requires_module("onnxruntime")
 def test_run_iclabel_onnx(eeglab_feature_file, eeglab_output_file):
     """Test that the network outputs the same values for the features in
     'features_raw_path' and 'features_epo_path' that contains the features

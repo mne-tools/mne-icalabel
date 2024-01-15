@@ -1,4 +1,6 @@
-from typing import Union
+from __future__ import annotations  # c.f. PEP 563, PEP 649
+
+from typing import TYPE_CHECKING
 
 from matplotlib import pyplot as plt
 from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg
@@ -20,6 +22,9 @@ from qtpy.QtWidgets import (
 )
 
 from mne_icalabel.config import ICA_LABELS_TO_MNE
+
+if TYPE_CHECKING:
+    from typing import Union
 
 
 class ICAComponentLabeler(QMainWindow):

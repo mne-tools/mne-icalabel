@@ -13,41 +13,68 @@ from typing import TYPE_CHECKING
 from mne.utils.docs import docdict as docdict_mne
 
 if TYPE_CHECKING:
-    from typing import Callable
+    from typing import Any, Callable
 
-# ------------------------- Documentation dictionary -------------------------
+# -- Documentation dictionary ----------------------------------------------------------
 docdict: dict[str, str] = {}
 
-# ---- Documentation to inc. from MNE ----
-keys: tuple[str, ...] = (
+# -- Documentation to inc. from MNE ----------------------------------------------------
+_KEYS_MNE: tuple[str, ...] = (
     "border_topomap",
     "extrapolate_topomap",
     "verbose",
 )
 
-for key in keys:
-    entry = docdict_mne[key]
+for key in _KEYS_MNE:
+    entry: str = docdict_mne[key]
     if ".. versionchanged::" in entry:
         entry = entry.replace(".. versionchanged::", ".. versionchanged:: MNE ")
     if ".. versionadded::" in entry:
         entry = entry.replace(".. versionadded::", ".. versionadded:: MNE ")
     docdict[key] = entry
+del key
 
-# ---- Features ----
+# -- A ---------------------------------------------------------------------------------
+# -- B ---------------------------------------------------------------------------------
+# -- C ---------------------------------------------------------------------------------
+# -- D ---------------------------------------------------------------------------------
+# -- E ---------------------------------------------------------------------------------
+# -- F ---------------------------------------------------------------------------------
+# -- G ---------------------------------------------------------------------------------
+# -- H ---------------------------------------------------------------------------------
+# -- I ---------------------------------------------------------------------------------
 docdict["image_interp_topomap"] = """
 image_interp : str
     The image interpolation to be used. All matplotlib options are
     accepted."""
+
+# -- J ---------------------------------------------------------------------------------
+# -- K ---------------------------------------------------------------------------------
+# -- L ---------------------------------------------------------------------------------
+# -- M ---------------------------------------------------------------------------------
+# -- N ---------------------------------------------------------------------------------
+# -- O ---------------------------------------------------------------------------------
+# -- P ---------------------------------------------------------------------------------
+# -- Q ---------------------------------------------------------------------------------
+# -- R ---------------------------------------------------------------------------------
 docdict["res_topomap"] = """
 res : int
     The resolution of the square topographic map (in pixels)."""
 
+# -- S ---------------------------------------------------------------------------------
+# -- T ---------------------------------------------------------------------------------
+# -- U ---------------------------------------------------------------------------------
+# -- V ---------------------------------------------------------------------------------
+# -- W ---------------------------------------------------------------------------------
+# -- X ---------------------------------------------------------------------------------
+# -- Y ---------------------------------------------------------------------------------
+# -- Z ---------------------------------------------------------------------------------
 
 # ------------------------- Documentation functions --------------------------
 docdict_indented: dict[int, dict[str, str]] = dict()
 
 
-def fill_doc(f: Callable) -> Callable:
+def fill_doc(f: Callable[..., Any]) -> Callable[..., Any]:
     """Fill a docstring with docdict entries.
 
     Parameters
@@ -93,16 +120,16 @@ def fill_doc(f: Callable) -> Callable:
 def _indentcount_lines(lines: list[str]) -> int:
     """Minimum indent for all lines in line list.
 
-    >>> lines = [' one', '  two', '   three']
+    >>> lines = [" one", "  two", "   three"]
     >>> indentcount_lines(lines)
     1
     >>> lines = []
     >>> indentcount_lines(lines)
     0
-    >>> lines = [' one']
+    >>> lines = [" one"]
     >>> indentcount_lines(lines)
     1
-    >>> indentcount_lines(['    '])
+    >>> indentcount_lines(["    "])
     0
     """
     indent = sys.maxsize
@@ -115,7 +142,7 @@ def _indentcount_lines(lines: list[str]) -> int:
     return indent
 
 
-def copy_doc(source: Callable) -> Callable:
+def copy_doc(source: Callable[..., Any]) -> Callable[..., Any]:
     """Copy the docstring from another function (decorator).
 
     The docstring of the source function is prepepended to the docstring of the function
@@ -143,13 +170,13 @@ def copy_doc(source: Callable) -> Callable:
     >>> class B(A):
     ...     @copy_doc(A.m1)
     ...     def m1():
-    ...         ''' this gets appended'''
+    ...         '''this gets appended'''
     ...         pass
     >>> print(B.m1.__doc__)
     Docstring for m1 this gets appended
     """
 
-    def wrapper(func):
+    def wrapper(func: Callable[..., Any]) -> Callable[..., Any]:
         if source.__doc__ is None or len(source.__doc__) == 0:
             raise RuntimeError(
                 f"The docstring from {source.__name__} could not be copied because it "

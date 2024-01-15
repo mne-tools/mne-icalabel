@@ -1,13 +1,9 @@
-from typing import Union
-
 import numpy as np
-from mne import Info, pick_info
+from mne import pick_info
 from mne.channels.layout import _find_topomap_coords
 from mne.defaults import _BORDER_DEFAULT, _EXTRAPOLATE_DEFAULT, _INTERPOLATION_DEFAULT
-from mne.preprocessing import ICA
 from mne.utils import _validate_type, check_version
 from mne.viz.topomap import _check_extrapolate, _make_head_outlines, _setup_interp
-from numpy.typing import NDArray
 
 if check_version("mne", "1.6"):
     from mne._fiff.pick import _pick_data_channels, _picks_to_idx
@@ -16,6 +12,13 @@ else:
 
 from ..utils._checks import _validate_ica
 from ..utils._docs import fill_doc
+
+if TYPE_CHECKING:
+    from typing imprt Union
+
+    from mne import Info
+    from mne.preprocessing import ICA
+    from numpy.typing import NDArray
 
 
 @fill_doc

@@ -1,11 +1,17 @@
+from __future__ import annotations  # c.f. PEP 563, PEP 649
+
 import shutil
 from functools import partial
-from typing import Optional
+from typing import TYPE_CHECKING
 
 import pooch
 from mne.datasets import fetch_dataset
 from mne.datasets.utils import has_dataset
 from mne.utils import verbose
+
+if TYPE_CHECKING:
+    from pathlib import Path
+    from typing import Optional
 
 has_icalabel_testing_data = partial(has_dataset, name="icalabel-testing")
 
@@ -17,7 +23,7 @@ def data_path(
     update_path: bool = True,
     download: bool = True,
     verbose=None,
-):
+) -> Path:
     """ICA label testing data generated in conjunction with EEGLab.
 
     Parameters
@@ -42,7 +48,7 @@ def data_path(
 
     Returns
     -------
-    path : str
+    path : Path
         Path to dataset directory.
     """
     dataset_params = dict(

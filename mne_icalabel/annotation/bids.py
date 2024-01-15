@@ -1,15 +1,21 @@
-from pathlib import Path
-from typing import Union
+from __future__ import annotations  # c.f. PEP 563, PEP 649
 
-from mne.preprocessing import ICA
+from typing import TYPE_CHECKING
+
 from mne.utils import _check_pandas_installed
 
 from ..config import ICA_LABELS_TO_MNE
 from ..iclabel.config import ICLABEL_STRING_TO_NUMERICAL
 from ..utils._imports import import_optional_dependency
 
+if TYPE_CHECKING:
+    from pathlib import Path
+    from typing import Union
 
-def write_components_tsv(ica: ICA, fname):
+    from mne.preprocessing import ICA
+
+
+def write_components_tsv(ica: ICA, fname: Union[str, Path]):
     """Write channels tsv file for ICA components.
 
     Will create an accompanying JSON sidecar to explain the

@@ -1,4 +1,9 @@
-from mne.preprocessing import ICA
+from __future__ import annotations  # c.f. PEP 563, PEP 649
+
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from mne.preprocessing import ICA
 
 
 def label_ica_components(inst, ica: ICA, show: bool = True, block: bool = False):

@@ -6,7 +6,7 @@ from pathlib import Path
 import pytest
 from mne.utils import verbose
 
-from mne_icalabel.utils._docs import copy_doc, docdict, fill_doc
+from mne_icalabel.utils._docs import _KEYS_MNE, copy_doc, docdict, fill_doc
 
 
 def test_fill_doc_function():
@@ -23,7 +23,7 @@ def test_fill_doc_function():
         """
         pass
 
-    assert "verbose : int | str | bool | None" in foo.__doc__
+    assert "verbose : bool | str | int | None" in foo.__doc__
 
     # test filling empty-docstring
     @fill_doc
@@ -57,7 +57,7 @@ def test_fill_doc_function():
         """
         pass
 
-    assert "verbose : int | str | bool | None" in foo.__doc__
+    assert "verbose : bool | str | int | None" in foo.__doc__
 
 
 def test_fill_doc_class():
@@ -108,14 +108,14 @@ def test_fill_doc_class():
             """
             pass
 
-    assert "verbose : int | str | bool | None" in Foo.__doc__
-    assert "verbose : int | str | bool | None" in Foo.method.__doc__
-    assert "verbose : int | str | bool | None" in Foo.method_decorated.__doc__
-    assert "verbose : int" in Foo.method_decorated_static.__doc__
+    assert "verbose : bool | str | int | None" in Foo.__doc__
+    assert "verbose : bool | str | int | None" in Foo.method.__doc__
+    assert "verbose : bool | str | int | None" in Foo.method_decorated.__doc__
+    assert "verbose : bool" in Foo.method_decorated_static.__doc__
     foo = Foo()
-    assert "verbose : int | str | bool | None" in foo.__doc__
-    assert "verbose : int | str | bool | None" in foo.method.__doc__
-    assert "verbose : int | str | bool | None" in foo.method_decorated.__doc__
+    assert "verbose : bool | str | int | None" in foo.__doc__
+    assert "verbose : bool | str | int | None" in foo.method.__doc__
+    assert "verbose : bool | str | int | None" in foo.method_decorated.__doc__
 
 
 def test_copy_doc_function():
@@ -215,11 +215,14 @@ def test_copy_doc_class():
 def test_docdict_order():
     """Test that docdict is alphabetical."""
     # read the file as text, and get entries via regex
+    docdict_ = docdict.copy()
+    for key in _KEYS_MNE:
+        del docdict_[key]
     docs_path = Path(__file__).parents[1] / "_docs.py"
     assert docs_path.is_file()
     with open(docs_path, encoding="UTF-8") as fid:
         docs = fid.read()
     entries = re.findall(r'docdict\[(?:\n    )?["\'](.+)["\']\n?\] = ', docs)
     # test length, uniqueness and order
-    assert len(docdict) == len(entries)
+    assert len(docdict_) == len(entries)
     assert sorted(entries) == entries

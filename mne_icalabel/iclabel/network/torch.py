@@ -1,11 +1,17 @@
-from importlib.resources import files  # type: ignore
+from __future__ import annotations  # c.f. PEP 563, PEP 649
+
+from typing import TYPE_CHECKING
+
+from importlib.resources import files
 
 import numpy as np
 import torch
 import torch.nn as nn
-from numpy.typing import ArrayLike, NDArray
 
 from .utils import _format_input
+
+if TYPE_CHECKING:
+    from numpy.typing import ArrayLike, NDArray
 
 
 class _ICLabelNetImg(nn.Module):

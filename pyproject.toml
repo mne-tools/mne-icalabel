@@ -97,6 +97,7 @@ stubs = [
   'mne-icalabel[onnx]',
   'mne-icalabel[torch]',
   'mypy',
+  'PyQt6',
   'ruff>=0.1.8',
 ]
 style = [

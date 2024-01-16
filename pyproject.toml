@@ -42,7 +42,7 @@ maintainers = [
 name = 'mne-icalabel'
 readme = 'README.md'
 requires-python = '~=3.9'
-version = "0.6.0.dev0"
+version = "0.6.0"
 
 [project.optional-dependencies]
 all = [

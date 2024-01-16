@@ -93,6 +93,9 @@ onnx = [
 ]
 stubs = [
   'isort',
+  'mne-icalabel[gui]',
+  'mne-icalabel[onnx]',
+  'mne-icalabel[torch]',
   'mypy',
   'ruff>=0.1.8',
 ]

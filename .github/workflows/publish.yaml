@@ -16,6 +16,10 @@ jobs:
         with:
           python-version: '3.9'
           architecture: 'x64'
+      - name: Setup headless display
+        uses: pyvista/setup-headless-display-action@main
+        with:
+          qt: true
       - name: Install dependencies
         run: |
           python -m pip install --progress-bar off --upgrade pip setuptools

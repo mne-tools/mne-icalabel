@@ -10,6 +10,7 @@ from mne.preprocessing import read_ica_eeglab
 from scipy.io import loadmat
 
 from mne_icalabel.datasets import icalabel
+from mne_icalabel.iclabel._utils import _mne_to_eeglab_locs
 from mne_icalabel.iclabel.features import (
     _compute_ica_activations,
     _eeg_autocorr,
@@ -24,7 +25,6 @@ from mne_icalabel.iclabel.features import (
     _topoplotFast,
     get_iclabel_features,
 )
-from mne_icalabel.iclabel.utils import _mne_to_eeglab_locs
 
 dataset_path = icalabel.data_path() / "iclabel"
 

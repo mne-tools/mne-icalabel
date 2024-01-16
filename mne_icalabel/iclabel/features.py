@@ -1,15 +1,21 @@
-from typing import List, Tuple, Union
+from __future__ import annotations  # c.f. PEP 563, PEP 649
+
+from typing import TYPE_CHECKING
 
 import numpy as np
 from mne import BaseEpochs
 from mne.io import BaseRaw
-from mne.preprocessing import ICA
 from mne.utils import warn
 from numpy.typing import NDArray
 from scipy.signal import resample_poly
 
 from ..utils._checks import _validate_inst_and_ica
-from .utils import _gdatav4, _mne_to_eeglab_locs, _next_power_of_2, _pol2cart
+from ._utils import _gdatav4, _mne_to_eeglab_locs, _next_power_of_2, _pol2cart
+
+if TYPE_CHECKING:
+    from typing import Union
+
+    from mne.preprocessing import ICA
 
 
 def get_iclabel_features(inst: Union[BaseRaw, BaseEpochs], ica: ICA):
@@ -42,7 +48,8 @@ def get_iclabel_features(inst: Union[BaseRaw, BaseEpochs], ica: ICA):
         raise RuntimeError(
             "Could not find EEG channels in the provided "
             f"{'Raw' if isinstance(inst, BaseRaw) else 'Epochs'} instance. The ICLabel "
-            "model was fitted on EEG data and is not suited for other types of channels."
+            "model was fitted on EEG data and is not suited for other types of "
+            "channels."
         )
 
     # TODO: 'custom_ref_applied' does not necessarily correspond to a CAR reference.
@@ -107,7 +114,7 @@ def get_iclabel_features(inst: Union[BaseRaw, BaseEpochs], ica: ICA):
 
 def _retrieve_eeglab_icawinv(
     ica: ICA,
-) -> Tuple[NDArray[float], NDArray[float]]:
+) -> tuple[NDArray[float], NDArray[float]]:
     """
     Retrieve 'icawinv' from an MNE ICA instance.
 
@@ -178,7 +185,7 @@ def _compute_ica_activations(
 
 # ----------------------------------------------------------------------------
 def _eeg_topoplot(
-    inst: Union[BaseRaw, BaseEpochs], icawinv: NDArray[float], picks: List[str]
+    inst: Union[BaseRaw, BaseEpochs], icawinv: NDArray[float], picks: list[str]
 ) -> NDArray[float]:
     """Topoplot feature."""
     ncomp = icawinv.shape[-1]
@@ -264,7 +271,7 @@ def _eeg_rpsd(
 def _eeg_rpsd_constants(
     inst: Union[BaseRaw, BaseEpochs],
     ica: ICA,
-) -> Tuple[int, int, int, int, NDArray[int], NDArray[float], NDArray[int]]:
+) -> tuple[int, int, int, int, NDArray[int], NDArray[float], NDArray[int]]:
     """Compute the constants before ``randperm`` is used to compute the subset."""
     # in MATLAB, 'pct_data' variable is never provided and is always initialized
     # to 100. 'pct_data' is only used in a division by 100.. and thus has no

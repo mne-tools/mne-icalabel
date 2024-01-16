@@ -1,6 +1,3 @@
-ci:
-    skip: [codespell, pydocstyle, yamllint]
-
 repos:
     - repo: https://github.com/pycqa/isort
       rev: 5.13.2
@@ -8,25 +5,23 @@ repos:
           - id: isort
             files: mne_icalabel
 
-    - repo: https://github.com/psf/black-pre-commit-mirror
-      rev: 23.12.1
-      hooks:
-          - id: black
-            args: [--quiet]
-            files: mne_icalabel
-
     - repo: https://github.com/astral-sh/ruff-pre-commit
       rev: v0.1.13
       hooks:
           - id: ruff
-            args: [--fix, --exit-non-zero-on-fix]
+            name: ruff linter
+            args: [--fix]
+            files: mne_icalabel
+          - id: ruff-format
+            name: ruff formatter
             files: mne_icalabel
 
     - repo: https://github.com/codespell-project/codespell
       rev: v2.2.6
       hooks:
           - id: codespell
-            args: [--check-filenames, --ignore-words=.codespellignore]
+            args: [--write-changes]
+            additional_dependencies: [tomli]
 
     - repo: https://github.com/pycqa/pydocstyle
       rev: 6.3.0

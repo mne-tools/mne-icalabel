@@ -1,3 +1,1 @@
-from . import icalabel
-
-__all__ = ["icalabel"]
+from . import icalabel  # noqa: F401

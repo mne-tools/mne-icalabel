@@ -7,7 +7,7 @@ from mne.preprocessing import ICA
 
 from mne_icalabel.config import ICA_LABELS_TO_MNE
 from mne_icalabel.iclabel import iclabel_label_components
-from mne_icalabel.utils._tests import requires_onnx, requires_torch
+from mne_icalabel.utils._tests import requires_module
 
 directory = testing.data_path() / "MEG" / "sample"
 raw = read_raw(directory / "sample_audvis_trunc_raw.fif", preload=False)
@@ -37,7 +37,7 @@ raw.set_eeg_reference("average")
         (make_fixed_length_epochs(raw, duration=5, preload=True), []),
     ),
 )
-@requires_onnx
+@requires_module("onnxruntime")
 def test_label_components_onnx(inst, exclude):
     """Check that label_components does not raise on various data shapes."""
     picks = pick_types(inst.info, eeg=True, exclude=exclude)
@@ -70,7 +70,7 @@ def test_label_components_onnx(inst, exclude):
         (make_fixed_length_epochs(raw, duration=5, preload=True), []),
     ),
 )
-@requires_torch
+@requires_module("torch")
 def test_label_components_torch(inst, exclude):
     """Check that label_components does not raise on various data shapes."""
     picks = pick_types(inst.info, eeg=True, exclude=exclude)

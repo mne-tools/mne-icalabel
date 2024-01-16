@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 .. _tuto-iclabel:
 
@@ -232,7 +231,9 @@ ica.plot_properties(raw, picks=[0, 12], verbose=False)
 # We will stay on the side of caution and assume we cannot blindly remove these.
 
 labels = ic_labels["labels"]
-exclude_idx = [idx for idx, label in enumerate(labels) if label not in ["brain", "other"]]
+exclude_idx = [
+    idx for idx, label in enumerate(labels) if label not in ["brain", "other"]
+]
 print(f"Excluding these ICA components: {exclude_idx}")
 
 # %%
@@ -247,7 +248,9 @@ reconst_raw = raw.copy()
 ica.apply(reconst_raw, exclude=exclude_idx)
 
 raw.plot(order=artifact_picks, n_channels=len(artifact_picks), show_scrollbars=False)
-reconst_raw.plot(order=artifact_picks, n_channels=len(artifact_picks), show_scrollbars=False)
+reconst_raw.plot(
+    order=artifact_picks, n_channels=len(artifact_picks), show_scrollbars=False
+)
 del reconst_raw
 
 # %%

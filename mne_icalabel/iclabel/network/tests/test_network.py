@@ -7,7 +7,7 @@ from scipy.io import loadmat
 
 from mne_icalabel.datasets import icalabel
 from mne_icalabel.iclabel.network.utils import _format_input
-from mne_icalabel.utils._tests import requires_onnx, requires_torch
+from mne_icalabel.utils._tests import requires_module
 
 dataset_path = icalabel.data_path() / "iclabel"
 
@@ -82,7 +82,7 @@ def test_weights_pytorch():
         assert np.allclose(network_python[python_layer], weights_matlab[idx])
 
 
-@requires_torch
+@requires_module("torch")
 def test_network_outputs_pytorch():
     """
     Compare that the ICLabel network in pytorch and matlab outputs the same
@@ -130,7 +130,7 @@ def test_network_outputs_pytorch():
     assert np.allclose(matlab_labels, torch_labels, atol=1e-7)
 
 
-@requires_onnx
+@requires_module("onnxruntime")
 def test_network_outputs_onnx():
     """
     Compare that the ICLabel network in onnx and matlab outputs the same
@@ -206,7 +206,7 @@ def test_format_input(eeglab_feature_file, eeglab_feature_formatted_file):
         (features_epo_path, iclabel_output_epo_path),
     ],
 )
-@requires_onnx
+@requires_module("onnxruntime")
 def test_run_iclabel_onnx(eeglab_feature_file, eeglab_output_file):
     """Test that the network outputs the same values for the features in
     'features_raw_path' and 'features_epo_path' that contains the features
@@ -236,7 +236,7 @@ def test_run_iclabel_onnx(eeglab_feature_file, eeglab_output_file):
         (features_epo_path, iclabel_output_epo_path),
     ],
 )
-@requires_torch
+@requires_module("torch")
 def test_run_iclabel_pytorch(eeglab_feature_file, eeglab_output_file):
     """Test that the network outputs the same values for the features in
     'features_raw_path' and 'features_epo_path' that contains the features

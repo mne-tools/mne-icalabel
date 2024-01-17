@@ -7,5 +7,4 @@ class WrapStdOut:
     properly.
     """
 
-    def __getattr__(self, name: str) -> Any:
-        ...
+    def __getattr__(self, name: str) -> Any: ...

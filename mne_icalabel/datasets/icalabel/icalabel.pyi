@@ -5,7 +5,13 @@ from _typeshed import Incomplete
 
 has_icalabel_testing_data: Incomplete
 
-def data_path(path: Optional[str]=None, force_update: bool=False, update_path: bool=True, download: bool=True, verbose: Incomplete | None=None) -> Path:
+def data_path(
+    path: Optional[str] = None,
+    force_update: bool = False,
+    update_path: bool = True,
+    download: bool = True,
+    verbose: Incomplete | None = None,
+) -> Path:
     """ICA label testing data generated in conjunction with EEGLab.
 
     Parameters
@@ -26,7 +32,7 @@ def data_path(path: Optional[str]=None, force_update: bool=False, update_path: b
         it will not be downloaded and the path will be returned
         as ‘’ (empty string). This is mostly used for debugging purposes
         and can be safely ignored by most users.
-    
+
     verbose : bool | str | int | None
         Control verbosity of the logging output. If ``None``, use the default
         verbosity level. See the :ref:`logging documentation <tut-logging>` and

@@ -52,7 +52,9 @@ def _retrieve_eeglab_icawinv(ica: ICA) -> tuple[NDArray[float], NDArray[float]]:
     weights : array
     """
 
-def _compute_ica_activations(inst: Union[BaseRaw, BaseEpochs], ica: ICA) -> NDArray[float]:
+def _compute_ica_activations(
+    inst: Union[BaseRaw, BaseEpochs], ica: ICA
+) -> NDArray[float]:
     """Compute the ICA activations 'icaact' variable from an MNE ICA instance.
 
     Parameters
@@ -83,25 +85,45 @@ def _compute_ica_activations(inst: Union[BaseRaw, BaseEpochs], ica: ICA) -> NDAr
     average reference.
     """
 
-def _eeg_topoplot(inst: Union[BaseRaw, BaseEpochs], icawinv: NDArray[float], picks: list[str]) -> NDArray[float]:
+def _eeg_topoplot(
+    inst: Union[BaseRaw, BaseEpochs], icawinv: NDArray[float], picks: list[str]
+) -> NDArray[float]:
     """Topoplot feature."""
 
-def _topoplotFast(values: NDArray[float], rd: NDArray[float], th: NDArray[float]) -> NDArray[float]:
+def _topoplotFast(
+    values: NDArray[float], rd: NDArray[float], th: NDArray[float]
+) -> NDArray[float]:
     """Implement topoplotFast.m from MATLAB. Each topographic map is a 32x32 images."""
 
-def _eeg_rpsd(inst: Union[BaseRaw, BaseEpochs], ica: ICA, icaact: NDArray[float]) -> NDArray[float]:
+def _eeg_rpsd(
+    inst: Union[BaseRaw, BaseEpochs], ica: ICA, icaact: NDArray[float]
+) -> NDArray[float]:
     """PSD feature."""
 
-def _eeg_rpsd_constants(inst: Union[BaseRaw, BaseEpochs], ica: ICA) -> tuple[int, int, int, int, NDArray[int], NDArray[float], NDArray[int]]:
+def _eeg_rpsd_constants(
+    inst: Union[BaseRaw, BaseEpochs], ica: ICA
+) -> tuple[int, int, int, int, NDArray[int], NDArray[float], NDArray[int]]:
     """Compute the constants before ``randperm`` is used to compute the subset."""
 
-def _eeg_rpsd_compute_psdmed(inst: Union[BaseRaw, BaseEpochs], icaact: NDArray[float], ncomp: int, nfreqs: int, n_points: int, nyquist: int, index: NDArray[int], window: NDArray[float], subset: NDArray[int]) -> NDArray[float]:
+def _eeg_rpsd_compute_psdmed(
+    inst: Union[BaseRaw, BaseEpochs],
+    icaact: NDArray[float],
+    ncomp: int,
+    nfreqs: int,
+    n_points: int,
+    nyquist: int,
+    index: NDArray[int],
+    window: NDArray[float],
+    subset: NDArray[int],
+) -> NDArray[float]:
     """Compute the variable 'psdmed', annotated as windowed spectrums."""
 
 def _eeg_rpsd_format(psd: NDArray[float]) -> NDArray[float]:
     """Apply the formatting steps after 'eeg_rpsd.m'."""
 
-def _eeg_autocorr_welch(raw: BaseRaw, ica: ICA, icaact: NDArray[float]) -> NDArray[float]:
+def _eeg_autocorr_welch(
+    raw: BaseRaw, ica: ICA, icaact: NDArray[float]
+) -> NDArray[float]:
     """Autocorrelation feature applied on raw object with at least 5 * fs samples.
 
     MATLAB: 'eeg_autocorr_welch.m'.
@@ -113,7 +135,9 @@ def _eeg_autocorr(raw: BaseRaw, ica: ICA, icaact: NDArray[float]) -> NDArray[flo
     MATLAB: 'eeg_autocorr.m'.
     """
 
-def _eeg_autocorr_fftw(epochs: BaseEpochs, ica: ICA, icaact: NDArray[float]) -> NDArray[float]:
+def _eeg_autocorr_fftw(
+    epochs: BaseEpochs, ica: ICA, icaact: NDArray[float]
+) -> NDArray[float]:
     """Autocorrelation feature applied on epoch object.
 
     MATLAB: 'eeg_autocorr_fftw.m'.

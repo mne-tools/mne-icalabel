@@ -3,7 +3,9 @@ from typing import Optional
 
 _INSTALL_MAPPING: dict[str, str]
 
-def import_optional_dependency(name: str, extra: str='', raise_error: bool=True) -> Optional[ModuleType]:
+def import_optional_dependency(
+    name: str, extra: str = "", raise_error: bool = True
+) -> Optional[ModuleType]:
     """Import an optional dependency.
 
     By default, if a dependency is missing an ImportError with a nice message will be

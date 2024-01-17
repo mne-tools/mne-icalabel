@@ -33,7 +33,14 @@ def write_components_tsv(ica: ICA, fname: Union[str, Path]):
     as the community converges on the specification of BIDS-Derivatives.
     """
 
-def mark_component(component: int, fname: Union[str, Path], method: str, label: str, author: str, strict_label: bool=True):
+def mark_component(
+    component: int,
+    fname: Union[str, Path],
+    method: str,
+    label: str,
+    author: str,
+    strict_label: bool = True,
+):
     """Mark a component with a label.
 
     Parameters

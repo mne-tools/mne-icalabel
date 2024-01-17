@@ -1,7 +1,9 @@
 from mne.io import BaseRaw
 from numpy.typing import ArrayLike, NDArray
 
-def _mne_to_eeglab_locs(raw: BaseRaw, picks: list[str]) -> tuple[NDArray[float], NDArray[float]]:
+def _mne_to_eeglab_locs(
+    raw: BaseRaw, picks: list[str]
+) -> tuple[NDArray[float], NDArray[float]]:
     """Obtain EEGLab-like spherical coordinate from EEG channel positions.
 
     TODO: @JACOB:
@@ -25,7 +27,9 @@ def _mne_to_eeglab_locs(raw: BaseRaw, picks: list[str]) -> tuple[NDArray[float],
         Degree in spherical coordinates of each EEG channel.
     """
 
-def _pol2cart(theta: NDArray[float], rho: NDArray[float]) -> tuple[NDArray[float], NDArray[float]]:
+def _pol2cart(
+    theta: NDArray[float], rho: NDArray[float]
+) -> tuple[NDArray[float], NDArray[float]]:
     """Convert polar coordinates to cartesian coordinates.
 
     Parameters
@@ -39,7 +43,9 @@ def _pol2cart(theta: NDArray[float], rho: NDArray[float]) -> tuple[NDArray[float
 def _next_power_of_2(x) -> int:
     """Equivalent to 2^nextpow2 in MATLAB."""
 
-def _gdatav4(x: ArrayLike, y: ArrayLike, v: ArrayLike, xq: ArrayLike, yq: ArrayLike) -> tuple[ArrayLike, ArrayLike, ArrayLike]:
+def _gdatav4(
+    x: ArrayLike, y: ArrayLike, v: ArrayLike, xq: ArrayLike, yq: ArrayLike
+) -> tuple[ArrayLike, ArrayLike, ArrayLike]:
     """GDATAV4 MATLAB 4 GRIDDATA interpolation.
 
     Parameters
@@ -69,7 +75,9 @@ def _gdatav4(x: ArrayLike, y: ArrayLike, v: ArrayLike, xq: ArrayLike, yq: ArrayL
     Describes interpolation using value of gradient of value in any dimension.
     """
 
-def _mergepoints2D(x: ArrayLike, y: ArrayLike, v: ArrayLike) -> tuple[ArrayLike, ArrayLike, ArrayLike]:
+def _mergepoints2D(
+    x: ArrayLike, y: ArrayLike, v: ArrayLike
+) -> tuple[ArrayLike, ArrayLike, ArrayLike]:
     """Averages values for points that are close to each other.
 
     Parameters
@@ -88,7 +96,9 @@ def _mergepoints2D(x: ArrayLike, y: ArrayLike, v: ArrayLike) -> tuple[ArrayLike,
     v : array
     """
 
-def _mergesimpts(data: ArrayLike, tols: list[ArrayLike], mode: str='average') -> ArrayLike:
+def _mergesimpts(
+    data: ArrayLike, tols: list[ArrayLike], mode: str = "average"
+) -> ArrayLike:
     """
     Parameters
     ----------

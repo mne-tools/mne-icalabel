@@ -8,7 +8,14 @@ from numpy.typing import NDArray
 from ..utils._checks import _validate_ica as _validate_ica
 from ..utils._docs import fill_doc as fill_doc
 
-def get_topomaps(ica: ICA, picks: Incomplete | None=None, res: int=64, image_interp: str=..., border: Union[float, str]=..., extrapolate: str=...) -> dict[str, NDArray[float]]:
+def get_topomaps(
+    ica: ICA,
+    picks: Incomplete | None = None,
+    res: int = 64,
+    image_interp: str = ...,
+    border: Union[float, str] = ...,
+    extrapolate: str = ...,
+) -> dict[str, NDArray[float]]:
     """Generate an array of scalp topographies for the picked components.
 
     Parameters
@@ -31,7 +38,7 @@ def get_topomaps(ica: ICA, picks: Incomplete | None=None, res: int=64, image_int
         then each extrapolated point has the average value of its neighbours.
     extrapolate : str
         Options:
-    
+
         - ``'box'``
             Extrapolate to four points placed to form a square encompassing all
             data points, where each side of the square is three times the range
@@ -52,7 +59,14 @@ def get_topomaps(ica: ICA, picks: Incomplete | None=None, res: int=64, image_int
         Dictionary of ICs topographic maps for each channel type.
     """
 
-def _get_topomap_array(data: NDArray[float], info: Info, res: int=64, image_interp: str=..., border: Union[float, str]=..., extrapolate: str=...) -> NDArray[float]:
+def _get_topomap_array(
+    data: NDArray[float],
+    info: Info,
+    res: int = 64,
+    image_interp: str = ...,
+    border: Union[float, str] = ...,
+    extrapolate: str = ...,
+) -> NDArray[float]:
     """Generate a scalp topographic map (n_pixels, n_pixels).
 
     Parameters
@@ -72,7 +86,7 @@ def _get_topomap_array(data: NDArray[float], info: Info, res: int=64, image_inte
         then each extrapolated point has the average value of its neighbours.
     extrapolate : str
         Options:
-    
+
         - ``'box'``
             Extrapolate to four points placed to form a square encompassing all
             data points, where each side of the square is three times the range

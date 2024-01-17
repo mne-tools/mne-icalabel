@@ -14,11 +14,8 @@ class _ICLabelNetImg(nn.Module):
     relu3: Incomplete
     sequential: Incomplete
 
-    def __init__(self) -> None:
-        ...
-
-    def forward(self, x):
-        ...
+    def __init__(self) -> None: ...
+    def forward(self, x): ...
 
 class _ICLabelNetPSDS(nn.Module):
     conv1: Incomplete
@@ -29,11 +26,8 @@ class _ICLabelNetPSDS(nn.Module):
     relu3: Incomplete
     sequential: Incomplete
 
-    def __init__(self) -> None:
-        ...
-
-    def forward(self, x):
-        ...
+    def __init__(self) -> None: ...
+    def forward(self, x): ...
 
 class _ICLabelNetAutocorr(nn.Module):
     conv1: Incomplete
@@ -44,14 +38,12 @@ class _ICLabelNetAutocorr(nn.Module):
     relu3: Incomplete
     sequential: Incomplete
 
-    def __init__(self) -> None:
-        ...
-
-    def forward(self, x):
-        ...
+    def __init__(self) -> None: ...
+    def forward(self, x): ...
 
 class ICLabelNet(nn.Module):
     """The ICLabel neural network."""
+
     img_conv: Incomplete
     psds_conv: Incomplete
     autocorr_conv: Incomplete
@@ -59,18 +51,13 @@ class ICLabelNet(nn.Module):
     softmax: Incomplete
     seq: Incomplete
 
-    def __init__(self) -> None:
-        ...
-
+    def __init__(self) -> None: ...
     @staticmethod
-    def reshape_fortran(x: torch.Tensor, shape) -> torch.Tensor:
-        ...
-
-    def reshape_concat(self, tensor: torch.Tensor) -> torch.Tensor:
-        ...
-
-    def forward(self, images: torch.Tensor, psds: torch.Tensor, autocorr: torch.Tensor) -> torch.Tensor:
-        ...
+    def reshape_fortran(x: torch.Tensor, shape) -> torch.Tensor: ...
+    def reshape_concat(self, tensor: torch.Tensor) -> torch.Tensor: ...
+    def forward(
+        self, images: torch.Tensor, psds: torch.Tensor, autocorr: torch.Tensor
+    ) -> torch.Tensor: ...
 
 def _format_input_for_torch(topo: ArrayLike, psd: ArrayLike, autocorr: ArrayLike):
     """Format the features to the correct shape and type for pytorch."""

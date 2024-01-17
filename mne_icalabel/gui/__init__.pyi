@@ -1,6 +1,6 @@
 from mne.preprocessing import ICA
 
-def label_ica_components(inst, ica: ICA, show: bool=True, block: bool=False):
+def label_ica_components(inst, ica: ICA, show: bool = True, block: bool = False):
     """Launch the IC labelling GUI.
 
     Parameters

@@ -17,15 +17,16 @@ class ICAComponentLabeler(QMainWindow):
     ica : ICA
     show : bool
     """
+
     _inst: Incomplete
     _ica: Incomplete
     _labels: Incomplete
     selected_labels: Incomplete
     _selected_component: int
 
-    def __init__(self, inst: Union[BaseRaw, BaseEpochs], ica: ICA, show: bool=True) -> None:
-        ...
-
+    def __init__(
+        self, inst: Union[BaseRaw, BaseEpochs], ica: ICA, show: bool = True
+    ) -> None: ...
     def _save_labels(self) -> None:
         """Save the selected labels to the ICA instance."""
     _central_widget: Incomplete

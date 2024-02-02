@@ -54,46 +54,34 @@ class ICAComponentLabeler(QMainWindow):
             - topomap
             - psd
         """
-
     @staticmethod
     def _check_inst_ica(inst: Union[BaseRaw, BaseEpochs], ica: ICA) -> None:
         """Check if the ICA was fitted."""
-
     @property
     def inst(self) -> Union[BaseRaw, BaseEpochs]:
         """Instance on which the ICA has been fitted."""
-
     @property
     def ica(self) -> ICA:
         """Fitted ICA decomposition."""
-
     @property
     def n_components_(self) -> int:
         """The number of fitted components."""
-
     @property
     def labels(self) -> list[str]:
         """List of valid labels."""
-
     @property
     def selected_component(self) -> int:
         """IC selected and displayed."""
-
     def _connect_signals_to_slots(self) -> None:
         """Connect all the signals and slots of the GUI."""
-
     def _components_listWidget_clicked(self) -> None:
         """Update the plots and the saved labels accordingly."""
-
     def _update_selected_labels(self) -> None:
         """Update the labels saved."""
-
     def _reset(self) -> None:
         """Action of the reset button."""
-
     def _reset_buttons(self) -> None:
         """Reset all buttons."""
-
     def closeEvent(self, event) -> None:
         """Clean up upon closing the window.
 

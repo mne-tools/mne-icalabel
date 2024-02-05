@@ -49,6 +49,7 @@ jobs:
           files: ./coverage.xml
           flags: unittests  # optional
           name: codecov-umbrella  # optional
+          token: ${{ secrets.CODECOV_TOKEN }}
           verbose: true  # optional (default = false)
 
   pytest-pip-pre:
@@ -91,4 +92,5 @@ jobs:
           files: ./coverage.xml
           flags: unittests  # optional
           name: codecov-umbrella  # optional
+          token: ${{ secrets.CODECOV_TOKEN }}
           verbose: true  # optional (default = false)

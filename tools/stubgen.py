@@ -63,5 +63,5 @@ for stub in stubs:
     isort.file(stub, config=config_isort)
 
 # run ruff to improve stub style
-exec = subprocess.run(["ruff", "format", str(directory), "--config", config])
-sys.exit(exec.returncode)
+execution = subprocess.run(["ruff", "format", str(directory), "--config", config])
+sys.exit(execution.returncode)

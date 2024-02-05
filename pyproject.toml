@@ -118,7 +118,7 @@ test = [
   'pandas',
   'pymatreader',
   'PyQt6',
-  'pytest',
+  'pytest>=8.0.0',
   'pytest-cov',
 ]
 torch = [
@@ -185,7 +185,7 @@ match-dir = '^mne_icalabel.*'
 [tool.pytest.ini_options]
 addopts = '--durations 20 --junit-xml=junit-results.xml -v --color=yes'
 junit_family = 'xunit2'
-minversion = '6.0'
+minversion = '8.0'
 
 [tool.ruff]
 extend-exclude = [

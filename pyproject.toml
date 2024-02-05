@@ -118,8 +118,8 @@ test = [
   'pandas',
   'pymatreader',
   'PyQt6',
-  'pytest',
   'pytest-cov',
+  'pytest>=8.0.0',
 ]
 torch = [
   'torch',
@@ -185,22 +185,24 @@ match-dir = '^mne_icalabel.*'
 [tool.pytest.ini_options]
 addopts = '--durations 20 --junit-xml=junit-results.xml -v --color=yes'
 junit_family = 'xunit2'
-minversion = '6.0'
+minversion = '8.0'
 
 [tool.ruff]
 extend-exclude = [
   'doc',
   'setup.py',
 ]
-ignore = []
 line-length = 88
-select = ["E", "F", "UP", "W"]
 target-version = 'py39'
 
 [tool.ruff.format]
 docstring-code-format = true
 
-[tool.ruff.per-file-ignores]
+[tool.ruff.lint]
+ignore = []
+select = ["E", "F", "UP", "W"]
+
+[tool.ruff.lint.per-file-ignores]
 '*' = [
   "UP007", # 'Use `X | Y` for type annotations', requires python 3.10
 ]

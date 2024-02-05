@@ -42,7 +42,7 @@ def data_path(
     download : bool
         If False and the dataset has not been downloaded yet,
         it will not be downloaded and the path will be returned
-        as ‘’ (empty string). This is mostly used for debugging purposes
+        as ``‘’`` (empty string). This is mostly used for debugging purposes
         and can be safely ignored by most users.
     %(verbose)s
 

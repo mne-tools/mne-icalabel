@@ -59,9 +59,13 @@ def sys_info(fid: Optional[IO] = None, developer: bool = False):
         keys = (
             "build",
             "doc",
-            "test",
+            "gui",
+            "ica",
+            "onnx",
             "stubs",
             "style",
+            "test",
+            "torch",
         )
         for key in keys:
             extra_dependencies = [

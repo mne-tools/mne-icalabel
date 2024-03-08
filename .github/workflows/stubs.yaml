@@ -1,0 +1,47 @@
+name: stubs
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.number }}-${{ github.event.ref }}
+  cancel-in-progress: true
+on:  # yamllint disable-line rule:truthy
+  pull_request:
+  schedule:
+    - cron: '0 3 * * *'
+  workflow_dispatch:
+
+jobs:
+  generate:
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Setup Python 3.9
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.9
+          architecture: 'x64'
+      - name: Setup headless display
+        uses: pyvista/setup-headless-display-action@main
+        with:
+          qt: true
+      - name: Install package
+        run: |
+          python -m pip install --progress-bar off --upgrade pip setuptools
+          python -m pip install --progress-bar off -e .[stubs]
+      - name: Display system information
+        run: mne_icalabel-sys_info --developer
+      - name: Generate stub files
+        run: python tools/stubgen.py
+      - name: Push stub files
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          if [ -n "$(git status --porcelain)" ]; then
+            git add mne_icalabel/\*.pyi
+            git commit -m "deploy stub files [ci skip]"
+            git push
+          fi

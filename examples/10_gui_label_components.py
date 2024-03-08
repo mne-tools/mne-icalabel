@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 .. _tuto-gui-label-components:
 

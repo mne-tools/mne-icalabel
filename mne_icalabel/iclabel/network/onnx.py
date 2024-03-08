@@ -1,10 +1,15 @@
-from importlib.resources import files  # type: ignore
+from __future__ import annotations  # c.f. PEP 563, PEP 649
+
+from importlib.resources import files
+from typing import TYPE_CHECKING
 
 import numpy as np
 import onnxruntime as ort
-from numpy.typing import ArrayLike, NDArray
 
 from .utils import _format_input
+
+if TYPE_CHECKING:
+    from numpy.typing import ArrayLike, NDArray
 
 
 def _format_input_for_onnx(topo: ArrayLike, psd: ArrayLike, autocorr: ArrayLike):

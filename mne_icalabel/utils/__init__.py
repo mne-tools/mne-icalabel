@@ -1,1 +1,1 @@
-from ._docs import fill_doc  # noqa: F401
+from . import config  # noqa: F401

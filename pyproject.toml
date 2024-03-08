@@ -43,7 +43,7 @@ maintainers = [
 name = 'mne-icalabel'
 readme = 'README.md'
 requires-python = '~=3.9'
-version = "0.6.0.dev0"
+version = "0.7.0.dev0"
 
 [project.optional-dependencies]
 all = [
@@ -52,6 +52,7 @@ all = [
   'mne-icalabel[gui]',
   'mne-icalabel[ica]',
   'mne-icalabel[onnx]',
+  'mne-icalabel[stubs]',
   'mne-icalabel[style]',
   'mne-icalabel[test]',
   'mne-icalabel[torch]',
@@ -91,18 +92,26 @@ ica = [
 onnx = [
   'onnxruntime',
 ]
+stubs = [
+  'isort',
+  'mne-icalabel[gui]',
+  'mne-icalabel[onnx]',
+  'mne-icalabel[torch]',
+  'mypy',
+  'PyQt6',
+  'ruff>=0.1.8',
+]
 style = [
   'bibclean',
-  'black',
-  'codespell',
+  'codespell[toml]>=2.2.4',
   'isort',
   'pydocstyle[toml]',
-  'ruff',
+  'ruff>=0.1.13',
   'toml-sort',
   'yamllint',
 ]
 test = [
-  'mne-bids',
+  'mne-bids>=0.14',
   'mne-icalabel[gui]',
   'mne-icalabel[ica]',
   'mne-icalabel[onnx]',
@@ -110,8 +119,8 @@ test = [
   'pandas',
   'pymatreader',
   'PyQt6',
-  'pytest',
   'pytest-cov',
+  'pytest>=8.0.0',
 ]
 torch = [
   'torch',
@@ -126,19 +135,11 @@ documentation = 'https://mne.tools/mne-icalabel'
 source = 'https://github.com/mne-tools/mne-icalabel'
 tracker = 'https://github.com/mne-tools/mne-icalabel/issues'
 
-[tool.black]
-extend-exclude = '''
-(
-      __pycache__
-    | .github
-    | setup.py
-    | doc/
-    | examples/
-)
-'''
-include = '\.pyi?$'
-line-length = 88
-target-version = ['py39']
+[tool.codespell]
+check-filenames = true
+check-hidden = true
+ignore-words = '.codespellignore'
+skip = 'build,.git,.mypy_cache,.pytest_cache'
 
 [tool.coverage.report]
 exclude_lines = [
@@ -156,6 +157,7 @@ omit = [
   '**/mne_icalabel/_version.py',
   '**/mne_icalabel/commands/*',
   '**/mne_icalabel/conftest.py',
+  '**/mne_icalabel/utils/_fixes.py',
   '**/tests/**',
 ]
 
@@ -184,7 +186,7 @@ match-dir = '^mne_icalabel.*'
 [tool.pytest.ini_options]
 addopts = '--durations 20 --junit-xml=junit-results.xml -v --color=yes'
 junit_family = 'xunit2'
-minversion = '6.0'
+minversion = '8.0'
 
 [tool.ruff]
 extend-exclude = [
@@ -192,8 +194,20 @@ extend-exclude = [
   'setup.py',
 ]
 line-length = 88
+target-version = 'py39'
 
-[tool.ruff.per-file-ignores]
+[tool.ruff.format]
+docstring-code-format = true
+
+[tool.ruff.lint]
+ignore = []
+select = ["E", "F", "UP", "W"]
+
+[tool.ruff.lint.per-file-ignores]
+'*' = [
+  "UP007", # 'Use `X | Y` for type annotations', requires python 3.10
+]
+'*.pyi' = ['E501']
 '__init__.py' = ['F401']
 
 [tool.setuptools]

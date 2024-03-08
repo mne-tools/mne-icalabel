@@ -21,7 +21,7 @@ jobs:
         with:
           path: ./main
       - name: Setup Python 3.9
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: 3.9
           architecture: 'x64'
@@ -44,7 +44,7 @@ jobs:
       - name: Prune sphinx environment
         run: sudo rm -R ./doc-build/dev/.doctrees
       - name: Upload documentation
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: doc-dev
           path: ./doc-build/dev
@@ -63,7 +63,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
       - name: Download documentation
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: doc-dev
           path: ./doc-dev

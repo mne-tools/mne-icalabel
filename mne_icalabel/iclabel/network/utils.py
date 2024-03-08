@@ -1,12 +1,16 @@
-from typing import Tuple
+from __future__ import annotations  # c.f. PEP 563, PEP 649
+
+from typing import TYPE_CHECKING
 
 import numpy as np
-from numpy.typing import ArrayLike, NDArray
+
+if TYPE_CHECKING:
+    from numpy.typing import ArrayLike, NDArray
 
 
 def _format_input(
     topo: ArrayLike, psd: ArrayLike, autocorr: ArrayLike
-) -> Tuple[NDArray, NDArray, NDArray]:
+) -> tuple[NDArray, NDArray, NDArray]:
     """Replicate the input formatting in EEGLAB -ICLabel.
 
     .. code-block:: matlab

@@ -55,7 +55,7 @@ Methods
             pip install mne-icalabel[ica]
 
             # developer dependencies
-            pip install mne-icalabel[doc,style,test]
+            pip install mne-icalabel[doc,stubs,style,test]
 
             # all of the above
             pip install mne-icalabel[all]

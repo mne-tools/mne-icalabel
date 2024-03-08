@@ -1,3 +1,5 @@
+import platform
+
 import numpy as np
 import pytest
 from mne import create_info, make_fixed_length_epochs, pick_types
@@ -36,6 +38,10 @@ raw.set_eeg_reference("average")
         (make_fixed_length_epochs(raw, duration=1, preload=True), []),
         (make_fixed_length_epochs(raw, duration=5, preload=True), []),
     ),
+)
+@pytest.mark.skipif(
+    platform.system() == "Windows" and os.getenv("GITHUB_ACTIONS", "") == "true",
+    reason="Unnavailable on windows server CIs.",
 )
 @requires_module("onnxruntime")
 def test_label_components_onnx(inst, exclude):

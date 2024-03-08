@@ -1,4 +1,5 @@
-from importlib.resources import files  # type: ignore
+import platform
+from importlib.resources import files
 
 import numpy as np
 import pytest
@@ -130,6 +131,10 @@ def test_network_outputs_pytorch():
     assert np.allclose(matlab_labels, torch_labels, atol=1e-7)
 
 
+@pytest.mark.skipif(
+    platform.system() == "Windows" and os.getenv("GITHUB_ACTIONS", "") == "true",
+    reason="Unnavailable on windows server CIs.",
+)
 @requires_module("onnxruntime")
 def test_network_outputs_onnx():
     """
@@ -205,6 +210,10 @@ def test_format_input(eeglab_feature_file, eeglab_feature_formatted_file):
         (features_raw_path, iclabel_output_raw_path),
         (features_epo_path, iclabel_output_epo_path),
     ],
+)
+@pytest.mark.skipif(
+    platform.system() == "Windows" and os.getenv("GITHUB_ACTIONS", "") == "true",
+    reason="Unnavailable on windows server CIs.",
 )
 @requires_module("onnxruntime")
 def test_run_iclabel_onnx(eeglab_feature_file, eeglab_output_file):

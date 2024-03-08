@@ -11,7 +11,7 @@ def pytest_configure(config):
     # pandas 3.0 will require pyarrow
     ignore:\n*Pyarrow will become a required dependency of pandas.*:DeprecationWarning
     # Python 3.12+ gives a deprecation warning if TarFile.extraction_filter is None
-    ignore:*filter extracted tar archives*:DeprecationWarning
+    ignore:Python 3\.14 will, by default, filter extracted tar.*:DeprecationWarning
     """
     for warning_line in warnings_lines.split("\n"):
         warning_line = warning_line.strip()

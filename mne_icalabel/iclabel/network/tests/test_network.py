@@ -133,10 +133,6 @@ def test_network_outputs_pytorch():
 
 
 @requires_module("onnxruntime")
-@pytest.mark.skipif(
-    platform.system() == "Windows" and os.getenv("GITHUB_ACTIONS", "") == "true",
-    reason="Unnavailable on windows server CIs.",
-)
 def test_network_outputs_onnx():
     """
     Compare that the ICLabel network in onnx and matlab outputs the same
@@ -213,10 +209,6 @@ def test_format_input(eeglab_feature_file, eeglab_feature_formatted_file):
     ],
 )
 @requires_module("onnxruntime")
-@pytest.mark.skipif(
-    platform.system() == "Windows" and os.getenv("GITHUB_ACTIONS", "") == "true",
-    reason="Unnavailable on windows server CIs.",
-)
 def test_run_iclabel_onnx(eeglab_feature_file, eeglab_output_file):
     """Test that the network outputs the same values for the features in
     'features_raw_path' and 'features_epo_path' that contains the features

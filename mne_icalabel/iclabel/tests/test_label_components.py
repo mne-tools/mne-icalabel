@@ -124,8 +124,9 @@ def test_warnings():
         random_state=101,
     )
     ica.fit(raw)
-    with pytest.warns(RuntimeWarning, match="common average reference"), pytest.warns(
-        RuntimeWarning, match="not filtered between 1 and 100 Hz"
+    with (
+        pytest.warns(RuntimeWarning, match="common average reference"),
+        pytest.warns(RuntimeWarning, match="not filtered between 1 and 100 Hz"),
     ):
         iclabel_label_components(raw, ica)
     with raw.info._unlock():

@@ -5,7 +5,7 @@ concurrency:
 on:  # yamllint disable-line rule:truthy
   pull_request:
   push:
-    branches: [main, maint/0.2, maint/0.3, maint/0.4]
+    branches: [main, maint/0.4, maint/0.5, maint/0.6]
   workflow_dispatch:
   schedule:
     - cron: '0 8 * * 1'
@@ -17,7 +17,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu, macos, windows]
-        python-version: [3.9, "3.10", "3.11"]
+        python-version: [3.9, "3.10", "3.11", "3.12"]
     name: ${{ matrix.os }} - py${{ matrix.python-version }}
     runs-on: ${{ matrix.os }}-latest
     defaults:

@@ -1,4 +1,4 @@
-from importlib.resources import files  # type: ignore
+from importlib.resources import files
 
 import numpy as np
 import pytest

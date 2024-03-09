@@ -1,6 +1,3 @@
-import os
-import platform
-
 import numpy as np
 import pytest
 from mne import create_info, make_fixed_length_epochs, pick_types

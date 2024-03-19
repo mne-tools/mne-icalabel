@@ -37,11 +37,16 @@ jobs:
         run: python tools/stubgen.py
       - name: Push stub files
         if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           if [ -n "$(git status --porcelain)" ]; then
+            branch_name="update-stub-files-$(date +'%Y%m%d-%H%M%S')"
+            git checkout -b "$branch_name"
             git add mne_icalabel/\*.pyi
             git commit -m "deploy stub files [ci skip]"
-            git push
+            git push --set-upstream origin "$branch_name"
+            gh pr create --title "Update stub files [bot]" --body "Auto-generated PR for updating stub files." --base main
           fi

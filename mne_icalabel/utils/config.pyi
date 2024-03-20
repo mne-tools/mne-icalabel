@@ -1,8 +1,8 @@
-from typing import IO, Callable, Optional
+from typing import IO, Callable
 
 from packaging.requirements import Requirement
 
-def sys_info(fid: Optional[IO] = None, developer: bool = False):
+def sys_info(fid: IO | None = None, developer: bool = False):
     """Print the system information for debugging.
 
     Parameters

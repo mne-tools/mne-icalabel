@@ -1,12 +1,11 @@
 from pathlib import Path
-from typing import Optional
 
 from _typeshed import Incomplete
 
 has_icalabel_testing_data: Incomplete
 
 def data_path(
-    path: Optional[str] = None,
+    path: str | None = None,
     force_update: bool = False,
     update_path: bool = True,
     download: bool = True,

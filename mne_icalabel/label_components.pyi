@@ -1,5 +1,3 @@
-from typing import Union
-
 from mne import BaseEpochs as BaseEpochs
 from mne.io import BaseRaw as BaseRaw
 from mne.preprocessing import ICA
@@ -8,7 +6,7 @@ from .config import ICALABEL_METHODS as ICALABEL_METHODS
 from .iclabel._config import ICLABEL_NUMERICAL_TO_STRING as ICLABEL_NUMERICAL_TO_STRING
 from .utils._checks import _validate_inst_and_ica as _validate_inst_and_ica
 
-def label_components(inst: Union[BaseRaw, BaseEpochs], ica: ICA, method: str):
+def label_components(inst: BaseRaw | BaseEpochs, ica: ICA, method: str):
     """Automatically label the ICA components with the selected method.
 
     Parameters

@@ -1,5 +1,3 @@
-from typing import Union
-
 from _typeshed import Incomplete
 from mne import BaseEpochs
 from mne.io import BaseRaw
@@ -25,7 +23,7 @@ class ICAComponentLabeler(QMainWindow):
     _selected_component: int
 
     def __init__(
-        self, inst: Union[BaseRaw, BaseEpochs], ica: ICA, show: bool = True
+        self, inst: BaseRaw | BaseEpochs, ica: ICA, show: bool = True
     ) -> None: ...
     def _save_labels(self) -> None:
         """Save the selected labels to the ICA instance."""
@@ -56,11 +54,11 @@ class ICAComponentLabeler(QMainWindow):
         """
 
     @staticmethod
-    def _check_inst_ica(inst: Union[BaseRaw, BaseEpochs], ica: ICA) -> None:
+    def _check_inst_ica(inst: BaseRaw | BaseEpochs, ica: ICA) -> None:
         """Check if the ICA was fitted."""
 
     @property
-    def inst(self) -> Union[BaseRaw, BaseEpochs]:
+    def inst(self) -> BaseRaw | BaseEpochs:
         """Instance on which the ICA has been fitted."""
 
     @property

@@ -1,5 +1,4 @@
 from pathlib import Path as Path
-from typing import Union
 
 from mne.preprocessing import ICA
 
@@ -7,7 +6,7 @@ from ..config import ICA_LABELS_TO_MNE as ICA_LABELS_TO_MNE
 from ..iclabel._config import ICLABEL_STRING_TO_NUMERICAL as ICLABEL_STRING_TO_NUMERICAL
 from ..utils._imports import import_optional_dependency as import_optional_dependency
 
-def write_components_tsv(ica: ICA, fname: Union[str, Path]):
+def write_components_tsv(ica: ICA, fname: str | Path):
     """Write channels tsv file for ICA components.
 
     Will create an accompanying JSON sidecar to explain the
@@ -35,7 +34,7 @@ def write_components_tsv(ica: ICA, fname: Union[str, Path]):
 
 def mark_component(
     component: int,
-    fname: Union[str, Path],
+    fname: str | Path,
     method: str,
     label: str,
     author: str,

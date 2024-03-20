@@ -1,5 +1,3 @@
-from typing import Union
-
 from _typeshed import Incomplete
 from mne import Info
 from mne.preprocessing import ICA
@@ -13,7 +11,7 @@ def get_topomaps(
     picks: Incomplete | None = None,
     res: int = 64,
     image_interp: str = ...,
-    border: Union[float, str] = ...,
+    border: float | str = ...,
     extrapolate: str = ...,
 ) -> dict[str, NDArray[float]]:
     """Generate an array of scalp topographies for the picked components.
@@ -64,7 +62,7 @@ def _get_topomap_array(
     info: Info,
     res: int = 64,
     image_interp: str = ...,
-    border: Union[float, str] = ...,
+    border: float | str = ...,
     extrapolate: str = ...,
 ) -> NDArray[float]:
     """Generate a scalp topographic map (n_pixels, n_pixels).

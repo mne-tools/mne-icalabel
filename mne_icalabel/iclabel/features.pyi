@@ -1,5 +1,3 @@
-from typing import Union
-
 from mne import BaseEpochs
 from mne.io import BaseRaw
 from mne.preprocessing import ICA
@@ -11,7 +9,7 @@ from ._utils import _mne_to_eeglab_locs as _mne_to_eeglab_locs
 from ._utils import _next_power_of_2 as _next_power_of_2
 from ._utils import _pol2cart as _pol2cart
 
-def get_iclabel_features(inst: Union[BaseRaw, BaseEpochs], ica: ICA):
+def get_iclabel_features(inst: BaseRaw | BaseEpochs, ica: ICA):
     """Generate the features for ICLabel neural network.
 
     Parameters
@@ -52,9 +50,7 @@ def _retrieve_eeglab_icawinv(ica: ICA) -> tuple[NDArray[float], NDArray[float]]:
     weights : array
     """
 
-def _compute_ica_activations(
-    inst: Union[BaseRaw, BaseEpochs], ica: ICA
-) -> NDArray[float]:
+def _compute_ica_activations(inst: BaseRaw | BaseEpochs, ica: ICA) -> NDArray[float]:
     """Compute the ICA activations 'icaact' variable from an MNE ICA instance.
 
     Parameters
@@ -86,7 +82,7 @@ def _compute_ica_activations(
     """
 
 def _eeg_topoplot(
-    inst: Union[BaseRaw, BaseEpochs], icawinv: NDArray[float], picks: list[str]
+    inst: BaseRaw | BaseEpochs, icawinv: NDArray[float], picks: list[str]
 ) -> NDArray[float]:
     """Topoplot feature."""
 
@@ -96,17 +92,17 @@ def _topoplotFast(
     """Implement topoplotFast.m from MATLAB. Each topographic map is a 32x32 images."""
 
 def _eeg_rpsd(
-    inst: Union[BaseRaw, BaseEpochs], ica: ICA, icaact: NDArray[float]
+    inst: BaseRaw | BaseEpochs, ica: ICA, icaact: NDArray[float]
 ) -> NDArray[float]:
     """PSD feature."""
 
 def _eeg_rpsd_constants(
-    inst: Union[BaseRaw, BaseEpochs], ica: ICA
+    inst: BaseRaw | BaseEpochs, ica: ICA
 ) -> tuple[int, int, int, int, NDArray[int], NDArray[float], NDArray[int]]:
     """Compute the constants before ``randperm`` is used to compute the subset."""
 
 def _eeg_rpsd_compute_psdmed(
-    inst: Union[BaseRaw, BaseEpochs],
+    inst: BaseRaw | BaseEpochs,
     icaact: NDArray[float],
     ncomp: int,
     nfreqs: int,
@@ -143,7 +139,7 @@ def _eeg_autocorr_fftw(
     MATLAB: 'eeg_autocorr_fftw.m'.
     """
 
-def _resample(ac: NDArray[float], fs: Union[int, float]) -> NDArray[float]:
+def _resample(ac: NDArray[float], fs: int | float) -> NDArray[float]:
     """Resample the autocorrelation feature.
 
     The comment in EEGLAB is:

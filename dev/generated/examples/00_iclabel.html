@@ -1,0 +1,1649 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Repairing artifacts with ICA automatically using ICLabel Model &#8212; MNE-ICALabel</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+    <link rel="stylesheet" type="text/css" href="../../_static/style.css?v=3a142594" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=ac02cc09edc035673794" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794" />
+  <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=ac02cc09edc035673794"></script>
+
+    <script src="../../_static/documentation_options.js?v=7b845e85"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=fd10adb8"></script>
+    <script src="../../_static/design-tabs.js?v=36754332"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'generated/examples/00_iclabel';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.14.1';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://mne.tools/mne-icalabel/dev/_static/versions.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'dev';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner = false;
+        </script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Labeling ICA components with a GUI" href="10_gui_label_components.html" />
+    <link rel="prev" title="Examples" href="index.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">MNE-ICALabel</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../install.html">
+                        Installation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../api.html">
+                        API
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="index.html">
+                        Examples
+                      </a>
+                    </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link nav-external" href="https://mne.tools/stable/index.html">
+                    MNE
+                  </a>
+                </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item">
+<script>
+document.write(`
+  <div class="version-switcher__container dropdown">
+    <button id="versionswitcherbutton" type="button" role="button" class="version-switcher__button btn btn-sm navbar-btn dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="listbox" aria-controls="versionswitcherlist" aria-label="Version switcher list">
+      Choose version  <!-- this text may get changed later by javascript -->
+      <span class="caret"></span>
+    </button>
+    <div id="versionswitcherlist" class="version-switcher__menu dropdown-menu list-group-flush py-0" role="listbox" aria-labelledby="versionswitcherbutton">
+    <!-- dropdown will be populated by javascript on page load -->
+    </div>
+  </div>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/mne-tools/mne-icalabel" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fab fa-github-square fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://mne.discourse.group/" title="Forum" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-discourse fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Forum</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://discord.gg/rKfvxTuATa" title="Discord" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-discord fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Discord</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+    <label class="sidebar-toggle secondary-toggle" for="__secondary" tabindex="0">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
+</div>
+
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../install.html">
+                        Installation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../api.html">
+                        API
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="index.html">
+                        Examples
+                      </a>
+                    </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link nav-external" href="https://mne.tools/stable/index.html">
+                    MNE
+                  </a>
+                </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <div class="version-switcher__container dropdown">
+    <button id="versionswitcherbutton" type="button" role="button" class="version-switcher__button btn btn-sm navbar-btn dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="listbox" aria-controls="versionswitcherlist" aria-label="Version switcher list">
+      Choose version  <!-- this text may get changed later by javascript -->
+      <span class="caret"></span>
+    </button>
+    <div id="versionswitcherlist" class="version-switcher__menu dropdown-menu list-group-flush py-0" role="listbox" aria-labelledby="versionswitcherbutton">
+    <!-- dropdown will be populated by javascript on page load -->
+    </div>
+  </div>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/mne-tools/mne-icalabel" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fab fa-github-square fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://mne.discourse.group/" title="Forum" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-discourse fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Forum</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://discord.gg/rKfvxTuATa" title="Discord" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-discord fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Discord</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item"><nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Repairing artifacts with ICA automatically using ICLabel Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="10_gui_label_components.html">Labeling ICA components with a GUI</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="index.html" class="nav-link">Examples</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">Repairing...</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference internal" href="#sphx-glr-download-generated-examples-00-iclabel-py"><span class="std std-ref">Go to the end</span></a>
+to download the full example code</p>
+</div>
+<section class="sphx-glr-example-title" id="repairing-artifacts-with-ica-automatically-using-iclabel-model">
+<span id="tuto-iclabel"></span><span id="sphx-glr-generated-examples-00-iclabel-py"></span><h1>Repairing artifacts with ICA automatically using ICLabel Model<a class="headerlink" href="#repairing-artifacts-with-ica-automatically-using-iclabel-model" title="Link to this heading">#</a></h1>
+<p>This tutorial covers automatically repairing signals using ICA with
+the ICLabel model<a class="footnote-reference brackets" href="#footcite-iclabel2019" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, which originates in EEGLab.
+For conceptual background on ICA, see <a class="reference external" href="https://scikit-learn.org/stable/auto_examples/decomposition/plot_ica_blind_source_separation.html#sphx-glr-auto-examples-decomposition-plot-ica-blind-source-separation-py" title="(in scikit-learn v1.4)"><span class="xref std std-ref">this scikit-learn tutorial</span></a>.
+For a basic understanding of how to use ICA to remove artifacts, see <a class="reference external" href="https://mne.tools/stable/auto_tutorials/preprocessing/40_artifact_correction_ica.html">the
+tutorial</a>
+in MNE-Python.</p>
+<p>ICLabel is designed to classify ICs fitted with an extended infomax ICA
+decomposition algorithm on EEG datasets referenced to a common average and
+filtered between [1., 100.] Hz. It is possible to run ICLabel on datasets that
+do not meet those specification, but the classification performance
+might be negatively impacted. Moreover, the ICLabel paper did not study the
+effects of these preprocessing steps.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This example involves running the ICA Infomax algorithm, which requires
+<a class="reference external" href="https://scikit-learn.org">scikit-learn</a> to be installed. Please install this optional dependency before
+running the example.</p>
+</div>
+<p>We begin as always by importing the necessary Python modules and loading some
+<a class="reference external" href="https://mne.tools/dev/documentation/datasets.html#sample-dataset" title="(in MNE v1.7)"><span class="xref std std-ref">example data</span></a>. Because ICA can be computationally
+intense, we’ll also crop the data to 60 seconds; and to save ourselves from
+repeatedly typing <code class="docutils literal notranslate"><span class="pre">mne.preprocessing</span></code> we’ll directly import a few functions
+and classes from that submodule.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">mne</span>
+<span class="kn">from</span> <span class="nn">mne.preprocessing</span> <span class="kn">import</span> <a href="https://mne.tools/dev/generated/mne.preprocessing.ICA.html#mne.preprocessing.ICA" title="mne.preprocessing.ICA" class="sphx-glr-backref-module-mne-preprocessing sphx-glr-backref-type-py-class"><span class="n">ICA</span></a>
+
+<span class="kn">from</span> <span class="nn">mne_icalabel</span> <span class="kn">import</span> <a href="../api/mne_icalabel.label_components.html#mne_icalabel.label_components" title="mne_icalabel.label_components" class="sphx-glr-backref-module-mne_icalabel sphx-glr-backref-type-py-function"><span class="n">label_components</span></a>
+
+<a href="https://docs.python.org/3/library/pathlib.html#pathlib.PosixPath" title="pathlib.PosixPath" class="sphx-glr-backref-module-pathlib sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">sample_data_folder</span></a> <span class="o">=</span> <a href="https://mne.tools/dev/generated/mne.datasets.sample.data_path.html#mne.datasets.sample.data_path" title="mne.datasets.sample.data_path" class="sphx-glr-backref-module-mne-datasets-sample sphx-glr-backref-type-py-function"><span class="n">mne</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">sample</span><span class="o">.</span><span class="n">data_path</span></a><span class="p">()</span> <span class="o">/</span> <span class="s2">&quot;MEG&quot;</span> <span class="o">/</span> <span class="s2">&quot;sample&quot;</span>
+<a href="https://docs.python.org/3/library/pathlib.html#pathlib.PosixPath" title="pathlib.PosixPath" class="sphx-glr-backref-module-pathlib sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">sample_data_raw_file</span></a> <span class="o">=</span> <a href="https://docs.python.org/3/library/pathlib.html#pathlib.PosixPath" title="pathlib.PosixPath" class="sphx-glr-backref-module-pathlib sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">sample_data_folder</span></a> <span class="o">/</span> <span class="s2">&quot;sample_audvis_raw.fif&quot;</span>
+<a href="https://mne.tools/dev/generated/mne.io.Raw.html#mne.io.Raw" title="mne.io.Raw" class="sphx-glr-backref-module-mne-io sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">raw</span></a> <span class="o">=</span> <a href="https://mne.tools/dev/generated/mne.io.read_raw_fif.html#mne.io.read_raw_fif" title="mne.io.read_raw_fif" class="sphx-glr-backref-module-mne-io sphx-glr-backref-type-py-function"><span class="n">mne</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_raw_fif</span></a><span class="p">(</span><a href="https://docs.python.org/3/library/pathlib.html#pathlib.PosixPath" title="pathlib.PosixPath" class="sphx-glr-backref-module-pathlib sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">sample_data_raw_file</span></a><span class="p">)</span>
+
+<span class="c1"># we&#39;ll crop to 60 seconds and drop MEG channels</span>
+<a href="https://mne.tools/dev/generated/mne.io.Raw.html#mne.io.Raw.crop" title="mne.io.Raw.crop" class="sphx-glr-backref-module-mne-io sphx-glr-backref-type-py-method"><span class="n">raw</span><span class="o">.</span><span class="n">crop</span></a><span class="p">(</span><span class="n">tmax</span><span class="o">=</span><span class="mf">60.0</span><span class="p">)</span><span class="o">.</span><span class="n">pick_types</span><span class="p">(</span><span class="n">eeg</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">stim</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">eog</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<a href="https://mne.tools/dev/generated/mne.io.Raw.html#mne.io.Raw.load_data" title="mne.io.Raw.load_data" class="sphx-glr-backref-module-mne-io sphx-glr-backref-type-py-method"><span class="n">raw</span><span class="o">.</span><span class="n">load_data</span></a><span class="p">()</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Using default location ~/mne_data for sample...
+Creating ~/mne_data
+
+  0%|                                              | 0.00/1.65G [00:00&lt;?, ?B/s]
+  0%|                                     | 2.09M/1.65G [00:00&lt;01:18, 20.9MB/s]
+  0%|                                     | 5.48M/1.65G [00:00&lt;00:57, 28.6MB/s]
+  1%|▏                                    | 8.43M/1.65G [00:00&lt;00:57, 28.5MB/s]
+  1%|▎                                    | 12.1M/1.65G [00:00&lt;00:51, 31.7MB/s]
+  1%|▎                                    | 15.4M/1.65G [00:00&lt;00:51, 31.8MB/s]
+  1%|▍                                    | 19.1M/1.65G [00:00&lt;00:48, 33.4MB/s]
+  1%|▌                                    | 22.5M/1.65G [00:00&lt;00:50, 32.2MB/s]
+  2%|▌                                    | 26.0M/1.65G [00:00&lt;00:49, 33.1MB/s]
+  2%|▋                                    | 29.5M/1.65G [00:00&lt;00:48, 33.3MB/s]
+  2%|▋                                    | 33.0M/1.65G [00:01&lt;00:48, 33.7MB/s]
+  2%|▊                                    | 36.6M/1.65G [00:01&lt;00:48, 33.0MB/s]
+  2%|▉                                    | 40.2M/1.65G [00:01&lt;00:47, 34.0MB/s]
+  3%|▉                                    | 43.6M/1.65G [00:01&lt;00:48, 33.2MB/s]
+  3%|█                                    | 47.3M/1.65G [00:01&lt;00:46, 34.4MB/s]
+  3%|█▏                                   | 50.8M/1.65G [00:01&lt;00:48, 33.2MB/s]
+  3%|█▏                                   | 54.5M/1.65G [00:01&lt;00:46, 34.4MB/s]
+  4%|█▎                                   | 58.0M/1.65G [00:01&lt;00:47, 33.4MB/s]
+  4%|█▍                                   | 61.7M/1.65G [00:01&lt;00:45, 34.6MB/s]
+  4%|█▍                                   | 65.2M/1.65G [00:01&lt;00:47, 33.3MB/s]
+  4%|█▌                                   | 68.9M/1.65G [00:02&lt;00:47, 33.1MB/s]
+  4%|█▌                                   | 72.5M/1.65G [00:02&lt;00:46, 33.9MB/s]
+  5%|█▋                                   | 76.0M/1.65G [00:02&lt;00:47, 33.2MB/s]
+  5%|█▊                                   | 79.6M/1.65G [00:02&lt;00:46, 34.2MB/s]
+  5%|█▊                                   | 83.0M/1.65G [00:02&lt;00:47, 33.1MB/s]
+  5%|█▉                                   | 86.6M/1.65G [00:02&lt;00:46, 33.7MB/s]
+  5%|██                                   | 90.0M/1.65G [00:02&lt;00:46, 33.4MB/s]
+  6%|██                                   | 93.6M/1.65G [00:02&lt;00:45, 33.9MB/s]
+  6%|██▏                                  | 97.1M/1.65G [00:02&lt;00:46, 33.2MB/s]
+  6%|██▎                                   | 101M/1.65G [00:03&lt;00:46, 33.6MB/s]
+  6%|██▍                                   | 104M/1.65G [00:03&lt;00:46, 33.6MB/s]
+  7%|██▍                                   | 108M/1.65G [00:03&lt;00:44, 34.5MB/s]
+  7%|██▌                                   | 111M/1.65G [00:03&lt;00:46, 33.2MB/s]
+  7%|██▋                                   | 115M/1.65G [00:03&lt;00:44, 34.2MB/s]
+  7%|██▋                                   | 118M/1.65G [00:03&lt;00:45, 33.5MB/s]
+  7%|██▊                                   | 122M/1.65G [00:03&lt;00:44, 34.6MB/s]
+  8%|██▉                                   | 126M/1.65G [00:03&lt;00:46, 32.6MB/s]
+  8%|██▉                                   | 129M/1.65G [00:03&lt;00:44, 34.0MB/s]
+  8%|███                                   | 133M/1.65G [00:03&lt;00:44, 33.9MB/s]
+  8%|███▏                                  | 136M/1.65G [00:04&lt;00:46, 32.4MB/s]
+  8%|███▏                                  | 140M/1.65G [00:04&lt;00:45, 33.5MB/s]
+  9%|███▎                                  | 144M/1.65G [00:04&lt;00:44, 34.1MB/s]
+  9%|███▍                                  | 147M/1.65G [00:04&lt;00:43, 34.9MB/s]
+  9%|███▍                                  | 151M/1.65G [00:04&lt;00:46, 32.6MB/s]
+  9%|███▌                                  | 155M/1.65G [00:04&lt;00:43, 34.1MB/s]
+ 10%|███▋                                  | 158M/1.65G [00:04&lt;00:43, 34.3MB/s]
+ 10%|███▋                                  | 162M/1.65G [00:04&lt;00:42, 35.0MB/s]
+ 10%|███▊                                  | 165M/1.65G [00:04&lt;00:45, 32.7MB/s]
+ 10%|███▉                                  | 169M/1.65G [00:05&lt;00:44, 33.6MB/s]
+ 10%|███▉                                  | 173M/1.65G [00:05&lt;00:42, 34.5MB/s]
+ 11%|████                                  | 176M/1.65G [00:05&lt;00:45, 32.3MB/s]
+ 11%|████▏                                 | 180M/1.65G [00:05&lt;00:44, 33.4MB/s]
+ 11%|████▏                                 | 183M/1.65G [00:05&lt;00:45, 32.3MB/s]
+ 11%|████▎                                 | 186M/1.65G [00:05&lt;00:52, 27.7MB/s]
+ 11%|████▎                                 | 190M/1.65G [00:05&lt;00:52, 27.8MB/s]
+ 12%|████▍                                 | 194M/1.65G [00:05&lt;00:48, 30.0MB/s]
+ 12%|████▌                                 | 197M/1.65G [00:05&lt;00:45, 31.9MB/s]
+ 12%|████▋                                 | 201M/1.65G [00:06&lt;00:42, 33.8MB/s]
+ 12%|████▋                                 | 205M/1.65G [00:06&lt;00:46, 31.3MB/s]
+ 13%|████▊                                 | 208M/1.65G [00:06&lt;00:43, 33.1MB/s]
+ 13%|████▉                                 | 212M/1.65G [00:06&lt;00:42, 33.9MB/s]
+ 13%|████▉                                 | 215M/1.65G [00:06&lt;00:45, 31.5MB/s]
+ 13%|█████                                 | 219M/1.65G [00:06&lt;00:43, 33.0MB/s]
+ 13%|█████                                 | 223M/1.65G [00:06&lt;00:41, 34.2MB/s]
+ 14%|█████▏                                | 227M/1.65G [00:06&lt;00:44, 32.1MB/s]
+ 14%|█████▎                                | 230M/1.65G [00:06&lt;00:42, 33.3MB/s]
+ 14%|█████▎                                | 234M/1.65G [00:07&lt;00:42, 33.1MB/s]
+ 14%|█████▍                                | 238M/1.65G [00:07&lt;00:43, 32.8MB/s]
+ 15%|█████▌                                | 241M/1.65G [00:07&lt;00:41, 33.9MB/s]
+ 15%|█████▋                                | 245M/1.65G [00:07&lt;00:40, 34.9MB/s]
+ 15%|█████▋                                | 249M/1.65G [00:07&lt;00:39, 35.8MB/s]
+ 15%|█████▊                                | 253M/1.65G [00:07&lt;00:42, 32.8MB/s]
+ 16%|█████▉                                | 256M/1.65G [00:07&lt;00:41, 34.0MB/s]
+ 16%|█████▉                                | 260M/1.65G [00:07&lt;00:39, 35.1MB/s]
+ 16%|██████                                | 264M/1.65G [00:07&lt;00:42, 32.3MB/s]
+ 16%|██████▏                               | 267M/1.65G [00:08&lt;00:41, 33.7MB/s]
+ 16%|██████▏                               | 271M/1.65G [00:08&lt;00:39, 34.7MB/s]
+ 17%|██████▎                               | 275M/1.65G [00:08&lt;00:42, 32.2MB/s]
+ 17%|██████▍                               | 278M/1.65G [00:08&lt;00:41, 33.5MB/s]
+ 17%|██████▍                               | 282M/1.65G [00:08&lt;00:39, 34.7MB/s]
+ 17%|██████▌                               | 286M/1.65G [00:08&lt;00:42, 32.2MB/s]
+ 18%|██████▋                               | 289M/1.65G [00:08&lt;00:40, 33.3MB/s]
+ 18%|██████▋                               | 293M/1.65G [00:08&lt;00:39, 34.6MB/s]
+ 18%|██████▊                               | 297M/1.65G [00:08&lt;00:38, 35.6MB/s]
+ 18%|██████▉                               | 300M/1.65G [00:09&lt;00:41, 32.7MB/s]
+ 18%|██████▉                               | 304M/1.65G [00:09&lt;00:39, 33.8MB/s]
+ 19%|███████                               | 308M/1.65G [00:09&lt;00:38, 35.1MB/s]
+ 19%|███████▏                              | 312M/1.65G [00:09&lt;00:41, 32.4MB/s]
+ 19%|███████▏                              | 315M/1.65G [00:09&lt;00:39, 33.6MB/s]
+ 19%|███████▎                              | 319M/1.65G [00:09&lt;00:39, 34.0MB/s]
+ 19%|███████▍                              | 322M/1.65G [00:09&lt;00:41, 32.2MB/s]
+ 20%|███████▍                              | 326M/1.65G [00:09&lt;00:39, 33.5MB/s]
+ 20%|███████▌                              | 329M/1.65G [00:09&lt;00:39, 33.8MB/s]
+ 20%|███████▋                              | 333M/1.65G [00:10&lt;00:38, 34.6MB/s]
+ 20%|███████▋                              | 337M/1.65G [00:10&lt;00:40, 32.5MB/s]
+ 21%|███████▊                              | 340M/1.65G [00:10&lt;00:38, 33.9MB/s]
+ 21%|███████▉                              | 344M/1.65G [00:10&lt;00:38, 34.1MB/s]
+ 21%|███████▉                              | 348M/1.65G [00:10&lt;00:37, 35.2MB/s]
+ 21%|████████                              | 351M/1.65G [00:10&lt;00:39, 32.7MB/s]
+ 21%|████████▏                             | 355M/1.65G [00:10&lt;00:38, 33.5MB/s]
+ 22%|████████▏                             | 358M/1.65G [00:10&lt;00:37, 34.2MB/s]
+ 22%|████████▎                             | 362M/1.65G [00:10&lt;00:39, 32.3MB/s]
+ 22%|████████▍                             | 365M/1.65G [00:10&lt;00:38, 33.7MB/s]
+ 22%|████████▍                             | 369M/1.65G [00:11&lt;00:37, 34.0MB/s]
+ 23%|████████▌                             | 373M/1.65G [00:11&lt;00:36, 34.7MB/s]
+ 23%|████████▋                             | 376M/1.65G [00:11&lt;00:39, 32.5MB/s]
+ 23%|████████▋                             | 380M/1.65G [00:11&lt;00:37, 34.0MB/s]
+ 23%|████████▊                             | 383M/1.65G [00:11&lt;00:37, 34.2MB/s]
+ 23%|████████▉                             | 387M/1.65G [00:11&lt;00:38, 32.5MB/s]
+ 24%|████████▉                             | 391M/1.65G [00:11&lt;00:37, 33.6MB/s]
+ 24%|█████████                             | 394M/1.65G [00:11&lt;00:36, 34.0MB/s]
+ 24%|█████████▏                            | 398M/1.65G [00:11&lt;00:35, 35.0MB/s]
+ 24%|█████████▏                            | 401M/1.65G [00:12&lt;00:38, 32.7MB/s]
+ 25%|█████████▎                            | 405M/1.65G [00:12&lt;00:36, 33.7MB/s]
+ 25%|█████████▍                            | 409M/1.65G [00:12&lt;00:35, 34.6MB/s]
+ 25%|█████████▍                            | 412M/1.65G [00:12&lt;00:38, 32.4MB/s]
+ 25%|█████████▌                            | 416M/1.65G [00:12&lt;00:36, 33.7MB/s]
+ 25%|█████████▋                            | 420M/1.65G [00:12&lt;00:36, 34.0MB/s]
+ 26%|█████████▋                            | 423M/1.65G [00:12&lt;00:35, 34.3MB/s]
+ 26%|█████████▊                            | 426M/1.65G [00:12&lt;00:37, 32.5MB/s]
+ 26%|█████████▉                            | 430M/1.65G [00:12&lt;00:35, 34.0MB/s]
+ 26%|█████████▉                            | 434M/1.65G [00:13&lt;00:35, 34.1MB/s]
+ 26%|██████████                            | 437M/1.65G [00:13&lt;00:34, 35.1MB/s]
+ 27%|██████████▏                           | 441M/1.65G [00:13&lt;00:37, 32.7MB/s]
+ 27%|██████████▏                           | 444M/1.65G [00:13&lt;00:36, 33.5MB/s]
+ 27%|██████████▎                           | 448M/1.65G [00:13&lt;00:34, 34.5MB/s]
+ 27%|██████████▍                           | 452M/1.65G [00:13&lt;00:37, 32.4MB/s]
+ 28%|██████████▍                           | 455M/1.65G [00:13&lt;00:35, 33.7MB/s]
+ 28%|██████████▌                           | 459M/1.65G [00:13&lt;00:36, 33.1MB/s]
+ 28%|██████████▋                           | 462M/1.65G [00:13&lt;00:40, 29.2MB/s]
+ 28%|██████████▋                           | 465M/1.65G [00:14&lt;00:41, 28.9MB/s]
+ 28%|██████████▊                           | 468M/1.65G [00:14&lt;00:41, 28.3MB/s]
+ 29%|██████████▊                           | 472M/1.65G [00:14&lt;00:39, 30.2MB/s]
+ 29%|██████████▉                           | 476M/1.65G [00:14&lt;00:36, 32.2MB/s]
+ 29%|███████████                           | 479M/1.65G [00:14&lt;00:34, 33.6MB/s]
+ 29%|███████████                           | 483M/1.65G [00:14&lt;00:37, 31.3MB/s]
+ 29%|███████████▏                          | 486M/1.65G [00:14&lt;00:35, 32.8MB/s]
+ 30%|███████████▎                          | 490M/1.65G [00:14&lt;00:34, 34.1MB/s]
+ 30%|███████████▎                          | 494M/1.65G [00:14&lt;00:36, 32.0MB/s]
+ 30%|███████████▍                          | 497M/1.65G [00:14&lt;00:34, 33.6MB/s]
+ 30%|███████████▌                          | 501M/1.65G [00:15&lt;00:32, 35.1MB/s]
+ 31%|███████████▌                          | 505M/1.65G [00:15&lt;00:35, 32.2MB/s]
+ 31%|███████████▋                          | 509M/1.65G [00:15&lt;00:33, 33.7MB/s]
+ 31%|███████████▊                          | 513M/1.65G [00:15&lt;00:32, 35.0MB/s]
+ 31%|███████████▊                          | 516M/1.65G [00:15&lt;00:35, 32.2MB/s]
+ 31%|███████████▉                          | 520M/1.65G [00:15&lt;00:33, 33.7MB/s]
+ 32%|████████████                          | 524M/1.65G [00:15&lt;00:32, 35.1MB/s]
+ 32%|████████████                          | 527M/1.65G [00:15&lt;00:34, 32.2MB/s]
+ 32%|████████████▏                         | 531M/1.65G [00:15&lt;00:33, 33.7MB/s]
+ 32%|████████████▎                         | 535M/1.65G [00:16&lt;00:31, 35.1MB/s]
+ 33%|████████████▍                         | 539M/1.65G [00:16&lt;00:34, 32.1MB/s]
+ 33%|████████████▍                         | 542M/1.65G [00:16&lt;00:32, 33.8MB/s]
+ 33%|████████████▌                         | 546M/1.65G [00:16&lt;00:31, 35.0MB/s]
+ 33%|████████████▋                         | 550M/1.65G [00:16&lt;00:34, 32.2MB/s]
+ 33%|████████████▋                         | 554M/1.65G [00:16&lt;00:32, 33.7MB/s]
+ 34%|████████████▊                         | 557M/1.65G [00:16&lt;00:31, 35.0MB/s]
+ 34%|████████████▉                         | 561M/1.65G [00:16&lt;00:33, 32.2MB/s]
+ 34%|████████████▉                         | 565M/1.65G [00:16&lt;00:32, 33.8MB/s]
+ 34%|█████████████                         | 569M/1.65G [00:17&lt;00:30, 35.0MB/s]
+ 35%|█████████████▏                        | 572M/1.65G [00:17&lt;00:33, 32.3MB/s]
+ 35%|█████████████▏                        | 576M/1.65G [00:17&lt;00:31, 33.8MB/s]
+ 35%|█████████████▎                        | 580M/1.65G [00:17&lt;00:30, 35.1MB/s]
+ 35%|█████████████▍                        | 584M/1.65G [00:17&lt;00:33, 32.3MB/s]
+ 36%|█████████████▌                        | 587M/1.65G [00:17&lt;00:31, 33.8MB/s]
+ 36%|█████████████▌                        | 591M/1.65G [00:17&lt;00:30, 35.0MB/s]
+ 36%|█████████████▋                        | 595M/1.65G [00:17&lt;00:32, 32.3MB/s]
+ 36%|█████████████▊                        | 598M/1.65G [00:17&lt;00:31, 33.5MB/s]
+ 36%|█████████████▊                        | 602M/1.65G [00:18&lt;00:29, 35.1MB/s]
+ 37%|█████████████▉                        | 606M/1.65G [00:18&lt;00:32, 32.4MB/s]
+ 37%|██████████████                        | 610M/1.65G [00:18&lt;00:30, 33.9MB/s]
+ 37%|██████████████                        | 614M/1.65G [00:18&lt;00:29, 35.1MB/s]
+ 37%|██████████████▏                       | 617M/1.65G [00:18&lt;00:32, 32.2MB/s]
+ 38%|██████████████▎                       | 621M/1.65G [00:18&lt;00:30, 34.0MB/s]
+ 38%|██████████████▎                       | 625M/1.65G [00:18&lt;00:29, 35.1MB/s]
+ 38%|██████████████▍                       | 629M/1.65G [00:18&lt;00:31, 32.2MB/s]
+ 38%|██████████████▌                       | 632M/1.65G [00:19&lt;00:30, 33.9MB/s]
+ 38%|██████████████▋                       | 636M/1.65G [00:19&lt;00:28, 35.1MB/s]
+ 39%|██████████████▋                       | 640M/1.65G [00:19&lt;00:31, 32.2MB/s]
+ 39%|██████████████▊                       | 644M/1.65G [00:19&lt;00:29, 33.8MB/s]
+ 39%|██████████████▉                       | 647M/1.65G [00:19&lt;00:28, 35.1MB/s]
+ 39%|██████████████▉                       | 651M/1.65G [00:19&lt;00:31, 32.2MB/s]
+ 40%|███████████████                       | 655M/1.65G [00:19&lt;00:29, 33.8MB/s]
+ 40%|███████████████▏                      | 659M/1.65G [00:19&lt;00:28, 34.9MB/s]
+ 40%|███████████████▏                      | 662M/1.65G [00:19&lt;00:30, 32.4MB/s]
+ 40%|███████████████▎                      | 666M/1.65G [00:20&lt;00:29, 33.8MB/s]
+ 41%|███████████████▍                      | 670M/1.65G [00:20&lt;00:28, 35.1MB/s]
+ 41%|███████████████▍                      | 674M/1.65G [00:20&lt;00:30, 32.3MB/s]
+ 41%|███████████████▌                      | 677M/1.65G [00:20&lt;00:28, 33.9MB/s]
+ 41%|███████████████▋                      | 681M/1.65G [00:20&lt;00:27, 35.0MB/s]
+ 41%|███████████████▋                      | 685M/1.65G [00:20&lt;00:29, 32.3MB/s]
+ 42%|███████████████▊                      | 689M/1.65G [00:20&lt;00:28, 33.8MB/s]
+ 42%|███████████████▉                      | 692M/1.65G [00:20&lt;00:27, 35.1MB/s]
+ 42%|████████████████                      | 696M/1.65G [00:20&lt;00:29, 32.3MB/s]
+ 42%|████████████████                      | 700M/1.65G [00:21&lt;00:28, 33.8MB/s]
+ 43%|████████████████▏                     | 704M/1.65G [00:21&lt;00:26, 35.2MB/s]
+ 43%|████████████████▎                     | 707M/1.65G [00:21&lt;00:29, 32.3MB/s]
+ 43%|████████████████▎                     | 711M/1.65G [00:21&lt;00:27, 33.9MB/s]
+ 43%|████████████████▍                     | 715M/1.65G [00:21&lt;00:26, 35.0MB/s]
+ 43%|████████████████▌                     | 719M/1.65G [00:21&lt;00:28, 32.3MB/s]
+ 44%|████████████████▌                     | 722M/1.65G [00:21&lt;00:28, 33.0MB/s]
+ 44%|████████████████▋                     | 726M/1.65G [00:21&lt;00:27, 33.5MB/s]
+ 44%|████████████████▊                     | 729M/1.65G [00:21&lt;00:26, 34.7MB/s]
+ 44%|████████████████▊                     | 733M/1.65G [00:21&lt;00:27, 32.9MB/s]
+ 45%|████████████████▉                     | 737M/1.65G [00:22&lt;00:26, 34.5MB/s]
+ 45%|█████████████████                     | 740M/1.65G [00:22&lt;00:26, 34.0MB/s]
+ 45%|█████████████████                     | 744M/1.65G [00:22&lt;00:27, 32.6MB/s]
+ 45%|█████████████████▏                    | 748M/1.65G [00:22&lt;00:26, 33.8MB/s]
+ 45%|█████████████████▎                    | 751M/1.65G [00:22&lt;00:26, 33.6MB/s]
+ 46%|█████████████████▎                    | 755M/1.65G [00:22&lt;00:25, 34.9MB/s]
+ 46%|█████████████████▍                    | 758M/1.65G [00:22&lt;00:27, 32.9MB/s]
+ 46%|█████████████████▌                    | 762M/1.65G [00:22&lt;00:25, 34.5MB/s]
+ 46%|█████████████████▌                    | 766M/1.65G [00:22&lt;00:26, 33.7MB/s]
+ 47%|█████████████████▋                    | 769M/1.65G [00:23&lt;00:27, 32.5MB/s]
+ 47%|█████████████████▊                    | 773M/1.65G [00:23&lt;00:25, 34.0MB/s]
+ 47%|█████████████████▊                    | 776M/1.65G [00:23&lt;00:26, 33.6MB/s]
+ 47%|█████████████████▉                    | 780M/1.65G [00:23&lt;00:25, 34.8MB/s]
+ 47%|██████████████████                    | 784M/1.65G [00:23&lt;00:26, 32.6MB/s]
+ 48%|██████████████████                    | 787M/1.65G [00:23&lt;00:25, 33.3MB/s]
+ 48%|██████████████████▏                   | 791M/1.65G [00:23&lt;00:25, 34.4MB/s]
+ 48%|██████████████████▎                   | 795M/1.65G [00:23&lt;00:26, 32.9MB/s]
+ 48%|██████████████████▎                   | 798M/1.65G [00:23&lt;00:25, 33.6MB/s]
+ 48%|██████████████████▍                   | 802M/1.65G [00:24&lt;00:25, 33.5MB/s]
+ 49%|██████████████████▌                   | 805M/1.65G [00:24&lt;00:24, 34.9MB/s]
+ 49%|██████████████████▌                   | 809M/1.65G [00:24&lt;00:25, 33.1MB/s]
+ 49%|██████████████████▋                   | 813M/1.65G [00:24&lt;00:24, 34.6MB/s]
+ 49%|██████████████████▊                   | 816M/1.65G [00:24&lt;00:24, 33.9MB/s]
+ 50%|██████████████████▊                   | 820M/1.65G [00:24&lt;00:25, 32.6MB/s]
+ 50%|██████████████████▉                   | 824M/1.65G [00:24&lt;00:24, 34.0MB/s]
+ 50%|███████████████████                   | 827M/1.65G [00:24&lt;00:24, 33.5MB/s]
+ 50%|███████████████████                   | 831M/1.65G [00:24&lt;00:23, 34.8MB/s]
+ 50%|███████████████████▏                  | 834M/1.65G [00:25&lt;00:24, 33.0MB/s]
+ 51%|███████████████████▎                  | 838M/1.65G [00:25&lt;00:24, 33.3MB/s]
+ 51%|███████████████████▎                  | 842M/1.65G [00:25&lt;00:23, 34.6MB/s]
+ 51%|███████████████████▍                  | 845M/1.65G [00:25&lt;00:24, 32.9MB/s]
+ 51%|███████████████████▌                  | 849M/1.65G [00:25&lt;00:23, 34.4MB/s]
+ 52%|███████████████████▌                  | 853M/1.65G [00:25&lt;00:23, 33.8MB/s]
+ 52%|███████████████████▋                  | 856M/1.65G [00:25&lt;00:24, 32.6MB/s]
+ 52%|███████████████████▊                  | 860M/1.65G [00:25&lt;00:23, 34.1MB/s]
+ 52%|███████████████████▊                  | 864M/1.65G [00:25&lt;00:23, 33.6MB/s]
+ 52%|███████████████████▉                  | 867M/1.65G [00:25&lt;00:22, 34.9MB/s]
+ 53%|████████████████████                  | 871M/1.65G [00:26&lt;00:23, 33.1MB/s]
+ 53%|████████████████████                  | 875M/1.65G [00:26&lt;00:23, 33.2MB/s]
+ 53%|████████████████████▏                 | 878M/1.65G [00:26&lt;00:22, 34.5MB/s]
+ 53%|████████████████████▎                 | 882M/1.65G [00:26&lt;00:23, 32.8MB/s]
+ 54%|████████████████████▎                 | 886M/1.65G [00:26&lt;00:22, 34.4MB/s]
+ 54%|████████████████████▍                 | 889M/1.65G [00:26&lt;00:25, 30.0MB/s]
+ 54%|████████████████████▌                 | 892M/1.65G [00:26&lt;00:26, 28.4MB/s]
+ 54%|████████████████████▌                 | 896M/1.65G [00:26&lt;00:24, 30.8MB/s]
+ 54%|████████████████████▋                 | 900M/1.65G [00:26&lt;00:23, 32.5MB/s]
+ 55%|████████████████████▊                 | 903M/1.65G [00:27&lt;00:24, 30.5MB/s]
+ 55%|████████████████████▊                 | 907M/1.65G [00:27&lt;00:22, 32.5MB/s]
+ 55%|████████████████████▉                 | 911M/1.65G [00:27&lt;00:21, 34.2MB/s]
+ 55%|█████████████████████                 | 914M/1.65G [00:27&lt;00:23, 31.4MB/s]
+ 56%|█████████████████████                 | 918M/1.65G [00:27&lt;00:22, 33.3MB/s]
+ 56%|█████████████████████▏                | 922M/1.65G [00:27&lt;00:20, 34.8MB/s]
+ 56%|█████████████████████▎                | 926M/1.65G [00:27&lt;00:22, 32.0MB/s]
+ 56%|█████████████████████▎                | 929M/1.65G [00:27&lt;00:21, 33.6MB/s]
+ 56%|█████████████████████▍                | 933M/1.65G [00:27&lt;00:20, 34.6MB/s]
+ 57%|█████████████████████▌                | 937M/1.65G [00:28&lt;00:22, 32.0MB/s]
+ 57%|█████████████████████▌                | 940M/1.65G [00:28&lt;00:21, 33.5MB/s]
+ 57%|█████████████████████▋                | 944M/1.65G [00:28&lt;00:20, 35.1MB/s]
+ 57%|█████████████████████▊                | 948M/1.65G [00:28&lt;00:21, 32.2MB/s]
+ 58%|█████████████████████▉                | 952M/1.65G [00:28&lt;00:20, 33.7MB/s]
+ 58%|█████████████████████▉                | 955M/1.65G [00:28&lt;00:19, 35.1MB/s]
+ 58%|██████████████████████                | 959M/1.65G [00:28&lt;00:21, 32.2MB/s]
+ 58%|██████████████████████▏               | 963M/1.65G [00:28&lt;00:20, 33.8MB/s]
+ 58%|██████████████████████▏               | 967M/1.65G [00:28&lt;00:19, 35.1MB/s]
+ 59%|██████████████████████▎               | 970M/1.65G [00:29&lt;00:21, 32.1MB/s]
+ 59%|██████████████████████▍               | 974M/1.65G [00:29&lt;00:35, 19.3MB/s]
+ 59%|██████████████████████▌               | 979M/1.65G [00:29&lt;00:25, 26.7MB/s]
+ 60%|██████████████████████▋               | 985M/1.65G [00:29&lt;00:20, 33.3MB/s]
+ 60%|██████████████████████▊               | 990M/1.65G [00:29&lt;00:20, 32.7MB/s]
+ 60%|██████████████████████▊               | 993M/1.65G [00:29&lt;00:19, 33.3MB/s]
+ 60%|██████████████████████▉               | 997M/1.65G [00:30&lt;00:20, 32.3MB/s]
+ 61%|██████████████████████▍              | 1.00G/1.65G [00:30&lt;00:19, 33.7MB/s]
+ 61%|██████████████████████▍              | 1.00G/1.65G [00:30&lt;00:19, 33.6MB/s]
+ 61%|██████████████████████▌              | 1.01G/1.65G [00:30&lt;00:19, 32.5MB/s]
+ 61%|██████████████████████▋              | 1.01G/1.65G [00:30&lt;00:18, 34.0MB/s]
+ 61%|██████████████████████▋              | 1.02G/1.65G [00:30&lt;00:18, 33.6MB/s]
+ 62%|██████████████████████▊              | 1.02G/1.65G [00:30&lt;00:18, 34.8MB/s]
+ 62%|██████████████████████▉              | 1.02G/1.65G [00:30&lt;00:19, 33.1MB/s]
+ 62%|██████████████████████▉              | 1.03G/1.65G [00:30&lt;00:18, 33.2MB/s]
+ 62%|███████████████████████              | 1.03G/1.65G [00:31&lt;00:18, 34.1MB/s]
+ 63%|███████████████████████▏             | 1.03G/1.65G [00:31&lt;00:18, 32.6MB/s]
+ 63%|███████████████████████▏             | 1.04G/1.65G [00:31&lt;00:18, 34.2MB/s]
+ 63%|███████████████████████▎             | 1.04G/1.65G [00:31&lt;00:18, 33.7MB/s]
+ 63%|███████████████████████▍             | 1.04G/1.65G [00:31&lt;00:17, 34.9MB/s]
+ 63%|███████████████████████▍             | 1.05G/1.65G [00:31&lt;00:18, 32.8MB/s]
+ 64%|███████████████████████▌             | 1.05G/1.65G [00:31&lt;00:18, 32.8MB/s]
+ 64%|███████████████████████▋             | 1.06G/1.65G [00:31&lt;00:17, 34.3MB/s]
+ 64%|███████████████████████▋             | 1.06G/1.65G [00:31&lt;00:18, 32.8MB/s]
+ 64%|███████████████████████▊             | 1.06G/1.65G [00:31&lt;00:17, 34.3MB/s]
+ 65%|███████████████████████▉             | 1.07G/1.65G [00:32&lt;00:18, 32.0MB/s]
+ 65%|███████████████████████▉             | 1.07G/1.65G [00:32&lt;00:20, 27.9MB/s]
+ 65%|████████████████████████             | 1.07G/1.65G [00:32&lt;00:19, 30.1MB/s]
+ 65%|████████████████████████             | 1.08G/1.65G [00:32&lt;00:17, 32.3MB/s]
+ 65%|████████████████████████▏            | 1.08G/1.65G [00:32&lt;00:18, 30.2MB/s]
+ 66%|████████████████████████▎            | 1.08G/1.65G [00:32&lt;00:17, 32.3MB/s]
+ 66%|████████████████████████▎            | 1.09G/1.65G [00:32&lt;00:16, 33.7MB/s]
+ 66%|████████████████████████▍            | 1.09G/1.65G [00:32&lt;00:17, 31.3MB/s]
+ 66%|████████████████████████▌            | 1.10G/1.65G [00:33&lt;00:17, 32.7MB/s]
+ 67%|████████████████████████▌            | 1.10G/1.65G [00:33&lt;00:15, 34.7MB/s]
+ 67%|████████████████████████▋            | 1.10G/1.65G [00:33&lt;00:17, 32.0MB/s]
+ 67%|████████████████████████▊            | 1.11G/1.65G [00:33&lt;00:16, 33.6MB/s]
+ 67%|████████████████████████▊            | 1.11G/1.65G [00:33&lt;00:15, 34.9MB/s]
+ 67%|████████████████████████▉            | 1.11G/1.65G [00:33&lt;00:16, 32.3MB/s]
+ 68%|█████████████████████████            | 1.12G/1.65G [00:33&lt;00:15, 33.7MB/s]
+ 68%|█████████████████████████            | 1.12G/1.65G [00:33&lt;00:15, 35.0MB/s]
+ 68%|█████████████████████████▏           | 1.13G/1.65G [00:33&lt;00:16, 32.3MB/s]
+ 68%|█████████████████████████▎           | 1.13G/1.65G [00:34&lt;00:15, 33.3MB/s]
+ 69%|█████████████████████████▎           | 1.13G/1.65G [00:34&lt;00:14, 35.0MB/s]
+ 69%|█████████████████████████▍           | 1.14G/1.65G [00:34&lt;00:15, 32.4MB/s]
+ 69%|█████████████████████████▌           | 1.14G/1.65G [00:34&lt;00:15, 33.8MB/s]
+ 69%|█████████████████████████▌           | 1.14G/1.65G [00:34&lt;00:16, 30.4MB/s]
+ 69%|█████████████████████████▋           | 1.15G/1.65G [00:34&lt;00:26, 19.2MB/s]
+ 70%|█████████████████████████▋           | 1.15G/1.65G [00:35&lt;00:35, 14.2MB/s]
+ 70%|█████████████████████████▊           | 1.15G/1.65G [00:35&lt;00:40, 12.4MB/s]
+ 70%|█████████████████████████▊           | 1.15G/1.65G [00:35&lt;00:42, 11.7MB/s]
+ 70%|█████████████████████████▊           | 1.15G/1.65G [00:35&lt;00:47, 10.5MB/s]
+ 70%|█████████████████████████▊           | 1.16G/1.65G [00:35&lt;00:49, 10.1MB/s]
+ 70%|█████████████████████████▉           | 1.16G/1.65G [00:36&lt;00:52, 9.37MB/s]
+ 70%|█████████████████████████▉           | 1.16G/1.65G [00:36&lt;00:52, 9.41MB/s]
+ 70%|█████████████████████████▉           | 1.16G/1.65G [00:36&lt;00:51, 9.58MB/s]
+ 70%|█████████████████████████▉           | 1.16G/1.65G [00:36&lt;00:52, 9.38MB/s]
+ 70%|█████████████████████████▉           | 1.16G/1.65G [00:36&lt;00:53, 9.19MB/s]
+ 70%|██████████████████████████           | 1.16G/1.65G [00:36&lt;00:51, 9.47MB/s]
+ 70%|██████████████████████████           | 1.16G/1.65G [00:36&lt;00:54, 9.02MB/s]
+ 70%|██████████████████████████           | 1.16G/1.65G [00:36&lt;00:55, 8.87MB/s]
+ 70%|██████████████████████████           | 1.17G/1.65G [00:36&lt;00:55, 8.77MB/s]
+ 71%|██████████████████████████           | 1.17G/1.65G [00:37&lt;00:57, 8.54MB/s]
+ 71%|██████████████████████████           | 1.17G/1.65G [00:37&lt;00:57, 8.45MB/s]
+ 71%|██████████████████████████▏          | 1.17G/1.65G [00:37&lt;00:52, 9.18MB/s]
+ 71%|██████████████████████████▏          | 1.17G/1.65G [00:37&lt;00:54, 8.84MB/s]
+ 71%|██████████████████████████▏          | 1.17G/1.65G [00:37&lt;00:54, 8.78MB/s]
+ 71%|██████████████████████████▏          | 1.17G/1.65G [00:37&lt;00:54, 8.88MB/s]
+ 71%|██████████████████████████▏          | 1.17G/1.65G [00:37&lt;00:51, 9.26MB/s]
+ 71%|██████████████████████████▎          | 1.17G/1.65G [00:37&lt;00:54, 8.74MB/s]
+ 71%|██████████████████████████▎          | 1.17G/1.65G [00:37&lt;00:59, 8.06MB/s]
+ 71%|██████████████████████████▎          | 1.17G/1.65G [00:38&lt;00:59, 8.09MB/s]
+ 71%|██████████████████████████▎          | 1.18G/1.65G [00:38&lt;00:59, 8.00MB/s]
+ 71%|██████████████████████████▎          | 1.18G/1.65G [00:38&lt;01:02, 7.68MB/s]
+ 71%|██████████████████████████▎          | 1.18G/1.65G [00:38&lt;01:09, 6.87MB/s]
+ 71%|██████████████████████████▎          | 1.18G/1.65G [00:38&lt;01:06, 7.10MB/s]
+ 71%|██████████████████████████▍          | 1.18G/1.65G [00:38&lt;01:04, 7.38MB/s]
+ 71%|██████████████████████████▍          | 1.18G/1.65G [00:38&lt;01:01, 7.67MB/s]
+ 71%|██████████████████████████▍          | 1.18G/1.65G [00:38&lt;00:58, 8.00MB/s]
+ 72%|██████████████████████████▍          | 1.18G/1.65G [00:39&lt;00:57, 8.25MB/s]
+ 72%|██████████████████████████▌          | 1.19G/1.65G [00:39&lt;00:32, 14.4MB/s]
+ 72%|██████████████████████████▌          | 1.19G/1.65G [00:39&lt;00:23, 19.9MB/s]
+ 72%|██████████████████████████▋          | 1.19G/1.65G [00:39&lt;00:18, 24.4MB/s]
+ 72%|██████████████████████████▊          | 1.20G/1.65G [00:39&lt;00:15, 28.7MB/s]
+ 73%|██████████████████████████▊          | 1.20G/1.65G [00:39&lt;00:17, 26.3MB/s]
+ 73%|██████████████████████████▉          | 1.20G/1.65G [00:39&lt;00:16, 26.9MB/s]
+ 73%|██████████████████████████▉          | 1.21G/1.65G [00:39&lt;00:16, 27.3MB/s]
+ 73%|███████████████████████████          | 1.21G/1.65G [00:39&lt;00:14, 30.3MB/s]
+ 73%|███████████████████████████▏         | 1.21G/1.65G [00:40&lt;00:14, 30.0MB/s]
+ 74%|███████████████████████████▏         | 1.22G/1.65G [00:40&lt;00:13, 31.9MB/s]
+ 74%|███████████████████████████▎         | 1.22G/1.65G [00:40&lt;00:13, 32.5MB/s]
+ 74%|███████████████████████████▍         | 1.22G/1.65G [00:40&lt;00:12, 33.9MB/s]
+ 74%|███████████████████████████▍         | 1.23G/1.65G [00:40&lt;00:13, 31.8MB/s]
+ 74%|███████████████████████████▌         | 1.23G/1.65G [00:40&lt;00:12, 33.8MB/s]
+ 75%|███████████████████████████▌         | 1.23G/1.65G [00:40&lt;00:12, 33.7MB/s]
+ 75%|███████████████████████████▋         | 1.24G/1.65G [00:40&lt;00:12, 32.5MB/s]
+ 75%|███████████████████████████▊         | 1.24G/1.65G [00:41&lt;00:19, 20.9MB/s]
+ 75%|███████████████████████████▊         | 1.24G/1.65G [00:41&lt;00:26, 15.6MB/s]
+ 75%|███████████████████████████▉         | 1.25G/1.65G [00:41&lt;00:31, 12.9MB/s]
+ 75%|███████████████████████████▉         | 1.25G/1.65G [00:41&lt;00:34, 11.7MB/s]
+ 76%|███████████████████████████▉         | 1.25G/1.65G [00:42&lt;00:35, 11.3MB/s]
+ 76%|███████████████████████████▉         | 1.25G/1.65G [00:42&lt;00:38, 10.5MB/s]
+ 76%|████████████████████████████         | 1.25G/1.65G [00:42&lt;00:44, 9.04MB/s]
+ 76%|████████████████████████████         | 1.25G/1.65G [00:42&lt;00:44, 9.00MB/s]
+ 76%|████████████████████████████         | 1.25G/1.65G [00:42&lt;00:47, 8.50MB/s]
+ 76%|████████████████████████████         | 1.25G/1.65G [00:42&lt;00:51, 7.74MB/s]
+ 76%|████████████████████████████         | 1.26G/1.65G [00:42&lt;00:49, 8.00MB/s]
+ 76%|████████████████████████████         | 1.26G/1.65G [00:43&lt;00:49, 7.99MB/s]
+ 76%|████████████████████████████▏        | 1.26G/1.65G [00:43&lt;00:52, 7.58MB/s]
+ 76%|████████████████████████████▏        | 1.26G/1.65G [00:43&lt;00:57, 6.91MB/s]
+ 76%|████████████████████████████▏        | 1.26G/1.65G [00:43&lt;00:57, 6.87MB/s]
+ 76%|████████████████████████████▏        | 1.26G/1.65G [00:43&lt;00:56, 6.91MB/s]
+ 76%|████████████████████████████▏        | 1.26G/1.65G [00:43&lt;00:59, 6.62MB/s]
+ 76%|████████████████████████████▏        | 1.26G/1.65G [00:43&lt;00:59, 6.58MB/s]
+ 76%|████████████████████████████▏        | 1.26G/1.65G [00:43&lt;00:56, 6.94MB/s]
+ 76%|████████████████████████████▎        | 1.26G/1.65G [00:43&lt;00:56, 6.92MB/s]
+ 76%|████████████████████████████▎        | 1.26G/1.65G [00:44&lt;00:53, 7.31MB/s]
+ 76%|████████████████████████████▎        | 1.26G/1.65G [00:44&lt;00:53, 7.31MB/s]
+ 77%|████████████████████████████▎        | 1.27G/1.65G [00:44&lt;00:49, 7.86MB/s]
+ 77%|████████████████████████████▎        | 1.27G/1.65G [00:44&lt;00:47, 8.14MB/s]
+ 77%|████████████████████████████▍        | 1.27G/1.65G [00:44&lt;00:41, 9.22MB/s]
+ 77%|████████████████████████████▍        | 1.27G/1.65G [00:44&lt;00:38, 9.92MB/s]
+ 77%|████████████████████████████▍        | 1.27G/1.65G [00:44&lt;00:40, 9.35MB/s]
+ 77%|████████████████████████████▍        | 1.27G/1.65G [00:44&lt;00:40, 9.51MB/s]
+ 77%|████████████████████████████▍        | 1.27G/1.65G [00:44&lt;00:40, 9.36MB/s]
+ 77%|████████████████████████████▍        | 1.27G/1.65G [00:45&lt;00:40, 9.40MB/s]
+ 77%|████████████████████████████▌        | 1.27G/1.65G [00:45&lt;00:45, 8.25MB/s]
+ 77%|████████████████████████████▌        | 1.27G/1.65G [00:45&lt;00:45, 8.26MB/s]
+ 77%|████████████████████████████▌        | 1.28G/1.65G [00:45&lt;00:44, 8.41MB/s]
+ 77%|████████████████████████████▌        | 1.28G/1.65G [00:45&lt;00:44, 8.52MB/s]
+ 77%|████████████████████████████▌        | 1.28G/1.65G [00:45&lt;00:44, 8.43MB/s]
+ 77%|████████████████████████████▌        | 1.28G/1.65G [00:45&lt;00:48, 7.78MB/s]
+ 77%|████████████████████████████▋        | 1.28G/1.65G [00:45&lt;00:48, 7.68MB/s]
+ 77%|████████████████████████████▋        | 1.28G/1.65G [00:46&lt;00:50, 7.43MB/s]
+ 78%|████████████████████████████▋        | 1.28G/1.65G [00:46&lt;00:44, 8.42MB/s]
+ 78%|████████████████████████████▋        | 1.28G/1.65G [00:46&lt;00:41, 8.90MB/s]
+ 78%|████████████████████████████▋        | 1.28G/1.65G [00:46&lt;00:41, 8.79MB/s]
+ 78%|████████████████████████████▊        | 1.28G/1.65G [00:46&lt;00:39, 9.38MB/s]
+ 78%|████████████████████████████▊        | 1.29G/1.65G [00:46&lt;00:40, 9.13MB/s]
+ 78%|████████████████████████████▊        | 1.29G/1.65G [00:46&lt;00:21, 17.0MB/s]
+ 78%|████████████████████████████▉        | 1.29G/1.65G [00:46&lt;00:18, 19.8MB/s]
+ 78%|█████████████████████████████        | 1.30G/1.65G [00:46&lt;00:14, 24.2MB/s]
+ 79%|█████████████████████████████        | 1.30G/1.65G [00:47&lt;00:12, 27.3MB/s]
+ 79%|█████████████████████████████▏       | 1.30G/1.65G [00:47&lt;00:13, 26.2MB/s]
+ 79%|█████████████████████████████▏       | 1.31G/1.65G [00:47&lt;00:13, 26.6MB/s]
+ 79%|█████████████████████████████▎       | 1.31G/1.65G [00:47&lt;00:12, 27.1MB/s]
+ 79%|█████████████████████████████▍       | 1.31G/1.65G [00:47&lt;00:10, 32.2MB/s]
+ 80%|█████████████████████████████▍       | 1.32G/1.65G [00:47&lt;00:10, 30.6MB/s]
+ 80%|█████████████████████████████▌       | 1.32G/1.65G [00:47&lt;00:10, 31.2MB/s]
+ 80%|█████████████████████████████▋       | 1.32G/1.65G [00:47&lt;00:09, 33.8MB/s]
+ 80%|█████████████████████████████▋       | 1.33G/1.65G [00:47&lt;00:09, 35.3MB/s]
+ 81%|█████████████████████████████▊       | 1.33G/1.65G [00:48&lt;00:09, 32.2MB/s]
+ 81%|█████████████████████████████▉       | 1.34G/1.65G [00:48&lt;00:09, 33.4MB/s]
+ 81%|█████████████████████████████▉       | 1.34G/1.65G [00:48&lt;00:09, 34.5MB/s]
+ 81%|██████████████████████████████       | 1.34G/1.65G [00:48&lt;00:15, 20.5MB/s]
+ 81%|██████████████████████████████       | 1.35G/1.65G [00:48&lt;00:18, 16.4MB/s]
+ 82%|██████████████████████████████▏      | 1.35G/1.65G [00:49&lt;00:24, 12.4MB/s]
+ 82%|██████████████████████████████▏      | 1.35G/1.65G [00:49&lt;00:27, 11.0MB/s]
+ 82%|██████████████████████████████▏      | 1.35G/1.65G [00:49&lt;00:28, 10.7MB/s]
+ 82%|██████████████████████████████▎      | 1.35G/1.65G [00:49&lt;00:28, 10.6MB/s]
+ 82%|██████████████████████████████▎      | 1.35G/1.65G [00:49&lt;00:29, 10.3MB/s]
+ 82%|██████████████████████████████▎      | 1.35G/1.65G [00:49&lt;00:28, 10.4MB/s]
+ 82%|██████████████████████████████▎      | 1.36G/1.65G [00:50&lt;00:30, 9.82MB/s]
+ 82%|██████████████████████████████▎      | 1.36G/1.65G [00:50&lt;00:30, 9.57MB/s]
+ 82%|██████████████████████████████▍      | 1.36G/1.65G [00:50&lt;00:30, 9.66MB/s]
+ 82%|██████████████████████████████▍      | 1.36G/1.65G [00:50&lt;00:30, 9.53MB/s]
+ 82%|██████████████████████████████▍      | 1.36G/1.65G [00:50&lt;00:31, 9.29MB/s]
+ 82%|██████████████████████████████▍      | 1.36G/1.65G [00:50&lt;00:36, 8.10MB/s]
+ 82%|██████████████████████████████▍      | 1.36G/1.65G [00:50&lt;00:41, 6.98MB/s]
+ 82%|██████████████████████████████▍      | 1.36G/1.65G [00:51&lt;00:51, 5.64MB/s]
+ 82%|██████████████████████████████▌      | 1.36G/1.65G [00:51&lt;00:51, 5.61MB/s]
+ 82%|██████████████████████████████▌      | 1.36G/1.65G [00:51&lt;00:49, 5.88MB/s]
+ 83%|██████████████████████████████▌      | 1.36G/1.65G [00:51&lt;00:45, 6.32MB/s]
+ 83%|██████████████████████████████▌      | 1.36G/1.65G [00:51&lt;00:51, 5.55MB/s]
+ 83%|██████████████████████████████▌      | 1.37G/1.65G [00:51&lt;00:52, 5.48MB/s]
+ 83%|██████████████████████████████▌      | 1.37G/1.65G [00:51&lt;00:46, 6.19MB/s]
+ 83%|██████████████████████████████▌      | 1.37G/1.65G [00:51&lt;00:41, 6.82MB/s]
+ 83%|██████████████████████████████▋      | 1.37G/1.65G [00:52&lt;00:37, 7.54MB/s]
+ 83%|██████████████████████████████▋      | 1.37G/1.65G [00:52&lt;00:34, 8.10MB/s]
+ 83%|██████████████████████████████▋      | 1.37G/1.65G [00:52&lt;00:34, 8.25MB/s]
+ 83%|██████████████████████████████▋      | 1.37G/1.65G [00:52&lt;00:32, 8.60MB/s]
+ 83%|██████████████████████████████▋      | 1.37G/1.65G [00:52&lt;00:34, 8.11MB/s]
+ 83%|██████████████████████████████▋      | 1.37G/1.65G [00:52&lt;00:34, 8.12MB/s]
+ 83%|██████████████████████████████▊      | 1.37G/1.65G [00:52&lt;00:33, 8.24MB/s]
+ 83%|██████████████████████████████▊      | 1.38G/1.65G [00:52&lt;00:36, 7.61MB/s]
+ 83%|██████████████████████████████▊      | 1.38G/1.65G [00:52&lt;00:40, 6.80MB/s]
+ 83%|██████████████████████████████▊      | 1.38G/1.65G [00:53&lt;00:36, 7.51MB/s]
+ 83%|██████████████████████████████▊      | 1.38G/1.65G [00:53&lt;00:34, 8.03MB/s]
+ 83%|██████████████████████████████▊      | 1.38G/1.65G [00:53&lt;00:33, 8.15MB/s]
+ 83%|██████████████████████████████▉      | 1.38G/1.65G [00:53&lt;00:32, 8.35MB/s]
+ 84%|██████████████████████████████▉      | 1.38G/1.65G [00:53&lt;00:16, 16.2MB/s]
+ 84%|███████████████████████████████      | 1.39G/1.65G [00:53&lt;00:14, 18.6MB/s]
+ 84%|███████████████████████████████      | 1.39G/1.65G [00:53&lt;00:13, 19.1MB/s]
+ 84%|███████████████████████████████▏     | 1.39G/1.65G [00:53&lt;00:12, 21.5MB/s]
+ 84%|███████████████████████████████▏     | 1.40G/1.65G [00:53&lt;00:09, 28.5MB/s]
+ 85%|███████████████████████████████▎     | 1.40G/1.65G [00:54&lt;00:09, 27.8MB/s]
+ 85%|███████████████████████████████▍     | 1.40G/1.65G [00:54&lt;00:08, 29.9MB/s]
+ 85%|███████████████████████████████▍     | 1.41G/1.65G [00:54&lt;00:07, 31.9MB/s]
+ 85%|███████████████████████████████▌     | 1.41G/1.65G [00:54&lt;00:07, 33.4MB/s]
+ 85%|███████████████████████████████▌     | 1.41G/1.65G [00:54&lt;00:07, 31.5MB/s]
+ 86%|███████████████████████████████▋     | 1.42G/1.65G [00:54&lt;00:07, 33.2MB/s]
+ 86%|███████████████████████████████▊     | 1.42G/1.65G [00:54&lt;00:06, 33.5MB/s]
+ 86%|███████████████████████████████▊     | 1.42G/1.65G [00:54&lt;00:06, 34.7MB/s]
+ 86%|███████████████████████████████▉     | 1.43G/1.65G [00:54&lt;00:06, 32.5MB/s]
+ 87%|████████████████████████████████     | 1.43G/1.65G [00:54&lt;00:06, 33.5MB/s]
+ 87%|████████████████████████████████     | 1.43G/1.65G [00:55&lt;00:06, 34.4MB/s]
+ 87%|████████████████████████████████▏    | 1.44G/1.65G [00:55&lt;00:06, 32.4MB/s]
+ 87%|████████████████████████████████▎    | 1.44G/1.65G [00:55&lt;00:06, 33.8MB/s]
+ 87%|████████████████████████████████▎    | 1.44G/1.65G [00:55&lt;00:06, 33.9MB/s]
+ 88%|████████████████████████████████▍    | 1.45G/1.65G [00:55&lt;00:09, 22.0MB/s]
+ 88%|████████████████████████████████▍    | 1.45G/1.65G [00:56&lt;00:14, 14.1MB/s]
+ 88%|████████████████████████████████▌    | 1.45G/1.65G [00:56&lt;00:16, 12.2MB/s]
+ 88%|████████████████████████████████▌    | 1.45G/1.65G [00:56&lt;00:17, 11.3MB/s]
+ 88%|████████████████████████████████▌    | 1.46G/1.65G [00:56&lt;00:18, 10.8MB/s]
+ 88%|████████████████████████████████▋    | 1.46G/1.65G [00:56&lt;00:18, 10.6MB/s]
+ 88%|████████████████████████████████▋    | 1.46G/1.65G [00:56&lt;00:19, 10.1MB/s]
+ 88%|████████████████████████████████▋    | 1.46G/1.65G [00:57&lt;00:21, 8.98MB/s]
+ 88%|████████████████████████████████▋    | 1.46G/1.65G [00:57&lt;00:22, 8.51MB/s]
+ 88%|████████████████████████████████▋    | 1.46G/1.65G [00:57&lt;00:23, 8.27MB/s]
+ 88%|████████████████████████████████▋    | 1.46G/1.65G [00:57&lt;00:22, 8.28MB/s]
+ 89%|████████████████████████████████▊    | 1.46G/1.65G [00:57&lt;00:23, 8.21MB/s]
+ 89%|████████████████████████████████▊    | 1.46G/1.65G [00:57&lt;00:21, 8.57MB/s]
+ 89%|████████████████████████████████▊    | 1.47G/1.65G [00:57&lt;00:25, 7.44MB/s]
+ 89%|████████████████████████████████▊    | 1.47G/1.65G [00:58&lt;00:25, 7.40MB/s]
+ 89%|████████████████████████████████▊    | 1.47G/1.65G [00:58&lt;00:25, 7.34MB/s]
+ 89%|████████████████████████████████▊    | 1.47G/1.65G [00:58&lt;00:22, 8.03MB/s]
+ 89%|████████████████████████████████▉    | 1.47G/1.65G [00:58&lt;00:23, 7.80MB/s]
+ 89%|████████████████████████████████▉    | 1.47G/1.65G [00:58&lt;00:22, 8.24MB/s]
+ 89%|████████████████████████████████▉    | 1.47G/1.65G [00:58&lt;00:21, 8.59MB/s]
+ 89%|████████████████████████████████▉    | 1.47G/1.65G [00:58&lt;00:22, 8.12MB/s]
+ 89%|████████████████████████████████▉    | 1.47G/1.65G [00:58&lt;00:21, 8.49MB/s]
+ 89%|████████████████████████████████▉    | 1.47G/1.65G [00:58&lt;00:21, 8.31MB/s]
+ 89%|█████████████████████████████████    | 1.47G/1.65G [00:59&lt;00:20, 8.48MB/s]
+ 89%|█████████████████████████████████    | 1.48G/1.65G [00:59&lt;00:21, 8.25MB/s]
+ 89%|█████████████████████████████████    | 1.48G/1.65G [00:59&lt;00:22, 7.86MB/s]
+ 89%|█████████████████████████████████    | 1.48G/1.65G [00:59&lt;00:24, 7.30MB/s]
+ 89%|█████████████████████████████████    | 1.48G/1.65G [00:59&lt;00:23, 7.38MB/s]
+ 90%|█████████████████████████████████    | 1.48G/1.65G [00:59&lt;00:22, 7.88MB/s]
+ 90%|█████████████████████████████████▏   | 1.48G/1.65G [00:59&lt;00:20, 8.48MB/s]
+ 90%|█████████████████████████████████▏   | 1.48G/1.65G [00:59&lt;00:19, 8.84MB/s]
+ 90%|█████████████████████████████████▏   | 1.48G/1.65G [00:59&lt;00:18, 9.00MB/s]
+ 90%|█████████████████████████████████▏   | 1.48G/1.65G [01:00&lt;00:18, 9.24MB/s]
+ 90%|█████████████████████████████████▏   | 1.48G/1.65G [01:00&lt;00:17, 9.48MB/s]
+ 90%|█████████████████████████████████▎   | 1.49G/1.65G [01:00&lt;00:17, 9.38MB/s]
+ 90%|█████████████████████████████████▎   | 1.49G/1.65G [01:00&lt;00:18, 8.95MB/s]
+ 90%|█████████████████████████████████▎   | 1.49G/1.65G [01:00&lt;00:10, 15.1MB/s]
+ 90%|█████████████████████████████████▍   | 1.49G/1.65G [01:00&lt;00:07, 21.2MB/s]
+ 91%|█████████████████████████████████▌   | 1.50G/1.65G [01:00&lt;00:06, 24.5MB/s]
+ 91%|█████████████████████████████████▌   | 1.50G/1.65G [01:00&lt;00:05, 28.0MB/s]
+ 91%|█████████████████████████████████▋   | 1.50G/1.65G [01:00&lt;00:05, 28.6MB/s]
+ 91%|█████████████████████████████████▋   | 1.51G/1.65G [01:00&lt;00:04, 30.6MB/s]
+ 91%|█████████████████████████████████▊   | 1.51G/1.65G [01:01&lt;00:04, 31.4MB/s]
+ 92%|█████████████████████████████████▉   | 1.51G/1.65G [01:01&lt;00:04, 32.9MB/s]
+ 92%|█████████████████████████████████▉   | 1.52G/1.65G [01:01&lt;00:04, 32.0MB/s]
+ 92%|██████████████████████████████████   | 1.52G/1.65G [01:01&lt;00:03, 33.1MB/s]
+ 92%|██████████████████████████████████▏  | 1.52G/1.65G [01:01&lt;00:03, 32.9MB/s]
+ 92%|██████████████████████████████████▏  | 1.53G/1.65G [01:01&lt;00:03, 33.9MB/s]
+ 93%|██████████████████████████████████▎  | 1.53G/1.65G [01:01&lt;00:03, 32.8MB/s]
+ 93%|██████████████████████████████████▎  | 1.54G/1.65G [01:01&lt;00:03, 33.8MB/s]
+ 93%|██████████████████████████████████▍  | 1.54G/1.65G [01:01&lt;00:03, 33.3MB/s]
+ 93%|██████████████████████████████████▌  | 1.54G/1.65G [01:02&lt;00:03, 34.1MB/s]
+ 94%|██████████████████████████████████▌  | 1.55G/1.65G [01:02&lt;00:03, 33.0MB/s]
+ 94%|██████████████████████████████████▋  | 1.55G/1.65G [01:02&lt;00:04, 23.3MB/s]
+ 94%|██████████████████████████████████▋  | 1.55G/1.65G [01:02&lt;00:05, 16.9MB/s]
+ 94%|██████████████████████████████████▊  | 1.55G/1.65G [01:02&lt;00:07, 13.9MB/s]
+ 94%|██████████████████████████████████▊  | 1.56G/1.65G [01:03&lt;00:07, 12.7MB/s]
+ 94%|██████████████████████████████████▊  | 1.56G/1.65G [01:03&lt;00:08, 10.8MB/s]
+ 94%|██████████████████████████████████▉  | 1.56G/1.65G [01:03&lt;00:09, 9.86MB/s]
+ 94%|██████████████████████████████████▉  | 1.56G/1.65G [01:03&lt;00:10, 8.91MB/s]
+ 94%|██████████████████████████████████▉  | 1.56G/1.65G [01:03&lt;00:10, 8.41MB/s]
+ 94%|██████████████████████████████████▉  | 1.56G/1.65G [01:03&lt;00:11, 8.16MB/s]
+ 95%|██████████████████████████████████▉  | 1.56G/1.65G [01:04&lt;00:12, 7.50MB/s]
+ 95%|██████████████████████████████████▉  | 1.56G/1.65G [01:04&lt;00:12, 7.34MB/s]
+ 95%|███████████████████████████████████  | 1.56G/1.65G [01:04&lt;00:12, 7.16MB/s]
+ 95%|███████████████████████████████████  | 1.56G/1.65G [01:04&lt;00:11, 7.46MB/s]
+ 95%|███████████████████████████████████  | 1.57G/1.65G [01:04&lt;00:11, 7.82MB/s]
+ 95%|███████████████████████████████████  | 1.57G/1.65G [01:04&lt;00:11, 7.24MB/s]
+ 95%|███████████████████████████████████  | 1.57G/1.65G [01:04&lt;00:10, 7.89MB/s]
+ 95%|███████████████████████████████████  | 1.57G/1.65G [01:04&lt;00:10, 8.32MB/s]
+ 95%|███████████████████████████████████▏ | 1.57G/1.65G [01:05&lt;00:09, 8.70MB/s]
+ 95%|███████████████████████████████████▏ | 1.57G/1.65G [01:05&lt;00:09, 8.83MB/s]
+ 95%|███████████████████████████████████▏ | 1.57G/1.65G [01:05&lt;00:09, 8.66MB/s]
+ 95%|███████████████████████████████████▏ | 1.57G/1.65G [01:05&lt;00:08, 8.96MB/s]
+ 95%|███████████████████████████████████▏ | 1.57G/1.65G [01:05&lt;00:08, 9.08MB/s]
+ 95%|███████████████████████████████████▎ | 1.58G/1.65G [01:05&lt;00:08, 8.86MB/s]
+ 95%|███████████████████████████████████▎ | 1.58G/1.65G [01:05&lt;00:08, 8.84MB/s]
+ 95%|███████████████████████████████████▎ | 1.58G/1.65G [01:05&lt;00:09, 8.24MB/s]
+ 95%|███████████████████████████████████▎ | 1.58G/1.65G [01:05&lt;00:08, 8.41MB/s]
+ 96%|███████████████████████████████████▎ | 1.58G/1.65G [01:06&lt;00:08, 8.22MB/s]
+ 96%|███████████████████████████████████▎ | 1.58G/1.65G [01:06&lt;00:08, 8.95MB/s]
+ 96%|███████████████████████████████████▍ | 1.58G/1.65G [01:06&lt;00:07, 9.02MB/s]
+ 96%|███████████████████████████████████▍ | 1.58G/1.65G [01:06&lt;00:07, 8.96MB/s]
+ 96%|███████████████████████████████████▍ | 1.58G/1.65G [01:06&lt;00:07, 9.47MB/s]
+ 96%|███████████████████████████████████▍ | 1.58G/1.65G [01:06&lt;00:07, 9.55MB/s]
+ 96%|███████████████████████████████████▍ | 1.59G/1.65G [01:06&lt;00:07, 9.59MB/s]
+ 96%|███████████████████████████████████▌ | 1.59G/1.65G [01:06&lt;00:06, 9.94MB/s]
+ 96%|███████████████████████████████████▌ | 1.59G/1.65G [01:06&lt;00:06, 9.61MB/s]
+ 96%|███████████████████████████████████▌ | 1.59G/1.65G [01:07&lt;00:06, 9.24MB/s]
+ 96%|███████████████████████████████████▋ | 1.59G/1.65G [01:07&lt;00:03, 15.8MB/s]
+ 97%|███████████████████████████████████▋ | 1.60G/1.65G [01:07&lt;00:02, 19.6MB/s]
+ 97%|███████████████████████████████████▊ | 1.60G/1.65G [01:07&lt;00:02, 24.5MB/s]
+ 97%|███████████████████████████████████▉ | 1.60G/1.65G [01:07&lt;00:01, 28.4MB/s]
+ 97%|███████████████████████████████████▉ | 1.61G/1.65G [01:07&lt;00:01, 28.0MB/s]
+ 97%|████████████████████████████████████ | 1.61G/1.65G [01:07&lt;00:01, 30.5MB/s]
+ 98%|████████████████████████████████████▏| 1.61G/1.65G [01:07&lt;00:01, 32.8MB/s]
+ 98%|████████████████████████████████████▏| 1.62G/1.65G [01:07&lt;00:01, 30.9MB/s]
+ 98%|████████████████████████████████████▎| 1.62G/1.65G [01:08&lt;00:00, 32.3MB/s]
+ 98%|████████████████████████████████████▍| 1.63G/1.65G [01:08&lt;00:00, 34.4MB/s]
+ 99%|████████████████████████████████████▍| 1.63G/1.65G [01:08&lt;00:00, 31.9MB/s]
+ 99%|████████████████████████████████████▌| 1.63G/1.65G [01:08&lt;00:00, 33.5MB/s]
+ 99%|████████████████████████████████████▌| 1.64G/1.65G [01:08&lt;00:00, 22.6MB/s]
+ 99%|████████████████████████████████████▋| 1.64G/1.65G [01:09&lt;00:00, 15.0MB/s]
+ 99%|████████████████████████████████████▋| 1.64G/1.65G [01:09&lt;00:00, 13.7MB/s]
+ 99%|████████████████████████████████████▊| 1.64G/1.65G [01:09&lt;00:00, 11.9MB/s]
+ 99%|████████████████████████████████████▊| 1.64G/1.65G [01:09&lt;00:00, 10.8MB/s]
+100%|████████████████████████████████████▊| 1.65G/1.65G [01:09&lt;00:00, 10.3MB/s]
+100%|████████████████████████████████████▊| 1.65G/1.65G [01:09&lt;00:00, 10.0MB/s]
+100%|████████████████████████████████████▉| 1.65G/1.65G [01:10&lt;00:00, 9.54MB/s]
+100%|████████████████████████████████████▉| 1.65G/1.65G [01:10&lt;00:00, 9.21MB/s]
+100%|████████████████████████████████████▉| 1.65G/1.65G [01:10&lt;00:00, 8.94MB/s]
+100%|████████████████████████████████████▉| 1.65G/1.65G [01:10&lt;00:00, 8.75MB/s]
+100%|████████████████████████████████████▉| 1.65G/1.65G [01:10&lt;00:00, 8.87MB/s]
+  0%|                                              | 0.00/1.65G [00:00&lt;?, ?B/s]
+100%|█████████████████████████████████████| 1.65G/1.65G [00:00&lt;00:00, 6.95TB/s]
+Attempting to create new mne-python configuration file:
+/home/runner/.mne/mne-python.json
+Download complete in 01m44s (1576.2 MB)
+Opening raw data file /home/runner/mne_data/MNE-sample-data/MEG/sample/sample_audvis_raw.fif...
+    Read a total of 3 projection items:
+        PCA-v1 (1 x 102)  idle
+        PCA-v2 (1 x 102)  idle
+        PCA-v3 (1 x 102)  idle
+    Range : 25800 ... 192599 =     42.956 ...   320.670 secs
+Ready.
+NOTE: pick_types() is a legacy function. New code should use inst.pick(...).
+Removing projector &lt;Projection | PCA-v1, active : False, n_channels : 102&gt;
+Removing projector &lt;Projection | PCA-v2, active : False, n_channels : 102&gt;
+Removing projector &lt;Projection | PCA-v3, active : False, n_channels : 102&gt;
+Reading 0 ... 36037  =      0.000 ...    60.000 secs...
+</pre></div>
+</div>
+<div class="output_subarea output_html rendered_html output_result">
+<details open>
+    <summary><strong>General</strong></summary>
+    <table class="table table-hover table-striped table-sm table-responsive small">
+        <tr>
+            <th>Measurement date</th>
+
+            <td>December 03, 2002  19:01:10 GMT</td>
+
+        </tr>
+        <tr>
+            <th>Experimenter</th>
+
+            <td>MEG</td>
+
+        </tr>
+        <tr>
+            <th>Participant</th>
+
+            <td>Unknown</td>
+
+        </tr>
+    </table>
+    </details>
+    <details open>
+        <summary><strong>Channels</strong></summary>
+        <table class="table table-hover table-striped table-sm table-responsive small">
+            <tr>
+                <th>Digitized points</th>
+
+                <td>146 points</td>
+
+            </tr>
+            <tr>
+                <th>Good channels</th>
+                <td>9 Stimulus, 59 EEG, 1 EOG</td>
+            </tr>
+            <tr>
+                <th>Bad channels</th>
+                <td>None</td>
+            </tr>
+            <tr>
+                <th>EOG channels</th>
+                <td>EOG 061</td>
+            </tr>
+            <tr>
+                <th>ECG channels</th>
+                <td>Not available</td>
+            </tr>
+        </table>
+        </details>
+        <details open>
+            <summary><strong>Data</strong></summary>
+            <table class="table table-hover table-striped table-sm table-responsive small">
+
+                <tr>
+                    <th>Sampling frequency</th>
+                    <td>600.61 Hz</td>
+                </tr>
+
+
+                <tr>
+                    <th>Highpass</th>
+                    <td>0.10 Hz</td>
+                </tr>
+
+
+                <tr>
+                    <th>Lowpass</th>
+                    <td>172.18 Hz</td>
+                </tr>
+
+
+
+                <tr>
+                    <th>Filenames</th>
+                    <td>sample_audvis_raw.fif</td>
+                </tr>
+
+
+                <tr>
+                    <th>Duration</th>
+                    <td>00:01:01 (HH:MM:SS)</td>
+                </tr>
+
+            </table>
+            </details>
+</div>
+<br />
+<br /><div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Before applying ICA (or any artifact repair strategy), be sure to observe
+the artifacts in your data to make sure you choose the right repair tool.
+Sometimes the right tool is no tool at all — if the artifacts are small
+enough you may not even need to repair them to get good analysis results.
+See <a class="reference external" href="https://mne.tools/dev/auto_tutorials/preprocessing/10_preprocessing_overview.html#tut-artifact-overview" title="(in MNE v1.7)"><span>Overview of artifact detection</span></a> for guidance on detecting and
+visualizing various types of artifact.</p>
+</div>
+<section id="example-eog-and-ecg-artifact-repair">
+<h2>Example: EOG and ECG artifact repair<a class="headerlink" href="#example-eog-and-ecg-artifact-repair" title="Link to this heading">#</a></h2>
+<section id="visualizing-the-artifacts">
+<h3>Visualizing the artifacts<a class="headerlink" href="#visualizing-the-artifacts" title="Link to this heading">#</a></h3>
+<p>Let’s begin by visualizing the artifacts that we want to repair. In this
+dataset they are big enough to see easily in the raw data:</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># pick some channels that clearly show heartbeats and blinks</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">artifact_picks</span></a> <span class="o">=</span> <a href="https://mne.tools/dev/generated/mne.pick_channels_regexp.html#mne.pick_channels_regexp" title="mne.pick_channels_regexp" class="sphx-glr-backref-module-mne sphx-glr-backref-type-py-function"><span class="n">mne</span><span class="o">.</span><span class="n">pick_channels_regexp</span></a><span class="p">(</span><a href="https://mne.tools/dev/generated/mne.io.Raw.html#mne.io.Raw.ch_names" title="mne.io.Raw.ch_names" class="sphx-glr-backref-module-mne-io sphx-glr-backref-type-py-property"><span class="n">raw</span><span class="o">.</span><span class="n">ch_names</span></a><span class="p">,</span> <span class="n">regexp</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;(EEG 00.)&quot;</span><span class="p">)</span>
+<a href="https://mne.tools/dev/generated/mne.io.Raw.html#mne.io.Raw.plot" title="mne.io.Raw.plot" class="sphx-glr-backref-module-mne-io sphx-glr-backref-type-py-method"><span class="n">raw</span><span class="o">.</span><span class="n">plot</span></a><span class="p">(</span><span class="n">order</span><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">artifact_picks</span></a><span class="p">,</span> <span class="n">n_channels</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">artifact_picks</span></a><span class="p">),</span> <span class="n">show_scrollbars</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<img src="../../_images/sphx_glr_00_iclabel_001.png" srcset="../../_images/sphx_glr_00_iclabel_001.png" alt="Raw plot" class = "sphx-glr-single-img"/></section>
+<section id="filtering-to-remove-slow-drifts">
+<h3>Filtering to remove slow drifts<a class="headerlink" href="#filtering-to-remove-slow-drifts" title="Link to this heading">#</a></h3>
+<p>Before we run the ICA, an important step is filtering the data to remove
+low-frequency drifts, which can negatively affect the quality of the ICA fit.
+The slow drifts are problematic because they reduce the independence of the
+assumed-to-be-independent sources (e.g., during a slow upward drift, the
+neural, heartbeat, blink, and other muscular sources will all tend to have
+higher values), making it harder for the algorithm to find an accurate
+solution. A high-pass filter with 1 Hz cutoff frequency is recommended.
+However, because filtering is a linear operation, the ICA solution found from
+the filtered signal can be applied to the unfiltered signal (see
+<a class="footnote-reference brackets" href="#footcite-winkleretal2015" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a> for more information), so we’ll keep a copy of
+the unfiltered <a class="reference external" href="https://mne.tools/dev/generated/mne.io.Raw.html#mne.io.Raw" title="(in MNE v1.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Raw</span></code></a> object around so we can apply the ICA solution
+to it later.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><a href="https://mne.tools/dev/generated/mne.io.Raw.html#mne.io.Raw" title="mne.io.Raw" class="sphx-glr-backref-module-mne-io sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">filt_raw</span></a> <span class="o">=</span> <a href="https://mne.tools/dev/generated/mne.io.Raw.html#mne.io.Raw.copy" title="mne.io.Raw.copy" class="sphx-glr-backref-module-mne-io sphx-glr-backref-type-py-method"><span class="n">raw</span><span class="o">.</span><span class="n">copy</span></a><span class="p">()</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">l_freq</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">h_freq</span><span class="o">=</span><span class="mf">100.0</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Filtering raw data in 1 contiguous segment
+Setting up band-pass filter from 1 - 1e+02 Hz
+
+FIR filter parameters
+---------------------
+Designing a one-pass, zero-phase, non-causal bandpass filter:
+- Windowed time-domain design (firwin) method
+- Hamming window with 0.0194 passband ripple and 53 dB stopband attenuation
+- Lower passband edge: 1.00
+- Lower transition bandwidth: 1.00 Hz (-6 dB cutoff frequency: 0.50 Hz)
+- Upper passband edge: 100.00 Hz
+- Upper transition bandwidth: 25.00 Hz (-6 dB cutoff frequency: 112.50 Hz)
+- Filter length: 1983 samples (3.302 s)
+
+[Parallel(n_jobs=1)]: Done  17 tasks      | elapsed:    0.0s
+</pre></div>
+</div>
+</section>
+<section id="fitting-and-plotting-the-ica-solution">
+<h3>Fitting and plotting the ICA solution<a class="headerlink" href="#fitting-and-plotting-the-ica-solution" title="Link to this heading">#</a></h3>
+<aside class="sidebar">
+<p class="sidebar-title">Ignoring the time domain</p>
+<p>The ICA algorithms implemented in MNE-Python find patterns across
+channels, but ignore the time domain. This means you can compute ICA on
+discontinuous <a class="reference external" href="https://mne.tools/dev/generated/mne.Epochs.html#mne.Epochs" title="(in MNE v1.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Epochs</span></code></a> or <a class="reference external" href="https://mne.tools/dev/generated/mne.Evoked.html#mne.Evoked" title="(in MNE v1.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Evoked</span></code></a> objects (not
+just continuous <a class="reference external" href="https://mne.tools/dev/generated/mne.io.Raw.html#mne.io.Raw" title="(in MNE v1.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Raw</span></code></a> objects), or only use every Nth
+sample by passing the <code class="docutils literal notranslate"><span class="pre">decim</span></code> parameter to <code class="docutils literal notranslate"><span class="pre">ICA.fit()</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference external" href="https://mne.tools/dev/generated/mne.Epochs.html#mne.Epochs" title="(in MNE v1.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Epochs</span></code></a> used for fitting ICA should not be
+baseline-corrected. Because cleaning the data via ICA may
+introduce DC offsets, we suggest to baseline correct your data
+<strong>after</strong> cleaning (and not before), should you require
+baseline correction.</p>
+</div>
+</aside>
+<p>Now we’re ready to set up and fit the ICA. Since we know (from observing our
+raw data) that the EOG and ECG artifacts are fairly strong, we would expect
+those artifacts to be captured in the first few dimensions of the PCA
+decomposition that happens before the ICA. Therefore, we probably don’t need
+a huge number of components to do a good job of isolating our artifacts
+(though it is usually preferable to include more components for a more
+accurate solution). As a first guess, we’ll run ICA with <code class="docutils literal notranslate"><span class="pre">n_components=15</span></code>
+(use only the first 15 PCA components to compute the ICA decomposition) — a
+very small number given that our data has 59 good EEG channels, but with the
+advantage that it will run quickly and we will able to tell easily whether it
+worked or not (because we already know what the EOG / ECG artifacts should
+look like).</p>
+<p>ICA fitting is not deterministic (e.g., the components may get a sign
+flip on different runs, or may not always be returned in the same order), so
+we’ll also specify a <a class="reference external" href="https://en.wikipedia.org/wiki/Random_seed">random seed</a> so that we get identical results each
+time this tutorial is built by our web servers.</p>
+<p>Before fitting ICA, we will apply a common average referencing, to comply
+with the ICLabel requirements.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><a href="https://mne.tools/dev/generated/mne.io.Raw.html#mne.io.Raw" title="mne.io.Raw" class="sphx-glr-backref-module-mne-io sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">filt_raw</span></a> <span class="o">=</span> <a href="https://mne.tools/dev/generated/mne.io.Raw.html#mne.io.Raw.set_eeg_reference" title="mne.io.Raw.set_eeg_reference" class="sphx-glr-backref-module-mne-io sphx-glr-backref-type-py-method"><span class="n">filt_raw</span><span class="o">.</span><span class="n">set_eeg_reference</span></a><span class="p">(</span><span class="s2">&quot;average&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>EEG channel type selected for re-referencing
+Applying average reference.
+Applying a custom (&#39;EEG&#39;,) reference.
+</pre></div>
+</div>
+<p>We will use the ‘extended infomax’ method for fitting the ICA, to comply with
+the ICLabel requirements. ICLabel was not tested with other ICA decomposition
+algorithm, but its performance and accuracy should not be impacted by the
+algorithm.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><a href="https://mne.tools/dev/generated/mne.preprocessing.ICA.html#mne.preprocessing.ICA" title="mne.preprocessing.ICA" class="sphx-glr-backref-module-mne-preprocessing sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ica</span></a> <span class="o">=</span> <a href="https://mne.tools/dev/generated/mne.preprocessing.ICA.html#mne.preprocessing.ICA" title="mne.preprocessing.ICA" class="sphx-glr-backref-module-mne-preprocessing sphx-glr-backref-type-py-class"><span class="n">ICA</span></a><span class="p">(</span>
+    <span class="n">n_components</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>
+    <span class="n">max_iter</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span>
+    <span class="n">method</span><span class="o">=</span><span class="s2">&quot;infomax&quot;</span><span class="p">,</span>
+    <span class="n">random_state</span><span class="o">=</span><span class="mi">97</span><span class="p">,</span>
+    <span class="n">fit_params</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">extended</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+<span class="p">)</span>
+<a href="https://mne.tools/dev/generated/mne.preprocessing.ICA.html#mne.preprocessing.ICA.fit" title="mne.preprocessing.ICA.fit" class="sphx-glr-backref-module-mne-preprocessing sphx-glr-backref-type-py-method"><span class="n">ica</span><span class="o">.</span><span class="n">fit</span></a><span class="p">(</span><a href="https://mne.tools/dev/generated/mne.io.Raw.html#mne.io.Raw" title="mne.io.Raw" class="sphx-glr-backref-module-mne-io sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">filt_raw</span></a><span class="p">)</span>
+<a href="https://mne.tools/dev/generated/mne.preprocessing.ICA.html#mne.preprocessing.ICA" title="mne.preprocessing.ICA" class="sphx-glr-backref-module-mne-preprocessing sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ica</span></a>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Fitting ICA to data using 59 channels (please be patient, this may take a while)
+Selecting by number: 15 components
+Computing Extended Infomax ICA
+Fitting ICA took 5.8s.
+</pre></div>
+</div>
+<div class="output_subarea output_html rendered_html output_result">
+<table class="table table-hover table-striped table-sm table-responsive small">
+    <tr>
+        <th>Method</th>
+        <td>infomax</td>
+    </tr>
+    <tr>
+        <th>Fit parameters</th>
+        <td>extended=True<br />max_iter=500<br /></td>
+    </tr>
+    <tr>
+        <th>Fit</th>
+        <td>500 iterations on raw data (36038 samples)</td>
+    </tr>
+
+    <tr>
+        <th>ICA components</th>
+        <td>15</td>
+    </tr>
+    <tr>
+        <th>Available PCA components</th>
+        <td>59</td>
+    </tr>
+    <tr>
+        <th>Channel types</th>
+        <td>eeg</td>
+    </tr>
+    <tr>
+        <th>ICA components marked for exclusion</th>
+        <td>&mdash;</td>
+    </tr>
+
+</table>
+</div>
+<br />
+<br /><p>Some optional parameters that we could have passed to the
+<a class="reference external" href="https://mne.tools/dev/generated/mne.preprocessing.ICA.html#mne.preprocessing.ICA.fit" title="(in MNE v1.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fit</span></code></a> method include <code class="docutils literal notranslate"><span class="pre">decim</span></code> (to use only
+every Nth sample in computing the ICs, which can yield a considerable
+speed-up) and <code class="docutils literal notranslate"><span class="pre">reject</span></code> (for providing a rejection dictionary for maximum
+acceptable peak-to-peak amplitudes for each channel type, just like we used
+when creating epoched data in the <a class="reference external" href="https://mne.tools/dev/auto_tutorials/intro/10_overview.html#tut-overview" title="(in MNE v1.7)"><span>Overview of MEG/EEG analysis with MNE-Python</span></a> tutorial).</p>
+<p>Now we can examine the ICs to see what they captured.
+<a class="reference external" href="https://mne.tools/dev/generated/mne.preprocessing.ICA.html#mne.preprocessing.ICA.plot_sources" title="(in MNE v1.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_sources</span></code></a> will show the time series of the
+ICs. Note that in our call to <a class="reference external" href="https://mne.tools/dev/generated/mne.preprocessing.ICA.html#mne.preprocessing.ICA.plot_sources" title="(in MNE v1.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_sources</span></code></a> we
+can use the original, unfiltered <a class="reference external" href="https://mne.tools/dev/generated/mne.io.Raw.html#mne.io.Raw" title="(in MNE v1.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Raw</span></code></a> object:</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><a href="https://mne.tools/dev/generated/mne.io.Raw.html#mne.io.Raw.load_data" title="mne.io.Raw.load_data" class="sphx-glr-backref-module-mne-io sphx-glr-backref-type-py-method"><span class="n">raw</span><span class="o">.</span><span class="n">load_data</span></a><span class="p">()</span>
+<a href="https://mne.tools/dev/generated/mne.preprocessing.ICA.html#mne.preprocessing.ICA.plot_sources" title="mne.preprocessing.ICA.plot_sources" class="sphx-glr-backref-module-mne-preprocessing sphx-glr-backref-type-py-method"><span class="n">ica</span><span class="o">.</span><span class="n">plot_sources</span></a><span class="p">(</span><a href="https://mne.tools/dev/generated/mne.io.Raw.html#mne.io.Raw" title="mne.io.Raw" class="sphx-glr-backref-module-mne-io sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">raw</span></a><span class="p">,</span> <span class="n">show_scrollbars</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<img src="../../_images/sphx_glr_00_iclabel_002.png" srcset="../../_images/sphx_glr_00_iclabel_002.png" alt="Raw plot" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Creating RawArray with float64 data, n_channels=16, n_times=36038
+    Range : 25800 ... 61837 =     42.956 ...   102.956 secs
+Ready.
+</pre></div>
+</div>
+<p>Here we can pretty clearly see that the first component (<code class="docutils literal notranslate"><span class="pre">ICA000</span></code>) captures
+the EOG signal quite well (for more info on visually identifying Independent
+Components, <a class="reference external" href="https://labeling.ucsd.edu/tutorial/labels">this EEGLAB tutorial</a> is a good resource). We can also
+visualize the scalp field distribution of each component using
+<a class="reference external" href="https://mne.tools/dev/generated/mne.preprocessing.ICA.html#mne.preprocessing.ICA.plot_components" title="(in MNE v1.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_components</span></code></a>. These are interpolated based
+on the values in the ICA mixing matrix:</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><a href="https://mne.tools/dev/generated/mne.preprocessing.ICA.html#mne.preprocessing.ICA.plot_components" title="mne.preprocessing.ICA.plot_components" class="sphx-glr-backref-module-mne-preprocessing sphx-glr-backref-type-py-method"><span class="n">ica</span><span class="o">.</span><span class="n">plot_components</span></a><span class="p">()</span>
+
+<span class="c1"># blinks</span>
+<a href="https://mne.tools/dev/generated/mne.preprocessing.ICA.html#mne.preprocessing.ICA.plot_overlay" title="mne.preprocessing.ICA.plot_overlay" class="sphx-glr-backref-module-mne-preprocessing sphx-glr-backref-type-py-method"><span class="n">ica</span><span class="o">.</span><span class="n">plot_overlay</span></a><span class="p">(</span><a href="https://mne.tools/dev/generated/mne.io.Raw.html#mne.io.Raw" title="mne.io.Raw" class="sphx-glr-backref-module-mne-io sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">raw</span></a><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">picks</span><span class="o">=</span><span class="s2">&quot;eeg&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="sphx-glr-horizontal">
+<li><img src="../../_images/sphx_glr_00_iclabel_003.png" srcset="../../_images/sphx_glr_00_iclabel_003.png" alt="ICA components, ICA000, ICA001, ICA002, ICA003, ICA004, ICA005, ICA006, ICA007, ICA008, ICA009, ICA010, ICA011, ICA012, ICA013, ICA014" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_00_iclabel_004.png" srcset="../../_images/sphx_glr_00_iclabel_004.png" alt="Signals before (red) and after (black) cleaning, Raw EEG data, EEG Global Field Power, Average across EEG channels" class = "sphx-glr-multi-img"/></li>
+</ul>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Applying ICA to Raw instance
+    Transforming to ICA space (15 components)
+    Zeroing out 1 ICA component
+    Projecting back using 59 PCA components
+</pre></div>
+</div>
+<p>We can also plot some diagnostics of IC using
+<a class="reference external" href="https://mne.tools/dev/generated/mne.preprocessing.ICA.html#mne.preprocessing.ICA.plot_properties" title="(in MNE v1.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_properties</span></code></a>:</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><a href="https://mne.tools/dev/generated/mne.preprocessing.ICA.html#mne.preprocessing.ICA.plot_properties" title="mne.preprocessing.ICA.plot_properties" class="sphx-glr-backref-module-mne-preprocessing sphx-glr-backref-type-py-method"><span class="n">ica</span><span class="o">.</span><span class="n">plot_properties</span></a><span class="p">(</span><a href="https://mne.tools/dev/generated/mne.io.Raw.html#mne.io.Raw" title="mne.io.Raw" class="sphx-glr-backref-module-mne-io sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">raw</span></a><span class="p">,</span> <span class="n">picks</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+<img src="../../_images/sphx_glr_00_iclabel_005.png" srcset="../../_images/sphx_glr_00_iclabel_005.png" alt="ICA000, Segment image and ERP/ERF, Spectrum, Dropped segments: 0.00 %" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>    Using multitaper spectrum estimation with 7 DPSS windows
+Not setting metadata
+30 matching events found
+No baseline correction applied
+0 projection items activated
+</pre></div>
+</div>
+</section>
+<section id="selecting-ica-components-automatically">
+<h3>Selecting ICA components automatically<a class="headerlink" href="#selecting-ica-components-automatically" title="Link to this heading">#</a></h3>
+<p>Now that we’ve explored what components need to be removed, we can
+apply the automatic ICA component labeling algorithm, which will
+assign a probability value for each component being one of:</p>
+<ul class="simple">
+<li><p>brain</p></li>
+<li><p>muscle artifact</p></li>
+<li><p>eye blink</p></li>
+<li><p>heart beat</p></li>
+<li><p>line noise</p></li>
+<li><p>channel noise</p></li>
+<li><p>other</p></li>
+</ul>
+<p>The output of the ICLabel <code class="docutils literal notranslate"><span class="pre">label_components</span></code> function produces
+predicted probability values for each of these classes in that order.
+See <a class="footnote-reference brackets" href="#footcite-iclabel2019" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> for full details.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ic_labels</span></a> <span class="o">=</span> <a href="../api/mne_icalabel.label_components.html#mne_icalabel.label_components" title="mne_icalabel.label_components" class="sphx-glr-backref-module-mne_icalabel sphx-glr-backref-type-py-function"><span class="n">label_components</span></a><span class="p">(</span><a href="https://mne.tools/dev/generated/mne.io.Raw.html#mne.io.Raw" title="mne.io.Raw" class="sphx-glr-backref-module-mne-io sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">filt_raw</span></a><span class="p">,</span> <a href="https://mne.tools/dev/generated/mne.preprocessing.ICA.html#mne.preprocessing.ICA" title="mne.preprocessing.ICA" class="sphx-glr-backref-module-mne-preprocessing sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ica</span></a><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;iclabel&quot;</span><span class="p">)</span>
+
+<span class="c1"># ICA0 was correctly identified as an eye blink, whereas ICA12 was</span>
+<span class="c1"># classified as a muscle artifact.</span>
+<span class="nb">print</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ic_labels</span></a><span class="p">[</span><span class="s2">&quot;labels&quot;</span><span class="p">])</span>
+<a href="https://mne.tools/dev/generated/mne.preprocessing.ICA.html#mne.preprocessing.ICA.plot_properties" title="mne.preprocessing.ICA.plot_properties" class="sphx-glr-backref-module-mne-preprocessing sphx-glr-backref-type-py-method"><span class="n">ica</span><span class="o">.</span><span class="n">plot_properties</span></a><span class="p">(</span><a href="https://mne.tools/dev/generated/mne.io.Raw.html#mne.io.Raw" title="mne.io.Raw" class="sphx-glr-backref-module-mne-io sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">raw</span></a><span class="p">,</span> <span class="n">picks</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">],</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="sphx-glr-horizontal">
+<li><img src="../../_images/sphx_glr_00_iclabel_006.png" srcset="../../_images/sphx_glr_00_iclabel_006.png" alt="ICA000, Segment image and ERP/ERF, Spectrum, Dropped segments: 0.00 %" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_00_iclabel_007.png" srcset="../../_images/sphx_glr_00_iclabel_007.png" alt="ICA012, Segment image and ERP/ERF, Spectrum, Dropped segments: 0.00 %" class = "sphx-glr-multi-img"/></li>
+</ul>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>NOTE: pick_channels() is a legacy function. New code should use inst.pick(...).
+[&#39;eye blink&#39;, &#39;brain&#39;, &#39;brain&#39;, &#39;brain&#39;, &#39;brain&#39;, &#39;brain&#39;, &#39;muscle artifact&#39;, &#39;muscle artifact&#39;, &#39;other&#39;, &#39;brain&#39;, &#39;muscle artifact&#39;, &#39;muscle artifact&#39;, &#39;muscle artifact&#39;, &#39;muscle artifact&#39;, &#39;eye blink&#39;]
+</pre></div>
+</div>
+<section id="extract-labels-and-reconstruct-raw-data">
+<h4>Extract Labels and Reconstruct Raw Data<a class="headerlink" href="#extract-labels-and-reconstruct-raw-data" title="Link to this heading">#</a></h4>
+<p>We can extract the labels of each component and exclude
+non-brain classified components, keeping ‘brain’ and ‘other’.
+“Other” is a catch-all that for non-classifiable components.
+We will stay on the side of caution and assume we cannot blindly remove these.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">labels</span></a> <span class="o">=</span> <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ic_labels</span></a><span class="p">[</span><span class="s2">&quot;labels&quot;</span><span class="p">]</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">exclude_idx</span></a> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">idx</span> <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">labels</span></a><span class="p">)</span> <span class="k">if</span> <span class="n">label</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;brain&quot;</span><span class="p">,</span> <span class="s2">&quot;other&quot;</span><span class="p">]</span>
+<span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Excluding these ICA components: </span><span class="si">{</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">exclude_idx</span></a><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Excluding these ICA components: [0, 6, 7, 10, 11, 12, 13, 14]
+</pre></div>
+</div>
+<p>Now that the exclusions have been set, we can reconstruct the sensor signals
+with artifacts removed using the <a class="reference external" href="https://mne.tools/dev/generated/mne.preprocessing.ICA.html#mne.preprocessing.ICA.apply" title="(in MNE v1.7)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">apply</span></code></a> method
+(remember, we’re applying the ICA solution from the <em>filtered</em> data to the
+original <em>unfiltered</em> signal). Plotting the original raw data alongside the
+reconstructed data shows that the heartbeat and blink artifacts are repaired.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># ica.apply() changes the Raw object in-place, so let&#39;s make a copy first:</span>
+<span class="n">reconst_raw</span> <span class="o">=</span> <a href="https://mne.tools/dev/generated/mne.io.Raw.html#mne.io.Raw.copy" title="mne.io.Raw.copy" class="sphx-glr-backref-module-mne-io sphx-glr-backref-type-py-method"><span class="n">raw</span><span class="o">.</span><span class="n">copy</span></a><span class="p">()</span>
+<a href="https://mne.tools/dev/generated/mne.preprocessing.ICA.html#mne.preprocessing.ICA.apply" title="mne.preprocessing.ICA.apply" class="sphx-glr-backref-module-mne-preprocessing sphx-glr-backref-type-py-method"><span class="n">ica</span><span class="o">.</span><span class="n">apply</span></a><span class="p">(</span><span class="n">reconst_raw</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">exclude_idx</span></a><span class="p">)</span>
+
+<a href="https://mne.tools/dev/generated/mne.io.Raw.html#mne.io.Raw.plot" title="mne.io.Raw.plot" class="sphx-glr-backref-module-mne-io sphx-glr-backref-type-py-method"><span class="n">raw</span><span class="o">.</span><span class="n">plot</span></a><span class="p">(</span><span class="n">order</span><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">artifact_picks</span></a><span class="p">,</span> <span class="n">n_channels</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">artifact_picks</span></a><span class="p">),</span> <span class="n">show_scrollbars</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">reconst_raw</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+    <span class="n">order</span><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">artifact_picks</span></a><span class="p">,</span> <span class="n">n_channels</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">artifact_picks</span></a><span class="p">),</span> <span class="n">show_scrollbars</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">)</span>
+<span class="k">del</span> <span class="n">reconst_raw</span>
+</pre></div>
+</div>
+<ul class="sphx-glr-horizontal">
+<li><img src="../../_images/sphx_glr_00_iclabel_008.png" srcset="../../_images/sphx_glr_00_iclabel_008.png" alt="Raw plots" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_00_iclabel_009.png" srcset="../../_images/sphx_glr_00_iclabel_009.png" alt="Raw plots" class = "sphx-glr-multi-img"/></li>
+</ul>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Applying ICA to Raw instance
+    Transforming to ICA space (15 components)
+    Zeroing out 8 ICA components
+    Projecting back using 59 PCA components
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Link to this heading">#</a></h2>
+<div class="docutils container" id="id4">
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="footcite-iclabel2019" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<span class="backrefs">(<a role="doc-backlink" href="#id1">1</a>,<a role="doc-backlink" href="#id3">2</a>)</span>
+<p>Luca Pion-Tonachini, Ken Kreutz-Delgado, and Scott Makeig. Iclabel: an automated electroencephalographic independent component classifier, dataset, and website. <em>NeuroImage</em>, 198:181–197, 2019. <a class="reference external" href="https://doi.org/https://doi.org/10.1016/j.neuroimage.2019.05.026">doi:https://doi.org/10.1016/j.neuroimage.2019.05.026</a>.</p>
+</aside>
+<aside class="footnote brackets" id="footcite-winkleretal2015" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">2</a><span class="fn-bracket">]</span></span>
+<p>Irene Winkler, Stefan Debener, Klaus-Robert Müller, and Michael Tangermann. On the influence of high-pass filtering on ICA-based artifact reduction in EEG-ERP. In <em>Proceedings of EMBC-2015</em>, 4101–4105. Milan, 2015. IEEE. <a class="reference external" href="https://doi.org/10.1109/EMBC.2015.7319296">doi:10.1109/EMBC.2015.7319296</a>.</p>
+</aside>
+</aside>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (2 minutes 4.676 seconds)</p>
+<p><strong>Estimated memory usage:</strong>  291 MB</p>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-generated-examples-00-iclabel-py">
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/83f77c6f12260eae5cd379686abc0ab4/00_iclabel.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">00_iclabel.ipynb</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/7ef00b18dcc03d88dc637be3c33e61a7/00_iclabel.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">00_iclabel.py</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  <!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="index.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Examples</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="10_gui_label_components.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Labeling ICA components with a GUI</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-eog-and-ecg-artifact-repair">Example: EOG and ECG artifact repair</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#visualizing-the-artifacts">Visualizing the artifacts</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#filtering-to-remove-slow-drifts">Filtering to remove slow drifts</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fitting-and-plotting-the-ica-solution">Fitting and plotting the ICA solution</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#selecting-ica-components-automatically">Selecting ICA components automatically</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#extract-labels-and-reconstruct-raw-data">Extract Labels and Reconstruct Raw Data</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=ac02cc09edc035673794"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+  <p class="copyright">
+    
+      © Copyright 2021-2024, MNE Developers. Last updated on 2024-03-26.
+      <br/>
+    
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.14.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

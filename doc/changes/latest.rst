@@ -16,3 +16,5 @@
 
 Version 0.7
 ===========
+
+- Raise helpful error message when montage is incomplete (:pr:`181` by `Mathieu Scheltienne`_)

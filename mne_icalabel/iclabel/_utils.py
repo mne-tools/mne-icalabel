@@ -53,9 +53,21 @@ def _mne_to_eeglab_locs(
         return azimuth, elevation, r
 
     # get the channel position dictionary
-    montage = raw.copy().pick_channels(picks, ordered=True).get_montage()
+    montage = raw.copy().pick(picks).get_montage()
+    if montage is None:
+        raise ValueError(
+            "Montage is not set. Please set the montage to provide the electrode "
+            "positions."
+        )
     positions = montage.get_positions()
     ch_pos = positions["ch_pos"]
+    # check that we do have a coordinate for every points
+    empty = [key for key in ch_pos if np.all(np.isnan(ch_pos[key]))]
+    if len(empty) != 0:
+        raise ValueError(
+            f"Channel position for {empty} is missing. Please check the montage set, "
+            "the channel names, and ensure that every channel has a position."
+        )
 
     # get locations as a 2D array
     locs = np.vstack(list(ch_pos.values()))

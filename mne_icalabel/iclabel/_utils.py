@@ -54,6 +54,11 @@ def _mne_to_eeglab_locs(
 
     # get the channel position dictionary
     montage = raw.copy().pick(picks).get_montage()
+    if montage is None:
+        raise ValueError(
+            "Montage is not set. Please set the montage to provide the electrode "
+            "positions."
+        )
     positions = montage.get_positions()
     ch_pos = positions["ch_pos"]
     # check that we do have a coordinate for every points

@@ -202,6 +202,21 @@ def test_eeg_topoplot(file, eeglab_result_file):
     assert np.allclose(topo, topo_eeglab, equal_nan=True)
 
 
+def test_eeg_topoplot_invalid_montage():
+    """Test that we raise an error if the montage is badly set."""
+    raw = read_raw(raw_eeglab_path, preload=True)
+    ica = read_ica_eeglab(raw_eeglab_path)
+    # get icawinv
+    icawinv, _ = _retrieve_eeglab_icawinv(ica)
+    # compute feature
+    raw.info["chs"][0]["loc"] = np.array([np.nan] * 12)
+    with pytest.raises(ValueError, match="Channel position for .* is missing"):
+        _eeg_topoplot(raw, icawinv, ica.ch_names)
+    raw.set_montage(None)
+    with pytest.raises(ValueError, match="Montage is not set"):
+        _eeg_topoplot(raw, icawinv, ica.ch_names)
+
+
 # ----------------------------------------------------------------------------
 @pytest.mark.filterwarnings("ignore:Estimated head radius.*:RuntimeWarning")
 @pytest.mark.parametrize(

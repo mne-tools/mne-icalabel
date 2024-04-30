@@ -30,7 +30,6 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-          architecture: 'x64'
       - name: Setup headless display
         uses: pyvista/setup-headless-display-action@main
         with:
@@ -70,7 +69,6 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-          architecture: 'x64'
       - name: Setup headless display
         uses: pyvista/setup-headless-display-action@main
         with:

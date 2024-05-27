@@ -126,7 +126,7 @@ def _eeg_autocorr_welch(
     """
 
 def _eeg_autocorr(raw: BaseRaw, ica: ICA, icaact: NDArray[float]) -> NDArray[float]:
-    """Autocorr applied on raw object without enough sampes for eeg_autocorr_welch.
+    """Autocorr applied on raw object without enough samples for eeg_autocorr_welch.
 
     MATLAB: 'eeg_autocorr.m'.
     """

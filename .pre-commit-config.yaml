@@ -6,7 +6,7 @@ repos:
             files: mne_icalabel
 
     - repo: https://github.com/astral-sh/ruff-pre-commit
-      rev: v0.5.2
+      rev: v0.5.4
       hooks:
           - id: ruff
             name: ruff linter

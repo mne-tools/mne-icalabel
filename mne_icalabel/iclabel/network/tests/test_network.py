@@ -119,7 +119,7 @@ def test_network_outputs_pytorch():
 
     # run the forward pass on pytorch
     iclabel_net = ICLabelNet()
-    iclabel_net.load_state_dict(torch.load(torch_iclabel_path))
+    iclabel_net.load_state_dict(torch.load(torch_iclabel_path, weights_only=False))
     torch_labels = iclabel_net(images, psd, autocorr)
     torch_labels = torch_labels.detach().numpy()  # (30, 7)
 

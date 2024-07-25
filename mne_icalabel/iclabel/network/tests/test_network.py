@@ -37,7 +37,7 @@ iclabel_output_epo_path = dataset_path / "iclabel-output-epo.mat"
 def test_weights_pytorch():
     """Compare the weights of pytorch model and matconvnet model."""
     network_python = torch.load(torch_iclabel_path, weights_only=False)
-    network_matlab = loadmat(matconvnet_iclabel_path, weights_only=False)
+    network_matlab = loadmat(matconvnet_iclabel_path)
 
     # load weights from matlab network
     weights_matlab = network_matlab["params"]["value"][0, :]

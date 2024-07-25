@@ -18,3 +18,4 @@ Version 0.7
 ===========
 
 - Raise helpful error message when montage is incomplete (:pr:`181` by `Mathieu Scheltienne`_)
+- Explicitly pass ``weights_only=True`` in all instances of ``torch.load`` used by mne-icalabel, both to suppress a warning in PyTorch 2.4 and to follow best security practices (:pr:`193` by `Scott Huberty`_)

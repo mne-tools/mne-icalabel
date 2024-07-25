@@ -198,7 +198,7 @@ def _run_iclabel(images: ArrayLike, psds: ArrayLike, autocorr: ArrayLike) -> NDA
     # load weights
     network_file = files("mne_icalabel.iclabel.network") / "assets" / "ICLabelNet.pt"
     iclabel_net = ICLabelNet()
-    iclabel_net.load_state_dict(torch.load(network_file))
+    iclabel_net.load_state_dict(torch.load(network_file, weights_only=True))
     # format inputs and run forward pass
     labels = iclabel_net(
         *_format_input_for_torch(*_format_input(images, psds, autocorr))

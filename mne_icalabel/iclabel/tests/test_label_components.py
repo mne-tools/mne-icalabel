@@ -21,8 +21,8 @@ raw.set_eeg_reference("average")
 
 
 @pytest.mark.parametrize(
-    "inst, exclude",
-    (
+    ("inst", "exclude"),
+    [
         (raw, "bads"),
         (raw.copy().crop(0, 8), "bads"),
         (raw.copy().crop(0, 1), "bads"),
@@ -35,7 +35,7 @@ raw.set_eeg_reference("average")
         (make_fixed_length_epochs(raw, duration=0.5, preload=True), []),
         (make_fixed_length_epochs(raw, duration=1, preload=True), []),
         (make_fixed_length_epochs(raw, duration=5, preload=True), []),
-    ),
+    ],
 )
 @requires_module("onnxruntime")
 def test_label_components_onnx(inst, exclude):
@@ -54,8 +54,8 @@ def test_label_components_onnx(inst, exclude):
 
 
 @pytest.mark.parametrize(
-    "inst, exclude",
-    (
+    ("inst", "exclude"),
+    [
         (raw, "bads"),
         (raw.copy().crop(0, 8), "bads"),
         (raw.copy().crop(0, 1), "bads"),
@@ -68,7 +68,7 @@ def test_label_components_onnx(inst, exclude):
         (make_fixed_length_epochs(raw, duration=0.5, preload=True), []),
         (make_fixed_length_epochs(raw, duration=1, preload=True), []),
         (make_fixed_length_epochs(raw, duration=5, preload=True), []),
-    ),
+    ],
 )
 @requires_module("torch")
 def test_label_components_torch(inst, exclude):
@@ -98,15 +98,12 @@ def test_label_components_torch(inst, exclude):
     assert np.allclose(labels, labels2)
 
 
-def test_warnings():
-    """Test warnings issued when the raw|epochs|ica instance are not using the
-    same algorithm/reference/filters as ICLabel."""
+def test_warnings(rng):
+    """Test warnings issued when the instance does not meet the requirements."""
     times = np.linspace(0, 5, 2000)
     signals = np.array([np.sin(2 * np.pi * k * times) for k in (7, 22, 37)])
-    coeffs = np.random.rand(6, 3)
-    data = np.dot(coeffs, signals) + np.random.normal(
-        0, 0.1, (coeffs.shape[0], times.size)
-    )
+    coeffs = rng.random((6, 3))
+    data = np.dot(coeffs, signals) + rng.normal(0, 0.1, (coeffs.shape[0], times.size))
 
     raw = RawArray(
         data,

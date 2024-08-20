@@ -1,4 +1,4 @@
-"""
+r"""
 .. _tuto-iclabel:
 
 Repairing artifacts with ICA automatically using ICLabel Model

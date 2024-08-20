@@ -154,9 +154,9 @@ class ICLabelNet(nn.Module):
         tensor = tensor.permute((0, 3, 1, 2))
         return tensor
 
-    def forward(
+    def forward(  # noqa: D102
         self, images: torch.Tensor, psds: torch.Tensor, autocorr: torch.Tensor
-    ) -> torch.Tensor:  # noqa: D102
+    ) -> torch.Tensor:
         out_img = self.img_conv(images)
         out_psds = self.psds_conv(psds)
         out_autocorr = self.autocorr_conv(autocorr)

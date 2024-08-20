@@ -1,33 +1,18 @@
 repos:
-    - repo: https://github.com/pycqa/isort
-      rev: 5.13.2
-      hooks:
-          - id: isort
-            files: mne_icalabel
-
     - repo: https://github.com/astral-sh/ruff-pre-commit
-      rev: v0.5.7
+      rev: v0.6.1
       hooks:
           - id: ruff
             name: ruff linter
-            args: [--fix]
-            files: mne_icalabel
+            args: [--fix, --show-fixes]
           - id: ruff-format
             name: ruff formatter
-            files: mne_icalabel
 
     - repo: https://github.com/codespell-project/codespell
       rev: v2.3.0
       hooks:
           - id: codespell
             args: [--write-changes]
-            additional_dependencies: [tomli]
-
-    - repo: https://github.com/pycqa/pydocstyle
-      rev: 6.3.0
-      hooks:
-          - id: pydocstyle
-            files: mne_icalabel
             additional_dependencies: [tomli]
 
     - repo: https://github.com/mscheltienne/bibclean

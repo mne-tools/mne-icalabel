@@ -30,6 +30,7 @@ def sys_info(fid: Optional[IO] = None, developer: bool = False):
     ljust = 26
     out = partial(print, end="", file=fid)
     package = __package__.split(".")[0]
+    package = metadata(package).get("Name", package)
 
     # OS information - requires python 3.8 or above
     out("Platform:".ljust(ljust) + platform.platform() + "\n")

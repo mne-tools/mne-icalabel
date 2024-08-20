@@ -295,10 +295,10 @@ def _eeg_rpsd_constants(
     index = index.T.astype(int)
 
     # different behaviors based on EEG.trials, i.e. raw or epoch
-    # if isinstance(inst, BaseRaw):
-    #     n_seg = index.shape[1]
-    # if isinstance(inst, BaseEpochs):
-    #     n_seg = index.shape[1] * len(inst)
+    if isinstance(inst, BaseRaw):
+        n_seg = index.shape[1]
+    if isinstance(inst, BaseEpochs):
+        n_seg = index.shape[1] * len(inst)
 
     # in MATLAB: 'subset = randperm(n_seg, ceil(n_seg * pct_data / 100));'
     # which is basically: 'subset = randperm(n_seg, n_seg);'
@@ -308,7 +308,7 @@ def _eeg_rpsd_constants(
     # 'subset' is used to select from arrays and is 0-index in Python while its
     # 1-index in MATLAB.
     rng = np.random.default_rng()
-    subset = rng.permutation(range(10))  # 0-index
+    subset = rng.permutation(range(n_seg))  # 0-index
 
     return ncomp, nfreqs, n_points, nyquist, index, window, subset
 

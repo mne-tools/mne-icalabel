@@ -270,7 +270,7 @@ class ICAComponentLabeler(QMainWindow):
 
     @Slot()
     def _reset(self) -> None:
-        """Action of the reset button."""  # noqa: D401
+        """Remove the label from the current component."""
         self._reset_buttons()
         if self.selected_component in self.selected_labels:
             del self.selected_labels[self.selected_component]

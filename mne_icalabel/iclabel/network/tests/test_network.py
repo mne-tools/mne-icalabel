@@ -84,9 +84,9 @@ def test_weights_pytorch():
 
 @requires_module("torch")
 def test_network_outputs_pytorch():
-    """
-    Compare that the ICLabel network in pytorch and matlab outputs the same
-    values for a common set of features (input to the forward pass).
+    """Compare that the ICLabel network in pytorch and matlab outputs the same values.
+
+    Compare the outputs for a common set of features (input to the forward pass).
 
     Notes
     -----
@@ -132,9 +132,9 @@ def test_network_outputs_pytorch():
 
 @requires_module("onnxruntime")
 def test_network_outputs_onnx():
-    """
-    Compare that the ICLabel network in onnx and matlab outputs the same
-    values for a common set of features (input to the forward pass).
+    """Compare that the ICLabel network in onnx and matlab outputs the same values.
+
+    Compare the outputs for a common set of features (input to the forward pass).
 
     Notes
     -----
@@ -176,7 +176,7 @@ def test_network_outputs_onnx():
 
 
 @pytest.mark.parametrize(
-    "eeglab_feature_file, eeglab_feature_formatted_file",
+    ("eeglab_feature_file", "eeglab_feature_formatted_file"),
     [
         (features_raw_path, features_formatted_raw_path),
         (features_epo_path, features_formatted_epo_path),
@@ -200,7 +200,7 @@ def test_format_input(eeglab_feature_file, eeglab_feature_formatted_file):
 
 
 @pytest.mark.parametrize(
-    "eeglab_feature_file, eeglab_output_file",
+    ("eeglab_feature_file", "eeglab_output_file"),
     [
         (features_raw_path, iclabel_output_raw_path),
         (features_epo_path, iclabel_output_epo_path),
@@ -208,10 +208,13 @@ def test_format_input(eeglab_feature_file, eeglab_feature_formatted_file):
 )
 @requires_module("onnxruntime")
 def test_run_iclabel_onnx(eeglab_feature_file, eeglab_output_file):
-    """Test that the network outputs the same values for the features in
-    'features_raw_path' and 'features_epo_path' that contains the features
-    extracted in EEGLAB. This set of feature is compared with the set of
-    features retrieved in python in 'test_features.py:test_get_features'."""
+    """Test that the network outputs the same values as MATLAB.
+
+    Test the the network outputs the same values for the features in
+    'features_raw_path' and 'features_epo_path' that contains the features extracted in
+    EEGLAB. This set of feature is compared with the set of features retrieved in python
+    in 'test_features.py:test_get_features'.
+    """
     from mne_icalabel.iclabel.network.onnx import _run_iclabel
 
     features_eeglab = loadmat(eeglab_feature_file)["features"]
@@ -230,7 +233,7 @@ def test_run_iclabel_onnx(eeglab_feature_file, eeglab_output_file):
 
 
 @pytest.mark.parametrize(
-    "eeglab_feature_file, eeglab_output_file",
+    ("eeglab_feature_file", "eeglab_output_file"),
     [
         (features_raw_path, iclabel_output_raw_path),
         (features_epo_path, iclabel_output_epo_path),
@@ -238,10 +241,13 @@ def test_run_iclabel_onnx(eeglab_feature_file, eeglab_output_file):
 )
 @requires_module("torch")
 def test_run_iclabel_pytorch(eeglab_feature_file, eeglab_output_file):
-    """Test that the network outputs the same values for the features in
-    'features_raw_path' and 'features_epo_path' that contains the features
-    extracted in EEGLAB. This set of feature is compared with the set of
-    features retrieved in python in 'test_features.py:test_get_features'."""
+    """Test that the network outputs matches MATLAB.
+
+    Test that the net work outputs the same values for the features in
+    'features_raw_path' and 'features_epo_path' that contains the features extracted in
+    EEGLAB. This set of feature is compared with the set of features retrieved in python
+    in 'test_features.py:test_get_features'.
+    """
     from mne_icalabel.iclabel.network.torch import _run_iclabel
 
     features_eeglab = loadmat(eeglab_feature_file)["features"]

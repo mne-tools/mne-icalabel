@@ -16,7 +16,7 @@ with raw.info._unlock():
 raw.set_eeg_reference("average")
 
 
-@pytest.mark.parametrize("n_components", (5, 15))
+@pytest.mark.parametrize("n_components", [5, 15])
 def test_label_components(n_components):
     """Simple test to check that label_components runs without raising."""
     ica = ICA(

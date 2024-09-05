@@ -18,6 +18,7 @@ ica.fit(raw)
 
 
 def test_label_components_gui_display():
+    """Test that the GUI is displayed correctly."""
     ica_ = ica.copy()
     gui = label_ica_components(raw, ica_, show=False)
     # test setting the label

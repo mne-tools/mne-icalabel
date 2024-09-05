@@ -74,7 +74,7 @@ kwargs = {"raw": dict(preload=True), "epo": dict()}
 # ----------------------------------------------------------------------------
 @pytest.mark.filterwarnings("ignore:Estimated head radius.*:RuntimeWarning")
 @pytest.mark.parametrize(
-    "file, psd_constant_file, eeglab_feature_file",
+    ("file", "psd_constant_file", "eeglab_feature_file"),
     [
         (raw_eeglab_path, psd_constants_raw_path, features_raw_path),
         (epo_eeglab_path, psd_constants_epo_path, features_epo_path),
@@ -84,7 +84,9 @@ def test_get_features_from_precomputed_ica(
     file, psd_constant_file, eeglab_feature_file
 ):
     """Test that we get the correct set of features from an MNE instance.
-    Corresponds to the output from 'ICL_feature_extractor.m'."""
+
+    Corresponds to the output from 'ICL_feature_extractor.m'.
+    """
     type_ = str(Path(file).stem)[-3:]
     inst = reader[type_](file, **kwargs[type_])
     ica = read_ica_eeglab(file)
@@ -124,7 +126,7 @@ def test_get_features_from_precomputed_ica(
 
 # ----------------------------------------------------------------------------
 @pytest.mark.filterwarnings("ignore:Estimated head radius.*:RuntimeWarning")
-@pytest.mark.parametrize("file", (raw_eeglab_path, epo_eeglab_path))
+@pytest.mark.parametrize("file", [raw_eeglab_path, epo_eeglab_path])
 def test_retrieve_eeglab_icawinv(file):
     """Test that the icawinv is correctly retrieved from an MNE ICA object."""
     ica = read_ica_eeglab(file)
@@ -136,7 +138,7 @@ def test_retrieve_eeglab_icawinv(file):
 
 @pytest.mark.filterwarnings("ignore:Estimated head radius.*:RuntimeWarning")
 @pytest.mark.parametrize(
-    "file, eeglab_result_file",
+    ("file", "eeglab_result_file"),
     [
         (raw_eeglab_path, raw_icaact_eeglab_path),
         (epo_eeglab_path, epo_icaact_eeglab_path),
@@ -156,7 +158,7 @@ def test_compute_ica_activations(file, eeglab_result_file):
 # ----------------------------------------------------------------------------
 @pytest.mark.filterwarnings("ignore:Estimated head radius.*:RuntimeWarning")
 @pytest.mark.parametrize(
-    "file, eeglab_result_file",
+    ("file", "eeglab_result_file"),
     [(raw_eeglab_path, raw_topo1_path), (epo_eeglab_path, epo_topo1_path)],
 )
 def test_topoplotFast(file, eeglab_result_file):
@@ -180,7 +182,7 @@ def test_topoplotFast(file, eeglab_result_file):
 
 @pytest.mark.filterwarnings("ignore:Estimated head radius.*:RuntimeWarning")
 @pytest.mark.parametrize(
-    "file, eeglab_result_file",
+    ("file", "eeglab_result_file"),
     [
         (raw_eeglab_path, raw_topo_feature_path),
         (epo_eeglab_path, epo_topo_feature_path),
@@ -220,12 +222,12 @@ def test_eeg_topoplot_invalid_montage():
 # ----------------------------------------------------------------------------
 @pytest.mark.filterwarnings("ignore:Estimated head radius.*:RuntimeWarning")
 @pytest.mark.parametrize(
-    "fname, constants_fname, type_",
-    (
+    ("fname", "constants_fname", "type_"),
+    [
         (raw_eeglab_path, psd_constants_raw_path, "raw"),
         (epo_eeglab_path, psd_constants_epo_path, "epo"),
         (epo_long_eeglab_path, psd_constants_long_epo_path, "epo"),
-    ),
+    ],
 )
 def test_eeg_rpsd_constants(fname, constants_fname, type_):
     """Test _eeg_rpsd_constants function."""
@@ -262,8 +264,8 @@ def test_eeg_rpsd_constants(fname, constants_fname, type_):
 
 @pytest.mark.filterwarnings("ignore:Estimated head radius.*")
 @pytest.mark.parametrize(
-    "fname, constants_fname, step_by_step_fname, psd_fname, type_",
-    (
+    ("fname", "constants_fname", "step_by_step_fname", "psd_fname", "type_"),
+    [
         (
             raw_eeglab_path,
             psd_constants_raw_path,
@@ -285,7 +287,7 @@ def test_eeg_rpsd_constants(fname, constants_fname, type_):
             psd_long_epo_path,
             "epo",
         ),
-    ),
+    ],
 )
 def test_eeg_rpsd(fname, constants_fname, step_by_step_fname, psd_fname, type_):
     """Test eeg_rpsd function that extract the PSD feature from the IC."""
@@ -368,11 +370,10 @@ def test_eeg_autocorr_fftw():
     assert np.allclose(autocorr, autocorr_eeglab, atol=1e-7)
 
 
-def test_resampling():
-    """Test that we correctly resample the autocorrelation feature, no matter
-    the sampling frequency."""
+def test_resampling(rng):
+    """Test that we correctly resample the autocorrelation feature."""
     # similar dataset shape to the MNE sample dataset
-    data = np.random.randint(1, 10, (15, 601))
+    data = rng.integers(1, 10, (15, 601))
 
     # with integer
     resamp = _resample(data, fs=600)
@@ -387,7 +388,7 @@ def test_resampling():
         assert resamp.shape[1] == 101
 
     # similar dataset shape to the EEGLAB sample dataset
-    data = np.random.randint(1, 10, (30, 129))
+    data = rng.integers(1, 10, (30, 129))
 
     # with integer
     resamp = _resample(data, fs=128)

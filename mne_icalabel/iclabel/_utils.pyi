@@ -99,14 +99,4 @@ def _mergepoints2D(
 def _mergesimpts(
     data: ArrayLike, tols: list[ArrayLike], mode: str = "average"
 ) -> ArrayLike:
-    """
-    Parameters
-    ----------
-    data : array
-    tols : list of 3 arrays
-    mode : str
-
-    Returns
-    -------
-    array
-    """
+    """Merge similar points."""

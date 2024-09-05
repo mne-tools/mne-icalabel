@@ -18,8 +18,9 @@ data_path = op.join(testing.data_path(), "EDF")
 raw_fname = op.join(data_path, "test_reduced.edf")
 
 
-@pytest.fixture(scope="function")
-def _tmp_bids_path(tmp_path):
+@pytest.fixture
+def tmp_bids_path(tmp_path):
+    """Create a bids path."""
     bids_path = BIDSPath(
         subject=subject_id,
         session=session_id,
@@ -35,7 +36,8 @@ def _tmp_bids_path(tmp_path):
 
 
 @pytest.fixture(scope="session")
-def _ica():
+def ica():
+    """Create an ICA object."""
     raw = read_raw_edf(raw_fname, preload=True)
     raw.filter(l_freq=1, h_freq=100)
     n_components = 5
@@ -44,8 +46,9 @@ def _ica():
     return ica
 
 
-def test_write_channels_tsv(_ica, _tmp_bids_path):
-    root = _tmp_bids_path.root
+def test_write_channels_tsv(ica: ICA, tmp_bids_path):
+    """Test writing components to a channels.tsv file."""
+    root = tmp_bids_path.root
     deriv_root = root / "derivatives" / "ICA"
     deriv_fname = BIDSPath(
         root=deriv_root,
@@ -57,10 +60,10 @@ def test_write_channels_tsv(_ica, _tmp_bids_path):
         suffix="channels",
         extension=".tsv",
     )
-    _ica = _ica.copy()
-    _ica.labels_["ecg"] = [0]
+    ica = ica.copy()
+    ica.labels_["ecg"] = [0]
 
-    write_components_tsv(_ica, deriv_fname)
+    write_components_tsv(ica, deriv_fname)
 
     assert deriv_fname.fpath.exists()
     expected_json = deriv_fname.copy().update(extension=".json")
@@ -72,8 +75,9 @@ def test_write_channels_tsv(_ica, _tmp_bids_path):
     assert ch_tsv["ic_type"].values[0] == "ecg"
 
 
-def test_mark_components(_ica, _tmp_bids_path):
-    root = _tmp_bids_path.root
+def test_mark_components(ica, tmp_bids_path):
+    """Test marking components."""
+    root = tmp_bids_path.root
     deriv_root = root / "derivatives" / "ICA"
     deriv_fname = BIDSPath(
         root=deriv_root,
@@ -85,7 +89,7 @@ def test_mark_components(_ica, _tmp_bids_path):
         suffix="channels",
         extension=".tsv",
     )
-    write_components_tsv(_ica, deriv_fname)
+    write_components_tsv(ica, deriv_fname)
 
     # mark components
     with pytest.raises(ValueError, match="not a valid label"):

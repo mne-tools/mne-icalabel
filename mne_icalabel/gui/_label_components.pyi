@@ -87,7 +87,7 @@ class ICAComponentLabeler(QMainWindow):
         """Update the labels saved."""
 
     def _reset(self) -> None:
-        """Action of the reset button."""
+        """Remove the label from the current component."""
 
     def _reset_buttons(self) -> None:
         """Reset all buttons."""

@@ -307,7 +307,8 @@ def _eeg_rpsd_constants(
     # possible to reproduce the output in python.
     # 'subset' is used to select from arrays and is 0-index in Python while its
     # 1-index in MATLAB.
-    subset = np.random.permutation(range(n_seg))  # 0-index
+    rng = np.random.default_rng()
+    subset = rng.permutation(range(n_seg))  # 0-index
 
     return ncomp, nfreqs, n_points, nyquist, index, window, subset
 

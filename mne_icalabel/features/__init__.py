@@ -1,3 +1,1 @@
-"""Features for the ICLabel"""
-
-from .topomap import get_topomaps  # noqa: F401
+from .topomap import get_topomaps

@@ -21,7 +21,7 @@ import mne_icalabel
 
 project = "MNE-ICALabel"
 author = "Adam Li, Mathieu Scheltienne"
-copyright = (
+copyright = (  # noqa: A001
     f"2021-{date.today().year}, MNE Developers. "
     f"Last updated on {date.today().isoformat()}"
 )
@@ -180,7 +180,7 @@ error_ignores = {
     "EX01",  # section 'Examples' not found
     "ES01",  # no extended summary found
     "SA01",  # section 'See Also' not found
-    "RT02",  # The first line of the Returns section should contain only the type, unless multiple values are being returned  # noqa
+    "RT02",  # The first line of the Returns section should contain only the type, unless multiple values are being returned  # noqa: E501
 }
 
 numpydoc_validate = True

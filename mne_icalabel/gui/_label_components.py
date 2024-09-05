@@ -269,8 +269,8 @@ class ICAComponentLabeler(QMainWindow):
         self._save_labels()  # updates the ICA instance every time
 
     @Slot()
-    def _reset(self) -> None:  # noqa: D401
-        """Action of the reset button."""
+    def _reset(self) -> None:
+        """Remove the label from the current component."""
         self._reset_buttons()
         if self.selected_component in self.selected_labels:
             del self.selected_labels[self.selected_component]

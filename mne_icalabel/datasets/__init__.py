@@ -1,1 +1,1 @@
-from . import icalabel  # noqa: F401
+from . import icalabel

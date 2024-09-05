@@ -31,14 +31,15 @@ kwargs = {"raw": dict(preload=True), "epo": dict()}
 
 @pytest.mark.filterwarnings("ignore:Estimated head radius.*:RuntimeWarning")
 @pytest.mark.parametrize(
-    "file, eeglab_result_file",
+    ("file", "eeglab_result_file"),
     [(raw_eeglab_path, loc_raw_path), (epo_eeglab_path, loc_epo_path)],
 )
 def test_loc(file, eeglab_result_file):
     """Test conversion of MNE montage to EEGLAB loc.
 
     This test works because MNE does the conversion from EEGLAB to MNE montage
-    when loading the datasets."""
+    when loading the datasets.
+    """
     type_ = str(Path(file).stem)[-3:]
     inst = reader[type_](file, **kwargs[type_])
     rd, th = _mne_to_eeglab_locs(inst, picks=inst.ch_names)
@@ -49,7 +50,7 @@ def test_loc(file, eeglab_result_file):
     assert np.allclose(th, eeglab_th, atol=1e-8)
 
 
-@pytest.mark.parametrize("file", (gdatav4_raw_path, gdatav4_epo_path))
+@pytest.mark.parametrize("file", [gdatav4_raw_path, gdatav4_epo_path])
 def test_gdatav4(file):
     """Test grid data interpolation."""
     # load inputs from MATLAB

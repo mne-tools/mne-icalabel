@@ -99,14 +99,12 @@ stubs = [
   'mne-icalabel[torch]',
   'mypy',
   'PyQt6',
-  'ruff>=0.1.8',
+  'ruff>=0.6.0',
 ]
 style = [
   'bibclean',
   'codespell[toml]>=2.2.4',
-  'isort',
-  'pydocstyle[toml]',
-  'ruff>=0.1.13',
+  'ruff>=0.6.0',
   'toml-sort',
   'yamllint',
 ]
@@ -161,27 +159,9 @@ omit = [
   '**/tests/**',
 ]
 
-[tool.isort]
-extend_skip_glob = [
-  'doc/*',
-  'examples/*',
-  'setup.py',
-]
-line_length = 88
-multi_line_output = 3
-profile = 'black'
-py_version = 39
-
 [tool.mypy]
 ignore_missing_imports = true
 no_site_packages = true
-
-[tool.pydocstyle]
-add_ignore = 'D100,D104,D107'
-convention = 'numpy'
-ignore-decorators = '(copy_doc|property|.*setter|.*getter|pyqtSlot|Slot)'
-match = '^(?!setup|__init__|test_).*\.py'
-match-dir = '^mne_icalabel.*'
 
 [tool.pytest.ini_options]
 addopts = '--durations 20 --junit-xml=junit-results.xml -v --color=yes'
@@ -189,10 +169,7 @@ junit_family = 'xunit2'
 minversion = '8.0'
 
 [tool.ruff]
-extend-exclude = [
-  'doc',
-  'setup.py',
-]
+extend-exclude = []
 line-length = 88
 target-version = 'py39'
 
@@ -201,14 +178,25 @@ docstring-code-format = true
 
 [tool.ruff.lint]
 ignore = []
-select = ["E", "F", "UP", "W"]
+select = ['A', 'B', 'D', 'E', 'F', 'G', 'I', 'LOG', 'NPY', 'PIE', 'PT', 'T20', 'UP', 'W']
 
 [tool.ruff.lint.per-file-ignores]
 '*' = [
-  "UP007", # 'Use `X | Y` for type annotations', requires python 3.10
+  'B904', # 'Within an except clause, raise exceptions with raise ... from ...'
+  'D100', # 'Missing docstring in public module'
+  'D104', # 'Missing docstring in public package'
+  'D107', # 'Missing docstring in __init__'
+  'UP007', # 'Use `X | Y` for type annotations', requires python 3.10
+  'UP038', # 'Use X | Y in {} call instead of (X, Y)', requires python 3.10
 ]
 '*.pyi' = ['E501']
 '__init__.py' = ['F401']
+'examples/*' = ['B018', 'D205', 'D400', 'T201']
+'tutorials/*' = ['B018', 'D205', 'D400', 'T201']
+
+[tool.ruff.lint.pydocstyle]
+convention = 'numpy'
+ignore-decorators = ["mne_icalabel.utils._docs.copy_doc"]
 
 [tool.setuptools]
 include-package-data = false

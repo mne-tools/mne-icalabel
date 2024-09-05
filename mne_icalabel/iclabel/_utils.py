@@ -243,18 +243,8 @@ def _mergepoints2D(
 
 def _mergesimpts(
     data: ArrayLike, tols: list[ArrayLike], mode: str = "average"
-) -> ArrayLike:  # noqa
-    """
-    Parameters
-    ----------
-    data : array
-    tols : list of 3 arrays
-    mode : str
-
-    Returns
-    -------
-    array
-    """
+) -> ArrayLike:
+    """Merge similar points."""
     data_ = data.copy()[np.argsort(data[:, 0])]
     newdata = []
     tols_ = np.array(tols)

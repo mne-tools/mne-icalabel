@@ -1,8 +1,8 @@
-"""Test config.py"""
-
 from io import StringIO
 
-from mne_icalabel.utils.config import sys_info
+import pytest
+
+from mne_icalabel.utils.config import _get_gpu_info, sys_info
 
 
 def test_sys_info():
@@ -33,3 +33,11 @@ def test_sys_info():
     assert "build" in value
     assert "style" in value
     assert "test" in value
+
+
+def test_gpu_info():
+    """Test getting GPU info."""
+    pytest.importorskip("pyvista")
+    version, renderer = _get_gpu_info()
+    assert version is not None
+    assert renderer is not None

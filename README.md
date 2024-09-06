@@ -1,12 +1,16 @@
 # mne-icalabel
 
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Imports: isort](https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336)](https://pycqa.github.io/isort/)
 [![Codecov](https://codecov.io/gh/mne-tools/mne-icalabel/branch/main/graph/badge.svg)](https://codecov.io/gh/mne-tools/mne-icalabel)
 [![tests](https://github.com/mne-tools/mne-icalabel/actions/workflows/pytest.yaml/badge.svg?branch=main)](https://github.com/mne-tools/mne-icalabel/actions/workflows/pytest.yaml)
 [![doc](https://github.com/mne-tools/mne-icalabel/actions/workflows/doc.yaml/badge.svg?branch=main)](https://github.com/mne-tools/mne-icalabel/actions/workflows/doc.yaml)
+[![PyPI version](https://img.shields.io/pypi/v/mne-icalabel.svg)](https://pypi.org/project/mne-icalabel/)
 [![PyPI Download count](https://pepy.tech/badge/mne-icalabel)](https://pepy.tech/project/mne-icalabel)
-[![Latest PyPI release](https://img.shields.io/pypi/v/mne-icalabel.svg)](https://pypi.org/project/mne-icalabel/)
-[![Latest conda-forge release](https://img.shields.io/conda/vn/conda-forge/mne-icalabel.svg)](https://anaconda.org/conda-forge/mne-icalabel/)
+[![Conda Version](https://img.shields.io/conda/vn/conda-forge/mne-icalabel.svg)](https://anaconda.org/conda-forge/mne-icalabel/)
+[![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/mne-icalabel.svg)](https://anaconda.org/conda-forge/mne-icalabel)
+[![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/mne-icalabel.svg)](https://anaconda.org/conda-forge/mne-icalabel)
 [![JOSS](https://joss.theoj.org/papers/d91770e35a985ecda4f2e1f124977207/status.svg)](https://joss.theoj.org/papers/d91770e35a985ecda4f2e1f124977207)
 
 This repository is a conversion of the popular Matlab-based

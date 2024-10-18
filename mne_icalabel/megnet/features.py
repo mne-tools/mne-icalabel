@@ -11,7 +11,7 @@ from PIL import Image
 from scipy import interpolate # type: ignore
 from scipy.spatial import ConvexHull # type: ignore
 
-from _utils import cart2sph, pol2cart
+from ._utils import cart2sph, pol2cart
 
 
 def get_megnet_features(raw: BaseRaw, ica: ICA):

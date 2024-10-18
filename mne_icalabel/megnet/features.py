@@ -1,16 +1,16 @@
 import io
 
 import matplotlib.pyplot as plt
-import mne # type: ignore
+import mne  # type: ignore
 import numpy as np
-from mne.io import BaseRaw # type: ignore
-from mne.preprocessing import ICA # type: ignore
-from mne.utils import warn # type: ignore
+from _utils import cart2sph, pol2cart
+from mne.io import BaseRaw  # type: ignore
+from mne.preprocessing import ICA  # type: ignore
+from mne.utils import warn  # type: ignore
 from numpy.typing import NDArray
 from PIL import Image
-from scipy import interpolate # type: ignore
-from scipy.spatial import ConvexHull # type: ignore
-
+from scipy import interpolate  # type: ignore
+from scipy.spatial import ConvexHull  # type: ignore
 from ._utils import cart2sph, pol2cart
 
 

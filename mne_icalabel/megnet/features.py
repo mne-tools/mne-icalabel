@@ -179,7 +179,7 @@ if __name__ == "__main__":
     sample_fname = sample_dir / "MEG" / "sample" / "sample_audvis_raw.fif"
 
     raw = mne.io.read_raw_fif(sample_fname).pick_types("mag")
-
+    raw.resample(250)
     ica = mne.preprocessing.ICA(n_components=20, method="infomax")
     ica.fit(raw)
 
@@ -192,4 +192,4 @@ if __name__ == "__main__":
         ax.imshow(comp)
         ax.axis("off")
     fig.tight_layout()
-    fig.show()
+    plt.show()

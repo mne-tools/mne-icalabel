@@ -134,7 +134,7 @@ if __name__ == "__main__":
 
     sample_dir = mne.datasets.sample.data_path()
     sample_fname = sample_dir / "MEG" / "sample" / "sample_audvis_raw.fif"
-    raw = mne.io.read_raw_fif(sample_fname).pick_types("mag")
+    raw = mne.io.read_raw_fif(sample_fname).pick("mag")
     raw.resample(250)
     raw.filter(1, 100)
     ica = mne.preprocessing.ICA(
@@ -143,3 +143,7 @@ if __name__ == "__main__":
     ica.fit(raw)
 
     res = megnet_label_components(raw, ica)
+    print(res)
+    ica.exclude = [i for i, label in enumerate(res["labels"]) if label != "brain/other"]
+    ica.plot_components()
+    

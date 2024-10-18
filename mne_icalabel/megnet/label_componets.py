@@ -67,7 +67,8 @@ def _chunk_predicting(
     overlap_len=3750,
 ) -> NDArray:
     """Predict the labels for each component using
-    MEGnet's chunk volte algorithm."""
+    MEGnet's chunk volte algorithm.
+    """
     predction_vote = []
 
     for comp_series, comp_map in zip(time_series, spatial_maps):
@@ -79,9 +80,7 @@ def _chunk_predicting(
 
         chunk_votes = {start: 0 for start in start_times}
         for t in range(time_len):
-            in_chunks = (
-                [start <= t < start + chunk_len for start in start_times]
-            )
+            in_chunks = [start <= t < start + chunk_len for start in start_times]
             # how many chunks the time point is in
             num_chunks = np.sum(in_chunks)
             for start_time, is_in_chunk in zip(start_times, in_chunks):
@@ -91,22 +90,18 @@ def _chunk_predicting(
         weighted_predictions = {}
         for start_time in chunk_votes.keys():
             onnx_inputs = {
-                session.get_inputs()[0].name:
-                    np.expand_dims(comp_map, 0).astype(np.float32),
-                session.get_inputs()[1].name:
-                    np.expand_dims(
-                    np.expand_dims(
-                        comp_series[start_time: start_time + chunk_len], 0
-                        ), -1).astype(np.float32),
+                session.get_inputs()[0].name: np.expand_dims(comp_map, 0).astype(
+                    np.float32
+                ),
+                session.get_inputs()[1].name: np.expand_dims(
+                    np.expand_dims(comp_series[start_time : start_time + chunk_len], 0),
+                    -1,
+                ).astype(np.float32),
             }
             prediction = session.run(None, onnx_inputs)[0]
-            weighted_predictions[start_time] = (
-                prediction * chunk_votes[start_time]
-            )
+            weighted_predictions[start_time] = prediction * chunk_votes[start_time]
 
-        comp_prediction = np.stack(
-            list(weighted_predictions.values())
-            ).mean(axis=0)
+        comp_prediction = np.stack(list(weighted_predictions.values())).mean(axis=0)
         comp_prediction /= comp_prediction.sum()
         predction_vote.append(comp_prediction)
 
@@ -129,7 +124,6 @@ def _get_chunk_start(
 
 if __name__ == "__main__":
     import mne
-
     from features import get_megnet_features
 
     sample_dir = mne.datasets.sample.data_path()
@@ -137,13 +131,10 @@ if __name__ == "__main__":
     raw = mne.io.read_raw_fif(sample_fname).pick("mag")
     raw.resample(250)
     raw.filter(1, 100)
-    ica = mne.preprocessing.ICA(
-        n_components=20, max_iter="auto", method="infomax"
-        )
+    ica = mne.preprocessing.ICA(n_components=20, max_iter="auto", method="infomax")
     ica.fit(raw)
 
     res = megnet_label_components(raw, ica)
     print(res)
     ica.exclude = [i for i, label in enumerate(res["labels"]) if label != "brain/other"]
     ica.plot_components()
-    

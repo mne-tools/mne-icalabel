@@ -3,7 +3,6 @@ import io
 import matplotlib.pyplot as plt
 import mne  # type: ignore
 import numpy as np
-from ._utils import cart2sph, pol2cart
 from mne.io import BaseRaw  # type: ignore
 from mne.preprocessing import ICA  # type: ignore
 from mne.utils import warn  # type: ignore
@@ -12,10 +11,12 @@ from PIL import Image
 from scipy import interpolate  # type: ignore
 from scipy.spatial import ConvexHull  # type: ignore
 
+from ._utils import cart2sph, pol2cart
+
 
 def get_megnet_features(raw: BaseRaw, ica: ICA):
     """
-    
+
     Extract time series and topomaps for each ICA component.
     the main work is focused on making BrainStorm-like topomaps
     which trained the MEGnet.
@@ -34,7 +35,7 @@ def get_megnet_features(raw: BaseRaw, ica: ICA):
         The time series for each ICA component.
     topomaps : np.ndarray
         The topomaps for each ICA component
-        
+
     """
     if "meg" not in raw:
         raise RuntimeError(
@@ -167,5 +168,3 @@ def _get_topomaps(ica: ICA, pos_new: NDArray, outlines: dict):
         topomaps.append(np.array(rgb_image))
 
     return np.array(topomaps)
-
-

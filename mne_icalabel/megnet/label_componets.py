@@ -5,7 +5,7 @@ import onnxruntime as ort
 from mne.io import BaseRaw
 from mne.preprocessing import ICA
 from numpy.typing import NDArray
-
+from features import get_megnet_features
 
 def megnet_label_components(
     raw: BaseRaw,
@@ -13,6 +13,7 @@ def megnet_label_components(
     model_path: str = op.join("assets", "network", "megnet.onnx"),
 ) -> dict:
     """
+    
     Label the provided ICA components with the MEGnet neural network.
 
     Parameters
@@ -32,6 +33,7 @@ def megnet_label_components(
                 The predicted probabilities for each component.
             - 'labels' : list of str
                 The predicted labels for each component.
+                
     """
     time_series, topomaps = get_megnet_features(raw, ica)
 
@@ -50,7 +52,7 @@ def megnet_label_components(
     session = ort.InferenceSession(model_path)
     predictions_vote = _chunk_predicting(session, time_series, topomaps)
 
-    all_labels = ["brain/other", "eye blink", "eye movement", "heart"]
+    all_labels = ["brain/other", "eye movement", "heart", "eye blink"]
     # megnet_labels = ['NA', 'EB', 'SA', 'CA']
     result = predictions_vote[:, 0, :]
     labels = [all_labels[i] for i in result.argmax(axis=1)]
@@ -66,9 +68,7 @@ def _chunk_predicting(
     chunk_len=15000,
     overlap_len=3750,
 ) -> NDArray:
-    """Predict the labels for each component using
-    MEGnet's chunk volte algorithm.
-    """
+    """MEGnet's chunk volte algorithm."""
     predction_vote = []
 
     for comp_series, comp_map in zip(time_series, spatial_maps):
@@ -111,9 +111,7 @@ def _chunk_predicting(
 def _get_chunk_start(
     input_len: int, chunk_len: int = 15000, overlap_len: int = 3750
 ) -> list:
-    """
-    Calculate start times for time series chunks with overlap.
-    """
+    """Calculate start times for time series chunks with overlap."""
     start_times = []
     start_time = 0
     while start_time + chunk_len <= input_len:
@@ -122,19 +120,3 @@ def _get_chunk_start(
     return start_times
 
 
-if __name__ == "__main__":
-    import mne
-    from features import get_megnet_features
-
-    sample_dir = mne.datasets.sample.data_path()
-    sample_fname = sample_dir / "MEG" / "sample" / "sample_audvis_raw.fif"
-    raw = mne.io.read_raw_fif(sample_fname).pick("mag")
-    raw.resample(250)
-    raw.filter(1, 100)
-    ica = mne.preprocessing.ICA(n_components=20, max_iter="auto", method="infomax")
-    ica.fit(raw)
-
-    res = megnet_label_components(raw, ica)
-    print(res)
-    ica.exclude = [i for i, label in enumerate(res["labels"]) if label != "brain/other"]
-    ica.plot_components()

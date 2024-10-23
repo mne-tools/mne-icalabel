@@ -3,7 +3,7 @@ import io
 import matplotlib.pyplot as plt
 import mne  # type: ignore
 import numpy as np
-from _utils import cart2sph, pol2cart
+from ._utils import cart2sph, pol2cart
 from mne.io import BaseRaw  # type: ignore
 from mne.preprocessing import ICA  # type: ignore
 from mne.utils import warn  # type: ignore
@@ -11,11 +11,11 @@ from numpy.typing import NDArray
 from PIL import Image
 from scipy import interpolate  # type: ignore
 from scipy.spatial import ConvexHull  # type: ignore
-from ._utils import cart2sph, pol2cart
 
 
 def get_megnet_features(raw: BaseRaw, ica: ICA):
     """
+    
     Extract time series and topomaps for each ICA component.
     the main work is focused on making BrainStorm-like topomaps
     which trained the MEGnet.
@@ -34,6 +34,7 @@ def get_megnet_features(raw: BaseRaw, ica: ICA):
         The time series for each ICA component.
     topomaps : np.ndarray
         The topomaps for each ICA component
+        
     """
     if "meg" not in raw:
         raise RuntimeError(
@@ -67,9 +68,7 @@ def get_megnet_features(raw: BaseRaw, ica: ICA):
 
 
 def _make_head_outlines(sphere: NDArray, pos: NDArray, clip_origin: tuple):
-    """
-    Generate head outlines and mask positions for the topomap plot.
-    """
+    """Generate head outlines and mask positions for the topomap plot."""
     x, y, _, radius = sphere
     ll = np.linspace(0, 2 * np.pi, 101)
     head_x = np.cos(ll) * radius * 1.01 + x
@@ -88,9 +87,7 @@ def _make_head_outlines(sphere: NDArray, pos: NDArray, clip_origin: tuple):
 
 
 def _get_topomaps_data(ica: ICA):
-    """
-    Prepare 2D sensor positions and outlines for topomap plotting.
-    """
+    """Prepare 2D sensor positions and outlines for topomap plotting."""
     mags = mne.pick_types(ica.info, meg="mag")
     channel_info = ica.info["chs"]
     loc_3d = [channel_info[i]["loc"][0:3] for i in mags]
@@ -133,9 +130,7 @@ def _get_topomaps_data(ica: ICA):
 
 
 def _get_topomaps(ica: ICA, pos_new: NDArray, outlines: dict):
-    """
-    Generate topomap images for each ICA component.
-    """
+    """Generate topomap images for each ICA component."""
     topomaps = []
     data_picks, _, _, _, _, _, _ = mne.viz.topomap._prepare_topomap_plot(
         ica, ch_type="mag"
@@ -153,7 +148,7 @@ def _get_topomaps(ica: ICA, pos_new: NDArray, outlines: dict):
             outlines=outlines,
             extrapolate="head",
             sphere=[0, 0, 0, 1],
-            contours=10,
+            contours=0,
             res=120,
             axes=ax,
             show=False,
@@ -174,22 +169,3 @@ def _get_topomaps(ica: ICA, pos_new: NDArray, outlines: dict):
     return np.array(topomaps)
 
 
-if __name__ == "__main__":
-    sample_dir = mne.datasets.sample.data_path()
-    sample_fname = sample_dir / "MEG" / "sample" / "sample_audvis_raw.fif"
-
-    raw = mne.io.read_raw_fif(sample_fname).pick_types("mag")
-    raw.resample(250)
-    ica = mne.preprocessing.ICA(n_components=20, method="infomax")
-    ica.fit(raw)
-
-    time_series, topomaps = get_megnet_features(raw, ica)
-
-    fig, axes = plt.subplots(4, 5)
-    for i, comp in enumerate(topomaps):
-        row, col = divmod(i, 5)
-        ax = axes[row, col]
-        ax.imshow(comp)
-        ax.axis("off")
-    fig.tight_layout()
-    plt.show()

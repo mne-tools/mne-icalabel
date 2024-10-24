@@ -16,7 +16,7 @@ from ._utils import cart2sph, pol2cart
 
 def get_megnet_features(raw: BaseRaw, ica: ICA):
     """Extract time series and topomaps for each ICA component.
-    
+
     the main work is focused on making BrainStorm-like topomaps
     which trained the MEGnet.
 

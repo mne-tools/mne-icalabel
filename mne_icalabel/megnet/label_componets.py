@@ -5,6 +5,7 @@ import onnxruntime as ort
 from mne.io import BaseRaw
 from mne.preprocessing import ICA
 from numpy.typing import NDArray
+
 from .features import get_megnet_features
 
 

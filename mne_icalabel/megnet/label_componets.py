@@ -5,7 +5,7 @@ import onnxruntime as ort
 from mne.io import BaseRaw
 from mne.preprocessing import ICA
 from numpy.typing import NDArray
-from features import get_megnet_features
+from .features import get_megnet_features
 
 def megnet_label_components(
     raw: BaseRaw,
@@ -13,7 +13,6 @@ def megnet_label_components(
     model_path: str = op.join("assets", "network", "megnet.onnx"),
 ) -> dict:
     """
-    
     Label the provided ICA components with the MEGnet neural network.
 
     Parameters

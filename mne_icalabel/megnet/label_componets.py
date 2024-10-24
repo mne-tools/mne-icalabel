@@ -2,18 +2,19 @@ import os.path as op
 
 import numpy as np
 import onnxruntime as ort
+from features import get_megnet_features
 from mne.io import BaseRaw
 from mne.preprocessing import ICA
 from numpy.typing import NDArray
 from .features import get_megnet_features
+
 
 def megnet_label_components(
     raw: BaseRaw,
     ica: ICA,
     model_path: str = op.join("assets", "network", "megnet.onnx"),
 ) -> dict:
-    """
-    Label the provided ICA components with the MEGnet neural network.
+    """Label the provided ICA components with the MEGnet neural network.
 
     Parameters
     ----------
@@ -32,7 +33,7 @@ def megnet_label_components(
                 The predicted probabilities for each component.
             - 'labels' : list of str
                 The predicted labels for each component.
-                
+
     """
     time_series, topomaps = get_megnet_features(raw, ica)
 
@@ -117,5 +118,3 @@ def _get_chunk_start(
         start_times.append(start_time)
         start_time += chunk_len - overlap_len
     return start_times
-
-

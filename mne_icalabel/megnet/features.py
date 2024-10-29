@@ -226,7 +226,7 @@ def _line_noise_channel(
     -------
     bool
         Returns True if line noise is detected in any channel, otherwise False.
-    
+
     """
     psd = raw.compute_psd(picks=picks)
     freqs = psd.freqs

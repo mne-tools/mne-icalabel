@@ -230,9 +230,10 @@ def _line_noise_channel(
     Notes
     -----
     This function detects line noise by analyzing the PSD of each selected channel.
-    For each harmonic of `fline` (up to the Nyquist frequency), it checks if the PSD at the harmonic
-    frequency is significantly higher than the PSD in neighboring frequencies. Specifically, it considers the
-    PSD value at each harmonic to indicate line noise if it exceeds the mean PSD of neighboring frequencies
+    For each harmonic of `fline` (up to the Nyquist frequency), 
+    it checks if the PSD at the harmonic frequency is significantly higher than the 
+    PSD in neighboring frequencies. Specifically, it considers the PSD value at each harmonic 
+    to indicate line noise if it exceeds the mean PSD of neighboring frequencies
     plus `threshold_factor` times the standard deviation.
     """
     psd = raw.compute_psd(picks=picks)
@@ -289,7 +290,7 @@ def _line_noise_channel(
 def _check_notch(
     raw: BaseRaw, picks: str, neighbor_width: float = 2.0, threshold_factor: float = 3
 ) -> bool:
-    """Return True if line noise find in raw"""
+    """Return True if line noise find in raw."""
     check_result = False
     for fline in [50, 60]:
         if _line_noise_channel(raw, picks, fline, neighbor_width, threshold_factor):

@@ -230,9 +230,9 @@ def _line_noise_channel(
     Notes
     -----
     This function detects line noise by analyzing the PSD of each selected channel.
-    For each harmonic of `fline` (up to the Nyquist frequency), 
-    it checks if the PSD at the harmonic frequency is significantly higher than the 
-    PSD in neighboring frequencies. Specifically, it considers the PSD value at each harmonic 
+    For each harmonic of `fline` (up to the Nyquist frequency),
+    it checks if the PSD at the harmonic frequency is significantly higher than the
+    PSD in neighboring frequencies. Specifically, it considers the PSD value at each harmonic
     to indicate line noise if it exceeds the mean PSD of neighboring frequencies
     plus `threshold_factor` times the standard deviation.
     """

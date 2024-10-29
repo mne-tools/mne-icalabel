@@ -5,7 +5,7 @@ import mne  # type: ignore
 import numpy as np
 from mne.io import BaseRaw  # type: ignore
 from mne.preprocessing import ICA  # type: ignore
-from mne.utils import warn, _validate_type  # type: ignore
+from mne.utils import _validate_type, warn  # type: ignore
 from numpy.typing import NDArray
 from PIL import Image
 from scipy import interpolate  # type: ignore
@@ -36,10 +36,11 @@ def get_megnet_features(raw: BaseRaw, ica: ICA):
         The topomaps for each ICA component
 
     """
-    _validate_type(raw, BaseRaw, 'raw')
+    _validate_type(raw, BaseRaw, "raw")
 
-    if not any(ch_type in ['mag', 'grad']
-               for ch_type in raw.get_channel_types(unique=True)):
+    if not any(
+        ch_type in ["mag", "grad"] for ch_type in raw.get_channel_types(unique=True)
+    ):
         raise RuntimeError(
             "Could not find MEG channels in the provided "
             "Raw instance. The MEGnet model was fitted on"
@@ -53,7 +54,7 @@ def get_megnet_features(raw: BaseRaw, ica: ICA):
             "an MEG datasetat least 60 seconds long. "
         )
 
-    if _check_notch(raw, 'mag'):
+    if _check_notch(raw, "mag"):
         raise RuntimeError(
             "Line noise detected in 50/60 Hz. "
             "MEGnet was trained on MEG data without line noise. "
@@ -70,22 +71,21 @@ def get_megnet_features(raw: BaseRaw, ica: ICA):
             "(see the 'resample()' method for raw)."
             "The classification performance might be negatively impacted."
         )
-        
+
     if raw.info["highpass"] != 1 or raw.info["lowpass"] != 100:
         warn(
-            f"The provided raw instance is not filtered between 1 and 100 Hz. "
+            "The provided raw instance is not filtered between 1 and 100 Hz. "
             "MEGnet was designed to classify features extracted from an MEG dataset "
             "bandpass filtered between 1 and 100 Hz (see the 'filter()' method for Raw."
         )
-        
-    if ica.method != 'infomax':
+
+    if ica.method != "infomax":
         warn(
             f"The provided ICA instance was fitted with a '{ica.method}' algorithm. "
             "MEGnet was designed with infomax ICA decompositions. To use the "
             "infomax algorithm, use the 'mne.preprocessing.ICA' instance with "
             "the arguments 'ICA(method='infomax')"
         )
-        
 
     pos_new, outlines = _get_topomaps_data(ica)
     topomaps = _get_topomaps(ica, pos_new, outlines)
@@ -193,12 +193,15 @@ def _get_topomaps(ica: ICA, pos_new: NDArray, outlines: dict):
 
     return np.array(topomaps)
 
-def _line_noise_channel(raw:BaseRaw, 
-                      picks: str, 
-                      fline: float=50.0, 
-                      neighbor_width: float=2.0, 
-                      threshold_factor: float=3, 
-                      show: bool=False):
+
+def _line_noise_channel(
+    raw: BaseRaw,
+    picks: str,
+    fline: float = 50.0,
+    neighbor_width: float = 2.0,
+    threshold_factor: float = 3,
+    show: bool = False,
+):
     """Detect line noise in MEG/EEG data.
 
     Parameters
@@ -206,19 +209,19 @@ def _line_noise_channel(raw:BaseRaw,
     raw : mne.io.Raw
         The raw MEG/EEG data.
     picks : str or list, optional
-        Channels to include in the analysis. 
+        Channels to include in the analysis.
     fline : float, optional
         The base frequency of the line noise to detect.
     neighbor_width : float, optional
-        Width of the frequency neighborhood around each harmonic 
+        Width of the frequency neighborhood around each harmonic
         for calculating background noise, in Hz. Default is 2.0 Hz.
     threshold_factor : float, optional
-        Multiplicative factor for setting the detection threshold. 
-        The threshold is set as the mean of the neighboring frequencies plus 
+        Multiplicative factor for setting the detection threshold.
+        The threshold is set as the mean of the neighboring frequencies plus
         `threshold_factor` times the standard deviation. Default is 3.
     show : bool, optional
-        Whether to plot the PSD for channels affected by line noise. 
-        
+        Whether to plot the PSD for channels affected by line noise.
+
     Returns
     -------
     bool
@@ -226,19 +229,19 @@ def _line_noise_channel(raw:BaseRaw,
 
     Notes
     -----
-    This function detects line noise by analyzing the PSD of each selected channel. 
-    For each harmonic of `fline` (up to the Nyquist frequency), it checks if the PSD at the harmonic 
-    frequency is significantly higher than the PSD in neighboring frequencies. Specifically, it considers the 
-    PSD value at each harmonic to indicate line noise if it exceeds the mean PSD of neighboring frequencies 
+    This function detects line noise by analyzing the PSD of each selected channel.
+    For each harmonic of `fline` (up to the Nyquist frequency), it checks if the PSD at the harmonic
+    frequency is significantly higher than the PSD in neighboring frequencies. Specifically, it considers the
+    PSD value at each harmonic to indicate line noise if it exceeds the mean PSD of neighboring frequencies
     plus `threshold_factor` times the standard deviation.
     """
     psd = raw.compute_psd(picks=picks)
     freqs = psd.freqs
     psds = psd.get_data()
     ch_names = psd.ch_names
-    
+
     # Compute Nyquist frequency and determine maximum harmonic
-    nyquist_freq = raw.info['sfreq'] / 2.0
+    nyquist_freq = raw.info["sfreq"] / 2.0
     max_harmonic = int(nyquist_freq // fline)
 
     # Generate list of harmonic frequencies based on the fundamental frequency
@@ -252,10 +255,11 @@ def _line_noise_channel(raw:BaseRaw,
         for lf in line_freqs:
             # Find the frequency index closest to the current harmonic
             idx = np.argmin(np.abs(freqs - lf))
-            # Get index range for neighboring frequencies, 
+            # Get index range for neighboring frequencies,
             # excluding the harmonic frequency itself
-            idx_range = np.arange(max(0, idx - n_neighbors), 
-                                  min(len(freqs), idx + n_neighbors + 1))
+            idx_range = np.arange(
+                max(0, idx - n_neighbors), min(len(freqs), idx + n_neighbors + 1)
+            )
             idx_neighbors = idx_range[idx_range != idx]
             # Calculate mean and standard deviation of neighboring frequencies
             neighbor_mean = np.mean(psd_ch[idx_neighbors])
@@ -263,36 +267,32 @@ def _line_noise_channel(raw:BaseRaw,
 
             threshold = neighbor_mean + threshold_factor * neighbor_std
             if psd_ch[idx] > threshold:
-                line_noise_detected.append({'channel': ch_names[ch_idx], 
-                                            'frequency': lf}
-                                           )
+                line_noise_detected.append(
+                    {"channel": ch_names[ch_idx], "frequency": lf}
+                )
 
     if show and line_noise_detected:
-        affected_channels = set([item['channel'] for item 
-                                 in line_noise_detected])
+        affected_channels = set([item["channel"] for item in line_noise_detected])
         plt.figure(figsize=(12, 3))
         for ch_name in affected_channels:
             ch_idx = ch_names.index(ch_name)
             plt.semilogy(freqs, psds[ch_idx, :], label=ch_name)
-        plt.axvline(fline, color='k', linestyle='--', lw=3, alpha=0.3)
-        plt.xlabel('Frequency (Hz)')
-        plt.ylabel('Power Spectral Density (PSD)')
+        plt.axvline(fline, color="k", linestyle="--", lw=3, alpha=0.3)
+        plt.xlabel("Frequency (Hz)")
+        plt.ylabel("Power Spectral Density (PSD)")
         plt.legend()
         plt.show()
 
     return line_noise_detected
 
 
-def _check_notch(raw: BaseRaw,
-                 picks: str,
-                 neighbor_width: float=2.0, 
-                 threshold_factor: float=3
-                 ) -> bool:
-    """return True if line noise find in raw"""
+def _check_notch(
+    raw: BaseRaw, picks: str, neighbor_width: float = 2.0, threshold_factor: float = 3
+) -> bool:
+    """Return True if line noise find in raw"""
     check_result = False
     for fline in [50, 60]:
-        if _line_noise_channel(raw, picks, fline, 
-                               neighbor_width, threshold_factor):
+        if _line_noise_channel(raw, picks, fline, neighbor_width, threshold_factor):
             check_result = True
             break
     return check_result

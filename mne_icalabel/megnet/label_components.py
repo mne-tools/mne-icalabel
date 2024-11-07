@@ -11,18 +11,18 @@ from .features import get_megnet_features
 _MODEL_PATH: str = files("mne_icalabel.megnet") / "assets" / "megnet.onnx"
 
 
-def megnet_label_components(
-    raw: BaseRaw,
-    ica: ICA,
-) -> dict:
+def megnet_label_components(raw: BaseRaw, ica: ICA) -> dict:
     """Label the provided ICA components with the MEGnet neural network.
 
     Parameters
     ----------
-    raw : BaseRaw
-        The raw MEG data.
-    ica : mne.preprocessing.ICA
-        The ICA data.
+    raw : Raw
+        Raw MEG recording used to fit the ICA decomposition. The raw instance should be
+        bandpass filtered between 1 and 100 Hz and notch filtered at 50 or 60 Hz to
+        remove line noise.
+    ica : ICA
+        ICA decomposition of the provided instance. The ICA decomposition
+        should use the infomax method.
 
     Returns
     -------
@@ -36,17 +36,10 @@ def megnet_label_components(
     """
     time_series, topomaps = get_megnet_features(raw, ica)
 
-    assert (
-        time_series.shape[0] == topomaps.shape[0]
-    ), "The number of time series should match the number of spatial topomaps."
-    assert topomaps.shape[1:] == (
-        120,
-        120,
-        3,
-    ), "The topomaps should have dimensions [N, 120, 120, 3]."
-    assert (
-        time_series.shape[1] >= 15000
-    ), "The time series must be at least 15000 samples long."
+    # sanity-checks
+    assert time_series.shape[0] == topomaps.shape[0]  # number of time-series <-> topos
+    assert topomaps.shape[1:] == (120, 120, 3)  # topos are images of shape 120x120x3
+    assert time_series.shape[1] >= 15000  # minimum time-series length
 
     session = ort.InferenceSession(_MODEL_PATH)
     predictions_vote = _chunk_predicting(session, time_series, topomaps)

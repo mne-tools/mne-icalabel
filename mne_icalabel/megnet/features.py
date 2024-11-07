@@ -1,15 +1,15 @@
 import io
 
 import matplotlib.pyplot as plt
-import mne  # type: ignore
+import mne
 import numpy as np
-from mne.io import BaseRaw  # type: ignore
-from mne.preprocessing import ICA  # type: ignore
-from mne.utils import _validate_type, warn  # type: ignore
+from mne.io import BaseRaw
+from mne.preprocessing import ICA
+from mne.utils import _validate_type, warn
 from numpy.typing import NDArray
 from PIL import Image
-from scipy import interpolate  # type: ignore
-from scipy.spatial import ConvexHull  # type: ignore
+from scipy import interpolate
+from scipy.spatial import ConvexHull
 
 from ._utils import cart2sph, pol2cart
 
@@ -17,58 +17,60 @@ from ._utils import cart2sph, pol2cart
 def get_megnet_features(raw: BaseRaw, ica: ICA):
     """Extract time series and topomaps for each ICA component.
 
-    the main work is focused on making BrainStorm-like topomaps
-    which trained the MEGnet.
+    MEGNet uses topomaps from BrainStorm exported as 120x120x3 RGB images. Thus, we need
+    to replicate the 'appearance'/'look' of a BrainStorm topomap.
 
     Parameters
     ----------
-    raw : BaseRaw
-        The raw MEG data. The raw instance should have 250 Hz
-        sampling frequency and more than 60 seconds.
+    raw : Raw.
+        Raw MEG recording used to fit the ICA decomposition. The raw instance should be
+        bandpass filtered between 1 and 100 Hz and notch filtered at 50 or 60 Hz to
+        remove line noise, and downsampled to 250 Hz.
     ica : ICA
-        The ICA object containing the independent components.
+        ICA decomposition of the provided instance. The ICA decomposition
+        should use the infomax method.
 
     Returns
     -------
-    time_series : np.ndarray
+    time_series : array of shape (n_components, n_samples)
         The time series for each ICA component.
-    topomaps : np.ndarray
-        The topomaps for each ICA component
+    topomaps : array of shape (n_components, 120, 120, 3)
+        The topomap RGB images for each ICA component.
 
     """
     _validate_type(raw, BaseRaw, "raw")
+    _validate_type(ica, ICA, "ica")
 
     if not any(
         ch_type in ["mag", "grad"] for ch_type in raw.get_channel_types(unique=True)
     ):
         raise RuntimeError(
-            "Could not find MEG channels in the provided "
-            "Raw instance. The MEGnet model was fitted on"
-            "MEG data and is not suited for other types of channels."
+            "Could not find MEG channels in the provided Raw instance. The MEGnet "
+            "model was fitted on MEG data and is not suited for other types of "
+            "channels."
         )
 
-    if raw.times[-1] < 60:
+    if n_samples := raw.get_data().shape[1] < 15000:
         raise RuntimeError(
-            f"The provided raw instance has {raw.times[-1]} seconds. "
-            "MEGnet was designed to classify features extracted from "
-            "an MEG datasetat least 60 seconds long. "
+            f"The provided raw instance has {n_samples} points. MEGnet was designed to "
+            "classify features extracted from an MEG dataset at least 60 seconds long "
+            "@ 250 Hz, corresponding to at least. 15 000 samples."
         )
 
     if _check_notch(raw, "mag"):
         raise RuntimeError(
-            "Line noise detected in 50/60 Hz. "
-            "MEGnet was trained on MEG data without line noise. "
-            "Please remove line noise before using MEGnet."
-            "see the 'notch_filter()' method for Raw instances."
+            "Line noise detected in 50/60 Hz. MEGnet was trained on MEG data without "
+            "line noise. Please remove line noise before using MEGnet "
+            "(see the 'notch_filter()' method for Raw instances."
         )
 
     if not np.isclose(raw.info["sfreq"], 250, atol=1e-1):
         warn(
-            "The provided raw instance is not sampled at 250 Hz"
+            "The provided raw instance is not sampled at 250 Hz "
             f"(sfreq={raw.info['sfreq']} Hz). "
             "MEGnet was designed to classify features extracted from"
-            "an MEG dataset sampled at 250 Hz"
-            "(see the 'resample()' method for raw)."
+            "an MEG dataset sampled at 250 Hz "
+            "(see the 'resample()' method for raw). "
             "The classification performance might be negatively impacted."
         )
 
@@ -76,20 +78,21 @@ def get_megnet_features(raw: BaseRaw, ica: ICA):
         warn(
             "The provided raw instance is not filtered between 1 and 100 Hz. "
             "MEGnet was designed to classify features extracted from an MEG dataset "
-            "bandpass filtered between 1 and 100 Hz (see the 'filter()' method for Raw."
+            "bandpass filtered between 1 and 100 Hz (see the 'filter()' method for "
+            "Raw). The classification performance might be negatively impacted."
         )
 
     if ica.method != "infomax":
         warn(
             f"The provided ICA instance was fitted with a '{ica.method}' algorithm. "
             "MEGnet was designed with infomax ICA decompositions. To use the "
-            "infomax algorithm, use the 'mne.preprocessing.ICA' instance with "
-            "the arguments 'ICA(method='infomax')"
+            "infomax algorithm, use mne.preprocessing.ICA instance with "
+            "the arguments ICA(method='infomax')."
         )
 
     pos_new, outlines = _get_topomaps_data(ica)
     topomaps = _get_topomaps(ica, pos_new, outlines)
-    time_series = ica.get_sources(raw)._data
+    time_series = ica.get_sources(raw).get_data()
 
     return time_series, topomaps
 

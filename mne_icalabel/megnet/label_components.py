@@ -1,4 +1,4 @@
-import os.path as op
+from importlib.resources import files
 
 import numpy as np
 import onnxruntime as ort
@@ -8,11 +8,12 @@ from numpy.typing import NDArray
 
 from .features import get_megnet_features
 
+_MODEL_PATH: str = files("mne_icalabel.megnet") / "assets" / "megnet.onnx"
+
 
 def megnet_label_components(
     raw: BaseRaw,
     ica: ICA,
-    model_path: str = op.join("assets", "network", "megnet.onnx"),
 ) -> dict:
     """Label the provided ICA components with the MEGnet neural network.
 
@@ -22,8 +23,6 @@ def megnet_label_components(
         The raw MEG data.
     ica : mne.preprocessing.ICA
         The ICA data.
-    model_path : str
-        Path to the ONNX model file.
 
     Returns
     -------
@@ -49,7 +48,7 @@ def megnet_label_components(
         time_series.shape[1] >= 15000
     ), "The time series must be at least 15000 samples long."
 
-    session = ort.InferenceSession(model_path)
+    session = ort.InferenceSession(_MODEL_PATH)
     predictions_vote = _chunk_predicting(session, time_series, topomaps)
 
     all_labels = ["brain/other", "eye movement", "heart", "eye blink"]

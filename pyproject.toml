@@ -203,6 +203,7 @@ include-package-data = false
 
 [tool.setuptools.package-data]
 'mne_icalabel.iclabel.network' = ['assets/*']
+'mne_icalabel.megnet' = ['assets/*']
 
 [tool.setuptools.packages.find]
 exclude = ['mne_icalabel*tests']

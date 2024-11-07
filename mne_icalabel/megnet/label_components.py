@@ -19,7 +19,7 @@ def megnet_label_components(raw: BaseRaw, ica: ICA) -> dict:
     raw : Raw
         Raw MEG recording used to fit the ICA decomposition. The raw instance should be
         bandpass filtered between 1 and 100 Hz and notch filtered at 50 or 60 Hz to
-        remove line noise.
+        remove line noise, and downsampled to 250 Hz.
     ica : ICA
         ICA decomposition of the provided instance. The ICA decomposition
         should use the infomax method.
@@ -39,7 +39,7 @@ def megnet_label_components(raw: BaseRaw, ica: ICA) -> dict:
     # sanity-checks
     assert time_series.shape[0] == topomaps.shape[0]  # number of time-series <-> topos
     assert topomaps.shape[1:] == (120, 120, 3)  # topos are images of shape 120x120x3
-    assert time_series.shape[1] >= 15000  # minimum time-series length
+    assert 15000 <= time_series.shape[1]  # minimum time-series length
 
     session = ort.InferenceSession(_MODEL_PATH)
     predictions_vote = _chunk_predicting(session, time_series, topomaps)

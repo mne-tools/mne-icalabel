@@ -36,11 +36,9 @@ def get_megnet_features(raw: BaseRaw, ica: ICA):
         The time series for each ICA component.
     topomaps : array of shape (n_components, 120, 120, 3)
         The topomap RGB images for each ICA component.
-
     """
     _validate_type(raw, BaseRaw, "raw")
     _validate_type(ica, ICA, "ica")
-
     if not any(
         ch_type in ["mag", "grad"] for ch_type in raw.get_channel_types(unique=True)
     ):
@@ -49,21 +47,12 @@ def get_megnet_features(raw: BaseRaw, ica: ICA):
             "model was fitted on MEG data and is not suited for other types of "
             "channels."
         )
-
     if n_samples := raw.get_data().shape[1] < 15000:
         raise RuntimeError(
             f"The provided raw instance has {n_samples} points. MEGnet was designed to "
             "classify features extracted from an MEG dataset at least 60 seconds long "
             "@ 250 Hz, corresponding to at least. 15 000 samples."
         )
-
-    if _check_notch(raw, "mag"):
-        raise RuntimeError(
-            "Line noise detected in 50/60 Hz. MEGnet was trained on MEG data without "
-            "line noise. Please remove line noise before using MEGnet "
-            "(see the 'notch_filter()' method for Raw instances."
-        )
-
     if not np.isclose(raw.info["sfreq"], 250, atol=1e-1):
         warn(
             "The provided raw instance is not sampled at 250 Hz "
@@ -73,7 +62,6 @@ def get_megnet_features(raw: BaseRaw, ica: ICA):
             "(see the 'resample()' method for raw). "
             "The classification performance might be negatively impacted."
         )
-
     if raw.info["highpass"] != 1 or raw.info["lowpass"] != 100:
         warn(
             "The provided raw instance is not filtered between 1 and 100 Hz. "
@@ -81,7 +69,12 @@ def get_megnet_features(raw: BaseRaw, ica: ICA):
             "bandpass filtered between 1 and 100 Hz (see the 'filter()' method for "
             "Raw). The classification performance might be negatively impacted."
         )
-
+    if _check_line_noise(raw):
+        warn(
+            "Line noise detected in 50/60 Hz. MEGnet was trained on MEG data without "
+            "line noise. Please remove line noise before using MEGnet "
+            "(see the 'notch_filter()' method for Raw instances."
+        )
     if ica.method != "infomax":
         warn(
             f"The provided ICA instance was fitted with a '{ica.method}' algorithm. "
@@ -89,11 +82,9 @@ def get_megnet_features(raw: BaseRaw, ica: ICA):
             "infomax algorithm, use mne.preprocessing.ICA instance with "
             "the arguments ICA(method='infomax')."
         )
-
     pos_new, outlines = _get_topomaps_data(ica)
     topomaps = _get_topomaps(ica, pos_new, outlines)
     time_series = ica.get_sources(raw).get_data()
-
     return time_series, topomaps
 
 
@@ -197,98 +188,32 @@ def _get_topomaps(ica: ICA, pos_new: NDArray, outlines: dict):
     return np.array(topomaps)
 
 
-def _line_noise_channel(
-    raw: BaseRaw,
-    picks: str,
-    fline: float = 50.0,
-    neighbor_width: float = 2.0,
-    threshold_factor: float = 3,
-    show: bool = False,
-):
-    """Detect line noise in MEG/EEG data.
-
-    Parameters
-    ----------
-    raw : mne.io.Raw
-        The raw MEG/EEG data.
-    picks : str or list, optional
-        Channels to include in the analysis.
-    fline : float, optional
-        The base frequency of the line noise to detect.
-    neighbor_width : float, optional
-        Width of the frequency neighborhood around each harmonic
-        for calculating background noise, in Hz. Default is 2.0 Hz.
-    threshold_factor : float, optional
-        Multiplicative factor for setting the detection threshold.
-        The threshold is set as the mean of the neighboring frequencies plus
-        `threshold_factor` times the standard deviation. Default is 3.
-    show : bool, optional
-        Whether to plot the PSD for channels affected by line noise.
-
-    Returns
-    -------
-    bool
-        Returns True if line noise is detected in any channel, otherwise False.
-
-    """
-    psd = raw.compute_psd(picks=picks)
-    freqs = psd.freqs
-    psds = psd.get_data()
-    ch_names = psd.ch_names
-
-    # Compute Nyquist frequency and determine maximum harmonic
-    nyquist_freq = raw.info["sfreq"] / 2.0
-    max_harmonic = int(nyquist_freq // fline)
-
-    # Generate list of harmonic frequencies based on the fundamental frequency
-    line_freqs = np.arange(fline, fline * (max_harmonic + 1), fline)
-    freq_res = freqs[1] - freqs[0]
-    n_neighbors = int(np.ceil(neighbor_width / freq_res))
-
-    line_noise_detected = []
-    for ch_idx in range(psds.shape[0]):
-        psd_ch = psds[ch_idx, :]  # PSD for the current channel
-        for lf in line_freqs:
-            # Find the frequency index closest to the current harmonic
-            idx = np.argmin(np.abs(freqs - lf))
-            # Get index range for neighboring frequencies,
-            # excluding the harmonic frequency itself
-            idx_range = np.arange(
-                max(0, idx - n_neighbors), min(len(freqs), idx + n_neighbors + 1)
-            )
-            idx_neighbors = idx_range[idx_range != idx]
-            # Calculate mean and standard deviation of neighboring frequencies
-            neighbor_mean = np.mean(psd_ch[idx_neighbors])
-            neighbor_std = np.std(psd_ch[idx_neighbors])
-
-            threshold = neighbor_mean + threshold_factor * neighbor_std
-            if psd_ch[idx] > threshold:
-                line_noise_detected.append(
-                    {"channel": ch_names[ch_idx], "frequency": lf}
-                )
-
-    if show and line_noise_detected:
-        affected_channels = set([item["channel"] for item in line_noise_detected])
-        plt.figure(figsize=(12, 3))
-        for ch_name in affected_channels:
-            ch_idx = ch_names.index(ch_name)
-            plt.semilogy(freqs, psds[ch_idx, :], label=ch_name)
-        plt.axvline(fline, color="k", linestyle="--", lw=3, alpha=0.3)
-        plt.xlabel("Frequency (Hz)")
-        plt.ylabel("Power Spectral Density (PSD)")
-        plt.legend()
-        plt.show()
-
-    return line_noise_detected
-
-
-def _check_notch(
-    raw: BaseRaw, picks: str, neighbor_width: float = 2.0, threshold_factor: float = 3
+def _check_line_noise(
+    raw: BaseRaw, *, neighbor_width: int = 4, threshold_factor: int = 10
 ) -> bool:
-    """Return True if line noise find in raw."""
-    check_result = False
-    for fline in [50, 60]:
-        if _line_noise_channel(raw, picks, fline, neighbor_width, threshold_factor):
-            check_result = True
-            break
-    return check_result
+    """Check if line noise is present in the MEG/EEG data."""
+    if raw.info.get("line_freq", None) is None:  # we don't know the line frequency
+        return False
+    # validate the primary and first harmonic frequencies
+    nyquist_freq = raw.info["sfreq"] / 2.0
+    line_freqs = [raw.info["line_freq"], 2 * raw.info["line_freq"]]
+    if any(nyquist_freq < lf for lf in line_freqs):
+        # not raising because if we get here, it means that someone provided a raw with
+        # a sampling rate extremely low (100 Hz?) and (1) either they missed all
+        # of the previous warnings encountered or (2) they know what they are doing.
+        warn("The sampling rate raw.info['sfreq'] is too low to estimate line niose.")
+        return False
+    # compute the power spectrum and retrieve the frequencies of interest
+    spectrum = raw.compute_psd(picks="meg", exclude="bads")
+    data, freqs = spectrum.get_data(
+        fmin=raw.info["line_freq"] - neighbor_width,
+        fmax=raw.info["line_freq"] + neighbor_width,
+        return_freqs=True,
+    )  # array of shape (n_good_channel, n_freqs)
+    idx = np.argmin(np.abs(freqs - raw.info["line_freq"]))
+    mask = np.ones(data.shape[1], dtype=bool)
+    mask[idx] = False
+    background_mean = np.mean(data[:, mask], axis=1)
+    background_std = np.std(data[:, mask], axis=1)
+    threshold = background_mean + threshold_factor * background_std
+    return np.any(data[:, idx] > threshold)

@@ -1,9 +1,8 @@
-# %%
 import numpy as np
 
 
-# Conversion functions
 def cart2sph(x, y, z):
+    """Convert cartesian coordinates to spherical coordinates."""
     xy = np.sqrt(x * x + y * y)
     r = np.sqrt(x * x + y * y + z * z)
     theta = np.arctan2(y, x)
@@ -12,6 +11,7 @@ def cart2sph(x, y, z):
 
 
 def pol2cart(rho, phi):
+    """Convert polar coordinates to cartesian coordinates."""
     x = rho * np.cos(phi)
     y = rho * np.sin(phi)
     return x, y

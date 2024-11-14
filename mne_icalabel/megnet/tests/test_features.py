@@ -3,6 +3,7 @@ import pytest
 from mne import create_info
 from mne.io import RawArray
 from mne.preprocessing import ICA
+
 from mne_icalabel.megnet.features import _check_line_noise, get_megnet_features
 
 
@@ -13,8 +14,7 @@ def raw_with_line_noise():
     data1 = np.sin(2 * np.pi * 10 * times) + np.sin(2 * np.pi * 30 * times)
     data2 = np.sin(2 * np.pi * 30 * times) + np.sin(2 * np.pi * 80 * times)
     data = np.vstack([data1, data2])
-    info = create_info(
-        ch_names=["10-30", "30-80"], sfreq=1000, ch_types="mag")
+    info = create_info(ch_names=["10-30", "30-80"], sfreq=1000, ch_types="mag")
     return RawArray(data, info)
 
 
@@ -53,8 +53,7 @@ def create_raw_ica(
     channel_locs[:, 1] += 0.1
     channel_locs[:, 2] += 0.1
 
-    info = create_info(
-        ch_names=ch_names, sfreq=sfreq, ch_types=ch_type)
+    info = create_info(ch_names=ch_names, sfreq=sfreq, ch_types=ch_type)
     for i, loc in enumerate(channel_locs):
         info["chs"][i]["loc"][:3] = loc
 
@@ -79,7 +78,7 @@ def raw_ica_valid():
 
 
 def test_get_megnet_features(raw_ica_valid):
-    """test whether the function returns the correct features."""
+    """Test whether the function returns the correct features."""
     time_series, topomaps = get_megnet_features(*raw_ica_valid)
     n_components = raw_ica_valid[1].n_components
     n_times = raw_ica_valid[0].times.shape[0]
@@ -138,7 +137,7 @@ def test_get_megnet_features_invalid(
     raw_ica_invalid_ncomp,
     raw_ica_invalid_method,
 ):
-    """test whether the function raises the correct exceptions"""
+    """Test whether the function raises the correct exceptions"""
     test_cases = [
         (raw_ica_invalid_channel, RuntimeError, "Could not find MEG channels"),
         (

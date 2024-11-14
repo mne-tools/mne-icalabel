@@ -10,12 +10,8 @@ def _cart2sph(x, y, z):
     return r, theta, phi
 
 
-def _make_head_outlines(
-    sphere: NDArray,
-    pos: NDArray,
-    clip_origin: tuple
-) -> dict:
-    """a modified version of mne.viz.topomap._make_head_outlines.
+def _make_head_outlines(sphere: NDArray, pos: NDArray, clip_origin: tuple) -> dict:
+    """A modified version of mne.viz.topomap._make_head_outlines.
 
     This function is used to generate head outlines for topomap plotting.
     The difference between this function and the original one is that

@@ -4,6 +4,7 @@ import mne
 import numpy as np
 import onnxruntime as ort
 import pytest
+
 from mne_icalabel.megnet.label_components import (
     _chunk_predicting,
     _get_chunk_start,
@@ -22,17 +23,14 @@ def raw_ica():
     raw.notch_filter(60)
     raw.filter(1, 100)
 
-    ica = mne.preprocessing.ICA(
-        n_components=20,
-        method="infomax",
-        random_state=88)
+    ica = mne.preprocessing.ICA(n_components=20, method="infomax", random_state=88)
     ica.fit(raw)
 
     return raw, ica
 
 
 def test_megnet_label_components(raw_ica):
-    """test whether the function returns the correct artifact index"""
+    """Test whether the function returns the correct artifact index"""
     real_atrifact_idx = [0, 3, 5]  # heart beat, eye movement, heart beat
     prob = megnet_label_components(*raw_ica)
     this_atrifact_idx = list(np.nonzero(prob.argmax(axis=1))[0])
@@ -40,7 +38,7 @@ def test_megnet_label_components(raw_ica):
 
 
 def test_get_chunk_start():
-    """test whether the function returns the correct start times"""
+    """Test whether the function returns the correct start times"""
     input_len = 10000
     chunk_len = 3000
     overlap_len = 750
@@ -52,7 +50,7 @@ def test_get_chunk_start():
 
 
 def test_chunk_predicting():
-    """test whether MEGnet's chunk volte algorithm returns the correct shape"""
+    """Test whether MEGnet's chunk volte algorithm returns the correct shape"""
     time_series = np.random.rand(5, 10000)
     spatial_maps = np.random.rand(5, 120, 120, 3)
 
@@ -60,11 +58,7 @@ def test_chunk_predicting():
     mock_session.run.return_value = [np.random.rand(4)]
 
     predictions = _chunk_predicting(
-        mock_session,
-        time_series,
-        spatial_maps,
-        chunk_len=3000,
-        overlap_len=750
+        mock_session, time_series, spatial_maps, chunk_len=3000, overlap_len=750
     )
 
     assert predictions.shape == (5, 4)

@@ -67,9 +67,7 @@ def _chunk_predicting(
 
         chunk_votes = {start: 0 for start in start_times}
         for t in range(time_len):
-            in_chunks = [
-                start <= t < start + chunk_len for start in start_times
-                ]
+            in_chunks = [start <= t < start + chunk_len for start in start_times]
             # how many chunks the time point is in
             num_chunks = np.sum(in_chunks)
             for start_time, is_in_chunk in zip(start_times, in_chunks):
@@ -79,24 +77,18 @@ def _chunk_predicting(
         weighted_predictions = {}
         for start_time in chunk_votes.keys():
             onnx_inputs = {
-                session.get_inputs()[0]
-                .name: np.expand_dims(comp_map, 0)
-                .astype(np.float32),
-                session.get_inputs()[1]
-                .name: np.expand_dims(
-                    np.expand_dims(
-                        comp_series[start_time: start_time + chunk_len], 0),
+                session.get_inputs()[0].name: np.expand_dims(comp_map, 0).astype(
+                    np.float32
+                ),
+                session.get_inputs()[1].name: np.expand_dims(
+                    np.expand_dims(comp_series[start_time : start_time + chunk_len], 0),
                     -1,
-                )
-                .astype(np.float32),
+                ).astype(np.float32),
             }
             prediction = session.run(None, onnx_inputs)[0]
-            weighted_predictions[start_time] = (
-                prediction * chunk_votes[start_time]
-            )
+            weighted_predictions[start_time] = prediction * chunk_votes[start_time]
 
-        comp_prediction = np.stack(
-            list(weighted_predictions.values())).mean(axis=0)
+        comp_prediction = np.stack(list(weighted_predictions.values())).mean(axis=0)
         comp_prediction /= comp_prediction.sum()
         predction_vote.append(comp_prediction)
 

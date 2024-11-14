@@ -6,11 +6,12 @@ import numpy as np
 from mne.io import BaseRaw
 from mne.preprocessing import ICA
 from mne.utils import _validate_type, warn
-from mne_icalabel.iclabel._utils import _pol2cart
 from numpy.typing import NDArray
 from PIL import Image
 from scipy import interpolate
 from scipy.spatial import ConvexHull
+
+from mne_icalabel.iclabel._utils import _pol2cart
 
 from ._utils import _cart2sph, _make_head_outlines
 
@@ -42,8 +43,7 @@ def get_megnet_features(raw: BaseRaw, ica: ICA):
     _validate_type(raw, BaseRaw, "raw")
     _validate_type(ica, ICA, "ica")
     if not any(
-        ch_type in ["mag", "grad"] for ch_type in raw.get_channel_types(
-            unique=True)
+        ch_type in ["mag", "grad"] for ch_type in raw.get_channel_types(unique=True)
     ):
         raise RuntimeError(
             "Could not find MEG channels in the provided Raw instance."
@@ -141,8 +141,7 @@ def _get_topomaps_data(ica: ICA):
     Xnew, Ynew = _pol2cart(TH, adjusted_R)
     pos_new = np.vstack((Xnew, Ynew)).T
 
-    outlines = _make_head_outlines(
-        np.array([0, 0, 0, 1]), pos_new, (0, 0))
+    outlines = _make_head_outlines(np.array([0, 0, 0, 1]), pos_new, (0, 0))
     return pos_new, outlines
 
 
@@ -154,8 +153,7 @@ def _get_topomaps(ica: ICA, pos_new: NDArray, outlines: dict):
 
     for comp in range(ica.n_components_):
         data = components[data_picks, comp]
-        fig = plt.figure(
-            figsize=(1.3, 1.3), dpi=100, facecolor="black")
+        fig = plt.figure(figsize=(1.3, 1.3), dpi=100, facecolor="black")
         ax = fig.add_subplot(111)
         mnefig, _ = mne.viz.plot_topomap(
             data,
@@ -201,10 +199,7 @@ def _check_line_noise(
         # a sampling rate extremely low (100 Hz?) and (1)
         # either they missed all of the previous warnings
         # encountered or (2) they know what they are doing.
-        warn(
-            "The sampling rate raw.info['sfreq'] is too low"
-            "to estimate line niose."
-            )
+        warn("The sampling rate raw.info['sfreq'] is too low" "to estimate line niose.")
         return False
     # compute the power spectrum and retrieve the frequencies of interest
     spectrum = raw.compute_psd(picks="meg", exclude="bads")

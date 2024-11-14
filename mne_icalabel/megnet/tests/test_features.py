@@ -142,10 +142,7 @@ def test_get_megnet_features_invalid(
 ):
     """Test whether the function raises the correct exceptions."""
     test_cases = [
-        (raw_ica_invalid_channel, 
-         RuntimeError, 
-         "Could not find MEG channels"
-         ),
+        (raw_ica_invalid_channel, RuntimeError, "Could not find MEG channels"),
         (
             raw_ica_invalid_time,
             RuntimeError,

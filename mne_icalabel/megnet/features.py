@@ -31,7 +31,7 @@ def get_megnet_features(raw: BaseRaw, ica: ICA):
         remove line noise, and downsampled to 250 Hz.
     ica : ICA
         ICA decomposition of the provided instance.
-        The ICA decomposition hould use the infomax method.
+        The ICA decomposition should use the infomax method.
 
     Returns
     -------

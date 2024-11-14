@@ -43,12 +43,14 @@ def create_raw_ica(
     ica_method="infomax",
     ntime=None,
 ):
+    """Create a Raw instance and ICA instance for testing."""
     n_times = sfreq * 60 if ntime is None else ntime
-    data = np.random.randn(n_channels, n_times)
+    rng = np.random.default_rng()
+    data = rng.standard_normal((n_channels, n_times))
     ch_names = [f"MEG {i+1}" for i in range(n_channels)]
 
     # Create valid channel loc for feature extraction
-    channel_locs = np.random.randn(n_channels, 3)
+    channel_locs = rng.standard_normal((n_channels, 3))
     channel_locs[:, 0] += 0.1
     channel_locs[:, 1] += 0.1
     channel_locs[:, 2] += 0.1
@@ -65,7 +67,8 @@ def create_raw_ica(
     # but set ica_method after fitting for testing
     ica = ICA(n_components=n_components, method="infomax")
     ica.fit(raw)
-    ica.method = ica_method
+    if ica_method != "infomax":
+        ica.method = ica_method
 
     return raw, ica
 
@@ -137,9 +140,12 @@ def test_get_megnet_features_invalid(
     raw_ica_invalid_ncomp,
     raw_ica_invalid_method,
 ):
-    """Test whether the function raises the correct exceptions"""
+    """Test whether the function raises the correct exceptions."""
     test_cases = [
-        (raw_ica_invalid_channel, RuntimeError, "Could not find MEG channels"),
+        (raw_ica_invalid_channel, 
+         RuntimeError, 
+         "Could not find MEG channels"
+         ),
         (
             raw_ica_invalid_time,
             RuntimeError,
@@ -163,15 +169,15 @@ def test_get_megnet_features_invalid(
         (
             raw_ica_invalid_method,
             RuntimeWarning,
-            "The provided ICA instance was fitted with a 'fastica' algorithm",
+            "The provided ICA instance was fitted with 'fastica'",
         ),
     ]
 
     for raw_ica_fixture, exc_type, msg in test_cases:
         raw, ica = raw_ica_fixture
-        if exc_type == RuntimeError:
+        if exc_type is RuntimeError:
             with pytest.raises(exc_type, match=msg):
                 get_megnet_features(raw, ica)
-        elif exc_type == RuntimeWarning:
+        elif exc_type is RuntimeWarning:
             with pytest.warns(exc_type, match=msg):
                 get_megnet_features(raw, ica)

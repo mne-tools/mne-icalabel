@@ -11,9 +11,9 @@ def _cart2sph(x, y, z):
 
 
 def _make_head_outlines(sphere: NDArray, pos: NDArray, clip_origin: tuple) -> dict:
-    """A modified version of mne.viz.topomap._make_head_outlines.
+    """Generate head outlines for topomap plotting.
 
-    This function is used to generate head outlines for topomap plotting.
+    This is a modified version of mne.viz.topomap._make_head_outlines.
     The difference between this function and the original one is that
     head_x and head_y here are scaled by a factor of 1.01 to make topomap
     fit the 120x120 pixel size.

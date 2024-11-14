@@ -83,8 +83,8 @@ def get_megnet_features(raw: BaseRaw, ica: ICA):
         )
     if ica.method != "infomax":
         warn(
-            f"The provided ICA instance was fitted with a '{ica.method}'"
-            "algorithm. MEGnet was designed with infomax method."
+            f"The provided ICA instance was fitted with '{ica.method}'."
+            "MEGnet was designed with infomax method."
             "To use the it, set mne.preprocessing.ICA instance with "
             "the arguments ICA(method='infomax')."
         )

@@ -14,6 +14,7 @@ from mne_icalabel.megnet.label_components import (
 
 @pytest.fixture
 def raw_ica():
+    """Create a Raw instance and ICA instance for testing."""
     sample_dir = mne.datasets.sample.data_path()
     sample_fname = sample_dir / "MEG" / "sample" / "sample_audvis_raw.fif"
 
@@ -30,7 +31,7 @@ def raw_ica():
 
 
 def test_megnet_label_components(raw_ica):
-    """Test whether the function returns the correct artifact index"""
+    """Test whether the function returns the correct artifact index."""
     real_atrifact_idx = [0, 3, 5]  # heart beat, eye movement, heart beat
     prob = megnet_label_components(*raw_ica)
     this_atrifact_idx = list(np.nonzero(prob.argmax(axis=1))[0])
@@ -38,7 +39,7 @@ def test_megnet_label_components(raw_ica):
 
 
 def test_get_chunk_start():
-    """Test whether the function returns the correct start times"""
+    """Test whether the function returns the correct start times."""
     input_len = 10000
     chunk_len = 3000
     overlap_len = 750
@@ -50,12 +51,13 @@ def test_get_chunk_start():
 
 
 def test_chunk_predicting():
-    """Test whether MEGnet's chunk volte algorithm returns the correct shape"""
-    time_series = np.random.rand(5, 10000)
-    spatial_maps = np.random.rand(5, 120, 120, 3)
+    """Test whether MEGnet's chunk volte algorithm returns the correct shape."""
+    rng = np.random.default_rng()
+    time_series = rng.random((5, 10000))
+    spatial_maps = rng.random((5, 120, 120, 3))
 
     mock_session = MagicMock(spec=ort.InferenceSession)
-    mock_session.run.return_value = [np.random.rand(4)]
+    mock_session.run.return_value = [rng.random(4)]
 
     predictions = _chunk_predicting(
         mock_session, time_series, spatial_maps, chunk_len=3000, overlap_len=750

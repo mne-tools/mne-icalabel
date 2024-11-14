@@ -1,8 +1,8 @@
 import numpy as np
+from numpy.typing import NDArray
 
 
-def cart2sph(x, y, z):
-    """Convert cartesian coordinates to spherical coordinates."""
+def _cart2sph(x, y, z):
     xy = np.sqrt(x * x + y * y)
     r = np.sqrt(x * x + y * y + z * z)
     theta = np.arctan2(y, x)
@@ -10,35 +10,46 @@ def cart2sph(x, y, z):
     return r, theta, phi
 
 
-def pol2cart(rho, phi):
-    """Convert polar coordinates to cartesian coordinates."""
-    x = rho * np.cos(phi)
-    y = rho * np.sin(phi)
-    return x, y
+def _make_head_outlines(
+    sphere: NDArray,
+    pos: NDArray,
+    clip_origin: tuple
+) -> dict:
+    """a modified version of mne.viz.topomap._make_head_outlines.
 
+    This function is used to generate head outlines for topomap plotting.
+    The difference between this function and the original one is that
+    head_x and head_y here are scaled by a factor of 1.01 to make topomap
+    fit the 120x120 pixel size.
+    Also, removed the ear and nose outlines for not needed in MEGnet.
 
-def make_head_outlines(sphere, pos, outlines, clip_origin):
-    assert isinstance(sphere, np.ndarray)
+    Parameters
+    ----------
+    sphere : NDArray
+        The sphere parameters (x, y, z, radius).
+    pos : NDArray
+        The 2D sensor positions.
+    clip_origin : tuple
+        The origin of the clipping circle.
+
+    Returns
+    -------
+    dict
+        Dictionary containing the head outlines and mask positions.
+
+    """
     x, y, _, radius = sphere
-    del sphere
-
     ll = np.linspace(0, 2 * np.pi, 101)
     head_x = np.cos(ll) * radius * 1.01 + x
     head_y = np.sin(ll) * radius * 1.01 + y
-    dx = np.exp(np.arccos(np.deg2rad(12)) * 1j)
-    dx, _ = dx.real, dx.imag
 
-    outlines_dict = dict(head=(head_x, head_y))
-
-    mask_scale = 1.0
-    max_norm = np.linalg.norm(pos, axis=1).max()
-    mask_scale = max(mask_scale, max_norm * 1.01 / radius)
-
-    outlines_dict["mask_pos"] = (mask_scale * head_x, mask_scale * head_y)
+    mask_scale = max(1.0, np.linalg.norm(pos, axis=1).max() * 1.01 / radius)
     clip_radius = radius * mask_scale
-    outlines_dict["clip_radius"] = (clip_radius,) * 2
-    outlines_dict["clip_origin"] = clip_origin
 
-    outlines = outlines_dict
-
-    return outlines
+    outlines_dict = {
+        "head": (head_x, head_y),
+        "mask_pos": (mask_scale * head_x, mask_scale * head_y),
+        "clip_radius": (clip_radius,) * 2,
+        "clip_origin": clip_origin,
+    }
+    return outlines_dict

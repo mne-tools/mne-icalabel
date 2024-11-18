@@ -1,35 +1,55 @@
-@ECHO OFF
+@echo off
 
-pushd %~dp0
+REM Minimal makefile for Sphinx documentation
 
-REM Command file for Sphinx documentation
+REM Set default options and commands
+set SPHINXOPTS=-nWT --keep-going
+set SPHINXBUILD=sphinx-build
 
-if "%SPHINXBUILD%" == "" (
-	set SPHINXBUILD=sphinx-build
-)
-set SOURCEDIR=.
-set BUILDDIR=_build
+if "%1" == "html" goto html
+if "%1" == "html-noplot" goto html-noplot
+if "%1" == "clean" goto clean
+if "%1" == "linkcheck" goto linkcheck
+if "%1" == "linkcheck-grep" goto linkcheck-grep
+if "%1" == "view" goto view
 
-%SPHINXBUILD% >NUL 2>NUL
-if errorlevel 9009 (
-	echo.
-	echo.The 'sphinx-build' command was not found. Make sure you have Sphinx
-	echo.installed, then set the SPHINXBUILD environment variable to point
-	echo.to the full path of the 'sphinx-build' executable. Alternatively you
-	echo.may add the Sphinx directory to PATH.
-	echo.
-	echo.If you don't have Sphinx installed, grab it from
-	echo.https://www.sphinx-doc.org/
-	exit /b 1
-)
-
-if "%1" == "" goto help
-
-%SPHINXBUILD% -M %1 %SOURCEDIR% %BUILDDIR% %SPHINXOPTS% %O%
-goto end
-
+REM Define targets
 :help
-%SPHINXBUILD% -M help %SOURCEDIR% %BUILDDIR% %SPHINXOPTS% %O%
+echo Please use `make ^<target^>` where ^<target^> is one of
+echo   html             to make standalone HTML files
+echo   html-noplot      to make standalone HTML files without plotting
+echo   clean            to clean HTML files
+echo   linkcheck        to check all external links for integrity
+echo   linkcheck-grep   to grep the linkcheck result
+echo   view             to view the built HTML
+goto :eof
 
-:end
-popd
+:html
+%SPHINXBUILD% . _build\html -b html %SPHINXOPTS%
+goto :eof
+
+:html-noplot
+%SPHINXBUILD% . _build\html -b html %SPHINXOPTS% -D plot_gallery=0
+goto :eof
+
+:clean
+rmdir /s /q _build generated
+goto :eof
+
+:linkcheck
+%SPHINXBUILD% . _build\linkcheck -b linkcheck -D plot_gallery=0
+goto :eof
+
+:linkcheck-grep
+findstr /C:"[broken]" _build\linkcheck\output.txt > nul
+if %errorlevel% equ 0 (
+    echo Lines with [broken]:
+    findstr /C:"[broken]" _build\linkcheck\output.txt
+) else (
+    echo No lines with [broken] found.
+)
+goto :eof
+
+:view
+python -c "import webbrowser; webbrowser.open_new_tab(r'file:///%cd%\_build\html\index.html')"
+goto :eof

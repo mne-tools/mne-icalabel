@@ -36,5 +36,5 @@ Contents
    :hidden:
 
    install
-   api
+   api/index
    generated/examples/index

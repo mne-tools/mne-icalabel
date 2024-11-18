@@ -5,7 +5,7 @@ Repairing artifacts with ICA automatically using ICLabel Model
 ==============================================================
 
 This tutorial covers automatically repairing signals using ICA with
-the ICLabel model\ :footcite:`iclabel2019`, which originates in EEGLab.
+the ICLabel model\ :footcite:`PionTonachini2019`, which originates in EEGLab.
 For conceptual background on ICA, see :ref:`this scikit-learn tutorial
 <sphx_glr_auto_examples_decomposition_plot_ica_blind_source_separation.py>`.
 For a basic understanding of how to use ICA to remove artifacts, see `the
@@ -212,7 +212,7 @@ ica.plot_properties(raw, picks=[0])
 #
 # The output of the ICLabel ``label_components`` function produces
 # predicted probability values for each of these classes in that order.
-# See :footcite:`iclabel2019` for full details.
+# See :footcite:`PionTonachini2019` for full details.
 
 ic_labels = label_components(filt_raw, ica, method="iclabel")
 

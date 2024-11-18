@@ -123,11 +123,7 @@ html_theme_options = {
         "version_match": switcher_version_match,
     },
 }
-# Custom sidebar templates, maps document names to template names.
-html_sidebars = {
-    "index": ["search-field.html"],
-}
-
+html_sidebars = {"**": []}
 html_context = {
     "pygment_light_style": "tango",
     "pygment_dark_style": "native",

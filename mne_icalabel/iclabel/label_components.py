@@ -32,7 +32,7 @@ def iclabel_label_components(
     - Autocorrelation, based on the ICA decomposition and the provided
       instance.
 
-    For more information, see :footcite:t:`iclabel2019`.
+    For more information, see :footcite:t:`PionTonachini2019`.
 
     Parameters
     ----------

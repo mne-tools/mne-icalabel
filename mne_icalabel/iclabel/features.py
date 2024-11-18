@@ -37,7 +37,7 @@ def get_iclabel_features(inst: Union[BaseRaw, BaseEpochs], ica: ICA):
     autocorr : array of shape (1, 100, 1, n_components)
         The autocorrelations feature. Depending on the length of the
         raw data passed in, different methods of computing autocorrelation
-        will be used. See :footcite:t:`iclabel2019` for details.
+        will be used. See :footcite:t:`PionTonachini2019` for details.
 
     References
     ----------

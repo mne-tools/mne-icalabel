@@ -34,6 +34,7 @@ goto :eof
 
 :clean
 rmdir /s /q _build generated
+del sg_execution_times.rst
 goto :eof
 
 :linkcheck

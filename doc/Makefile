@@ -23,7 +23,7 @@ html-noplot:
 	$(SPHINXBUILD) . _build/html -b html $(SPHINXOPTS) -D plot_gallery=0
 
 clean:
-	rm -rf _build generated
+	rm -rf _build generated sg_execution_times.rst
 
 linkcheck:
 	$(SPHINXBUILD) . _build/linkcheck -b linkcheck -D plot_gallery=0

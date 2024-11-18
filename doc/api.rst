@@ -1,6 +1,5 @@
-###
 API
-###
+===
 
 .. automodule:: mne_icalabel
    :no-members:
@@ -11,7 +10,7 @@ for classes (``CamelCase`` names) and functions
 (``underscore_case`` names) of MNE-ICALabel.
 
 Most-used functions
-===================
+-------------------
 
 .. currentmodule:: mne_icalabel
 
@@ -21,7 +20,7 @@ Most-used functions
    label_components
 
 ICLabel
-=======
+-------
 
 This is the model originally available for `EEGLab <https://github.com/sccn/ICLabel>`_.
 The model was ported from matconvnet using `pytorch <https://pytorch.org/>`_ or
@@ -56,7 +55,7 @@ the 3 features are concatenated for the final layer.
    run_iclabel
 
 Features
-========
+--------
 
 Contains functions to extract features from `~mne.preprocessing.ICA` instance and `~mne.io.Raw` or
 `~mne.Epochs` instances using MNE-Python.
@@ -69,7 +68,8 @@ Contains functions to extract features from `~mne.preprocessing.ICA` instance an
    get_topomaps
 
 Annotating Components
-=====================
+---------------------
+
 To facilitate annotation of the ICA components, we provide an API that conforms to the
 derivative standard of BIDS for EEG data.
 

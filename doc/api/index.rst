@@ -22,7 +22,7 @@ label the components using the specified method/model.
 Models
 ------
 
-.. card-carousel:: 2
+.. card-carousel:: 4
 
     .. card:: ICLabel
         :link: iclabel.html

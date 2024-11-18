@@ -38,3 +38,4 @@ Contents
    install
    api/index
    generated/examples/index
+   cite

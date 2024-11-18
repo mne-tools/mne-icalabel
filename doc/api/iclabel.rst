@@ -51,9 +51,6 @@ paper\ :footcite:p:`PionTonachini2019`.
 
 .. footbibliography::
 
-.. dropdown:: BibTeX for ICLabel
-   :color: info
-
 .. code-block::
 
     @article{PionTonachini2019,

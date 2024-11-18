@@ -23,9 +23,9 @@ html[data-theme="light"] {
     /* ↓↓↓ use "warning" colors for "secondary" */
     --pst-color-secondary: var(--pst-color-warning);
     --pst-color-secondary-bg: var(--pst-color-warning-bg);
-    /* ↓↓↓ make sure new primary (link) color propogates to links on code */
+    /* ↓↓↓ make sure new primary (link) color propagates to links on code */
     --pst-color-inline-code-links: var(--pst-color-link);
-    /* ↓↓↓ make sure new secondary (hover) color propogates to hovering on table rows */
+    /* ↓↓↓ make sure new secondary (hover) color propagates to hovering on table rows */
     --pst-color-table-row-hover-bg: var(--pst-color-secondary-bg);
     /* topbar logo links */
     --mne-color-github: #000;
@@ -55,9 +55,9 @@ html[data-theme="dark"] {
     /* ↓↓↓ use "warning" colors for "secondary" */
     --pst-color-secondary: var(--pst-color-warning);
     --pst-color-secondary-bg: var(--pst-color-warning-bg);
-    /* ↓↓↓ make sure new primary (link) color propogates to links on code */
+    /* ↓↓↓ make sure new primary (link) color propagates to links on code */
     --pst-color-inline-code-links: var(--pst-color-link);
-    /* ↓↓↓ make sure new secondary (hover) color propogates to hovering on table rows */
+    /* ↓↓↓ make sure new secondary (hover) color propagates to hovering on table rows */
     --pst-color-table-row-hover-bg: var(--pst-color-secondary-bg);
     /* topbar logo links */
     --mne-color-github: rgb(240, 246, 252);  /* from their logo SVG */

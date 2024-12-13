@@ -12,7 +12,6 @@ repos:
       rev: v2.3.0
       hooks:
           - id: codespell
-            args: [--write-changes]
             additional_dependencies: [tomli]
 
     - repo: https://github.com/mscheltienne/bibclean

@@ -12,7 +12,7 @@
 
 .. include:: ./authors.inc
 
-Version 0.3
+Version 0.2
 ===========
 
 - Add functions for annotating and labeling ICA components in BIDS format :func:`mne_icalabel.annotation.write_components_tsv`, :func:`mne_icalabel.annotation.mark_component` (:pr:`60` by `Adam Li`_)

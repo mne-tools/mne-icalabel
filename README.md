@@ -84,23 +84,43 @@ your question.
 
 # Citing
 
-If you use the ``ICLabel`` model, please consider citing our paper:
+If you use the ``mne-icalabel``, please consider citing our paper:
 
-    Li et al., (2022). MNE-ICALabel: Automatically annotating ICA components with ICLabel in Python. Journal of Open Source Software, 7(76), 4484, https://doi.org/10.21105/joss.04484
+```
+@article{Li2022,
+  title = {MNE-ICALabel: Automatically annotating ICA components with ICLabel in Python},
+  volume = {7},
+  ISSN = {2475-9066},
+  url = {http://dx.doi.org/10.21105/joss.04484},
+  DOI = {10.21105/joss.04484},
+  number = {76},
+  journal = {Journal of Open Source Software},
+  publisher = {The Open Journal},
+  author = {Li,  Adam and Feitelberg,  Jacob and Saini,  Anand Prakash and H\"{o}chenberger, Richard and Scheltienne,  Mathieu},
+  year = {2022},
+  month = aug,
+  pages = {4484}
+}
+```
 
-with the corresponding BibTex:
+And the paper associated to the model used:
 
-    @article{Li2022,
-        doi       = {10.21105/joss.04484},
-        url       = {https://doi.org/10.21105/joss.04484},
-        year      = {2022},
-        publisher = {The Open Journal},
-        volume    = {7},
-        number    = {76},
-        pages     = {4484},
-        author    = {Adam Li and Jacob Feitelberg and Anand Prakash Saini and Richard Höchenberger and Mathieu Scheltienne},
-        title     = {MNE-ICALabel: Automatically annotating ICA components with ICLabel in Python},
-        journal   = {Journal of Open Source Software}
-    }
+- **ICLabel**
+
+```
+@article{PionTonachini2019,
+  title = {ICLabel: An automated electroencephalographic independent component classifier,  dataset,  and website},
+  volume = {198},
+  ISSN = {1053-8119},
+  url = {http://dx.doi.org/10.1016/j.neuroimage.2019.05.026},
+  DOI = {10.1016/j.neuroimage.2019.05.026},
+  journal = {NeuroImage},
+  publisher = {Elsevier BV},
+  author = {Pion-Tonachini,  Luca and Kreutz-Delgado,  Ken and Makeig,  Scott},
+  year = {2019},
+  month = sep,
+  pages = {181–197}
+}
+```
 
 Future versions of the software are aimed at improved models and may have different papers associated with it.

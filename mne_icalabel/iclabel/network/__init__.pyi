@@ -9,7 +9,8 @@ def run_iclabel(
     """Run the ICLabel network on the provided set of features.
 
     The features are un-formatted and are as-returned by
-    `~mne_icalabel.iclabel.get_iclabel_features`.
+    `~mne_icalabel.iclabel.get_iclabel_features`. For more information,
+    see :footcite:t:`PionTonachini2019`.
 
     Parameters
     ----------
@@ -29,4 +30,8 @@ def run_iclabel(
         The predicted numerical probability values for all labels in ICLabel output.
         Columns are ordered with ``'Brain'``, ``'Muscle'``, ``'Eye'``,
         ``'Heart'``, ``'Line Noise'``, ``'Channel Noise'``, and ``'Other'``.
+
+    References
+    ----------
+    .. footbibliography::
     """

@@ -123,11 +123,7 @@ html_theme_options = {
         "version_match": switcher_version_match,
     },
 }
-# Custom sidebar templates, maps document names to template names.
-html_sidebars = {
-    "index": ["search-field.html"],
-}
-
+html_sidebars = {"**": []}
 html_context = {
     "pygment_light_style": "tango",
     "pygment_dark_style": "native",
@@ -296,7 +292,7 @@ def linkcode_resolve(domain: str, info: dict[str, str]) -> Optional[str]:
 
     # retrieve start/stop lines
     source, start_line = inspect.getsourcelines(pyobject)
-    lines = "L%d-L%d" % (start_line, start_line + len(source) - 1)
+    lines = f"L{start_line}-L{start_line + len(source) - 1}"
 
     # create URL
     if "dev" in release:

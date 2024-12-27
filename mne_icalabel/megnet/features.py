@@ -24,7 +24,7 @@ def get_megnet_features(raw: BaseRaw, ica: ICA):
 
     Parameters
     ----------
-    raw : Raw.
+    raw : Raw
         Raw MEG recording used to fit the ICA decomposition.
         The raw instance should be bandpass filtered between
         1 and 100 Hz and notch filtered at 50 or 60 Hz to

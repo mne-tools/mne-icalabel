@@ -1,6 +1,7 @@
-#%%
-import numpy as np
+# %%
 import mne
+import numpy as np
+
 from mne_icalabel.megnet.label_components import megnet_label_components
 
 
@@ -27,9 +28,10 @@ def test_megnet_label_components(raw_ica):
     prob = megnet_label_components(*raw_ica)
     this_atrifact_idx = [int(idx) for idx in np.nonzero(prob.argmax(axis=1))[0]]
     assert set(real_atrifact_idx) == set(this_atrifact_idx)
-    print (f"this_atrifact_idx: {this_atrifact_idx}")
+    print(f"this_atrifact_idx: {this_atrifact_idx}")
 
-#%%
+
+# %%
 raw_ica = raw_ica()
 test_megnet_label_components(raw_ica)
-#%%
+# %%

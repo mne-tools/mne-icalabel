@@ -1,9 +1,10 @@
 from unittest.mock import MagicMock
+
 import mne
 import numpy as np
-from numpy.testing import assert_allclose
 import onnxruntime as ort
 import pytest
+from numpy.testing import assert_allclose
 
 from mne_icalabel.megnet.label_components import (
     _chunk_predicting,
@@ -72,19 +73,40 @@ def test_ica(raw_ica):
     raw2 = raw1.copy()
     ica = mne.preprocessing.ICA(n_components=20, method="infomax", random_state=88)
     ica2 = ica.fit(raw2)
-    assert_allclose(raw1.get_data(), raw2.get_data(), atol=1e-6, err_msg="Raw data should be the same!")
+    assert_allclose(
+        raw1.get_data(),
+        raw2.get_data(),
+        atol=1e-6,
+        err_msg="Raw data should be the same!",
+    )
 
-    assert_allclose(ica1.mixing_matrix_, ica2.mixing_matrix_, atol=1e-6, err_msg="ICA mixing matrices should be the same!")
-    assert_allclose(ica1.unmixing_matrix_, ica2.unmixing_matrix_, atol=1e-6, err_msg="ICA unmixing matrices should be the same!")
+    assert_allclose(
+        ica1.mixing_matrix_,
+        ica2.mixing_matrix_,
+        atol=1e-6,
+        err_msg="ICA mixing matrices should be the same!",
+    )
+    assert_allclose(
+        ica1.unmixing_matrix_,
+        ica2.unmixing_matrix_,
+        atol=1e-6,
+        err_msg="ICA unmixing matrices should be the same!",
+    )
 
     ica1_data = ica1.get_sources(raw1).get_data()
     ica2_data = ica2.get_sources(raw2).get_data()
-    assert_allclose(ica1_data, ica2_data, atol=1e-6, err_msg="ICA transformed data should be the same!")
-    
+    assert_allclose(
+        ica1_data,
+        ica2_data,
+        atol=1e-6,
+        err_msg="ICA transformed data should be the same!",
+    )
+
 
 def test_megnet(raw_ica):
     raw, ica = raw_ica
     prob1 = megnet_label_components(raw, ica)
     prob2 = megnet_label_components(raw, ica)
-    assert_allclose(prob1, prob2, atol=1e-6, err_msg="MEGnet predictions should be the same!")
-    
+    assert_allclose(
+        prob1, prob2, atol=1e-6, err_msg="MEGnet predictions should be the same!"
+    )

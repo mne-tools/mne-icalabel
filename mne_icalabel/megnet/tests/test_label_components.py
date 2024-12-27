@@ -69,6 +69,7 @@ def test_chunk_predicting():
 
 
 def test_ica(raw_ica):
+    """Test whether the ICA instances are the same."""
     raw1, ica1 = raw_ica
     raw2 = raw1.copy()
     ica = mne.preprocessing.ICA(n_components=20, method="infomax", random_state=88)
@@ -104,6 +105,7 @@ def test_ica(raw_ica):
 
 
 def test_megnet(raw_ica):
+    """Test whether the MEGnet predictions are the same."""
     raw, ica = raw_ica
     prob1 = megnet_label_components(raw, ica)
     prob2 = megnet_label_components(raw, ica)

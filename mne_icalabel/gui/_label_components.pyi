@@ -19,7 +19,7 @@ class ICAComponentLabeler(QMainWindow):
     _inst: Incomplete
     _ica: Incomplete
     _labels: Incomplete
-    selected_labels: Incomplete
+    selected_labels: dict[int, str]
     _selected_component: int
 
     def __init__(

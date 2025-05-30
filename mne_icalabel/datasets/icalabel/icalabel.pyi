@@ -1,9 +1,11 @@
 from pathlib import Path
 
 from _typeshed import Incomplete
+from mne.utils import verbose
 
 has_icalabel_testing_data: Incomplete
 
+@verbose
 def data_path(
     path: str | None = None,
     force_update: bool = False,

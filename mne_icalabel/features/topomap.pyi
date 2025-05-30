@@ -6,6 +6,7 @@ from numpy.typing import NDArray
 from ..utils._checks import _validate_ica as _validate_ica
 from ..utils._docs import fill_doc as fill_doc
 
+@fill_doc
 def get_topomaps(
     ica: ICA,
     picks: Incomplete | None = None,
@@ -57,6 +58,7 @@ def get_topomaps(
         Dictionary of ICs topographic maps for each channel type.
     """
 
+@fill_doc
 def _get_topomap_array(
     data: NDArray[float],
     info: Info,

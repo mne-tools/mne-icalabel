@@ -11,14 +11,12 @@ from .iclabel._config import ICLABEL_NUMERICAL_TO_STRING
 from .utils._checks import _validate_inst_and_ica
 
 if TYPE_CHECKING:
-    from typing import Union
-
     from mne import BaseEpochs
     from mne.io import BaseRaw
     from mne.preprocessing import ICA
 
 
-def label_components(inst: Union[BaseRaw, BaseEpochs], ica: ICA, method: str):
+def label_components(inst: BaseRaw | BaseEpochs, ica: ICA, method: str):
     """Automatically label the ICA components with the selected method.
 
     Parameters

@@ -13,12 +13,10 @@ from ..utils._checks import _validate_inst_and_ica
 from ._utils import _gdatav4, _mne_to_eeglab_locs, _next_power_of_2, _pol2cart
 
 if TYPE_CHECKING:
-    from typing import Union
-
     from mne.preprocessing import ICA
 
 
-def get_iclabel_features(inst: Union[BaseRaw, BaseEpochs], ica: ICA):
+def get_iclabel_features(inst: BaseRaw | BaseEpochs, ica: ICA):
     """Generate the features for ICLabel neural network.
 
     Parameters
@@ -140,9 +138,7 @@ def _retrieve_eeglab_icawinv(
     return icawinv, weights
 
 
-def _compute_ica_activations(
-    inst: Union[BaseRaw, BaseEpochs], ica: ICA
-) -> NDArray[float]:
+def _compute_ica_activations(inst: BaseRaw | BaseEpochs, ica: ICA) -> NDArray[float]:
     """Compute the ICA activations 'icaact' variable from an MNE ICA instance.
 
     Parameters
@@ -185,7 +181,7 @@ def _compute_ica_activations(
 
 # ----------------------------------------------------------------------------
 def _eeg_topoplot(
-    inst: Union[BaseRaw, BaseEpochs], icawinv: NDArray[float], picks: list[str]
+    inst: BaseRaw | BaseEpochs, icawinv: NDArray[float], picks: list[str]
 ) -> NDArray[float]:
     """Topoplot feature."""
     ncomp = icawinv.shape[-1]
@@ -258,10 +254,10 @@ def _topoplotFast(
 
 # ----------------------------------------------------------------------------
 def _eeg_rpsd(
-    inst: Union[BaseRaw, BaseEpochs], ica: ICA, icaact: NDArray[float]
+    inst: BaseRaw | BaseEpochs, ica: ICA, icaact: NDArray[float]
 ) -> NDArray[float]:
     """PSD feature."""
-    assert isinstance(inst, (BaseRaw, BaseEpochs))  # sanity-check
+    assert isinstance(inst, (BaseRaw | BaseEpochs))  # sanity-check
     constants = _eeg_rpsd_constants(inst, ica)
     psd = _eeg_rpsd_compute_psdmed(inst, icaact, *constants)
     psd = _eeg_rpsd_format(psd)
@@ -269,7 +265,7 @@ def _eeg_rpsd(
 
 
 def _eeg_rpsd_constants(
-    inst: Union[BaseRaw, BaseEpochs],
+    inst: BaseRaw | BaseEpochs,
     ica: ICA,
 ) -> tuple[int, int, int, int, NDArray[int], NDArray[float], NDArray[int]]:
     """Compute the constants before ``randperm`` is used to compute the subset."""
@@ -314,7 +310,7 @@ def _eeg_rpsd_constants(
 
 
 def _eeg_rpsd_compute_psdmed(
-    inst: Union[BaseRaw, BaseEpochs],
+    inst: BaseRaw | BaseEpochs,
     icaact: NDArray[float],
     ncomp: int,
     nfreqs: int,
@@ -539,7 +535,7 @@ def _eeg_autocorr_fftw(
     return np.real(resamp).astype(np.float32)
 
 
-def _resample(ac: NDArray[float], fs: Union[int, float]) -> NDArray[float]:
+def _resample(ac: NDArray[float], fs: int | float) -> NDArray[float]:
     """Resample the autocorrelation feature.
 
     The comment in EEGLAB is:

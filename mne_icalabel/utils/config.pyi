@@ -1,4 +1,5 @@
-from typing import IO, Callable
+from collections.abc import Callable
+from typing import IO
 
 from packaging.requirements import Requirement
 

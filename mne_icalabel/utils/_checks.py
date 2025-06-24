@@ -1,12 +1,10 @@
-from typing import Union
-
 from mne import BaseEpochs
 from mne.io import BaseRaw
 from mne.preprocessing import ICA
 from mne.utils import _validate_type
 
 
-def _validate_inst_and_ica(inst: Union[BaseRaw, BaseEpochs], ica: ICA):
+def _validate_inst_and_ica(inst: BaseRaw | BaseEpochs, ica: ICA):
     """Make sure that the provided instance and ICA are valid."""
     _validate_type(inst, (BaseRaw, BaseEpochs), "inst", "Raw or Epochs")
     _validate_ica(ica)

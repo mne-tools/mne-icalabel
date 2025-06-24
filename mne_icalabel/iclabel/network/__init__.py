@@ -16,7 +16,7 @@ def run_iclabel(
     images: ArrayLike,
     psds: ArrayLike,
     autocorr: ArrayLike,
-    backend: Optional[str] = "pytorch",
+    backend: str | None = "pytorch",
 ) -> NDArray:
     """Run the ICLabel network on the provided set of features.
 

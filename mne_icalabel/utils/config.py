@@ -11,10 +11,11 @@ from mne.utils import _validate_type
 from packaging.requirements import Requirement
 
 if TYPE_CHECKING:
-    from typing import IO, Callable, Optional
+    from collections.abc import Callable
+    from typing import IO
 
 
-def sys_info(fid: Optional[IO] = None, developer: bool = False):
+def sys_info(fid: IO | None = None, developer: bool = False):
     """Print the system information for debugging.
 
     Parameters
@@ -134,7 +135,7 @@ def _list_dependencies_info(
 
 
 @lru_cache(maxsize=1)
-def _get_gpu_info() -> tuple[Optional[str], Optional[str]]:
+def _get_gpu_info() -> tuple[str | None, str | None]:
     """Get the GPU information."""
     try:
         from pyvista import GPUInfo

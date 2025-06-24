@@ -1,4 +1,4 @@
-from typing import Callable
+from collections.abc import Callable
 
 from .iclabel import iclabel_label_components as iclabel_label_components
 

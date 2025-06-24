@@ -257,7 +257,7 @@ def _eeg_rpsd(
     inst: BaseRaw | BaseEpochs, ica: ICA, icaact: NDArray[float]
 ) -> NDArray[float]:
     """PSD feature."""
-    assert isinstance(inst, (BaseRaw, BaseEpochs))  # sanity-check
+    assert isinstance(inst, (BaseRaw | BaseEpochs))  # sanity-check
     constants = _eeg_rpsd_constants(inst, ica)
     psd = _eeg_rpsd_compute_psdmed(inst, icaact, *constants)
     psd = _eeg_rpsd_format(psd)

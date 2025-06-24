@@ -10,12 +10,11 @@ from ..utils._imports import import_optional_dependency
 
 if TYPE_CHECKING:
     from pathlib import Path
-    from typing import Union
 
     from mne.preprocessing import ICA
 
 
-def write_components_tsv(ica: ICA, fname: Union[str, Path]):
+def write_components_tsv(ica: ICA, fname: str | Path):
     """Write channels tsv file for ICA components.
 
     Will create an accompanying JSON sidecar to explain the
@@ -102,7 +101,7 @@ def write_components_tsv(ica: ICA, fname: Union[str, Path]):
 
 def mark_component(
     component: int,
-    fname: Union[str, Path],
+    fname: str | Path,
     method: str,
     label: str,
     author: str,

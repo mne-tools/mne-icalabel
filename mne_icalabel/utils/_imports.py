@@ -10,7 +10,6 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from types import ModuleType
-    from typing import Optional
 
 # A mapping from import name to package name (on PyPI) when the package name
 # is different.
@@ -29,7 +28,7 @@ def import_optional_dependency(
     name: str,
     extra: str = "",
     raise_error: bool = True,
-) -> Optional[ModuleType]:
+) -> ModuleType | None:
     """Import an optional dependency.
 
     By default, if a dependency is missing an ImportError with a nice message will be

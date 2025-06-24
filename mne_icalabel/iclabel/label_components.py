@@ -1,5 +1,3 @@
-from typing import Optional, Union
-
 import numpy as np
 from mne import BaseEpochs
 from mne.io import BaseRaw
@@ -10,10 +8,10 @@ from .network import run_iclabel
 
 
 def iclabel_label_components(
-    inst: Union[BaseRaw, BaseEpochs],
+    inst: BaseRaw | BaseEpochs,
     ica: ICA,
     inplace: bool = True,
-    backend: Optional[str] = None,
+    backend: str | None = None,
 ):
     """Label the provided ICA components with the ICLabel neural network.
 

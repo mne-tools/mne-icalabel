@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING
 import pytest
 
 if TYPE_CHECKING:
-    from typing import Callable
+    from collections.abc import Callable
 
 
 def requires_module(name: str):  # pragma: no cover

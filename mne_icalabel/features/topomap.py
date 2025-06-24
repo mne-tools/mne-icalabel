@@ -18,8 +18,6 @@ from ..utils._checks import _validate_ica
 from ..utils._docs import fill_doc
 
 if TYPE_CHECKING:
-    from typing import Union
-
     from mne import Info
     from mne.preprocessing import ICA
     from numpy.typing import NDArray
@@ -31,7 +29,7 @@ def get_topomaps(
     picks=None,
     res: int = 64,
     image_interp: str = _INTERPOLATION_DEFAULT,  # 'cubic'
-    border: Union[float, str] = _BORDER_DEFAULT,  # 'mean'
+    border: float | str = _BORDER_DEFAULT,  # 'mean'
     extrapolate: str = _EXTRAPOLATE_DEFAULT,  # 'auto' -> 'head' (EEG), 'local' (MEG)
 ) -> dict[str, NDArray[float]]:
     """Generate an array of scalp topographies for the picked components.
@@ -100,7 +98,7 @@ def _get_topomap_array(
     info: Info,
     res: int = 64,
     image_interp: str = _INTERPOLATION_DEFAULT,  # 'cubic'
-    border: Union[float, str] = _BORDER_DEFAULT,  # 'mean'
+    border: float | str = _BORDER_DEFAULT,  # 'mean'
     extrapolate: str = _EXTRAPOLATE_DEFAULT,  # 'auto' -> 'head' (EEG), 'local' (MEG)
 ) -> NDArray[float]:
     """Generate a scalp topographic map (n_pixels, n_pixels).

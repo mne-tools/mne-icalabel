@@ -1,5 +1,5 @@
-from mne import BaseEpochs as BaseEpochs
-from mne.io import BaseRaw as BaseRaw
+from mne import BaseEpochs
+from mne.io import BaseRaw
 from mne.preprocessing import ICA
 
 from .features import get_iclabel_features as get_iclabel_features
@@ -24,35 +24,35 @@ def iclabel_label_components(
 
     - Topographic maps, based on the ICA decomposition.
     - Power Spectral Density (PSD), based on the ICA decomposition and the
-      provided instance.
+    provided instance.
     - Autocorrelation, based on the ICA decomposition and the provided
-      instance.
+    instance.
 
     For more information, see :footcite:t:`PionTonachini2019`.
 
     Parameters
     ----------
     inst : Raw | Epochs
-        Instance used to fit the ICA decomposition. The instance should be
-        referenced to a common average and bandpass filtered between 1 and
-        100 Hz.
+    Instance used to fit the ICA decomposition. The instance should be
+    referenced to a common average and bandpass filtered between 1 and
+    100 Hz.
     ica : ICA
-        ICA decomposition of the provided instance. The ICA decomposition
-        should use the extended infomax method.
+    ICA decomposition of the provided instance. The ICA decomposition
+    should use the extended infomax method.
     inplace : bool
-        Whether to modify the ``ica`` instance in place by adding the automatic
-        annotations to the ``labels_`` property. By default True.
+    Whether to modify the ``ica`` instance in place by adding the automatic
+    annotations to the ``labels_`` property. By default True.
     backend : None | ``torch`` | ``onnx``
-        Backend to use to run ICLabel. If None, returns the first available backend in
-        the order ``torch``, ``onnx``.
+    Backend to use to run ICLabel. If None, returns the first available backend in
+    the order ``torch``, ``onnx``.
 
     Returns
     -------
     labels_pred_proba : numpy.ndarray of shape (n_components, n_classes)
-        The estimated corresponding predicted probabilities of output classes
-        for each independent component. Columns are ordered with 'brain',
-        'muscle artifact', 'eye blink', 'heart beat', 'line noise',
-        'channel noise', 'other'.
+    The estimated corresponding predicted probabilities of output classes
+    for each independent component. Columns are ordered with 'brain',
+    'muscle artifact', 'eye blink', 'heart beat', 'line noise',
+    'channel noise', 'other'.
 
     References
     ----------

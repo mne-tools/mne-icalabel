@@ -15,21 +15,21 @@ def run_iclabel(
     Parameters
     ----------
     images : array of shape (n_components, 1, 32, 32)
-        The topoplot images.
+    The topoplot images.
     psds : array of shape (n_components, 1, 1, 100)
-        The power spectral density features.
+    The power spectral density features.
     autocorr : array of shape (n_components, 1, 1, 100)
-        The autocorrelation features.
+    The autocorrelation features.
     backend : None | ``torch`` | ``onnx``
-        Backend to use to run ICLabel. If None, returns the first available backend in
-        the order ``torch``, ``onnx``.
+    Backend to use to run ICLabel. If None, returns the first available backend in
+    the order ``torch``, ``onnx``.
 
     Returns
     -------
     labels : array of shape (n_components, n_classes)
-        The predicted numerical probability values for all labels in ICLabel output.
-        Columns are ordered with ``'Brain'``, ``'Muscle'``, ``'Eye'``,
-        ``'Heart'``, ``'Line Noise'``, ``'Channel Noise'``, and ``'Other'``.
+    The predicted numerical probability values for all labels in ICLabel output.
+    Columns are ordered with ``'Brain'``, ``'Muscle'``, ``'Eye'``,
+    ``'Heart'``, ``'Line Noise'``, ``'Channel Noise'``, and ``'Other'``.
 
     References
     ----------

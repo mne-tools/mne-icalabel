@@ -1,4 +1,4 @@
-from pathlib import Path as Path
+from pathlib import Path
 
 from mne.preprocessing import ICA
 
@@ -16,9 +16,9 @@ def write_components_tsv(ica: ICA, fname: str | Path):
     Parameters
     ----------
     ica : ICA
-        An instance of the fitted ICA.
+    An instance of the fitted ICA.
     fname : str | Path
-        The output filename.
+    The output filename.
 
     Notes
     -----
@@ -45,20 +45,20 @@ def mark_component(
     Parameters
     ----------
     component : int
-        The component to mark.
+    The component to mark.
     fname : Union[str, Path]
-        The filename for the BIDS filepath.
+    The filename for the BIDS filepath.
     method : str
-        The method to use. Must be 'manual', or one of ['iclabel'].
+    The method to use. Must be 'manual', or one of ['iclabel'].
     label : str
-        The label of the ICA component. Must be one of ['brain',
-        'muscle artifact', 'eye blink', 'heart beat', 'line noise',
-        'channel noise', 'other'].
+    The label of the ICA component. Must be one of ['brain',
+    'muscle artifact', 'eye blink', 'heart beat', 'line noise',
+    'channel noise', 'other'].
     author : str
-        The annotating author.
+    The annotating author.
     strict_label : bool
-        Whether to raise an error if ``label`` is not an accepted value.
-        Default is True.
+    Whether to raise an error if ``label`` is not an accepted value.
+    Default is True.
 
     Notes
     -----

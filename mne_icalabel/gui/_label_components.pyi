@@ -42,15 +42,15 @@ class ICAComponentLabeler(QMainWindow):
         self._components_listWidget
         self._labels_buttonGroup
         self._mpl_widgets (dict)
-            - topomap
-            - psd
+        - topomap
+        - psd
         self._timeSeries_widget
 
         Matplotlib figures
         ------------------
         self._mpl_figures (dict)
-            - topomap
-            - psd
+        - topomap
+        - psd
         """
 
     @staticmethod

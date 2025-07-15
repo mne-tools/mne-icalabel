@@ -11,7 +11,7 @@ def data_path(
     force_update: bool = False,
     update_path: bool = True,
     download: bool = True,
-    verbose: Incomplete | None = None,
+    verbose=None,
 ) -> Path:
     """ICA label testing data generated in conjunction with EEGLab.
 

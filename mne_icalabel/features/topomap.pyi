@@ -1,4 +1,3 @@
-from _typeshed import Incomplete
 from mne import Info
 from mne.preprocessing import ICA
 from numpy.typing import NDArray
@@ -9,7 +8,7 @@ from ..utils._docs import fill_doc as fill_doc
 @fill_doc
 def get_topomaps(
     ica: ICA,
-    picks: Incomplete | None = None,
+    picks=None,
     res: int = 64,
     image_interp: str = ...,
     border: float | str = ...,

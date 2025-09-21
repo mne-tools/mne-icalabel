@@ -3,12 +3,14 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from .iclabel import iclabel_label_components
+from .megnet import megnet_label_components
 
 if TYPE_CHECKING:
     from collections.abc import Callable
 
 ICALABEL_METHODS: dict[str, Callable | None] = {
     "iclabel": iclabel_label_components,
+    "megnet": megnet_label_components,
     "manual": None,
 }
 

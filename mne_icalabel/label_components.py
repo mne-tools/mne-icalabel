@@ -26,25 +26,26 @@ def label_components(inst: BaseRaw | BaseEpochs, ica: ICA, method: str):
         The fitted ICA instance.
     method : str
         The proposed method for labeling components. Must be one of:
-        ``'iclabel'``.
+        ``'iclabel'``, ``'megnet'``.
 
     Returns
     -------
     component_dict : dict
         A dictionary with the following fields:
 
-        - 'y_pred_proba' : array of shape (n_components,)
+        - ``'y_pred_proba'`` : array of shape (n_components,)
               Estimated predicted probability of the output class
               for each independent component.
-        - 'labels': list of shape (n_components,)
-              The corresponding string label of each class in 'y_pred'.
+        - ``'labels'`` : list of shape (n_components,)
+              The corresponding string label of each class in ``'y_pred'``.
 
     Notes
     -----
     Please refer to the following function for additional information on each
     method:
 
-    - ``'iclabel'``: `~mne_icalabel.iclabel.iclabel_label_components`
+    - ``'iclabel'``: :func:`~mne_icalabel.iclabel.iclabel_label_components`
+    - ``'megnet'``: :func:`~mne_icalabel.megnet.megnet_label_components`
     """
     _validate_type(method, str, "method")
     _check_option(

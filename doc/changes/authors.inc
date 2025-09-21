@@ -3,3 +3,4 @@
 .. _Jacob Feitelberg: https://github.com/jacobf18
 .. _Anand Saini: https://github.com/anandsaini024
 .. _Scott Huberty: https://github.com/scott-huberty
+.. _Guohao Zhang: https://github.com/colehank

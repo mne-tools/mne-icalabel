@@ -16,3 +16,5 @@
 
 Version 0.8
 ===========
+
+- Add support for MEGNet to classify MEG ICs into 4 categories: ``brain/others``, ``eye movements``, ``heart beat`` and ``eye blinks`` (see :func:`~mne_icalabel.megnet.megnet_label_components` for more information) (:pr:`207` by `Guohao Zhang`_)

@@ -18,7 +18,7 @@ def raw_with_line_noise() -> RawArray:
     return RawArray(data, info)
 
 
-def test_check_line_noise(raw_with_line_noise):
+def test_check_line_noise(raw_with_line_noise: RawArray) -> None:
     """Check line-noise auto-detection."""
     assert not _check_line_noise(raw_with_line_noise)
     # 50 Hz is absent from both channels
@@ -42,12 +42,12 @@ def create_raw_ica(
     filter_range=(1, 100),
     ica_method="infomax",
     ntime=None,
-):
+) -> tuple[RawArray, ICA]:
     """Create a Raw instance and ICA instance for testing."""
     n_times = sfreq * 60 if ntime is None else ntime
     rng = np.random.default_rng()
     data = rng.standard_normal((n_channels, n_times))
-    ch_names = [f"MEG {i+1}" for i in range(n_channels)]
+    ch_names = [f"MEG {i + 1}" for i in range(n_channels)]
 
     # Create valid channel loc for feature extraction
     channel_locs = rng.standard_normal((n_channels, 3))
@@ -74,13 +74,13 @@ def create_raw_ica(
 
 
 @pytest.fixture
-def raw_ica_valid():
+def raw_ica_valid() -> tuple[RawArray, ICA]:
     """Raw instance with valid parameters."""
     raw, ica = create_raw_ica()
     return raw, ica
 
 
-def test_get_megnet_features(raw_ica_valid):
+def test_get_megnet_features(raw_ica_valid) -> None:
     """Test whether the function returns the correct features."""
     time_series, topomaps = get_megnet_features(*raw_ica_valid)
     n_components = raw_ica_valid[1].n_components
@@ -91,42 +91,42 @@ def test_get_megnet_features(raw_ica_valid):
 
 
 @pytest.fixture
-def raw_ica_invalid_channel():
+def raw_ica_invalid_channel() -> tuple[RawArray, ICA]:
     """Raw instance with invalid channel type."""
     raw, ica = create_raw_ica(ch_type="eeg")
     return raw, ica
 
 
 @pytest.fixture
-def raw_ica_invalid_sfreq():
+def raw_ica_invalid_sfreq() -> tuple[RawArray, ICA]:
     """Raw instance with invalid sampling frequency."""
     raw, ica = create_raw_ica(sfreq=600)
     return raw, ica
 
 
 @pytest.fixture
-def raw_ica_invalid_time():
+def raw_ica_invalid_time() -> tuple[RawArray, ICA]:
     """Raw instance with invalid time points."""
     raw, ica = create_raw_ica(ntime=2500)
     return raw, ica
 
 
 @pytest.fixture
-def raw_ica_invalid_filter():
+def raw_ica_invalid_filter() -> tuple[RawArray, ICA]:
     """Raw instance with invalid filter range."""
     raw, ica = create_raw_ica(filter_range=(0.1, 100))
     return raw, ica
 
 
 @pytest.fixture
-def raw_ica_invalid_ncomp():
+def raw_ica_invalid_ncomp() -> tuple[RawArray, ICA]:
     """Raw instance with invalid number of ICA components."""
     raw, ica = create_raw_ica(n_components=10)
     return raw, ica
 
 
 @pytest.fixture
-def raw_ica_invalid_method():
+def raw_ica_invalid_method() -> tuple[RawArray, ICA]:
     """Raw instance with invalid ICA method."""
     raw, ica = create_raw_ica(ica_method="fastica")
     return raw, ica

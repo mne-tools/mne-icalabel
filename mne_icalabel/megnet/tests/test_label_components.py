@@ -1,9 +1,14 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 from unittest.mock import MagicMock
 
 import mne
 import numpy as np
 import onnxruntime as ort
 import pytest
+from mne.io.base import BaseRaw
+from mne.preprocessing.ica import ICA
 from numpy.testing import assert_allclose
 
 from mne_icalabel.megnet.label_components import (
@@ -12,9 +17,13 @@ from mne_icalabel.megnet.label_components import (
     megnet_label_components,
 )
 
+if TYPE_CHECKING:
+    from mne.io import BaseRaw
+    from mne.preprocessing import ICA
+
 
 @pytest.fixture
-def raw_ica():
+def raw_ica() -> tuple[BaseRaw, ICA]:
     """Create a Raw instance and ICA instance for testing."""
     sample_dir = mne.datasets.sample.data_path()
     sample_fname = sample_dir / "MEG" / "sample" / "sample_audvis_raw.fif"
@@ -31,7 +40,7 @@ def raw_ica():
     return raw, ica
 
 
-def test_megnet_label_components(raw_ica):
+def test_megnet_label_components(raw_ica: tuple[BaseRaw, ICA]) -> None:
     """Test whether the function returns the correct artifact index."""
     real_atrifact_idx = [0, 3, 5]  # heart beat, eye movement, heart beat
     prob = megnet_label_components(*raw_ica)
@@ -39,7 +48,7 @@ def test_megnet_label_components(raw_ica):
     assert set(real_atrifact_idx) == set(this_atrifact_idx)
 
 
-def test_get_chunk_start():
+def test_get_chunk_start() -> None:
     """Test whether the function returns the correct start times."""
     input_len = 10000
     chunk_len = 3000
@@ -51,7 +60,7 @@ def test_get_chunk_start():
     assert start_times == [0, 2250, 4500, 6750]
 
 
-def test_chunk_predicting():
+def test_chunk_predicting() -> None:
     """Test whether MEGnet's chunk volte algorithm returns the correct shape."""
     rng = np.random.default_rng()
     time_series = rng.random((5, 10000))
@@ -68,7 +77,7 @@ def test_chunk_predicting():
     assert isinstance(predictions, np.ndarray)
 
 
-def test_ica(raw_ica):
+def test_ica(raw_ica: tuple[BaseRaw, ICA]) -> None:
     """Test whether the ICA instances are the same."""
     raw1, ica1 = raw_ica
     raw2 = raw1.copy()
@@ -104,7 +113,7 @@ def test_ica(raw_ica):
     )
 
 
-def test_megnet(raw_ica):
+def test_megnet(raw_ica: tuple[BaseRaw, ICA]) -> None:
     """Test whether the MEGnet predictions are the same."""
     raw, ica = raw_ica
     prob1 = megnet_label_components(raw, ica)

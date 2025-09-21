@@ -66,8 +66,8 @@ def _mne_to_eeglab_locs(raw: BaseRaw, picks: list[str]) -> tuple[NDArray, NDArra
 
     # Obtain Spherical Coordinates
     sph = np.array([cart2sph(x[i], y[i], z[i]) for i in range(len(x))])
-    theta = sph[:, 0]
-    phi = sph[:, 1]
+    theta = sph[:, 1]
+    phi = sph[:, 2]
 
     # Obtain Polar coordinates (as in eeglab)
     topo = np.array([sph2topo(theta[i], phi[i]) for i in range(len(theta))])

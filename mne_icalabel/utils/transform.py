@@ -37,5 +37,5 @@ def cart2sph(x, y, z):
     azimuth = np.arctan2(y, x)
     elevation = np.arctan2(z, np.sqrt(x**2 + y**2))
     r = np.sqrt(x**2 + y**2 + z**2)
-    # theta, phi, r
-    return azimuth, elevation, r
+    # r, theta, phi
+    return r, azimuth, elevation

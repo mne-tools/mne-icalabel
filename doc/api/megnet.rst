@@ -3,6 +3,33 @@
 MEGNet
 ======
 
+MEGNet is an automated ICA-based artifact removal system for MEG using spatiotemporal
+convolutional neural networks. MEGNEt classifies ICs in the following categories:
+
+* ``'brain/other'``: Brain activity or other non-artifact activity.
+* ``'eye movement'``: Eye movements, such as saccades.
+* ``'heart beat'``: Cardiac activity.
+* ``'eye blink'``: Eye blinks.
+
+Architecture
+------------
+
+The MEGNet architecture consists of three subnetworks:
+
+1. **2D CNN for spatial maps**: Processes the topographic maps with 8 convolutional
+   layers to extract spatial features from the magnetic flux patterns.
+
+2. **1D CNN for time courses**: Processes 60-second epochs with 15-second overlaps
+   using 5 convolutional layers to capture temporal dynamics.
+
+3. **Dense merge network**: Combines the learned representations from both CNNs
+   through concatenation and outputs probabilities for four classes: eye-blink (EB),
+   saccade (SA), cardiac (CA), and non-artifact (NA).
+
+The model uses PReLU activation and He uniform initialization, with batch
+normalization applied differently in spatial and temporal subnetworks based on
+automated hyperparameter optimization.
+
 API
 ---
 

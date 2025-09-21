@@ -4,10 +4,10 @@ from mne.preprocessing import ICA
 from numpy.typing import NDArray
 
 from ..utils._checks import _validate_inst_and_ica as _validate_inst_and_ica
+from ..utils.transform import pol2cart as pol2cart
 from ._utils import _gdatav4 as _gdatav4
 from ._utils import _mne_to_eeglab_locs as _mne_to_eeglab_locs
 from ._utils import _next_power_of_2 as _next_power_of_2
-from ._utils import _pol2cart as _pol2cart
 
 def get_iclabel_features(inst: BaseRaw | BaseEpochs, ica: ICA):
     """Generate the features for ICLabel neural network.
@@ -35,7 +35,7 @@ def get_iclabel_features(inst: BaseRaw | BaseEpochs, ica: ICA):
     .. footbibliography::
     """
 
-def _retrieve_eeglab_icawinv(ica: ICA) -> tuple[NDArray[float], NDArray[float]]:
+def _retrieve_eeglab_icawinv(ica: ICA) -> tuple[NDArray, NDArray]:
     """
     Retrieve 'icawinv' from an MNE ICA instance.
 
@@ -50,7 +50,7 @@ def _retrieve_eeglab_icawinv(ica: ICA) -> tuple[NDArray[float], NDArray[float]]:
     weights : array
     """
 
-def _compute_ica_activations(inst: BaseRaw | BaseEpochs, ica: ICA) -> NDArray[float]:
+def _compute_ica_activations(inst: BaseRaw | BaseEpochs, ica: ICA) -> NDArray:
     """Compute the ICA activations 'icaact' variable from an MNE ICA instance.
 
     Parameters
@@ -82,64 +82,56 @@ def _compute_ica_activations(inst: BaseRaw | BaseEpochs, ica: ICA) -> NDArray[fl
     """
 
 def _eeg_topoplot(
-    inst: BaseRaw | BaseEpochs, icawinv: NDArray[float], picks: list[str]
-) -> NDArray[float]:
+    inst: BaseRaw | BaseEpochs, icawinv: NDArray, picks: list[str]
+) -> NDArray:
     """Topoplot feature."""
 
-def _topoplotFast(
-    values: NDArray[float], rd: NDArray[float], th: NDArray[float]
-) -> NDArray[float]:
+def _topoplotFast(values: NDArray, rd: NDArray, th: NDArray) -> NDArray:
     """Implement topoplotFast.m from MATLAB. Each topographic map is a 32x32 images."""
 
-def _eeg_rpsd(
-    inst: BaseRaw | BaseEpochs, ica: ICA, icaact: NDArray[float]
-) -> NDArray[float]:
+def _eeg_rpsd(inst: BaseRaw | BaseEpochs, ica: ICA, icaact: NDArray) -> NDArray:
     """PSD feature."""
 
 def _eeg_rpsd_constants(
     inst: BaseRaw | BaseEpochs, ica: ICA
-) -> tuple[int, int, int, int, NDArray[int], NDArray[float], NDArray[int]]:
+) -> tuple[int, int, int, int, NDArray, NDArray, NDArray]:
     """Compute the constants before ``randperm`` is used to compute the subset."""
 
 def _eeg_rpsd_compute_psdmed(
     inst: BaseRaw | BaseEpochs,
-    icaact: NDArray[float],
+    icaact: NDArray,
     ncomp: int,
     nfreqs: int,
     n_points: int,
     nyquist: int,
-    index: NDArray[int],
-    window: NDArray[float],
-    subset: NDArray[int],
-) -> NDArray[float]:
+    index: NDArray,
+    window: NDArray,
+    subset: NDArray,
+) -> NDArray:
     """Compute the variable 'psdmed', annotated as windowed spectrums."""
 
-def _eeg_rpsd_format(psd: NDArray[float]) -> NDArray[float]:
+def _eeg_rpsd_format(psd: NDArray) -> NDArray:
     """Apply the formatting steps after 'eeg_rpsd.m'."""
 
-def _eeg_autocorr_welch(
-    raw: BaseRaw, ica: ICA, icaact: NDArray[float]
-) -> NDArray[float]:
+def _eeg_autocorr_welch(raw: BaseRaw, ica: ICA, icaact: NDArray) -> NDArray:
     """Autocorrelation feature applied on raw object with at least 5 * fs samples.
 
     MATLAB: 'eeg_autocorr_welch.m'.
     """
 
-def _eeg_autocorr(raw: BaseRaw, ica: ICA, icaact: NDArray[float]) -> NDArray[float]:
+def _eeg_autocorr(raw: BaseRaw, ica: ICA, icaact: NDArray) -> NDArray:
     """Autocorr applied on raw object without enough samples for eeg_autocorr_welch.
 
     MATLAB: 'eeg_autocorr.m'.
     """
 
-def _eeg_autocorr_fftw(
-    epochs: BaseEpochs, ica: ICA, icaact: NDArray[float]
-) -> NDArray[float]:
+def _eeg_autocorr_fftw(epochs: BaseEpochs, ica: ICA, icaact: NDArray) -> NDArray:
     """Autocorrelation feature applied on epoch object.
 
     MATLAB: 'eeg_autocorr_fftw.m'.
     """
 
-def _resample(ac: NDArray[float], fs: int | float) -> NDArray[float]:
+def _resample(ac: NDArray, fs: int | float) -> NDArray:
     """Resample the autocorrelation feature.
 
     The comment in EEGLAB is:

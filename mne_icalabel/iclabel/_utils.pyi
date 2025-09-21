@@ -1,9 +1,11 @@
 from mne.io import BaseRaw
-from numpy.typing import ArrayLike, NDArray
+from numpy.typing import ArrayLike
+from numpy.typing import NDArray as NDArray
 
-def _mne_to_eeglab_locs(
-    raw: BaseRaw, picks: list[str]
-) -> tuple[NDArray[float], NDArray[float]]:
+from ..utils.transform import cart2sph as cart2sph
+from ..utils.transform import sph2topo as sph2topo
+
+def _mne_to_eeglab_locs(raw: BaseRaw, picks: list[str]) -> tuple[NDArray, NDArray]:
     """Obtain EEGLab-like spherical coordinate from EEG channel positions.
 
     TODO: @JACOB:

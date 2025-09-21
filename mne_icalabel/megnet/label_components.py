@@ -19,13 +19,15 @@ _MODEL_PATH: str = files("mne_icalabel.megnet") / "assets" / "megnet.onnx"
 def megnet_label_components(raw: BaseRaw, ica: ICA) -> NDArray:
     """Label the provided ICA components with the MEGnet neural network.
 
+    For more information, see :footcite:t:`Treacher2021`.
+
     Parameters
     ----------
     raw : Raw
         Raw MEG recording used to fit the ICA decomposition.
-        The raw instance should be bandpass filtered between 1 and 100 Hz
-        and notch filtered at 50 or 60 Hz to remove line noise,
-        and downsampled to 250 Hz.
+        The raw instance should be bandpass filtered between ``1`` and ``100`` Hz
+        and notch filtered at ``50`` or ``60`` Hz to remove line noise, and downsampled
+        to ``250`` Hz.
     ica : ICA
         ICA decomposition of the provided instance.
         The ICA decomposition should use the infomax method.
@@ -35,8 +37,11 @@ def megnet_label_components(raw: BaseRaw, ica: ICA) -> NDArray:
     labels_pred_proba : numpy.ndarray of shape (n_components, n_classes)
         The estimated corresponding predicted probabilities of output classes
         for each independent component. Columns are ordered with
-        'brain/other', 'eye movement', 'heart beat', 'eye blink',
+        ``'brain/other'``, ``'eye movement'``, ``'heart beat'``, ``'eye blink'``.
 
+    References
+    ----------
+    .. footbibliography::
     """
     time_series, topomaps = get_megnet_features(raw, ica)
 

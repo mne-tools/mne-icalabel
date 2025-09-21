@@ -1,12 +1,17 @@
+from __future__ import annotations
+
 from importlib.resources import files
+from typing import TYPE_CHECKING
 
 import numpy as np
 import onnxruntime as ort
 from mne.io import BaseRaw
 from mne.preprocessing import ICA
-from numpy.typing import NDArray
 
 from .features import get_megnet_features
+
+if TYPE_CHECKING:
+    from numpy.typing import NDArray
 
 _MODEL_PATH: str = files("mne_icalabel.megnet") / "assets" / "megnet.onnx"
 
@@ -58,7 +63,7 @@ def _chunk_predicting(
     """MEGnet's chunk volte algorithm."""
     predction_vote = []
 
-    for comp_series, comp_map in zip(time_series, spatial_maps):
+    for comp_series, comp_map in zip(time_series, spatial_maps, strict=False):
         time_len = comp_series.shape[0]
         start_times = _get_chunk_start(time_len, chunk_len, overlap_len)
 
@@ -70,7 +75,7 @@ def _chunk_predicting(
             in_chunks = [start <= t < start + chunk_len for start in start_times]
             # how many chunks the time point is in
             num_chunks = np.sum(in_chunks)
-            for start_time, is_in_chunk in zip(start_times, in_chunks):
+            for start_time, is_in_chunk in zip(start_times, in_chunks, strict=False):
                 if is_in_chunk:
                     chunk_votes[start_time] += 1.0 / num_chunks
 

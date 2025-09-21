@@ -38,11 +38,11 @@ keywords = [
 license = {file = 'LICENSE'}
 maintainers = [
   {email = 'adam.li@columbia.edu', name = 'Adam Li'},
-  {email = 'mathieu.scheltienne@fcbg.ch', name = 'Mathieu Scheltienne'},
+  {email = 'mathieu.scheltienne@gnail.com', name = 'Mathieu Scheltienne'},
 ]
 name = 'mne-icalabel'
 readme = 'README.md'
-requires-python = '~=3.10'
+requires-python = '>=3.10'
 version = "0.8.0.dev0"
 
 [project.optional-dependencies]

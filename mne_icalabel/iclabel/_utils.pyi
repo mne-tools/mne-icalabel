@@ -27,19 +27,6 @@ def _mne_to_eeglab_locs(
     Degree in spherical coordinates of each EEG channel.
     """
 
-def _pol2cart(
-    theta: NDArray[float], rho: NDArray[float]
-) -> tuple[NDArray[float], NDArray[float]]:
-    """Convert polar coordinates to cartesian coordinates.
-
-    Parameters
-    ----------
-    theta : array
-    angle
-    rho : array
-    magnitude
-    """
-
 def _next_power_of_2(x) -> int:
     """Equivalent to 2^nextpow2 in MATLAB."""
 

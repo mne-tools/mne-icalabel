@@ -8,7 +8,7 @@ from mne_icalabel.megnet.features import _check_line_noise, get_megnet_features
 
 
 @pytest.fixture
-def raw_with_line_noise():
+def raw_with_line_noise() -> RawArray:
     """Create a Raw instance with line noise."""
     times = np.arange(0, 2, 1 / 1000)
     data1 = np.sin(2 * np.pi * 10 * times) + np.sin(2 * np.pi * 30 * times)

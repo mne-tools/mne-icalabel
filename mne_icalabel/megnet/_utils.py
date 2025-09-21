@@ -1,13 +1,11 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 import numpy as np
-from numpy.typing import NDArray
 
-
-def _cart2sph(x, y, z):
-    xy = np.sqrt(x * x + y * y)
-    r = np.sqrt(x * x + y * y + z * z)
-    theta = np.arctan2(y, x)
-    phi = np.arctan2(z, xy)
-    return r, theta, phi
+if TYPE_CHECKING:
+    from numpy.typing import NDArray
 
 
 def _make_head_outlines(sphere: NDArray, pos: NDArray, clip_origin: tuple) -> dict:
@@ -17,7 +15,7 @@ def _make_head_outlines(sphere: NDArray, pos: NDArray, clip_origin: tuple) -> di
     The difference between this function and the original one is that
     head_x and head_y here are scaled by a factor of 1.01 to make topomap
     fit the 120x120 pixel size.
-    Also, removed the ear and nose outlines for not needed in MEGnet.
+    Also, removed the ear and nose outlines, not needed in MEGnet.
 
     Parameters
     ----------
@@ -32,7 +30,6 @@ def _make_head_outlines(sphere: NDArray, pos: NDArray, clip_origin: tuple) -> di
     -------
     dict
         Dictionary containing the head outlines and mask positions.
-
     """
     x, y, _, radius = sphere
     ll = np.linspace(0, 2 * np.pi, 101)

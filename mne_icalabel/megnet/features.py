@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 import io
+from typing import TYPE_CHECKING
 
 import matplotlib.pyplot as plt
 import mne
@@ -6,14 +9,15 @@ import numpy as np
 from mne.io import BaseRaw
 from mne.preprocessing import ICA
 from mne.utils import _validate_type, warn
-from numpy.typing import NDArray
 from PIL import Image
 from scipy import interpolate
 from scipy.spatial import ConvexHull
 
-from mne_icalabel.iclabel._utils import _pol2cart
+from ..utils.transform import cart2sph, pol2cart
+from ._utils import _make_head_outlines
 
-from ._utils import _cart2sph, _make_head_outlines
+if TYPE_CHECKING:
+    from numpy.typing import NDArray
 
 
 def get_megnet_features(raw: BaseRaw, ica: ICA):
@@ -111,7 +115,7 @@ def _get_topomaps_data(ica: ICA):
 
     # Convert to spherical and then to 2D
     sph_coords = np.transpose(
-        _cart2sph(
+        cart2sph(
             channel_locations_3d[:, 0],
             channel_locations_3d[:, 1],
             channel_locations_3d[:, 2],
@@ -119,7 +123,7 @@ def _get_topomaps_data(ica: ICA):
     )
     TH, PHI = sph_coords[:, 1], sph_coords[:, 2]
     newR = 1 - PHI / np.pi * 2
-    channel_locations_2d = np.transpose(_pol2cart(TH, newR))
+    channel_locations_2d = np.transpose(pol2cart(TH, newR))
 
     # Adjust coordinates with convex hull interpolation
     hull = ConvexHull(channel_locations_2d)
@@ -138,7 +142,7 @@ def _get_topomaps_data(ica: ICA):
     D = interp_func(TH)
 
     adjusted_R = np.array([min(newR[i] * D[i], 1) for i in range(len(mags))])
-    Xnew, Ynew = _pol2cart(TH, adjusted_R)
+    Xnew, Ynew = pol2cart(TH, adjusted_R)
     pos_new = np.vstack((Xnew, Ynew)).T
 
     outlines = _make_head_outlines(np.array([0, 0, 0, 1]), pos_new, (0, 0))
@@ -199,7 +203,7 @@ def _check_line_noise(
         # a sampling rate extremely low (100 Hz?) and (1)
         # either they missed all of the previous warnings
         # encountered or (2) they know what they are doing.
-        warn("The sampling rate raw.info['sfreq'] is too low" "to estimate line niose.")
+        warn("The sampling rate raw.info['sfreq'] is too lowto estimate line niose.")
         return False
     # compute the power spectrum and retrieve the frequencies of interest
     spectrum = raw.compute_psd(picks="meg", exclude="bads")

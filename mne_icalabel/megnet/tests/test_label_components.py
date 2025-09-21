@@ -44,8 +44,9 @@ def test_megnet_label_components(raw_ica: tuple[BaseRaw, ICA]) -> None:
     """Test whether the function returns the correct artifact index."""
     real_atrifact_idx = [0, 3, 5]  # heart beat, eye movement, heart beat
     prob = megnet_label_components(*raw_ica)
-    this_atrifact_idx = [int(idx) for idx in np.nonzero(prob.argmax(axis=1))[0]]
-    assert set(real_atrifact_idx) == set(this_atrifact_idx)
+    # round due to floating point error
+    idx = [int(idx) for idx in np.nonzero(np.round(prob, 5).argmax(axis=1))[0]]
+    assert set(real_atrifact_idx) == set(idx)
 
 
 def test_get_chunk_start() -> None:

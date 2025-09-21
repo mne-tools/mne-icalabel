@@ -6,8 +6,7 @@ import numpy as np
 from mne.utils import _validate_type
 from mne.utils.check import _check_option
 
-from .config import ICALABEL_METHODS
-from .iclabel._config import ICLABEL_NUMERICAL_TO_STRING
+from .config import ICALABEL_METHODS, ICALABEL_METHODS_NUMERICAL_TO_STRING
 from .utils._checks import _validate_inst_and_ica
 
 if TYPE_CHECKING:
@@ -55,7 +54,9 @@ def label_components(inst: BaseRaw | BaseEpochs, ica: ICA, method: str):
     _validate_inst_and_ica(inst, ica)
     labels_pred_proba = ICALABEL_METHODS[method](inst, ica)  # type: ignore
     labels_pred = np.argmax(labels_pred_proba, axis=1)
-    labels = [ICLABEL_NUMERICAL_TO_STRING[label] for label in labels_pred]
+    labels = [
+        ICALABEL_METHODS_NUMERICAL_TO_STRING[method][label] for label in labels_pred
+    ]
     assert ica.n_components_ == labels_pred.size  # sanity-check
     assert ica.n_components_ == labels_pred_proba.shape[0]  # sanity-check
     y_pred_proba = labels_pred_proba[np.arange(ica.n_components_), labels_pred]

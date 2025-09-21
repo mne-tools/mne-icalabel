@@ -39,3 +39,4 @@ Contents
    api/index
    generated/examples/index
    cite
+   changes/index

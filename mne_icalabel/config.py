@@ -5,9 +5,9 @@ from typing import TYPE_CHECKING
 from .iclabel import iclabel_label_components
 
 if TYPE_CHECKING:
-    from typing import Callable, Optional
+    from collections.abc import Callable
 
-ICALABEL_METHODS: dict[str, Optional[Callable]] = {
+ICALABEL_METHODS: dict[str, Callable | None] = {
     "iclabel": iclabel_label_components,
     "manual": None,
 }

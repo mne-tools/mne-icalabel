@@ -1,4 +1,5 @@
-from typing import Any, Callable
+from collections.abc import Callable
+from typing import Any
 
 docdict: dict[str, str]
 _KEYS_MNE: tuple[str, ...]
@@ -11,12 +12,12 @@ def fill_doc(f: Callable[..., Any]) -> Callable[..., Any]:
     Parameters
     ----------
     f : callable
-        The function to fill the docstring of (modified in place).
+    The function to fill the docstring of (modified in place).
 
     Returns
     -------
     f : callable
-        The function, potentially with an updated __doc__.
+    The function, potentially with an updated __doc__.
     """
 
 def _indentcount_lines(lines: list[str]) -> int:
@@ -47,12 +48,12 @@ def copy_doc(source: Callable[..., Any]) -> Callable[..., Any]:
     Parameters
     ----------
     source : callable
-        The function to copy the docstring from.
+    The function to copy the docstring from.
 
     Returns
     -------
     wrapper : callable
-        The decorated function.
+    The decorated function.
 
     Examples
     --------

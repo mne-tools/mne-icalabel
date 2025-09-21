@@ -6,17 +6,17 @@ def label_ica_components(inst, ica: ICA, show: bool = True, block: bool = False)
     Parameters
     ----------
     inst : Raw | Epochs
-        `~mne.io.Raw` or `~mne.Epochs` instance used to fit the `~mne.preprocessing.ICA`
-        decomposition.
+    `~mne.io.Raw` or `~mne.Epochs` instance used to fit the `~mne.preprocessing.ICA`
+    decomposition.
     ica : ICA
-        The ICA object fitted on ``inst``.
+    The ICA object fitted on ``inst``.
     show : bool
-        Show the GUI if True.
+    Show the GUI if True.
     block : bool
-        Whether to halt program execution until the figure is closed.
+    Whether to halt program execution until the figure is closed.
 
     Returns
     -------
     gui : instance of ICAComponentLabeler
-        The graphical user interface (GUI) window.
+    The graphical user interface (GUI) window.
     """

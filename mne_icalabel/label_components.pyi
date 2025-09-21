@@ -1,5 +1,5 @@
-from mne import BaseEpochs as BaseEpochs
-from mne.io import BaseRaw as BaseRaw
+from mne import BaseEpochs
+from mne.io import BaseRaw
 from mne.preprocessing import ICA
 
 from .config import ICALABEL_METHODS as ICALABEL_METHODS
@@ -12,23 +12,23 @@ def label_components(inst: BaseRaw | BaseEpochs, ica: ICA, method: str):
     Parameters
     ----------
     inst : Raw | Epochs
-        The data instance used to fit the ICA instance.
+    The data instance used to fit the ICA instance.
     ica : ICA
-        The fitted ICA instance.
+    The fitted ICA instance.
     method : str
-        The proposed method for labeling components. Must be one of:
-        ``'iclabel'``.
+    The proposed method for labeling components. Must be one of:
+    ``'iclabel'``.
 
     Returns
     -------
     component_dict : dict
-        A dictionary with the following fields:
+    A dictionary with the following fields:
 
-        - 'y_pred_proba' : array of shape (n_components,)
-              Estimated predicted probability of the output class
-              for each independent component.
-        - 'labels': list of shape (n_components,)
-              The corresponding string label of each class in 'y_pred'.
+    - 'y_pred_proba' : array of shape (n_components,)
+          Estimated predicted probability of the output class
+          for each independent component.
+    - 'labels': list of shape (n_components,)
+          The corresponding string label of each class in 'y_pred'.
 
     Notes
     -----

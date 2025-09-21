@@ -1,4 +1,4 @@
-from types import ModuleType as ModuleType
+from types import ModuleType
 
 _INSTALL_MAPPING: dict[str, str]
 
@@ -13,17 +13,17 @@ def import_optional_dependency(
     Parameters
     ----------
     name : str
-        The module name.
+    The module name.
     extra : str
-        Additional text to include in the ImportError message.
+    Additional text to include in the ImportError message.
     raise_error : bool
-        What to do when a dependency is not found.
-        * True : Raise an ImportError.
-        * False: Return None.
+    What to do when a dependency is not found.
+    * True : Raise an ImportError.
+    * False: Return None.
 
     Returns
     -------
     module : Module | None
-        The imported module when found.
-        None is returned when the package is not found and raise_error is False.
+    The imported module when found.
+    None is returned when the package is not found and raise_error is False.
     """

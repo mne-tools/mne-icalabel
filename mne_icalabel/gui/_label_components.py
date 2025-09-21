@@ -24,7 +24,7 @@ from qtpy.QtWidgets import (
 from mne_icalabel.config import ICA_LABELS_TO_MNE
 
 if TYPE_CHECKING:
-    from typing import Union
+    pass
 
 
 class ICAComponentLabeler(QMainWindow):
@@ -37,9 +37,7 @@ class ICAComponentLabeler(QMainWindow):
     show : bool
     """
 
-    def __init__(
-        self, inst: Union[BaseRaw, BaseEpochs], ica: ICA, show: bool = True
-    ) -> None:
+    def __init__(self, inst: BaseRaw | BaseEpochs, ica: ICA, show: bool = True) -> None:
         ICAComponentLabeler._check_inst_ica(inst, ica)
         super().__init__()  # initialize the QMainwindow
         set_browser_backend("qt")  # force MNE to use the QT Browser
@@ -164,7 +162,7 @@ class ICAComponentLabeler(QMainWindow):
 
     # - Checkers --------------------------------------------------------------
     @staticmethod
-    def _check_inst_ica(inst: Union[BaseRaw, BaseEpochs], ica: ICA) -> None:
+    def _check_inst_ica(inst: BaseRaw | BaseEpochs, ica: ICA) -> None:
         """Check if the ICA was fitted."""
         _validate_type(inst, (BaseRaw, BaseEpochs), "inst", "raw or epochs")
         _validate_type(ica, ICA, "ica", "ICA")
@@ -176,7 +174,7 @@ class ICAComponentLabeler(QMainWindow):
 
     # - Properties ------------------------------------------------------------
     @property
-    def inst(self) -> Union[BaseRaw, BaseEpochs]:
+    def inst(self) -> BaseRaw | BaseEpochs:
         """Instance on which the ICA has been fitted."""
         return self._inst
 

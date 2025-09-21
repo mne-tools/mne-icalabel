@@ -14,17 +14,17 @@ def _mne_to_eeglab_locs(
     Parameters
     ----------
     raw : mne.io.BaseRaw
-        Instance of raw object with a `mne.montage.DigMontage` set with
-        ``n_channels`` channel positions.
+    Instance of raw object with a `mne.montage.DigMontage` set with
+    ``n_channels`` channel positions.
     picks : list of str
-        List of channel names to include.
+    List of channel names to include.
 
     Returns
     -------
     Rd : np.array of shape (1, n_channels)
-        Angle in spherical coordinates of each EEG channel.
+    Angle in spherical coordinates of each EEG channel.
     Th : np.array of shape (1, n_channels)
-        Degree in spherical coordinates of each EEG channel.
+    Degree in spherical coordinates of each EEG channel.
     """
 
 def _pol2cart(
@@ -35,9 +35,9 @@ def _pol2cart(
     Parameters
     ----------
     theta : array
-        angle
+    angle
     rho : array
-        magnitude
+    magnitude
     """
 
 def _next_power_of_2(x) -> int:
@@ -51,15 +51,15 @@ def _gdatav4(
     Parameters
     ----------
     x : array
-        x-coordinates
+    x-coordinates
     y : array
-        y-coordinates
+    y-coordinates
     v : array
-        values
+    values
     xq : array
-        x-grid
+    x-grid
     yq : array
-        y-grid
+    y-grid
 
     Returns
     -------
@@ -83,11 +83,11 @@ def _mergepoints2D(
     Parameters
     ----------
     x : array
-        x-coordinates
+    x-coordinates
     y : array
-        y-coordinates
+    y-coordinates
     v : array
-        values
+    values
 
     Returns
     -------

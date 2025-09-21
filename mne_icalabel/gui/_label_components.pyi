@@ -19,7 +19,7 @@ class ICAComponentLabeler(QMainWindow):
     _inst: Incomplete
     _ica: Incomplete
     _labels: Incomplete
-    selected_labels: Incomplete
+    selected_labels: dict[int, str]
     _selected_component: int
 
     def __init__(
@@ -42,15 +42,15 @@ class ICAComponentLabeler(QMainWindow):
         self._components_listWidget
         self._labels_buttonGroup
         self._mpl_widgets (dict)
-            - topomap
-            - psd
+        - topomap
+        - psd
         self._timeSeries_widget
 
         Matplotlib figures
         ------------------
         self._mpl_figures (dict)
-            - topomap
-            - psd
+        - topomap
+        - psd
         """
 
     @staticmethod

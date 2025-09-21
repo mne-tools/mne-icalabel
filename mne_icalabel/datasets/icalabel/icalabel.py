@@ -11,14 +11,13 @@ from mne.utils import verbose
 
 if TYPE_CHECKING:
     from pathlib import Path
-    from typing import Optional
 
 has_icalabel_testing_data = partial(has_dataset, name="icalabel-testing")
 
 
 @verbose
 def data_path(
-    path: Optional[str] = None,
+    path: str | None = None,
     force_update: bool = False,
     update_path: bool = True,
     download: bool = True,

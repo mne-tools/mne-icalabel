@@ -83,6 +83,6 @@ def test_next_power_of_2():
     """Test that next_power_of_2 works as intended."""
     x = [0, 10, 200, 400]
     expected = [1, 16, 256, 512]
-    for k, exp in zip(x, expected):
+    for k, exp in zip(x, expected, strict=False):
         val = _next_power_of_2(k)
         assert exp == val

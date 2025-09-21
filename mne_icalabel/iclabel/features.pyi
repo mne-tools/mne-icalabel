@@ -15,20 +15,20 @@ def get_iclabel_features(inst: BaseRaw | BaseEpochs, ica: ICA):
     Parameters
     ----------
     inst : Raw | Epochs
-        MNE Raw/Epoch instance with data array in Volts.
+    MNE Raw/Epoch instance with data array in Volts.
     ica : ICA
-        MNE ICA decomposition.
+    MNE ICA decomposition.
 
     Returns
     -------
     topo : array of shape (32, 32, 1, n_components)
-        The topoplot feature.
+    The topoplot feature.
     psd : array of shape (1, 100, 1, n_components)
-        The psd feature.
+    The psd feature.
     autocorr : array of shape (1, 100, 1, n_components)
-        The autocorrelations feature. Depending on the length of the
-        raw data passed in, different methods of computing autocorrelation
-        will be used. See :footcite:t:`PionTonachini2019` for details.
+    The autocorrelations feature. Depending on the length of the
+    raw data passed in, different methods of computing autocorrelation
+    will be used. See :footcite:t:`PionTonachini2019` for details.
 
     References
     ----------
@@ -42,7 +42,7 @@ def _retrieve_eeglab_icawinv(ica: ICA) -> tuple[NDArray[float], NDArray[float]]:
     Parameters
     ----------
     ica : ICA
-        MNE ICA decomposition.
+    MNE ICA decomposition.
 
     Returns
     -------
@@ -56,15 +56,15 @@ def _compute_ica_activations(inst: BaseRaw | BaseEpochs, ica: ICA) -> NDArray[fl
     Parameters
     ----------
     inst : Raw | Epoch
-        MNE Raw/Epoch instance with data array in Volts.
+    MNE Raw/Epoch instance with data array in Volts.
     ica : ICA
-        MNE ICA decomposition.
+    MNE ICA decomposition.
 
     Returns
     -------
     icaact : array
-        raw: (n_components, n_samples)
-        epoch: (n_components, n_samples, n_trials)
+    raw: (n_components, n_samples)
+    epoch: (n_components, n_samples, n_trials)
 
     Notes
     -----
@@ -143,18 +143,18 @@ def _resample(ac: NDArray[float], fs: int | float) -> NDArray[float]:
     """Resample the autocorrelation feature.
 
     The comment in EEGLAB is:
-        resample to 1 second at 100 samples/sec
+    resample to 1 second at 100 samples/sec
 
     Which translates by: the output array must be of shape (n_comp, 101), thus
     the resampling up variable is set to 100, and down variable must respect:
-        100 < ac.T.shape[0] * 100 / down <= 101
+    100 < ac.T.shape[0] * 100 / down <= 101
     If the instance sampling frequency is an integer, then down is equal to the
     sampling frequency.
 
     Parameters
     ----------
     ac : array
-        Array of shape (n_comp, samples).
+    Array of shape (n_comp, samples).
     fs : int | float
-        Sampling frequency of the MNE instance.
+    Sampling frequency of the MNE instance.
     """

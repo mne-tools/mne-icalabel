@@ -8,8 +8,8 @@ def _format_input(
 
     .. code-block:: matlab
 
-       images = cat(4, images, -images, images(:, end:-1:1, :, :), ...
-                    -images(:, end:-1:1, :, :));
-       psds = repmat(psds, [1 1 1 4]);
-       autocorrs = repmat(autocorrs, [1 1 1 4]);
+    images = cat(4, images, -images, images(:, end:-1:1, :, :), ...
+                -images(:, end:-1:1, :, :));
+    psds = repmat(psds, [1 1 1 4]);
+    autocorrs = repmat(autocorrs, [1 1 1 4]);
     """

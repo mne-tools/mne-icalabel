@@ -28,7 +28,7 @@ Models
         :link: iclabel.html
         :link-type: url
 
-    .. card:: ICLabel
+    .. card:: MEGNet
         :link: megnet.html
         :link-type: url
 

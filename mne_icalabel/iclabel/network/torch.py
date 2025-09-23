@@ -1,4 +1,4 @@
-from __future__ import annotations  # c.f. PEP 563, PEP 649
+from __future__ import annotations
 
 from importlib.resources import files
 from typing import TYPE_CHECKING

@@ -1,4 +1,4 @@
-from __future__ import annotations  # c.f. PEP 563, PEP 649
+from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
@@ -31,7 +31,7 @@ def get_topomaps(
     image_interp: str = _INTERPOLATION_DEFAULT,  # 'cubic'
     border: float | str = _BORDER_DEFAULT,  # 'mean'
     extrapolate: str = _EXTRAPOLATE_DEFAULT,  # 'auto' -> 'head' (EEG), 'local' (MEG)
-) -> dict[str, NDArray[float]]:
+) -> dict[str, NDArray]:
     """Generate an array of scalp topographies for the picked components.
 
     Parameters
@@ -94,13 +94,13 @@ def get_topomaps(
 
 @fill_doc
 def _get_topomap_array(
-    data: NDArray[float],
+    data: NDArray,
     info: Info,
     res: int = 64,
     image_interp: str = _INTERPOLATION_DEFAULT,  # 'cubic'
     border: float | str = _BORDER_DEFAULT,  # 'mean'
     extrapolate: str = _EXTRAPOLATE_DEFAULT,  # 'auto' -> 'head' (EEG), 'local' (MEG)
-) -> NDArray[float]:
+) -> NDArray:
     """Generate a scalp topographic map (n_pixels, n_pixels).
 
     Parameters

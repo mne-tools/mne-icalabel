@@ -1,18 +1,18 @@
-from __future__ import annotations  # c.f. PEP 563, PEP 649
+from __future__ import annotations
 
 import warnings
 from typing import TYPE_CHECKING
 
 import numpy as np
 
+from ..utils.transform import cart2sph, sph2topo
+
 if TYPE_CHECKING:
     from mne.io import BaseRaw
     from numpy.typing import ArrayLike, NDArray
 
 
-def _mne_to_eeglab_locs(
-    raw: BaseRaw, picks: list[str]
-) -> tuple[NDArray[float], NDArray[float]]:
+def _mne_to_eeglab_locs(raw: BaseRaw, picks: list[str]) -> tuple[NDArray, NDArray]:
     """Obtain EEGLab-like spherical coordinate from EEG channel positions.
 
     TODO: @JACOB:
@@ -35,23 +35,6 @@ def _mne_to_eeglab_locs(
     Th : np.array of shape (1, n_channels)
         Degree in spherical coordinates of each EEG channel.
     """
-
-    def _sph2topo(_theta, _phi):
-        """Convert spherical coordinates to topo."""
-        az = _phi
-        horiz = _theta
-        angle = -1 * horiz
-        radius = (np.pi / 2 - az) / np.pi
-        return angle, radius
-
-    def _cart2sph(_x, _y, _z):
-        """Convert cartesian coordinates to spherical."""
-        azimuth = np.arctan2(_y, _x)
-        elevation = np.arctan2(_z, np.sqrt(_x**2 + _y**2))
-        r = np.sqrt(_x**2 + _y**2 + _z**2)
-        # theta,phi,r
-        return azimuth, elevation, r
-
     # get the channel position dictionary
     montage = raw.copy().pick(picks).get_montage()
     if montage is None:
@@ -82,33 +65,16 @@ def _mne_to_eeglab_locs(
     z = locs[:, 2]
 
     # Obtain Spherical Coordinates
-    sph = np.array([_cart2sph(x[i], y[i], z[i]) for i in range(len(x))])
-    theta = sph[:, 0]
-    phi = sph[:, 1]
+    sph = np.array([cart2sph(x[i], y[i], z[i]) for i in range(len(x))])
+    theta = sph[:, 1]
+    phi = sph[:, 2]
 
     # Obtain Polar coordinates (as in eeglab)
-    topo = np.array([_sph2topo(theta[i], phi[i]) for i in range(len(theta))])
+    topo = np.array([sph2topo(theta[i], phi[i]) for i in range(len(theta))])
     rd = topo[:, 1]
     th = topo[:, 0]
 
     return rd.reshape([1, -1]), np.degrees(th).reshape([1, -1])
-
-
-def _pol2cart(
-    theta: NDArray[float], rho: NDArray[float]
-) -> tuple[NDArray[float], NDArray[float]]:
-    """Convert polar coordinates to cartesian coordinates.
-
-    Parameters
-    ----------
-    theta : array
-        angle
-    rho : array
-        magnitude
-    """
-    x = rho * np.cos(theta)
-    y = rho * np.sin(theta)
-    return x, y
 
 
 # ----------------------------------------------------------------------------

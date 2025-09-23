@@ -28,6 +28,10 @@ Models
         :link: iclabel.html
         :link-type: url
 
+    .. card:: MEGNet
+        :link: megnet.html
+        :link-type: url
+
 Features
 --------
 

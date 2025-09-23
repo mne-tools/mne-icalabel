@@ -13,7 +13,7 @@ def get_topomaps(
     image_interp: str = ...,
     border: float | str = ...,
     extrapolate: str = ...,
-) -> dict[str, NDArray[float]]:
+) -> dict[str, NDArray]:
     """Generate an array of scalp topographies for the picked components.
 
     Parameters
@@ -59,13 +59,13 @@ def get_topomaps(
 
 @fill_doc
 def _get_topomap_array(
-    data: NDArray[float],
+    data: NDArray,
     info: Info,
     res: int = 64,
     image_interp: str = ...,
     border: float | str = ...,
     extrapolate: str = ...,
-) -> NDArray[float]:
+) -> NDArray:
     """Generate a scalp topographic map (n_pixels, n_pixels).
 
     Parameters

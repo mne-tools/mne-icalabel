@@ -16,6 +16,8 @@ def pytest_configure(config):
     ignore:Python 3\.14 will, by default, filter extracted tar.*:DeprecationWarning
     # onnxruntime on windows runners
     ignore:Unsupported Windows version.*:UserWarning
+    # Matplotlib deprecation issued in VSCode test debugger
+    ignore:.*interactive_bk.*:matplotlib._api.deprecation.MatplotlibDeprecationWarning
     """
     for warning_line in warnings_lines.split("\n"):
         warning_line = warning_line.strip()

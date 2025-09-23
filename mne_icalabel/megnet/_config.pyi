@@ -1,0 +1,2 @@
+MEGNET_NUMERICAL_TO_STRING: dict[int, str]
+MEGNET_STRING_TO_NUMERICAL: dict[str, int]

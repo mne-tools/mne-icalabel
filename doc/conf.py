@@ -164,6 +164,7 @@ numpydoc_xref_ignore = {
     "n_components",
     "n_pixels",
     "n_classes",
+    "n_samples",
     "instance",
     "ICAComponentLabeler",
 }

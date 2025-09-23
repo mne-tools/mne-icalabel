@@ -1,4 +1,4 @@
-from __future__ import annotations  # c.f. PEP 563, PEP 649
+from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
@@ -7,8 +7,6 @@ from mne.utils import _check_option
 from ...utils._imports import import_optional_dependency
 
 if TYPE_CHECKING:
-    from typing import Optional
-
     from numpy.typing import ArrayLike, NDArray
 
 

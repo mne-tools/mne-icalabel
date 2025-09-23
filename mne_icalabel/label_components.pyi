@@ -3,7 +3,9 @@ from mne.io import BaseRaw
 from mne.preprocessing import ICA
 
 from .config import ICALABEL_METHODS as ICALABEL_METHODS
-from .iclabel._config import ICLABEL_NUMERICAL_TO_STRING as ICLABEL_NUMERICAL_TO_STRING
+from .config import (
+    ICALABEL_METHODS_NUMERICAL_TO_STRING as ICALABEL_METHODS_NUMERICAL_TO_STRING,
+)
 from .utils._checks import _validate_inst_and_ica as _validate_inst_and_ica
 
 def label_components(inst: BaseRaw | BaseEpochs, ica: ICA, method: str):

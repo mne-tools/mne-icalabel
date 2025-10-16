@@ -8,7 +8,7 @@ from mne_icalabel.datasets import icalabel
 from mne_icalabel.iclabel.network.utils import _format_input
 from mne_icalabel.utils._tests import requires_module
 
-pytest.importorskip("torch")
+torch = pytest.importorskip("torch")
 
 dataset_path = icalabel.data_path() / "iclabel"
 

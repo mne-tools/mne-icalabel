@@ -4,13 +4,14 @@ from importlib.resources import files
 from typing import TYPE_CHECKING
 
 import numpy as np
-import onnxruntime as ort
 from mne.io import BaseRaw
 from mne.preprocessing import ICA
 
+from ..utils._imports import import_optional_dependency
 from .features import get_megnet_features
 
 if TYPE_CHECKING:
+    import onnxruntime as ort
     from numpy.typing import NDArray
 
 _MODEL_PATH: str = files("mne_icalabel.megnet") / "assets" / "megnet.onnx"
@@ -43,6 +44,7 @@ def megnet_label_components(raw: BaseRaw, ica: ICA) -> NDArray:
     ----------
     .. footbibliography::
     """
+    ort = import_optional_dependency("onnxruntime")
     time_series, topomaps = get_megnet_features(raw, ica)
 
     # sanity-checks

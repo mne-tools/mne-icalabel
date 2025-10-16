@@ -2,12 +2,13 @@ from importlib.resources import files
 
 import numpy as np
 import pytest
-import torch
 from scipy.io import loadmat
 
 from mne_icalabel.datasets import icalabel
 from mne_icalabel.iclabel.network.utils import _format_input
 from mne_icalabel.utils._tests import requires_module
+
+pytest.importorskip("torch")
 
 dataset_path = icalabel.data_path() / "iclabel"
 

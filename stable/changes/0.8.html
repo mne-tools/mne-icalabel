@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Version 0.8 &#8212; MNE-ICALabel</title>
+    <title>Version 0.8.1 &#8212; MNE-ICALabel</title>
   
   
   
@@ -42,7 +42,7 @@
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794" />
   <script src="../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=ac02cc09edc035673794"></script>
 
-    <script src="../_static/documentation_options.js?v=a85d417d"></script>
+    <script src="../_static/documentation_options.js?v=cc929139"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -52,7 +52,7 @@
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.14.1';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://mne.tools/mne-icalabel/dev/_static/versions.json';
-        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '0.8.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '0.8.1';
         DOCUMENTATION_OPTIONS.show_version_warning_banner = false;
         </script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -305,6 +305,10 @@ document.write(`
   
 
   
+    <label class="sidebar-toggle secondary-toggle" for="__secondary" tabindex="0">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
 </div>
 
     </nav>
@@ -493,7 +497,7 @@ document.write(`
     
     <li class="breadcrumb-item"><a href="index.html" class="nav-link">Changelog</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page">Version 0.8</li>
+    <li class="breadcrumb-item active" aria-current="page">Version 0.8.1</li>
   </ul>
 </nav>
 </div>
@@ -510,8 +514,14 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section id="version-0-8">
-<span id="latest"></span><h1>Version 0.8<a class="headerlink" href="#version-0-8" title="Link to this heading">#</a></h1>
+  <section id="version-0-8-1">
+<span id="latest"></span><h1>Version 0.8.1<a class="headerlink" href="#version-0-8-1" title="Link to this heading">#</a></h1>
+<ul class="simple">
+<li><p>Don’t include <code class="docutils literal notranslate"><span class="pre">onnxruntime</span></code> as a core dependency of <code class="docutils literal notranslate"><span class="pre">mne-icalabel</span></code> (<a class="reference external" href="https://github.com/mne-tools/mne-icalabel/pull/271">#271</a> by <a class="reference external" href="https://github.com/scott-huberty">Scott Huberty</a>)</p></li>
+</ul>
+</section>
+<section id="version-0-8-0">
+<h1>Version 0.8.0<a class="headerlink" href="#version-0-8-0" title="Link to this heading">#</a></h1>
 <ul class="simple">
 <li><p>Add support for MEGNet to classify MEG ICs into 4 categories: <code class="docutils literal notranslate"><span class="pre">brain/others</span></code>, <code class="docutils literal notranslate"><span class="pre">eye</span> <span class="pre">movements</span></code>, <code class="docutils literal notranslate"><span class="pre">heart</span> <span class="pre">beat</span></code> and <code class="docutils literal notranslate"><span class="pre">eye</span> <span class="pre">blinks</span></code> (see <a class="reference internal" href="../generated/api/mne_icalabel.megnet.megnet_label_components.html#mne_icalabel.megnet.megnet_label_components" title="mne_icalabel.megnet.megnet_label_components"><code class="xref py py-func docutils literal notranslate"><span class="pre">megnet_label_components()</span></code></a> for more information) (<a class="reference external" href="https://github.com/mne-tools/mne-icalabel/pull/207">#207</a> by <a class="reference external" href="https://github.com/colehank">Guohao Zhang</a>)</p></li>
 </ul>
@@ -552,6 +562,22 @@ document.write(`
             
             
               
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Version 0.8.1</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#version-0-8-0">Version 0.8.0</a></li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
             
           </div>
           <footer class="bd-footer-content">
@@ -574,7 +600,7 @@ document.write(`
         <div class="footer-item">
   <p class="copyright">
     
-      © Copyright 2021-2025, MNE Developers. Last updated on 2025-09-23.
+      © Copyright 2021-2025, MNE Developers. Last updated on 2025-10-17.
       <br/>
     
   </p>

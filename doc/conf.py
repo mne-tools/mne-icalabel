@@ -207,8 +207,7 @@ intersphinx_mapping = {
     "pandas": ("https://pandas.pydata.org/pandas-docs/dev", None),
     "pooch": ("https://www.fatiando.org/pooch/latest/", None),
     "python": ("https://docs.python.org/3", None),
-    # Can use stable after https://github.com/scipy/scipy/issues/23757 is addressed
-    "scipy": ("https://scipy.github.io/devdocs/", None),
+    "scipy": ("https://docs.scipy.org/doc/scipy", None),
     "sklearn": ("https://scikit-learn.org/stable", None),
     "torch": ("https://pytorch.org/docs/stable", None),
 }

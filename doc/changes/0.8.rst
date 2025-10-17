@@ -12,7 +12,14 @@
 
 .. include:: ./authors.inc
 
-Version 0.8
-===========
+.. _latest:
+
+Version 0.8.1
+=============
+
+- Don't include ``onnxruntime`` as a core dependency of ``mne-icalabel`` (:pr:`271` by `Scott Huberty`_)
+
+Version 0.8.0
+=============
 
 - Add support for MEGNet to classify MEG ICs into 4 categories: ``brain/others``, ``eye movements``, ``heart beat`` and ``eye blinks`` (see :func:`~mne_icalabel.megnet.megnet_label_components` for more information) (:pr:`207` by `Guohao Zhang`_)

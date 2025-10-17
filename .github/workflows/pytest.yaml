@@ -77,7 +77,7 @@ jobs:
           name: codecov-umbrella  # optional
           token: ${{ secrets.CODECOV_TOKEN }}
           verbose: true  # optional (default = false)
-  
+
   pytest-backend:
     timeout-minutes: 30
     strategy:

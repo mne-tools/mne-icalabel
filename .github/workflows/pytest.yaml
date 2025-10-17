@@ -34,7 +34,7 @@ jobs:
       - name: Install package
         run: |
           python -m pip install --progress-bar off --upgrade pip setuptools
-          python -m pip install --progress-bar off .[test]
+          python -m pip install --progress-bar off ".[test,torch,onnx]"
       - run: mne_icalabel-sys_info --developer
       - run: pytest mne_icalabel --cov=mne_icalabel --cov-report=xml --cov-config=pyproject.toml
       - uses: codecov/codecov-action@v5
@@ -64,10 +64,42 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --progress-bar off --upgrade pip setuptools
-          python -m pip install --progress-bar off .[test]
+          python -m pip install --progress-bar off ".[test,torch,onnx]"
           python -m pip install --progress-bar off --upgrade git+https://github.com/mne-tools/mne-python
           python -m pip install --progress-bar off --upgrade git+https://github.com/mne-tools/mne-bids
           python -m pip install --progress-bar off --upgrade --pre --only-binary :all: -i https://pypi.anaconda.org/scientific-python-nightly-wheels/simple --timeout=180 numpy scipy matplotlib
+      - run: mne_icalabel-sys_info --developer
+      - run: pytest mne_icalabel --cov=mne_icalabel --cov-report=xml --cov-config=pyproject.toml
+      - uses: codecov/codecov-action@v5
+        with:
+          files: ./coverage.xml
+          flags: unittests  # optional
+          name: codecov-umbrella  # optional
+          token: ${{ secrets.CODECOV_TOKEN }}
+          verbose: true  # optional (default = false)
+
+  pytest-backend:
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu]
+        backend: ["torch", "onnx"]
+        python-version: ["3.12"]
+    name: ${{ matrix.os }} - ${{ matrix.backend }} backend - py${{ matrix.python-version }}
+    runs-on: ${{ matrix.os }}-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+      - uses: pyvista/setup-headless-display-action@main
+        with:
+          qt: true
+      - name: Install package
+        run: |
+          python -m pip install --progress-bar off --upgrade pip setuptools
+          python -m pip install --progress-bar off ".[test,${{ matrix.backend }}]";
       - run: mne_icalabel-sys_info --developer
       - run: pytest mne_icalabel --cov=mne_icalabel --cov-report=xml --cov-config=pyproject.toml
       - uses: codecov/codecov-action@v5

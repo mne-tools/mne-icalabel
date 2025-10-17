@@ -48,7 +48,7 @@ Methods
 
             If you are working with MEG data and plan to use the MEGnet model, e.g.
             :func:`mne_icalabel.megnet.megnet_label_components`, you *must* install
-            onnxruntime, and do not need to install torch.
+            ``onnxruntime``, and do not need to install ``torch``.
 
         Additional dependencies can be installed with different keywords:
 

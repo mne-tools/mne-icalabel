@@ -113,8 +113,6 @@ test = [
   'mne-bids>=0.14',
   'mne-icalabel[gui]',
   'mne-icalabel[ica]',
-  'mne-icalabel[onnx]',
-  'mne-icalabel[torch]',
   'pandas',
   'pymatreader',
   'PyQt6',

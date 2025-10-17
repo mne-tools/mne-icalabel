@@ -5,7 +5,6 @@ from unittest.mock import MagicMock
 
 import mne
 import numpy as np
-import onnxruntime as ort
 import pytest
 from mne.io.base import BaseRaw
 from mne.preprocessing.ica import ICA
@@ -16,6 +15,8 @@ from mne_icalabel.megnet.label_components import (
     _get_chunk_start,
     megnet_label_components,
 )
+
+ort = pytest.importorskip("onnxruntime")
 
 if TYPE_CHECKING:
     from mne.io import BaseRaw

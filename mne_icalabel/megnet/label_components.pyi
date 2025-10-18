@@ -3,6 +3,7 @@ from mne.io import BaseRaw
 from mne.preprocessing import ICA
 from numpy.typing import NDArray
 
+from ..utils._imports import import_optional_dependency as import_optional_dependency
 from .features import get_megnet_features as get_megnet_features
 
 _MODEL_PATH: str

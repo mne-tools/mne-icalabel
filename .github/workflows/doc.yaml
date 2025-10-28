@@ -33,7 +33,7 @@ jobs:
       - run: mne_icalabel-sys_info --developer
       - run: sphinx-build ./main/doc ./doc-build/dev -W --keep-going
       - run: sudo rm -R ./doc-build/dev/.doctrees
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         with:
           name: doc-dev
           path: ./doc-build/dev

@@ -1,0 +1,42 @@
+[
+    {
+        "name": "0.9 (dev)",
+        "version": "dev",
+        "url": "https://mne.tools/mne-icalabel/dev"
+    },
+    {
+        "name": "0.8 (stable)",
+        "version": "stable",
+        "url": "https://mne.tools/mne-icalabel/stable"
+    },
+    {
+        "name": "0.7",
+        "version": "0.7",
+        "url": "https://mne.tools/mne-icalabel/0.7"
+    },
+    {
+        "name": "0.6",
+        "version": "0.6",
+        "url": "https://mne.tools/mne-icalabel/0.6"
+    },
+    {
+        "name": "0.5.1",
+        "version": "0.5.1",
+        "url": "https://mne.tools/mne-icalabel/0.5"
+    },
+    {
+        "name": "0.4",
+        "version": "0.4",
+        "url": "https://mne.tools/mne-icalabel/0.4"
+    },
+    {
+        "name": "0.3.2",
+        "version": "0.3.2",
+        "url": "https://mne.tools/mne-icalabel/0.3"
+    },
+    {
+        "name": "0.2",
+        "version": "0.2",
+        "url": "https://mne.tools/mne-icalabel/0.2"
+    }
+]

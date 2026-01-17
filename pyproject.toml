@@ -6,7 +6,6 @@ requires = ['setuptools >= 64.0.0']
 classifiers = [
   'Intended Audience :: Developers',
   'Intended Audience :: Science/Research',
-  'License :: OSI Approved :: BSD License',
   'Natural Language :: English',
   'Operating System :: MacOS',
   'Operating System :: Microsoft :: Windows',
@@ -36,10 +35,11 @@ keywords = [
   'meg',
   'neuroscience',
 ]
-license = {file = 'LICENSE'}
+license = 'BSD-3-Clause'
+license-files = ['LICENSE']
 maintainers = [
   {email = 'adam.li@columbia.edu', name = 'Adam Li'},
-  {email = 'mathieu.scheltienne@gnail.com', name = 'Mathieu Scheltienne'},
+  {email = 'mathieu.scheltienne@gmail.com', name = 'Mathieu Scheltienne'},
 ]
 name = 'mne-icalabel'
 readme = 'README.md'

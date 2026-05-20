@@ -14,20 +14,5 @@
 
 .. _latest:
 
-Version x.x
-===========
-
-Enhancements
-------------
-
-- xxx
-
-Bugs
-----
-
-- xxx
-
-API and behavior changes
-------------------------
-
-- xxx
+Version 0.10
+============

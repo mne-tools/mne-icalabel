@@ -6,7 +6,8 @@ Changelog
 .. toctree::
     :titlesonly:
 
-    0.9.0.rst
+    latest.rst
+    0.9.rst
     0.8.rst
     0.7.rst
     0.6.rst

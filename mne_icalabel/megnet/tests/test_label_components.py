@@ -43,7 +43,7 @@ def raw_ica() -> tuple[BaseRaw, ICA]:
 
 def test_megnet_label_components(raw_ica: tuple[BaseRaw, ICA]) -> None:
     """Test whether the function returns the correct artifact index."""
-    real_atrifact_idx = [0, 3, 5]  # heart beat, eye movement, heart beat
+    real_atrifact_idx = [0, 3, 5]  # heart beat, eye blink, heart beat
     prob = megnet_label_components(*raw_ica)
     # round due to floating point error
     idx = [int(idx) for idx in np.nonzero(np.round(prob, 5).argmax(axis=1))[0]]

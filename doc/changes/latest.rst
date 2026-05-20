@@ -16,3 +16,5 @@
 
 Version 0.9
 ===========
+
+- Fix swapped class labels ``'eye blink'`` (index ``1``) and ``'eye movement'`` (index ``3``) in :func:`~mne_icalabel.megnet.megnet_label_components`, matching the label encoding used to train the original MEGnet model (:pr:`305` by `Mathieu Scheltienne`_)

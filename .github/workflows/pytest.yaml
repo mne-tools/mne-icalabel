@@ -37,7 +37,7 @@ jobs:
           python -m pip install --progress-bar off ".[test,torch,onnx]"
       - run: mne_icalabel-sys_info --developer
       - run: pytest mne_icalabel --cov=mne_icalabel --cov-report=xml --cov-config=pyproject.toml
-      - uses: codecov/codecov-action@v5
+      - uses: codecov/codecov-action@v6
         with:
           files: ./coverage.xml
           flags: unittests  # optional
@@ -70,7 +70,7 @@ jobs:
           python -m pip install --progress-bar off --upgrade --pre --only-binary :all: -i https://pypi.anaconda.org/scientific-python-nightly-wheels/simple --timeout=180 numpy scipy matplotlib
       - run: mne_icalabel-sys_info --developer
       - run: pytest mne_icalabel --cov=mne_icalabel --cov-report=xml --cov-config=pyproject.toml
-      - uses: codecov/codecov-action@v5
+      - uses: codecov/codecov-action@v6
         with:
           files: ./coverage.xml
           flags: unittests  # optional
@@ -102,7 +102,7 @@ jobs:
           python -m pip install --progress-bar off ".[test,${{ matrix.backend }}]";
       - run: mne_icalabel-sys_info --developer
       - run: pytest mne_icalabel --cov=mne_icalabel --cov-report=xml --cov-config=pyproject.toml
-      - uses: codecov/codecov-action@v5
+      - uses: codecov/codecov-action@v6
         with:
           files: ./coverage.xml
           flags: unittests  # optional

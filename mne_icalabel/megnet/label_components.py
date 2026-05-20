@@ -38,7 +38,7 @@ def megnet_label_components(raw: BaseRaw, ica: ICA) -> NDArray:
     labels_pred_proba : numpy.ndarray of shape (n_components, n_classes)
         The estimated corresponding predicted probabilities of output classes
         for each independent component. Columns are ordered with
-        ``'brain/other'``, ``'eye movement'``, ``'heart beat'``, ``'eye blink'``.
+        ``'brain/other'``, ``'eye blink'``, ``'heart beat'``, ``'eye movement'``.
 
     References
     ----------

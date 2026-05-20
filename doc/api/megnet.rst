@@ -7,9 +7,9 @@ MEGNet is an automated ICA-based artifact removal system for MEG using spatiotem
 convolutional neural networks. MEGNEt classifies ICs in the following categories:
 
 * ``'brain/other'``: Brain activity or other non-artifact activity.
-* ``'eye movement'``: Eye movements, such as saccades.
-* ``'heart beat'``: Cardiac activity.
 * ``'eye blink'``: Eye blinks.
+* ``'heart beat'``: Cardiac activity.
+* ``'eye movement'``: Eye movements, such as saccades.
 
 Architecture
 ------------

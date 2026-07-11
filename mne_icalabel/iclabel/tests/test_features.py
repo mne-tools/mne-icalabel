@@ -3,10 +3,11 @@ from pathlib import Path
 
 import numpy as np
 import pytest
-from mne import read_epochs_eeglab
-from mne.io import read_raw
+from mne import create_info, read_epochs_eeglab
+from mne.channels import make_standard_montage
+from mne.io import RawArray, read_raw
 from mne.io.eeglab.eeglab import _check_load_mat
-from mne.preprocessing import read_ica_eeglab
+from mne.preprocessing import ICA, read_ica_eeglab
 from scipy.io import loadmat
 
 from mne_icalabel.datasets import icalabel
@@ -405,11 +406,6 @@ def test_resampling(rng):
 
 def _synthetic_raw_ica():
     """Build a small synthetic EEG Raw + fitted ICA, no dataset download (gh#290)."""
-    from mne import create_info
-    from mne.channels import make_standard_montage
-    from mne.io import RawArray
-    from mne.preprocessing import ICA
-
     ch_names = [
         "Fp1",
         "Fp2",

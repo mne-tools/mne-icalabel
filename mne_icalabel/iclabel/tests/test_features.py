@@ -449,8 +449,10 @@ def test_get_iclabel_features_car_warning_reference_scenarios():
     ``custom_ref_applied`` is only set when an average reference is applied
     directly; when it is added as an SSP projection (``projection=True``) the
     flag stays 0, so ``get_iclabel_features`` used to warn even though a CAR
-    was requested/applied. The check must also consider an average-reference
-    projection, whether pending or already applied.
+    was applied. The features are extracted from ``inst.get_data()``, which
+    applies an average-reference projector only once it is active, so the check
+    must treat an *applied* projector as a CAR but still warn on a *pending*
+    one (the data is not actually referenced to a CAR yet).
     """
     raw, ica = _synthetic_raw_ica()
     car_msg = "common average reference"
@@ -467,9 +469,10 @@ def test_get_iclabel_features_car_warning_reference_scenarios():
     # Average reference applied directly (projection=False) -> no warn.
     assert not _car_warned(raw.copy().set_eeg_reference("average", projection=False))
 
-    # Average reference added as a pending projection -> must not warn.
+    # Average reference added as a pending (unapplied) projection -> warn:
+    # get_data() does not apply a pending projector, so the data is not CAR yet.
     raw_proj = raw.copy().set_eeg_reference("average", projection=True)
-    assert not _car_warned(raw_proj)
+    assert _car_warned(raw_proj)
 
-    # Same projection, now applied -> must not warn.
+    # Same projection, now applied -> no warn.
     assert not _car_warned(raw_proj.copy().apply_proj())

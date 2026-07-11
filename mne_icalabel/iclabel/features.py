@@ -57,13 +57,17 @@ def get_iclabel_features(inst: BaseRaw | BaseEpochs, ica: ICA):
         )
 
     # 'custom_ref_applied' is only set when an average reference is applied
-    # directly; when the average reference is added as a projection it stays 0,
-    # so we also check for an average-reference projector (pending or applied).
-    # TODO: 'custom_ref_applied' does not necessarily correspond to a CAR reference.
+    # directly; when the average reference is added as a projection it stays 0.
+    # We also treat an *applied* average-reference projector as a CAR, using
+    # 'check_active=True': the features are extracted from 'inst.get_data()',
+    # which does not apply a pending projector (nor does mne-icalabel apply it
+    # elsewhere), so a projector that is present but not yet applied does not
+    # actually reference the data to a CAR and should still warn.
+    #
     # At the moment, the reference of the EEG data is not stored in the info.
     # c.f. https://github.com/mne-tools/mne-python/issues/8962
     if inst.info["custom_ref_applied"] == 0 and not _has_eeg_average_ref_proj(
-        inst.info
+        inst.info, check_active=True
     ):
         warn(
             f"The provided {'Raw' if isinstance(inst, BaseRaw) else 'Epochs'} instance "

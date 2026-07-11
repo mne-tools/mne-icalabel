@@ -5,8 +5,13 @@ from typing import TYPE_CHECKING
 import numpy as np
 from mne import BaseEpochs
 from mne.io import BaseRaw
-from mne.utils import warn
+from mne.utils import check_version, warn
 from scipy.signal import resample_poly
+
+if check_version("mne", "1.6"):
+    from mne._fiff.proj import _has_eeg_average_ref_proj
+else:
+    from mne.io.proj import _has_eeg_average_ref_proj
 
 from ..utils._checks import _validate_inst_and_ica
 from ..utils.transform import pol2cart
@@ -51,10 +56,15 @@ def get_iclabel_features(inst: BaseRaw | BaseEpochs, ica: ICA):
             "channels."
         )
 
+    # 'custom_ref_applied' is only set when an average reference is applied
+    # directly; when the average reference is added as a projection it stays 0,
+    # so we also check for an average-reference projector (pending or applied).
     # TODO: 'custom_ref_applied' does not necessarily correspond to a CAR reference.
     # At the moment, the reference of the EEG data is not stored in the info.
     # c.f. https://github.com/mne-tools/mne-python/issues/8962
-    if inst.info["custom_ref_applied"] == 0:
+    if inst.info["custom_ref_applied"] == 0 and not _has_eeg_average_ref_proj(
+        inst.info
+    ):
         warn(
             f"The provided {'Raw' if isinstance(inst, BaseRaw) else 'Epochs'} instance "
             "does not seem to be referenced to a common average reference (CAR). "

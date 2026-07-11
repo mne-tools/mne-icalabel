@@ -4,3 +4,4 @@
 .. _Anand Saini: https://github.com/anandsaini024
 .. _Scott Huberty: https://github.com/scott-huberty
 .. _Guohao Zhang: https://github.com/colehank
+.. _Leonardo Scappatura: https://github.com/Leonard013

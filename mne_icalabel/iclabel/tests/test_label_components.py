@@ -4,6 +4,7 @@ from mne import create_info, make_fixed_length_epochs, pick_types
 from mne.datasets import testing
 from mne.io import RawArray, read_raw
 from mne.preprocessing import ICA
+from mne.utils import check_version
 
 from mne_icalabel.config import ICA_LABELS_TO_MNE
 from mne_icalabel.iclabel import iclabel_label_components
@@ -109,7 +110,8 @@ def test_warnings(rng):
         data,
         create_info(["Fpz", "Cz", "CPz", "Oz", "M1", "M2"], sfreq=400, ch_types="eeg"),
     )
-    raw.set_montage("standard_1020")
+    montage_name = "colin27_1020" if check_version("mne", "1.13") else "standard_1020"
+    raw.set_montage(montage_name)
     with raw.info._unlock():
         raw.info["highpass"] = 1.0
 

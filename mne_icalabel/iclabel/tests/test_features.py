@@ -3,10 +3,11 @@ from pathlib import Path
 
 import numpy as np
 import pytest
-from mne import read_epochs_eeglab
-from mne.io import read_raw
+from mne import create_info, read_epochs_eeglab
+from mne.io import RawArray, read_raw
 from mne.io.eeglab.eeglab import _check_load_mat
-from mne.preprocessing import read_ica_eeglab
+from mne.preprocessing import ICA, read_ica_eeglab
+from mne.utils import check_version
 from scipy.io import loadmat
 
 from mne_icalabel.datasets import icalabel
@@ -401,3 +402,78 @@ def test_resampling(rng):
     for fs in np.arange(128.1, 128.9, 0.1):
         resamp = _resample(data, fs=fs)
         assert resamp.shape[1] == 101
+
+
+def _synthetic_raw_ica():
+    """Build a small synthetic EEG Raw + fitted ICA, no dataset download (gh#290)."""
+    ch_names = [
+        "Fp1",
+        "Fp2",
+        "F3",
+        "F4",
+        "C3",
+        "C4",
+        "P3",
+        "P4",
+        "O1",
+        "O2",
+        "F7",
+        "F8",
+        "T7",
+        "T8",
+        "P7",
+        "P8",
+    ]
+    sfreq = 100.0
+    rng = np.random.default_rng(42)
+    info = create_info(ch_names, sfreq, ch_types="eeg")
+    raw = RawArray(rng.standard_normal((len(ch_names), int(sfreq * 10))) * 1e-6, info)
+    montage_name = "colin27_1020" if check_version("mne", "1.13") else "standard_1020"
+    raw.set_montage(montage_name)
+    with raw.info._unlock():
+        raw.info["highpass"] = 1.0
+        raw.info["lowpass"] = 100.0
+    ica = ICA(
+        n_components=5,
+        method="infomax",
+        fit_params=dict(extended=True),
+        random_state=42,
+        max_iter="auto",
+    )
+    ica.fit(raw)
+    return raw, ica
+
+
+def test_get_iclabel_features_car_warning_reference_scenarios():
+    """The CAR warning must track the actual reference, incl. projections (gh#290).
+
+    ``custom_ref_applied`` is only set when an average reference is applied
+    directly; when it is added as an SSP projection (``projection=True``) the
+    flag stays 0, so ``get_iclabel_features`` used to warn even though a CAR
+    was applied. The features are extracted from ``inst.get_data()``, which
+    applies an average-reference projector only once it is active, so the check
+    must treat an *applied* projector as a CAR but still warn on a *pending*
+    one (the data is not actually referenced to a CAR yet).
+    """
+    raw, ica = _synthetic_raw_ica()
+    car_msg = "common average reference"
+
+    def _car_warned(inst):
+        with warnings.catch_warnings(record=True) as record:
+            warnings.simplefilter("always")
+            get_iclabel_features(inst, ica)
+        return any(car_msg in str(w.message) for w in record)
+
+    # No reference set -> warn (guards the existing, correct behavior).
+    assert _car_warned(raw.copy())
+
+    # Average reference applied directly (projection=False) -> no warn.
+    assert not _car_warned(raw.copy().set_eeg_reference("average", projection=False))
+
+    # Average reference added as a pending (unapplied) projection -> warn:
+    # get_data() does not apply a pending projector, so the data is not CAR yet.
+    raw_proj = raw.copy().set_eeg_reference("average", projection=True)
+    assert _car_warned(raw_proj)
+
+    # Same projection, now applied -> no warn.
+    assert not _car_warned(raw_proj.copy().apply_proj())

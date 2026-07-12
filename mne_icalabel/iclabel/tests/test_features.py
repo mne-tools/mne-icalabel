@@ -4,10 +4,10 @@ from pathlib import Path
 import numpy as np
 import pytest
 from mne import create_info, read_epochs_eeglab
-from mne.channels import make_standard_montage
 from mne.io import RawArray, read_raw
 from mne.io.eeglab.eeglab import _check_load_mat
 from mne.preprocessing import ICA, read_ica_eeglab
+from mne.utils import check_version
 from scipy.io import loadmat
 
 from mne_icalabel.datasets import icalabel
@@ -428,7 +428,8 @@ def _synthetic_raw_ica():
     rng = np.random.default_rng(42)
     info = create_info(ch_names, sfreq, ch_types="eeg")
     raw = RawArray(rng.standard_normal((len(ch_names), int(sfreq * 10))) * 1e-6, info)
-    raw.set_montage(make_standard_montage("standard_1020"))
+    montage_name = "colin27_1020" if check_version("mne", "1.13") else "standard_1020"
+    raw.set_montage(montage_name)
     with raw.info._unlock():
         raw.info["highpass"] = 1.0
         raw.info["lowpass"] = 100.0

@@ -4,6 +4,7 @@ from mne import create_info, make_fixed_length_epochs, pick_types
 from mne.datasets import testing
 from mne.io import RawArray, read_raw
 from mne.preprocessing import ICA
+from mne.utils import check_version
 
 from mne_icalabel.config import ICA_LABELS_TO_MNE
 from mne_icalabel.iclabel import iclabel_label_components

@@ -38,8 +38,8 @@ keywords = [
 license = 'BSD-3-Clause'
 license-files = ['LICENSE']
 maintainers = [
-  {email = 'adam.li@columbia.edu', name = 'Adam Li'},
-  {email = 'mathieu.scheltienne@gmail.com', name = 'Mathieu Scheltienne'},
+  { email = 'adam.li@columbia.edu', name = 'Adam Li' },
+  { email = 'mathieu.scheltienne@gmail.com', name = 'Mathieu Scheltienne' },
 ]
 name = 'mne-icalabel'
 readme = 'README.md'

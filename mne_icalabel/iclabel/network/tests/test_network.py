@@ -131,6 +131,30 @@ def test_network_outputs_pytorch():
     assert np.allclose(matlab_labels, torch_labels, atol=1e-7)
 
 
+@requires_module("torch")
+def test_run_iclabel_pytorch_with_float64_default():
+    """Use the network's float32 dtype regardless of PyTorch's default."""
+    from mne_icalabel.iclabel.network.torch import _run_iclabel
+
+    rng = np.random.default_rng(0)
+    features = (
+        rng.standard_normal((32, 32, 1, 2)).astype(np.float32),
+        rng.standard_normal((1, 100, 1, 2)).astype(np.float32),
+        rng.standard_normal((1, 100, 1, 2)).astype(np.float32),
+    )
+    expected = _run_iclabel(*features)
+
+    default_dtype = torch.get_default_dtype()
+    try:
+        torch.set_default_dtype(torch.float64)
+        actual = _run_iclabel(*features)
+    finally:
+        torch.set_default_dtype(default_dtype)
+
+    assert actual.dtype == np.float32
+    assert np.allclose(actual, expected)
+
+
 @requires_module("onnxruntime")
 def test_network_outputs_onnx():
     """Compare that the ICLabel network in onnx and matlab outputs the same values.

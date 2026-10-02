@@ -5,3 +5,4 @@
 .. _Scott Huberty: https://github.com/scott-huberty
 .. _Guohao Zhang: https://github.com/colehank
 .. _Leonardo Scappatura: https://github.com/Leonard013
+.. _Daria Agafonova: https://github.com/viranovskaya

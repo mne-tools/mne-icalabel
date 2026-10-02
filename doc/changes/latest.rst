@@ -18,3 +18,5 @@ Version 0.10
 ============
 
 - Fix a spurious warning from :func:`~mne_icalabel.iclabel.get_iclabel_features` (and :func:`~mne_icalabel.label_components`) about the data not being referenced to a common average reference (CAR) when the average reference was applied as a projection (``set_eeg_reference("average", projection=True)``) rather than directly (:pr:`316` by `Leonardo Scappatura`_)
+- Fix the PyTorch ICLabel backend when the global default dtype is ``float64``
+  (:issue:`322` by `Daria Agafonova`_)

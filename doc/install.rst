@@ -60,12 +60,6 @@ Methods
             # MNE's ICA dependencies
             pip install mne-icalabel[ica]
 
-            # developer dependencies
-            pip install mne-icalabel[doc,stubs,style,test]
-
-            # all of the above
-            pip install mne-icalabel[all]
-
     .. tab-item:: Conda
 
         Depending on your system, you may want to create a separate environment
@@ -93,6 +87,16 @@ Methods
         .. code-block:: bash
 
             pip install git+https://github.com/mne-tools/mne-icalabel
+
+        For development, clone the repository and install it in editable mode
+        with the developer dependencies, declared as dependency groups, using
+        `uv <https://docs.astral.sh/uv/>`_:
+
+        .. code-block:: bash
+
+            git clone https://github.com/mne-tools/mne-icalabel
+            cd mne-icalabel
+            uv sync --extra onnx --extra torch
 
 To check if everything worked fine, the following command should not raise any
 error messages:

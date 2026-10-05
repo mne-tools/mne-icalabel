@@ -1,0 +1,18 @@
+# Include project files
+include LICENSE
+include pyproject.toml
+include README.md
+
+# Include package source code
+graft src/mne_icalabel
+
+# Prune repository files not needed in the source distribution
+prune .github
+prune doc
+prune examples
+prune paper
+prune tests
+exclude .* CITATION.cff CONTRIBUTING.md
+
+# Exclude compiled files
+global-exclude *.py[cod] __pycache__

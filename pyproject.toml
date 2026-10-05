@@ -1,6 +1,38 @@
 [build-system]
 build-backend = 'setuptools.build_meta'
-requires = ['setuptools >= 64.0.0']
+requires = ['setuptools>=77', 'setuptools_scm>=8']
+
+[dependency-groups]
+doc = [
+  'memory-profiler',
+  'mne-icalabel[gui,ica,onnx]',
+  'numpydoc',
+  'pydata-sphinx-theme==0.14.1',
+  'PyQt6',
+  'sphinx',
+  'sphinx-copybutton',
+  'sphinx-design',
+  'sphinx-gallery',
+  'sphinx-issues',
+  'sphinxcontrib-bibtex',
+]
+style = [
+  'bibclean',
+  'codespell[toml]>=2.2.4',
+  'pre-commit',
+  'ruff>=0.6.0',
+  'toml-sort',
+  'yamllint',
+]
+test = [
+  'mne-bids>=0.14',
+  'mne-icalabel[gui,ica]',
+  'pandas',
+  'pymatreader',
+  'PyQt6',
+  'pytest-cov',
+  'pytest>=8.0.0',
+]
 
 [project]
 classifiers = [
@@ -28,6 +60,7 @@ dependencies = [
   'scipy >= 1.4.0',
 ]
 description = 'MNE-ICALabel: Automatic labeling of ICA components from MEG, EEG and iEEG data with MNE.'
+dynamic = ['version']
 keywords = [
   'eeg',
   'ica',
@@ -44,42 +77,8 @@ maintainers = [
 name = 'mne-icalabel'
 readme = 'README.md'
 requires-python = '>=3.10'
-version = "0.10.0.dev0"
 
 [project.optional-dependencies]
-all = [
-  'mne-icalabel[build]',
-  'mne-icalabel[doc]',
-  'mne-icalabel[gui]',
-  'mne-icalabel[ica]',
-  'mne-icalabel[onnx]',
-  'mne-icalabel[stubs]',
-  'mne-icalabel[style]',
-  'mne-icalabel[test]',
-  'mne-icalabel[torch]',
-]
-build = [
-  'build',
-  'twine',
-]
-doc = [
-  'memory-profiler',
-  'mne-icalabel[gui]',
-  'mne-icalabel[ica]',
-  'mne-icalabel[onnx]',
-  'numpydoc',
-  'pydata-sphinx-theme==0.14.1',
-  'PyQt6',
-  'sphinx',
-  'sphinx-copybutton',
-  'sphinx-design',
-  'sphinx-gallery',
-  'sphinx-issues',
-  'sphinxcontrib-bibtex',
-]
-full = [
-  'mne-icalabel[all]',
-]
 gui = [
   'matplotlib',
   'mne-qt-browser>=0.6.0',
@@ -92,32 +91,6 @@ ica = [
 ]
 onnx = [
   'onnxruntime',
-]
-stubs = [
-  'isort',
-  'mne-icalabel[gui]',
-  'mne-icalabel[onnx]',
-  'mne-icalabel[torch]',
-  'mypy',
-  'PyQt6',
-  'ruff>=0.6.0',
-]
-style = [
-  'bibclean',
-  'codespell[toml]>=2.2.4',
-  'ruff>=0.6.0',
-  'toml-sort',
-  'yamllint',
-]
-test = [
-  'mne-bids>=0.14',
-  'mne-icalabel[gui]',
-  'mne-icalabel[ica]',
-  'pandas',
-  'pymatreader',
-  'PyQt6',
-  'pytest-cov',
-  'pytest>=8.0.0',
 ]
 torch = [
   'torch',
@@ -136,7 +109,7 @@ tracker = 'https://github.com/mne-tools/mne-icalabel/issues'
 check-filenames = true
 check-hidden = true
 ignore-words = '.codespellignore'
-skip = 'build,.git,.mypy_cache,.pytest_cache'
+skip = 'build,.git,.pytest_cache'
 
 [tool.coverage.report]
 exclude_lines = [
@@ -153,14 +126,8 @@ omit = [
   '**/__init__.py',
   '**/mne_icalabel/_version.py',
   '**/mne_icalabel/commands/*',
-  '**/mne_icalabel/conftest.py',
   '**/mne_icalabel/utils/_fixes.py',
-  '**/tests/**',
 ]
-
-[tool.mypy]
-ignore_missing_imports = true
-no_site_packages = true
 
 [tool.pytest.ini_options]
 addopts = '--durations 20 --junit-xml=junit-results.xml -v --color=yes'
@@ -185,7 +152,6 @@ select = ['A', 'B', 'D', 'E', 'F', 'G', 'I', 'LOG', 'NPY', 'PIE', 'PT', 'T20', '
   'D104', # 'Missing docstring in public package'
   'D107', # 'Missing docstring in __init__'
 ]
-'*.pyi' = ['E501']
 '__init__.py' = ['F401']
 'examples/*' = ['B018', 'D205', 'D400', 'T201']
 'tutorials/*' = ['B018', 'D205', 'D400', 'T201']
@@ -202,10 +168,17 @@ include-package-data = false
 'mne_icalabel.megnet' = ['assets/*']
 
 [tool.setuptools.packages.find]
-exclude = ['mne_icalabel*tests']
 include = ['mne_icalabel*']
+where = ['src']
+
+[tool.setuptools_scm]
+version_file = 'src/mne_icalabel/_version.py'
+version_scheme = 'release-branch-semver'
 
 [tool.tomlsort]
 all = true
 ignore_case = true
 trailing_comma_inline_array = true
+
+[tool.uv]
+default-groups = 'all'

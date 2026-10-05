@@ -12,11 +12,10 @@
 
 .. include:: ./authors.inc
 
-.. _latest:
-
 Version 0.10
 ============
 
 - Fix a spurious warning from :func:`~mne_icalabel.iclabel.get_iclabel_features` (and :func:`~mne_icalabel.label_components`) about the data not being referenced to a common average reference (CAR) when the average reference was applied as a projection (``set_eeg_reference("average", projection=True)``) rather than directly (:pr:`316` by `Leonardo Scappatura`_)
 - Fix the PyTorch ICLabel backend when the global default dtype is ``float64``
   (:issue:`322` by `Daria Agafonova`_)
+- Modernize the packaging with a ``src`` layout, a version derived from git tags with ``setuptools_scm``, and the developer dependencies declared as dependency groups. The ``build``, ``doc``, ``stubs``, ``style``, ``test``, ``all`` and ``full`` extras are removed, and the ``sys_info`` command lists the optional dependencies with ``--extra`` and the developer dependencies with ``--developer`` (:pr:`332` by `Mathieu Scheltienne`_)

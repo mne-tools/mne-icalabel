@@ -300,5 +300,5 @@ def linkcode_resolve(domain: str, info: dict[str, str]) -> str | None:
     else:
         return None  # alternatively, link to a maint/version branch
     fname = fname.rsplit("/mne_icalabel/")[1]
-    url = f"{gh_url}/blob/{branch}/mne_icalabel/{fname}#{lines}"
+    url = f"{gh_url}/blob/{branch}/src/mne_icalabel/{fname}#{lines}"
     return url

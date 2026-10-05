@@ -153,9 +153,7 @@ omit = [
   '**/__init__.py',
   '**/mne_icalabel/_version.py',
   '**/mne_icalabel/commands/*',
-  '**/mne_icalabel/conftest.py',
   '**/mne_icalabel/utils/_fixes.py',
-  '**/tests/**',
 ]
 
 [tool.mypy]
@@ -202,8 +200,8 @@ include-package-data = false
 'mne_icalabel.megnet' = ['assets/*']
 
 [tool.setuptools.packages.find]
-exclude = ['mne_icalabel*tests']
 include = ['mne_icalabel*']
+where = ['src']
 
 [tool.tomlsort]
 all = true

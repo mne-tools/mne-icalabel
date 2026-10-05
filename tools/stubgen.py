@@ -16,8 +16,8 @@ for file in directory.rglob("*.pyi"):
 files = [
     str(file.as_posix())
     for file in directory.rglob("*.py")
-    if file.parent.name not in ("commands", "tests")
-    and file.name not in ("conftest.py", "_tests.py", "_version.py")
+    if file.parent.name not in ("commands",)
+    and file.name not in ("_tests.py", "_version.py")
 ]
 stubgen.main(
     [
@@ -31,7 +31,7 @@ stubgen.main(
     ]
 )
 stubs = list(directory.rglob("*.pyi"))
-config = str(directory.parent / "pyproject.toml")
+config = str(directory.parents[1] / "pyproject.toml")
 
 # expand docstrings and inject into stub files
 for stub in stubs:

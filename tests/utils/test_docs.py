@@ -1,3 +1,4 @@
+import inspect
 import re
 from pathlib import Path
 
@@ -206,7 +207,7 @@ def test_docdict_order():
     docdict_ = docdict.copy()
     for key in _KEYS_MNE:
         del docdict_[key]
-    docs_path = Path(__file__).parents[1] / "_docs.py"
+    docs_path = Path(inspect.getsourcefile(fill_doc))
     assert docs_path.is_file()
     with open(docs_path, encoding="UTF-8") as fid:
         docs = fid.read()

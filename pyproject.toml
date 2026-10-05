@@ -1,6 +1,6 @@
 [build-system]
 build-backend = 'setuptools.build_meta'
-requires = ['setuptools >= 64.0.0']
+requires = ['setuptools>=77', 'setuptools_scm>=8']
 
 [project]
 classifiers = [
@@ -28,6 +28,7 @@ dependencies = [
   'scipy >= 1.4.0',
 ]
 description = 'MNE-ICALabel: Automatic labeling of ICA components from MEG, EEG and iEEG data with MNE.'
+dynamic = ['version']
 keywords = [
   'eeg',
   'ica',
@@ -44,7 +45,6 @@ maintainers = [
 name = 'mne-icalabel'
 readme = 'README.md'
 requires-python = '>=3.10'
-version = "0.10.0.dev0"
 
 [project.optional-dependencies]
 all = [
@@ -202,6 +202,10 @@ include-package-data = false
 [tool.setuptools.packages.find]
 include = ['mne_icalabel*']
 where = ['src']
+
+[tool.setuptools_scm]
+version_file = 'src/mne_icalabel/_version.py'
+version_scheme = 'release-branch-semver'
 
 [tool.tomlsort]
 all = true

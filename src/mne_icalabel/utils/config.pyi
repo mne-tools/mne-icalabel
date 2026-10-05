@@ -3,7 +3,7 @@ from typing import IO
 
 from packaging.requirements import Requirement
 
-def sys_info(fid: IO | None = None, developer: bool = False):
+def sys_info(fid: IO | None = None, *, extra: bool = False, developer: bool = False):
     """Print the system information for debugging.
 
     Parameters
@@ -11,8 +11,11 @@ def sys_info(fid: IO | None = None, developer: bool = False):
     fid : file-like | None
     The file to write to, passed to :func:`print`. Can be None to use
     :data:`sys.stdout`.
-    developer : bool
+    extra : bool
     If True, display information about optional dependencies.
+    developer : bool
+    If True, display information about developer dependencies. Only available for
+    the package installed in editable mode.
     """
 
 def _list_dependencies_info(

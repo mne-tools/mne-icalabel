@@ -1,7 +1,9 @@
 from io import StringIO
+from pathlib import Path
 
 import pytest
 
+import mne_icalabel
 from mne_icalabel.utils.config import _get_gpu_info, sys_info
 
 
@@ -26,13 +28,25 @@ def test_sys_info():
     assert "test" not in value
 
     out = StringIO()
+    sys_info(fid=out, extra=True)
+    value = out.getvalue()
+    out.close()
+    assert "Optional 'gui' dependencies" in value
+    assert "Developer" not in value
+
+
+@pytest.mark.skipif(
+    not (Path(mne_icalabel.__file__).parents[2] / "pyproject.toml").exists(),
+    reason="not editable install",
+)
+def test_sys_info_developer():
+    """Test info-showing utility, with developer dependencies."""
+    out = StringIO()
     sys_info(fid=out, developer=True)
     value = out.getvalue()
     out.close()
-
-    assert "build" in value
-    assert "style" in value
-    assert "test" in value
+    assert "Developer 'style' dependencies" in value
+    assert "Developer 'test' dependencies" in value
 
 
 def test_gpu_info():

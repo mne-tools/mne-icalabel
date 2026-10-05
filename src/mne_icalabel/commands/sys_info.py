@@ -9,10 +9,15 @@ def run():
         prog=f"{__package__.split('.')[0]}-sys_info", description="sys_info"
     )
     parser.add_argument(
-        "--developer",
+        "--extra",
         help="display information for optional dependencies",
+        action="store_true",
+    )
+    parser.add_argument(
+        "--developer",
+        help="display information for developer dependencies",
         action="store_true",
     )
     args = parser.parse_args()
 
-    sys_info(developer=args.developer)
+    sys_info(extra=args.extra, developer=args.developer)

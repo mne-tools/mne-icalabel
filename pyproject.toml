@@ -2,6 +2,44 @@
 build-backend = 'setuptools.build_meta'
 requires = ['setuptools>=77', 'setuptools_scm>=8']
 
+[dependency-groups]
+doc = [
+  'memory-profiler',
+  'mne-icalabel[gui,ica,onnx]',
+  'numpydoc',
+  'pydata-sphinx-theme==0.14.1',
+  'PyQt6',
+  'sphinx',
+  'sphinx-copybutton',
+  'sphinx-design',
+  'sphinx-gallery',
+  'sphinx-issues',
+  'sphinxcontrib-bibtex',
+]
+stubs = [
+  'mne-icalabel[gui,onnx,torch]',
+  'mypy',
+  'PyQt6',
+  'ruff>=0.6.0',
+]
+style = [
+  'bibclean',
+  'codespell[toml]>=2.2.4',
+  'pre-commit',
+  'ruff>=0.6.0',
+  'toml-sort',
+  'yamllint',
+]
+test = [
+  'mne-bids>=0.14',
+  'mne-icalabel[gui,ica]',
+  'pandas',
+  'pymatreader',
+  'PyQt6',
+  'pytest-cov',
+  'pytest>=8.0.0',
+]
+
 [project]
 classifiers = [
   'Intended Audience :: Developers',
@@ -47,39 +85,6 @@ readme = 'README.md'
 requires-python = '>=3.10'
 
 [project.optional-dependencies]
-all = [
-  'mne-icalabel[build]',
-  'mne-icalabel[doc]',
-  'mne-icalabel[gui]',
-  'mne-icalabel[ica]',
-  'mne-icalabel[onnx]',
-  'mne-icalabel[stubs]',
-  'mne-icalabel[style]',
-  'mne-icalabel[test]',
-  'mne-icalabel[torch]',
-]
-build = [
-  'build',
-  'twine',
-]
-doc = [
-  'memory-profiler',
-  'mne-icalabel[gui]',
-  'mne-icalabel[ica]',
-  'mne-icalabel[onnx]',
-  'numpydoc',
-  'pydata-sphinx-theme==0.14.1',
-  'PyQt6',
-  'sphinx',
-  'sphinx-copybutton',
-  'sphinx-design',
-  'sphinx-gallery',
-  'sphinx-issues',
-  'sphinxcontrib-bibtex',
-]
-full = [
-  'mne-icalabel[all]',
-]
 gui = [
   'matplotlib',
   'mne-qt-browser>=0.6.0',
@@ -92,32 +97,6 @@ ica = [
 ]
 onnx = [
   'onnxruntime',
-]
-stubs = [
-  'isort',
-  'mne-icalabel[gui]',
-  'mne-icalabel[onnx]',
-  'mne-icalabel[torch]',
-  'mypy',
-  'PyQt6',
-  'ruff>=0.6.0',
-]
-style = [
-  'bibclean',
-  'codespell[toml]>=2.2.4',
-  'ruff>=0.6.0',
-  'toml-sort',
-  'yamllint',
-]
-test = [
-  'mne-bids>=0.14',
-  'mne-icalabel[gui]',
-  'mne-icalabel[ica]',
-  'pandas',
-  'pymatreader',
-  'PyQt6',
-  'pytest-cov',
-  'pytest>=8.0.0',
 ]
 torch = [
   'torch',
@@ -211,3 +190,6 @@ version_scheme = 'release-branch-semver'
 all = true
 ignore_case = true
 trailing_comma_inline_array = true
+
+[tool.uv]
+default-groups = 'all'

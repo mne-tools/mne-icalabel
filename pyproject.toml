@@ -16,12 +16,6 @@ doc = [
   'sphinx-issues',
   'sphinxcontrib-bibtex',
 ]
-stubs = [
-  'mne-icalabel[gui,onnx,torch]',
-  'mypy',
-  'PyQt6',
-  'ruff>=0.6.0',
-]
 style = [
   'bibclean',
   'codespell[toml]>=2.2.4',
@@ -115,7 +109,7 @@ tracker = 'https://github.com/mne-tools/mne-icalabel/issues'
 check-filenames = true
 check-hidden = true
 ignore-words = '.codespellignore'
-skip = 'build,.git,.mypy_cache,.pytest_cache'
+skip = 'build,.git,.pytest_cache'
 
 [tool.coverage.report]
 exclude_lines = [
@@ -134,10 +128,6 @@ omit = [
   '**/mne_icalabel/commands/*',
   '**/mne_icalabel/utils/_fixes.py',
 ]
-
-[tool.mypy]
-ignore_missing_imports = true
-no_site_packages = true
 
 [tool.pytest.ini_options]
 addopts = '--durations 20 --junit-xml=junit-results.xml -v --color=yes'
@@ -162,7 +152,6 @@ select = ['A', 'B', 'D', 'E', 'F', 'G', 'I', 'LOG', 'NPY', 'PIE', 'PT', 'T20', '
   'D104', # 'Missing docstring in public package'
   'D107', # 'Missing docstring in __init__'
 ]
-'*.pyi' = ['E501']
 '__init__.py' = ['F401']
 'examples/*' = ['B018', 'D205', 'D400', 'T201']
 'tutorials/*' = ['B018', 'D205', 'D400', 'T201']

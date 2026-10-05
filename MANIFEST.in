@@ -12,7 +12,6 @@ prune doc
 prune examples
 prune paper
 prune tests
-prune tools
 exclude .* CITATION.cff CONTRIBUTING.md
 
 # Exclude compiled files

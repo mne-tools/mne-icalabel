@@ -1,2 +1,0 @@
-ICLABEL_NUMERICAL_TO_STRING: dict[int, str]
-ICLABEL_STRING_TO_NUMERICAL: dict[str, int]

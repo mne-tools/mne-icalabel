@@ -15,7 +15,6 @@ else:
     from mne.io.pick import _pick_data_channels, _picks_to_idx
 
 from ..utils._checks import _validate_ica
-from ..utils._docs import fill_doc
 
 if TYPE_CHECKING:
     from mne import Info
@@ -23,7 +22,6 @@ if TYPE_CHECKING:
     from numpy.typing import NDArray
 
 
-@fill_doc
 def get_topomaps(
     ica: ICA,
     picks=None,
@@ -44,10 +42,30 @@ def get_topomaps(
         Multiple ICs can be selected using a list of int or a slice.
         The indices are 0-indexed, so ``picks=1`` will pick the second IC: ``ICA001``.
         ``None`` (default) will pick all independent components in the order fitted.
-    %(res_topomap)s
-    %(image_interp_topomap)s
-    %(border_topomap)s
-    %(extrapolate_topomap)s
+    res : int
+        The resolution of the square topographic map (in pixels).
+    image_interp : str
+        The image interpolation to be used. All matplotlib options are
+        accepted.
+    border : float | 'mean'
+        Value to extrapolate to on the topomap borders. If ``'mean'`` (default),
+        then each extrapolated point has the average value of its neighbours.
+    extrapolate : str
+        Options:
+
+        - ``'box'``
+            Extrapolate to four points placed to form a square encompassing all
+            data points, where each side of the square is three times the range
+            of the data in the respective dimension.
+        - ``'local'`` (default for MEG sensors)
+            Extrapolate only to nearby points (approximately to points closer than
+            median inter-electrode distance). This will also set the
+            mask to be polygonal based on the convex hull of the sensors.
+        - ``'head'`` (default for non-MEG sensors)
+            Extrapolate out to the edges of the clipping circle. This will be on
+            the head circle when the sensors are contained within the head circle,
+            but it can extend beyond the head when sensors are plotted outside
+            the head circle.
 
     Returns
     -------
@@ -92,7 +110,6 @@ def get_topomaps(
     return topomaps
 
 
-@fill_doc
 def _get_topomap_array(
     data: NDArray,
     info: Info,
@@ -110,10 +127,30 @@ def _get_topomap_array(
     info : Info
         Instance of `mne.Info` with the montage associated with the ``(n_channels,)``
         points.
-    %(res_topomap)s
-    %(image_interp_topomap)s
-    %(border_topomap)s
-    %(extrapolate_topomap)s
+    res : int
+        The resolution of the square topographic map (in pixels).
+    image_interp : str
+        The image interpolation to be used. All matplotlib options are
+        accepted.
+    border : float | 'mean'
+        Value to extrapolate to on the topomap borders. If ``'mean'`` (default),
+        then each extrapolated point has the average value of its neighbours.
+    extrapolate : str
+        Options:
+
+        - ``'box'``
+            Extrapolate to four points placed to form a square encompassing all
+            data points, where each side of the square is three times the range
+            of the data in the respective dimension.
+        - ``'local'`` (default for MEG sensors)
+            Extrapolate only to nearby points (approximately to points closer than
+            median inter-electrode distance). This will also set the
+            mask to be polygonal based on the convex hull of the sensors.
+        - ``'head'`` (default for non-MEG sensors)
+            Extrapolate out to the edges of the clipping circle. This will be on
+            the head circle when the sensors are contained within the head circle,
+            but it can extend beyond the head when sensors are plotted outside
+            the head circle.
 
     Returns
     -------

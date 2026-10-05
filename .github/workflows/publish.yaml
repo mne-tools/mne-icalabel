@@ -21,7 +21,6 @@ jobs:
           python -m pip install --progress-bar off --upgrade pip setuptools
           python -m pip install --progress-bar off -e .[build,stubs]
       - run: mne_icalabel-sys_info --developer
-      - run: python tools/stubgen.py
       - name: Build and publish
         env:
           TWINE_USERNAME: __token__

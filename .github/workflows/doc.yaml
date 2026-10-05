@@ -7,6 +7,8 @@ on:  # yamllint disable-line rule:truthy
   push:
     branches: [main]
   workflow_dispatch:
+  release:
+    types: [published]
 
 jobs:
   build:
@@ -41,6 +43,10 @@ jobs:
     needs: build
     timeout-minutes: 10
     runs-on: ubuntu-latest
+    # serialize the deployments to gh-pages, as this one force-pushes a single commit
+    concurrency:
+      group: gh-pages
+      cancel-in-progress: false
     permissions:
       contents: write
     steps:
@@ -57,3 +63,54 @@ jobs:
           git-config-email: 'github-actions[bot]@users.noreply.github.com'
           single-commit: true
           force: true
+
+  deploy-release:
+    if: ${{ github.event_name == 'release' && github.repository == 'mne-tools/mne-icalabel' }}
+    needs: build
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    concurrency:
+      group: gh-pages
+      cancel-in-progress: false
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: gh-pages
+          fetch-depth: 0
+      - uses: actions/download-artifact@v8
+        with:
+          name: doc-dev
+          path: ./doc-dev
+      - name: Get previous release version
+        run: |
+          PREVIOUS_RELEASE_TAG=$(git tag --sort=-creatordate | sed "/^$RELEASE_TAG$/d" | sed -n 1p)
+          if [ -z "$PREVIOUS_RELEASE_TAG" ]; then
+            echo "No previous release tag found."
+            exit 1
+          fi
+          echo "Previous release tag: $PREVIOUS_RELEASE_TAG"
+          # the archived documentation folders are named without the 'v' prefix
+          echo "PREVIOUS_RELEASE=${PREVIOUS_RELEASE_TAG#v}" >> $GITHUB_ENV
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+      - name: Move stable to previous release version
+        run: |
+          if [ ! -d "stable" ]; then
+            echo "No stable folder found."
+            exit 1
+          fi
+          if [ -d "$PREVIOUS_RELEASE" ]; then
+            echo "Folder $PREVIOUS_RELEASE already exists."
+            exit 1
+          fi
+          git mv stable "$PREVIOUS_RELEASE"
+      - run: mv doc-dev stable
+      - name: Commit and push changes
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git add .
+          git commit -m "update documentation for release ${{ github.event.release.tag_name }}"
+          git push origin gh-pages

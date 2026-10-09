@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">
+<defs>
+<radialGradient id="pos"><stop offset="0" stop-color="#b2182b"/><stop offset="0.45" stop-color="#ef8a62"/><stop offset="1" stop-color="#fddbc7" stop-opacity="0"/></radialGradient>
+<radialGradient id="neg"><stop offset="0" stop-color="#2166ac"/><stop offset="0.45" stop-color="#67a9cf"/><stop offset="1" stop-color="#d1e5f0" stop-opacity="0"/></radialGradient>
+<clipPath id="head"><circle cx="50" cy="54" r="32"/></clipPath>
+</defs>
+<g transform="rotate(-90 50 50)" fill="none" stroke-width="7">
+<circle cx="50" cy="50" r="45" pathLength="100" stroke="#2b7bba" stroke-dasharray="60.40 39.60" stroke-dashoffset="-0.00"/>
+<circle cx="50" cy="50" r="45" pathLength="100" stroke="#e07b39" stroke-dasharray="8.40 91.60" stroke-dashoffset="-62.00"/>
+<circle cx="50" cy="50" r="45" pathLength="100" stroke="#8e6bbf" stroke-dasharray="6.40 93.60" stroke-dashoffset="-72.00"/>
+<circle cx="50" cy="50" r="45" pathLength="100" stroke="#d1495b" stroke-dasharray="4.40 95.60" stroke-dashoffset="-80.00"/>
+<circle cx="50" cy="50" r="45" pathLength="100" stroke="#edae49" stroke-dasharray="3.40 96.60" stroke-dashoffset="-86.00"/>
+<circle cx="50" cy="50" r="45" pathLength="100" stroke="#66a182" stroke-dasharray="3.40 96.60" stroke-dashoffset="-91.00"/>
+<circle cx="50" cy="50" r="45" pathLength="100" stroke="#9aa4b2" stroke-dasharray="2.40 97.60" stroke-dashoffset="-96.00"/>
+</g>
+<g transform="translate(17 14.5) scale(0.66)">
+<g clip-path="url(#head)">
+<rect width="100" height="100" fill="#f7f7f7"/>
+<circle cx="37" cy="44" r="30" fill="url(#pos)"/>
+<circle cx="65" cy="66" r="30" fill="url(#neg)"/>
+<g fill="none" stroke="#000" stroke-opacity="0.2" stroke-width="1.1">
+<ellipse cx="37" cy="44" rx="9" ry="7"/><ellipse cx="37" cy="44" rx="18" ry="14"/>
+<ellipse cx="65" cy="66" rx="9" ry="7"/><ellipse cx="65" cy="66" rx="18" ry="14"/>
+</g>
+</g>
+<g fill="none" stroke="#808080" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round">
+<circle cx="50" cy="54" r="32"/>
+<path d="M43 23 L50 13 L57 23"/>
+<path d="M18.5 48 q-4 6 0 12"/><path d="M81.5 48 q4 6 0 12"/>
+</g>
+</g>
+</svg>

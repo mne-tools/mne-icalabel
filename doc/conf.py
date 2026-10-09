@@ -78,6 +78,8 @@ suppress_warnings = ["config.cache"]
 
 html_theme = "pydata_sphinx_theme"
 html_title = project
+html_favicon = "_static/logos/logo-no-mne.svg"
+html_logo = "_static/logos/logo-mne.svg"
 # HTML options (e.g., theme)
 # see: https://sphinx-bootstrap-theme.readthedocs.io/en/latest/README.html
 # Clean up sidebar: Do not show "Source" link

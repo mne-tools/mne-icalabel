@@ -1,4 +1,4 @@
-# mne-icalabel
+<img src="https://raw.githubusercontent.com/mne-tools/mne-icalabel/main/doc/_static/logos/logo-mne.svg" alt="MNE-ICALabel" width="400"/>
 
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)

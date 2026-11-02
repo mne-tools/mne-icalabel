@@ -16,3 +16,6 @@
 
 Version 0.11
 ============
+
+- Raise an informative error when ICLabel is used on an ICA fitted on non-EEG channels, e.g. on
+  combined MEG and EEG data (:issue:`133` by `Rafat Hossain`_)

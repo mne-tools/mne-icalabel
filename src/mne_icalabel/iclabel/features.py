@@ -56,6 +56,17 @@ def get_iclabel_features(inst: BaseRaw | BaseEpochs, ica: ICA):
             "channels."
         )
 
+    ch_types = ica.get_channel_types(unique=True)
+    if any(ch_type != "eeg" for ch_type in ch_types):
+        raise RuntimeError(
+            "The provided ICA instance was fitted on non-EEG channels "
+            f"({', '.join(ch_type for ch_type in ch_types if ch_type != 'eeg')}). "
+            "The ICLabel model was fitted on ICA decompositions of EEG data only and "
+            "is not suited for decompositions including other types of channels. "
+            "Please fit the ICA on the EEG channels only, e.g. with "
+            "'ica.fit(inst, picks=\"eeg\")'."
+        )
+
     # 'custom_ref_applied' is only set when an average reference is applied
     # directly; when the average reference is added as a projection it stays 0.
     # We also treat an *applied* average-reference projector as a CAR, using

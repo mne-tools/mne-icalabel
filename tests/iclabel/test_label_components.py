@@ -195,3 +195,34 @@ def test_comp_in_labels_():
     iclabel_label_components(raw, ica, inplace=True)
     assert ica.labels_["brain"] == [3]
     assert ica.labels_["other"] == [1, 2, 4]
+
+
+def test_mixed_meg_eeg():
+    """Test that an ICA fitted on MEG and EEG channels raises (gh-133)."""
+    raw = read_raw(directory / "sample_audvis_trunc_raw.fif", preload=False)
+    raw.pick(["meg", "eeg"], exclude="bads")
+    raw.load_data()
+    with raw.info._unlock():
+        raw.info["highpass"] = 1.0
+        raw.info["lowpass"] = 100.0
+    raw.set_eeg_reference("average")
+    ica = ICA(
+        n_components=3,
+        method="picard",
+        fit_params=dict(ortho=False, extended=True),
+        random_state=101,
+    )
+    ica.fit(raw)
+    with pytest.raises(RuntimeError, match=r"fitted on non-EEG channels \(grad, mag\)"):
+        iclabel_label_components(raw, ica)
+
+    # an ICA fitted on the EEG channels only works on an instance with MEG channels
+    ica = ICA(
+        n_components=3,
+        method="picard",
+        fit_params=dict(ortho=False, extended=True),
+        random_state=101,
+    )
+    ica.fit(raw, picks="eeg")
+    labels = iclabel_label_components(raw, ica)
+    assert labels.shape == (ica.n_components_, 7)
